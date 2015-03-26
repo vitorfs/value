@@ -68,3 +68,8 @@ MEDIA_URL = '/media/'
 TEMPLATE_DIRS = (
     PROJECT_DIR.child('templates'),
 )
+
+
+LOGIN_URL = '/login/'
+
+LOGIN_REDIRECT_URL = '/'

@@ -1,0 +1,17 @@
+.login  {
+  padding: 130px 0;
+}
+
+span {
+  color: #fe0074;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: 48px;
+}
+
+h3 {
+  margin-bottom: 20px;
+  font-weight: 700;
+}

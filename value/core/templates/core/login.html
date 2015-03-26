@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block stylesheet %}
+  <link href="{{ STATIC_URL }}css/login.css" rel="stylesheet">
+{% endblock stylesheet %}
+
+{% block main %}
+  <div class="login">
+    <div class="row">
+      <div class="col-md-8">
+        <h1>Impro<span>v</span>ing decision-m<span>a</span>king re<span>l</span>ating to software-intensive prod<span>u</span>cts and s<span>e</span>rvices development</h1>
+      </div>
+      <div class="col-md-4">
+        <h3>Sign in to <span>Value</span> application</h3>
+        <form>
+          <div class="form-group form-group-lg">
+            <input type="text" class="form-control" id="username" placeholder="Username">
+          </div>
+          <div class="form-group form-group-lg">
+            <input type="password" class="form-control" id="password" placeholder="Password">
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock main %}
