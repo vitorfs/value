@@ -25,7 +25,7 @@
       {% for user in users %}
         <tr>
           <td><input type="checkbox"></td>
-          <td>{{ user.username }}</td>
+          <td><a href="{% url 'user' user.username %}">{{ user.username }}</a></td>
           <td>{{ user.email }}</td>
           <td>{{ user.first_name }}</td>
           <td>{{ user.last_name }}</td>
