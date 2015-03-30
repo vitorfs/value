@@ -1,5 +1,43 @@
 {% extends 'base.html' %}
 
 {% block main %}
-  
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li class="active">Users</li>
+  </ol>
+
+  <button class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> Add user</button>
+
+  <p class="lead">Select user to change</p>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th><input type="checkbox"></th>
+        <th>Username</th>
+        <th>Email address</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Admin status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+        <tr>
+          <td><input type="checkbox"></td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.first_name }}</td>
+          <td>{{ user.last_name }}</td>
+          <td>
+            {% if user.is_superuser %}
+              <span class="glyphicon glyphicon-ok"></span>
+            {% else %}
+              <span class="glyphicon glyphicon-remove"></span>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock main %}
