@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 def products(request):
-    pass
+    return render(request, 'products/products.html')
 
 def product(request, product_id):
-    pass
+    return render(request, 'products/product.html')
