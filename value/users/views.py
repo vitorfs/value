@@ -24,7 +24,13 @@ def add_user(request):
 @login_required
 def user(request, username):
     page_user = User.objects.get(username=username)
-    form = UserChangeForm(instance=page_user)
+    if request.method == 'POST':
+        form = UserChangeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('users'))
+    else:
+        form = UserChangeForm(instance=page_user)
     return render(request, 'users/user.html', { 'page_user' : page_user, 'form' : form })
 
 @login_required

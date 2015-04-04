@@ -7,6 +7,8 @@
     <li class="active">{{ page_user.username }}</li>
   </ol>
 
+  <button type="button" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+
   <h1 class="lead">Change user</h1>
 
   <form action="." method="post" class="form-horizontal">
@@ -53,6 +55,28 @@
     </div>
 
     <hr>
+
+    <div class="form-group">
+      <div class="col-sm-10 col-sm-offset-2">
+        <div class="checkbox">
+          <label>
+            {{ form.is_active }} {{ form.is_active.label }}
+          </label>
+        </div>
+        <span class="help-block">{{ form.is_active.help_text }}</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-10 col-sm-offset-2">
+        <div class="checkbox">
+          <label>
+            {{ form.is_superuser }} {{ form.is_superuser.label }}
+          </label>
+        </div>
+        <span class="help-block">{{ form.is_superuser.help_text }}</span>
+      </div>
+    </div>
 
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">

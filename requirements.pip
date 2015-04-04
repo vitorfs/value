@@ -1,4 +1,4 @@
-Django==1.7.7
+Django==1.8
 Unipath==1.1
 dj-database-url==0.3.0
 psycopg2==2.6
