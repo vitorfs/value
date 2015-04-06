@@ -13,7 +13,6 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th><input type="checkbox"></th>
         <th>Username</th>
         <th>Email address</th>
         <th>First name</th>
@@ -24,7 +23,6 @@
     <tbody>
       {% for user in users %}
         <tr>
-          <td><input type="checkbox"></td>
           <td><a href="{% url 'user' user.username %}">{{ user.username }}</a></td>
           <td>{{ user.email }}</td>
           <td>{{ user.first_name }}</td>

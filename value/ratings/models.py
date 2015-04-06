@@ -6,6 +6,13 @@ class Rating(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_values(self):
+        values = RatingValue.objects.filter(rating=self)
+        string_values = []
+        for value in values:
+            string_values.append(u'{0} ({1})'.format(value.description, value.weight))
+        return u', '.join(string_values)
+
 
 class RatingValue(models.Model):
     rating = models.ForeignKey(Rating)
