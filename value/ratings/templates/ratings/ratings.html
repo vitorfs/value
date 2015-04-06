@@ -2,4 +2,13 @@
 
 {% block main %}
 
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li class="active">Ratings</li>
+  </ol>
+
+  <a class="btn btn-primary pull-right" href="{% url 'add_rating' %}"><span class="glyphicon glyphicon-plus"></span> Add rating</a>
+
+  <h1 class="lead">Select rating to change</h1>
+
 {% endblock main %}
