@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def factors(request):
+    return render(request, 'factors/factors.html')

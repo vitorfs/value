@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def ratings(request):
+    return render(request, 'ratings/ratings.html')

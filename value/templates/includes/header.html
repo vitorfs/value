@@ -13,8 +13,8 @@
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
           <li><a href="{% url 'models' %}"><span class="glyphicon glyphicon-duplicate"></span> Models</a></li>
-          <li><a href="#"><span class="glyphicon glyphicon-list"></span> Factors</a></li>
-          <li><a href="#"><span class="glyphicon glyphicon-signal"></span> Ratings</a></li>
+          <li><a href="{% url 'factors' %}"><span class="glyphicon glyphicon-list"></span> Factors</a></li>
+          <li><a href="{% url 'ratings' %}"><span class="glyphicon glyphicon-signal"></span> Ratings</a></li>
           {% if user.is_superuser %}
             <li><a href="{% url 'users' %}"><span class="glyphicon glyphicon-user"></span> Users</a></li>
           {% endif %}

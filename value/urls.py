@@ -5,5 +5,7 @@ urlpatterns = patterns('',
     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'core/login.html'}, name='login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name='logout'),
     url(r'^models/', include('value.models.urls')),
+    url(r'^factors/', include('value.factors.urls')),
+    url(r'^ratings/', include('value.ratings.urls')),
     url(r'^users/', include('value.users.urls')),
 )
