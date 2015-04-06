@@ -58,3 +58,7 @@ venv
 .DS_Store
 
 *.sqlite3
+
+staticfiles
+
+todo.txt
