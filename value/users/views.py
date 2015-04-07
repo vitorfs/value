@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.forms.models import modelform_factory
 
 @login_required
 def users(request):
@@ -23,14 +24,17 @@ def add_user(request):
 
 @login_required
 def user(request, username):
+    Form = modelform_factory(User, form=UserChangeForm, exclude=('date_joined',))
     page_user = User.objects.get(username=username)
     if request.method == 'POST':
-        form = UserChangeForm(request.POST)
+        form = Form(request.POST, instance=page_user)
         if form.is_valid():
             form.save()
             return redirect(reverse('users'))
+        else:
+            print form.errors
     else:
-        form = UserChangeForm(instance=page_user)
+        form = Form(instance=page_user)
     return render(request, 'users/user.html', { 'page_user' : page_user, 'form' : form })
 
 @login_required
