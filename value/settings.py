@@ -1,5 +1,6 @@
 from unipath import Path
 import dj_database_url
+from django.contrib.messages import constants as message_constants
 
 PROJECT_DIR = Path(__file__).parent
 
@@ -9,6 +10,9 @@ SECRET_KEY = 'n7bnts*dpi00c41faj4@@hr0z2f4&zbe35(^2%b43$l&%h15br'
 DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG
+
+if DEBUG:
+    MESSAGE_LEVEL = message_constants.DEBUG
 
 ALLOWED_HOSTS = ['127.0.0.1']
 

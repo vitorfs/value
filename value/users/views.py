@@ -5,10 +5,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm, AdminPasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.forms.models import modelform_factory
+from django.contrib import messages
 
 @login_required
 def users(request):
-    users = User.objects.all()
+    users = User.objects.all().order_by('username')
     return render(request, 'users/users.html', { 'users' : users })
 
 @login_required
