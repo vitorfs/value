@@ -24,7 +24,7 @@ def add_user(request):
 
 @login_required
 def user(request, username):
-    Form = modelform_factory(User, form=UserChangeForm, exclude=('date_joined',))
+    Form = modelform_factory(User, form=UserChangeForm, exclude=('date_joined', 'email',))
     page_user = User.objects.get(username=username)
     if request.method == 'POST':
         form = Form(request.POST, instance=page_user)

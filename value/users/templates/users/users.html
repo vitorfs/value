@@ -14,21 +14,27 @@
     <thead>
       <tr>
         <th>Username</th>
-        <th>Email address</th>
         <th>First name</th>
         <th>Last name</th>
-        <th>Superuser status</th>
+        <th>Superuser</th>
+        <th>Active</th>
       </tr>
     </thead>
     <tbody>
       {% for user in users %}
         <tr>
           <td><a href="{% url 'user' user.username %}">{{ user.username }}</a></td>
-          <td>{{ user.email }}</td>
           <td>{{ user.first_name }}</td>
           <td>{{ user.last_name }}</td>
           <td>
             {% if user.is_superuser %}
+              <span class="glyphicon glyphicon-ok"></span>
+            {% else %}
+              <span class="glyphicon glyphicon-remove"></span>
+            {% endif %}
+          </td>
+          <td>
+            {% if user.is_active %}
               <span class="glyphicon glyphicon-ok"></span>
             {% else %}
               <span class="glyphicon glyphicon-remove"></span>
