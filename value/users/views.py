@@ -18,6 +18,7 @@ def add_user(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            messages.success(request, u'The user {0} was added successfully. You may edit it again below.'.format(user.username))
             return redirect(reverse('user', args=(user.username,)))
     else:
         user = User()
@@ -32,6 +33,7 @@ def user(request, username):
         form = Form(request.POST, instance=page_user)
         if form.is_valid():
             form.save()
+            messages.success(request, u'The user {0} was changed successfully.'.format(page_user.username))
             return redirect(reverse('users'))
     else:
         form = Form(instance=page_user)
@@ -44,9 +46,19 @@ def password(request, username):
         form = AdminPasswordChangeForm(page_user, request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, u'Password changed successfully.')
             if request.user == page_user:
                 update_session_auth_hash(request, form.user)
             return redirect(reverse('user', args=(page_user.username,)))
     else:
         form = AdminPasswordChangeForm(page_user)
     return render(request, 'users/password.html', { 'page_user' : page_user, 'form' : form })
+
+@login_required
+def delete(request, username):
+    page_user = User.objects.get(username=username)
+    if request.method == 'POST':
+        page_user.delete()
+        messages.success(request, u'The user {0} was deleted successfully.'.format(page_user.username))
+        return redirect(reverse('users'))
+    return render(request, 'users/delete.html', { 'page_user' : page_user })

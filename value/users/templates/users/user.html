@@ -7,7 +7,7 @@
     <li class="active">{{ page_user.username }}</li>
   </ol>
 
-  <button type="button" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+  <a href="{% url 'delete' page_user.username %}" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-remove"></span> Delete</a>
 
   <h1 class="lead">Change user</h1>
 

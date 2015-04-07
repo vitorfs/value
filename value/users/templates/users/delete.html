@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block main %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'users' %}">Users</a></li>
+    <li><a href="{% url 'user' page_user.username %}">{{ page_user.username }}</a></li>
+    <li class="active">Delete</li>
+  </ol>
+
+  <h1 class="lead">Are you sure you want to delete the user {{ page_user.username }}?</h1>
+
+  <form action="." method="post" class="form-horizontal">
+    {% csrf_token %}
+    <div class="form-group">
+      <div class="col-sm-12">
+        <button type="submit" class="btn btn-danger">Confirm</button>
+        <a href="{% url 'user' page_user.username %}" class="btn btn-default">Cancel</a>
+      </div>
+    </div>
+  </form>
+
+{% endblock main %}
