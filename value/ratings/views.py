@@ -15,7 +15,7 @@ def add_rating(request):
         form = RatingForm(request.POST)
         if form.is_valid():
             rating = form.save()
-            return redirect(reverse('rating', args=(rating.pk,)))
+            return redirect(reverse('ratings'))
     else:
         rating = Rating()
         form = RatingForm(instance=rating)
