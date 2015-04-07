@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.core.urlresolvers import reverse
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from value.ratings.models import Rating
 from value.ratings.forms import RatingForm
