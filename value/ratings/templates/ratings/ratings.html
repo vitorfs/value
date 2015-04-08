@@ -21,7 +21,7 @@
     <tbody>
       {% for rating in ratings %}
         <tr>
-          <td><a href="">{{ rating.name }}</a></td>
+          <td><a href="{% url 'rating' rating.id %}">{{ rating.name }}</a></td>
           <td>{{ rating.get_values }}</td>
         </tr>
       {% endfor %}

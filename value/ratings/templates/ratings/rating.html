@@ -14,13 +14,17 @@
 
     {% csrf_token %}
 
+    {% for hidden in form.hidden_fields %}
+      {{ hidden }}
+    {% endfor %}
+    
     {% for field in form.visible_fields %}
       <div class="form-group{% if field.errors %} has-error{% endif %}">
         <label for="{{ field.label }}" class="col-sm-2 control-label">{{ field.label }}</label>
         <div class="col-sm-10">
           {{ field }}
           {% for error in field.errors %}
-            <p class="help-block"><span class="glyphicon glyphicon-warning-sign"></span> {{ error }}</p>
+            <p class="help-block">{{ error }}</p>
           {% endfor %}
           {% if field.help_text %}
             <span class="help-block">{{ field.help_text }}</span>
@@ -50,6 +54,9 @@
             {% for form in formset.forms %}
               <tr>
                 <td>
+                  {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                  {% endfor %}
                   <input type="text" 
                          class="form-control" 
                          value="{{ form.description.value|default_if_none:'' }}" 
