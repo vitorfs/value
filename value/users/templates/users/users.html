@@ -13,6 +13,7 @@
   <table class="table table-striped">
     <thead>
       <tr>
+        <th><input type="checkbox"></th>
         <th>Username</th>
         <th>First name</th>
         <th>Last name</th>
@@ -23,21 +24,22 @@
     <tbody>
       {% for user in users %}
         <tr>
+          <td><input type="checkbox"></td>
           <td><a href="{% url 'user' user.username %}">{{ user.username }}</a></td>
           <td>{{ user.first_name }}</td>
           <td>{{ user.last_name }}</td>
           <td>
             {% if user.is_superuser %}
-              <span class="glyphicon glyphicon-ok"></span>
+              <span class="glyphicon glyphicon-ok-sign text-success"></span>
             {% else %}
-              <span class="glyphicon glyphicon-remove"></span>
+              <span class="glyphicon glyphicon-remove-sign text-danger"></span>
             {% endif %}
           </td>
           <td>
             {% if user.is_active %}
-              <span class="glyphicon glyphicon-ok"></span>
+              <span class="glyphicon glyphicon-ok-sign text-success"></span>
             {% else %}
-              <span class="glyphicon glyphicon-remove"></span>
+              <span class="glyphicon glyphicon-remove-sign text-danger"></span>
             {% endif %}
           </td>
         </tr>

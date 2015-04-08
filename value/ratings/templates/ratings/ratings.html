@@ -14,6 +14,7 @@
   <table class="table table-striped">
     <thead>
       <tr>
+        <th><input type="checkbox"></th>
         <th>Name</th>
         <th>Values</th>
       </tr>
@@ -21,6 +22,7 @@
     <tbody>
       {% for rating in ratings %}
         <tr>
+          <td><input type="checkbox"></td>
           <td><a href="{% url 'rating' rating.id %}">{{ rating.name }}</a></td>
           <td>{{ rating.get_values }}</td>
         </tr>
