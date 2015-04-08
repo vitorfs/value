@@ -1,7 +1,8 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from value.ratings.models import Rating
+from django.forms.models import inlineformset_factory
+from value.ratings.models import Rating, RatingValue
 from value.ratings.forms import RatingForm
 
 @login_required
@@ -19,4 +20,6 @@ def add_rating(request):
     else:
         rating = Rating()
         form = RatingForm(instance=rating)
-    return render(request, 'ratings/add_rating.html', { 'form' : form })
+        RatingValueFormSet = inlineformset_factory(Rating, RatingValue, fields=('description', 'weight',))
+        formset = RatingValueFormSet(instance=rating)
+    return render(request, 'ratings/add_rating.html', { 'form' : form, 'formset' : formset })

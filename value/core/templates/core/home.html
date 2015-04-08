@@ -2,4 +2,12 @@
 
 {% block main %}
 
+  <ol class="breadcrumb">
+    <li class="active">Home</li>
+  </ol>
+
+  <h1 class="page-header">Welcome to <span class="text-primary">VALUE</span> application</h1>
+
+  <p class="lead">You are signed in as <strong>{% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}</strong></p>
+
 {% endblock main %}
