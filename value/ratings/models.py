@@ -10,7 +10,7 @@ class Rating(models.Model):
         values = RatingValue.objects.filter(rating=self)
         string_values = []
         for value in values:
-            string_values.append(u'{0} ({1})'.format(value.description, value.weight))
+            string_values.append(value.description)
         return u', '.join(string_values)
 
 

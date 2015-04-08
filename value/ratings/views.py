@@ -12,14 +12,18 @@ def ratings(request):
 
 @login_required
 def add_rating(request):
+    RatingValueFormSet = inlineformset_factory(Rating, RatingValue, fields=('description', 'weight',))
     if request.method == 'POST':
         form = RatingForm(request.POST)
-        if form.is_valid():
+        formset = RatingValueFormSet(request.POST)
+        if form.is_valid() and formset.is_valid():
             rating = form.save()
-            return redirect(reverse('ratings'))
+            formset = RatingValueFormSet(request.POST, instance=rating)
+            if formset.is_valid():
+                formset.save()
+                return redirect(reverse('ratings'))
     else:
         rating = Rating()
         form = RatingForm(instance=rating)
-        RatingValueFormSet = inlineformset_factory(Rating, RatingValue, fields=('description', 'weight',))
         formset = RatingValueFormSet(instance=rating)
     return render(request, 'ratings/add_rating.html', { 'form' : form, 'formset' : formset })
