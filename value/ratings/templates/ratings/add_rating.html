@@ -52,7 +52,7 @@
                 <td>
                   <input type="text" 
                          class="form-control" 
-                         value="{{ form.description.value }}" 
+                         value="{{ form.description.value|default_if_none:'' }}" 
                          id="{{ form.description.id_for_label }}" 
                          name="{{ form.description.html_name }}" 
                          maxlength="{{ form.description.field.max_length }}">

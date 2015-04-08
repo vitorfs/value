@@ -30,7 +30,7 @@
       <div class="col-sm-10">
         <input type="text" class="form-control" value="{{ form.username.value }}" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" maxlength="{{ form.username.field.max_length }}">
         {% for error in form.username.errors %}
-          <p class="help-block"><span class="glyphicon glyphicon-warning-sign"></span> {{ error }}</p>
+          <p class="help-block">{{ error }}</p>
         {% endfor %}
         <span class="help-block">{{ form.username.help_text }}</span>
       </div>
@@ -41,7 +41,7 @@
       <div class="col-sm-10">
         <input type="password" class="form-control" id="{{ form.password1.id_for_label }}" name="{{ form.password1.html_name }}">
         {% for error in form.password1.errors %}
-          <p class="help-block"><span class="glyphicon glyphicon-warning-sign"></span> {{ error }}</p>
+          <p class="help-block">{{ error }}</p>
         {% endfor %}
       </div>
     </div>
@@ -51,7 +51,7 @@
       <div class="col-sm-10">
         <input type="password" class="form-control" id="{{ form.password2.id_for_label }}" name="{{ form.password2.html_name }}">
         {% for error in form.password2.errors %}
-          <p class="help-block"><span class="glyphicon glyphicon-warning-sign"></span> {{ error }}</p>
+          <p class="help-block">{{ error }}</p>
         {% endfor %}
         <span class="help-block">{{ form.password2.help_text }}</span>
       </div>
