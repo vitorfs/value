@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block javascript %}
+  <script src="{{ STATIC_URL }}js/ratings.js"></script>
+{% endblock javascript %}
+
 {% block main %}
 
   <ol class="breadcrumb">
@@ -57,7 +61,11 @@
           </thead>
           <tfoot>
             <tr>
-              <td colspan="3"><a href="#"><span class="glyphicon glyphicon-plus-sign"></span> Add another value</a></td>
+              <td colspan="3">
+                <a href="#" class="js-add-value">
+                  <span class="glyphicon glyphicon-plus-sign"></span> Add another value
+                </a>
+              </td>
             </tr>
           </tfoot>
           <tbody>
@@ -77,17 +85,18 @@
                 <td>
                   <input type="number" 
                          class="form-control" 
-                         value="{{ form.weight.value }}" 
+                         value="{{ form.weight.value|default_if_none:'' }}" 
                          id="{{ form.weight.id_for_label }}" 
-                         name="{{ form.weight.html_name }}" 
-                         maxlength="{{ form.weight.field.max_length }}">
+                         name="{{ form.weight.html_name }}">
                 </td>
-                <td>
-                  <div class="checkbox">
-                    <label>
-                      {{ form.DELETE }}
-                    </label>
-                  </div>
+                <td style="vertical-align: middle;">
+                  {% if form.instance.pk %}
+                    {{ form.DELETE }}
+                  {% else %}
+                    <a href="#" class="js-remove-value">
+                      <span class="glyphicon glyphicon-remove-sign"></span>
+                    </a>
+                  {% endif %}
                 </td>
               </tr>
             {% endfor %}
