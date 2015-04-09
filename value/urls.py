@@ -7,5 +7,5 @@ urlpatterns = patterns('',
     url(r'^models/', include('value.models.urls')),
     url(r'^factors/', include('value.factors.urls')),
     url(r'^ratings/', include('value.ratings.urls')),
-    url(r'^users/', include('value.users.urls')),
+    url(r'^users/', include('value.users.urls', namespace='users')),
 )

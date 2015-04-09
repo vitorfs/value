@@ -10,14 +10,14 @@
 
   <h1 class="lead" style="margin-bottom: 0">Add rating</h1>
 
-  <form action="." method="post" class="form-horizontal" role="form">
+  <form method="post" class="form-horizontal" role="form">
 
     {% csrf_token %}
 
     {% for hidden in form.hidden_fields %}
       {{ hidden }}
     {% endfor %}
-    
+
     {% for field in form.visible_fields %}
       <div class="form-group{% if field.errors %} has-error{% endif %}">
         <label for="{{ field.label }}" class="col-sm-2 control-label">{{ field.label }}</label>

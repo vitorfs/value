@@ -13,17 +13,17 @@ def users(request):
     return render(request, 'users/users.html', { 'users' : users })
 
 @login_required
-def add_user(request):
+def add(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             messages.success(request, u'The user {0} was added successfully. You may edit it again below.'.format(user.username))
-            return redirect(reverse('user', args=(user.username,)))
+            return redirect(reverse('users:user', args=(user.username,)))
     else:
         user = User()
         form = UserCreationForm(instance=user)
-    return render(request, 'users/add_user.html', { 'form' : form })
+    return render(request, 'users/add.html', { 'form' : form })
 
 @login_required
 def user(request, username):
@@ -34,7 +34,7 @@ def user(request, username):
         if form.is_valid():
             form.save()
             messages.success(request, u'The user {0} was changed successfully.'.format(page_user.username))
-            return redirect(reverse('users'))
+            return redirect(reverse('users:users'))
     else:
         form = Form(instance=page_user)
     return render(request, 'users/user.html', { 'page_user' : page_user, 'form' : form })
@@ -49,7 +49,7 @@ def password(request, username):
             messages.success(request, u'Password changed successfully.')
             if request.user == page_user:
                 update_session_auth_hash(request, form.user)
-            return redirect(reverse('user', args=(page_user.username,)))
+            return redirect(reverse('users:user', args=(page_user.username,)))
     else:
         form = AdminPasswordChangeForm(page_user)
     return render(request, 'users/password.html', { 'page_user' : page_user, 'form' : form })
@@ -60,5 +60,5 @@ def delete(request, username):
     if request.method == 'POST':
         page_user.delete()
         messages.success(request, u'The user {0} was deleted successfully.'.format(page_user.username))
-        return redirect(reverse('users'))
+        return redirect(reverse('users:users'))
     return render(request, 'users/delete.html', { 'page_user' : page_user })

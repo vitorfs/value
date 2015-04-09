@@ -3,11 +3,9 @@
 {% block main %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'users' %}">Users</a></li>
+    <li><a href="{% url 'users:users' %}">Users</a></li>
     <li class="active">{{ page_user.username }}</li>
   </ol>
-
-  <a href="{% url 'delete' page_user.username %}" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-remove"></span> Delete</a>
 
   <h1 class="lead">Change user</h1>
 
@@ -20,7 +18,7 @@
     </div>
   {% endif %}
 
-  <form action="." method="post" class="form-horizontal">
+  <form method="post" class="form-horizontal">
 
     {% csrf_token %}
 
@@ -86,8 +84,9 @@
 
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
+        <a href="{% url 'users:delete' page_user.username %}" class="btn btn-danger pull-right">Delete</a>
         <button type="submit" class="btn btn-primary">Save</button>
-        <a href="{% url 'users' %}" class="btn btn-default">Cancel</a>
+        <a href="{% url 'users:users' %}" class="btn btn-default">Cancel</a>
       </div>
     </div>
 

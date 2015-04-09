@@ -14,17 +14,20 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th><input type="checkbox"></th>
         <th>Name</th>
         <th>Values</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       {% for rating in ratings %}
         <tr>
-          <td><input type="checkbox"></td>
           <td><a href="{% url 'rating' rating.id %}">{{ rating.name }}</a></td>
           <td>{{ rating.get_values }}</td>
+          <td style="width: 150px">
+            <a href="" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+            <a href="" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+          </td>
         </tr>
       {% endfor %}
     </tbody>
