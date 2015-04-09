@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm, AdminPasswordChangeForm
@@ -19,16 +19,16 @@ def add(request):
         if form.is_valid():
             user = form.save()
             messages.success(request, u'The user {0} was added successfully. You may edit it again below.'.format(user.username))
-            return redirect(reverse('users:user', args=(user.username,)))
+            return redirect(reverse('users:user', args=(user.pk,)))
     else:
         user = User()
         form = UserCreationForm(instance=user)
     return render(request, 'users/add.html', { 'form' : form })
 
 @login_required
-def user(request, username):
+def user(request, user_id):
     Form = modelform_factory(User, form=UserChangeForm, exclude=('date_joined', 'email',))
-    user = User.objects.get(username=username)
+    user = get_object_or_404(User, pk=user_id)
     if request.method == 'POST':
         form = Form(request.POST, instance=user)
         if form.is_valid():
@@ -40,8 +40,8 @@ def user(request, username):
     return render(request, 'users/user.html', { 'form' : form })
 
 @login_required
-def password(request, username):
-    user = User.objects.get(username=username)
+def password(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
     if request.method == 'POST':
         form = AdminPasswordChangeForm(user, request.POST)
         if form.is_valid():
@@ -49,14 +49,14 @@ def password(request, username):
             messages.success(request, u'Password changed successfully.')
             if request.user == user:
                 update_session_auth_hash(request, form.user)
-            return redirect(reverse('users:user', args=(user.username,)))
+            return redirect(reverse('users:user', args=(user.pk,)))
     else:
         form = AdminPasswordChangeForm(user)
     return render(request, 'users/password.html', { 'form' : form })
 
 @login_required
-def delete(request, username):
-    user = User.objects.get(username=username)
+def delete(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
     if request.method == 'POST':
         user.delete()
         messages.success(request, u'The user {0} was deleted successfully.'.format(user.username))

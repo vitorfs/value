@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.forms.models import inlineformset_factory
 from value.ratings.models import Rating, RatingValue
 from value.ratings.forms import RatingForm
+from django.contrib import messages
 
 @login_required
 def ratings(request):
@@ -46,5 +47,10 @@ def rating(request, rating_id):
 
 @login_required
 def delete(request, rating_id):
-    pass
+    rating = get_object_or_404(Rating, pk=rating_id)
+    if request.method == 'POST':
+        rating.delete()
+        messages.success(request, u'The rating {0} was deleted successfully.'.format(rating.name))
+        return redirect(reverse('ratings:ratings'))
+    return render(request, 'ratings/delete.html', { 'rating' : rating })
     

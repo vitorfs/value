@@ -24,7 +24,7 @@
     <tbody>
       {% for user in users %}
         <tr>
-          <td><a href="{% url 'users:user' user.username %}">{{ user.username }}</a></td>
+          <td><a href="{% url 'users:user' user.pk %}">{{ user.username }}</a></td>
           <td>{{ user.first_name }}</td>
           <td>{{ user.last_name }}</td>
           <td>
@@ -42,8 +42,8 @@
             {% endif %}
           </td>
           <td style="width: 150px">
-            <a href="{% url 'users:user' user.username %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
-            <a href="{% url 'users:delete' user.username %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+            <a href="{% url 'users:user' user.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+            <a href="{% url 'users:delete' user.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</a>
           </td>
         </tr>
       {% endfor %}

@@ -3,19 +3,19 @@
 {% block main %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'users:users' %}">Users</a></li>
-    <li><a href="{% url 'users:user' delete_user.pk %}">{{ delete_user.username }}</a></li>
+    <li><a href="{% url 'ratings:ratings' %}">Users</a></li>
+    <li><a href="{% url 'ratings:rating' rating.id %}">{{ rating.name }}</a></li>
     <li class="active">Delete</li>
   </ol>
 
-  <h1 class="lead">Are you sure you want to delete the user {{ delete_user.username }}?</h1>
+  <h1 class="lead">Are you sure you want to delete the rating {{ rating.name }}?</h1>
 
   <form method="post" class="form-horizontal">
     {% csrf_token %}
     <div class="form-group">
       <div class="col-sm-12">
         <button type="submit" class="btn btn-primary">Confirm</button>
-        <a href="{% url 'users:users' %}" class="btn btn-default">Cancel</a>
+        <a href="{% url 'ratings:ratings' %}" class="btn btn-default">Cancel</a>
       </div>
     </div>
   </form>

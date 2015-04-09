@@ -5,7 +5,11 @@
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
     <li><a href="{% url 'ratings:ratings' %}">Ratings</a></li>
-    <li class="active">Add rating</li>
+    {% if form.instance.pk %}
+      <li class="active">{{ form.instance.name }}</li>
+    {% else %}
+      <li class="active">Add rating</li>
+    {% endif %}
   </ol>
 
   <h1 class="lead" style="margin-bottom: 0">
