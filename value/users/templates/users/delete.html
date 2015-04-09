@@ -4,13 +4,13 @@
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
     <li><a href="{% url 'users:users' %}">Users</a></li>
-    <li><a href="{% url 'users:user' page_user.username %}">{{ page_user.username }}</a></li>
+    <li><a href="{% url 'users:user' delete_user.username %}">{{ delete_user.username }}</a></li>
     <li class="active">Delete</li>
   </ol>
 
-  <h1 class="lead">Are you sure you want to delete the user {{ page_user.username }}?</h1>
+  <h1 class="lead">Are you sure you want to delete the user {{ delete_user.username }}?</h1>
 
-  <form action="." method="post" class="form-horizontal">
+  <form method="post" class="form-horizontal">
     {% csrf_token %}
     <div class="form-group">
       <div class="col-sm-12">

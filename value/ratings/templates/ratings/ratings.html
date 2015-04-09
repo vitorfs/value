@@ -7,7 +7,7 @@
     <li class="active">Ratings</li>
   </ol>
 
-  <a class="btn btn-primary pull-right" href="{% url 'add_rating' %}"><span class="glyphicon glyphicon-plus"></span> Add rating</a>
+  <a class="btn btn-primary pull-right" href="{% url 'ratings:add' %}"><span class="glyphicon glyphicon-plus"></span> Add rating</a>
 
   <h1 class="lead">Select rating to change</h1>
 
@@ -22,11 +22,11 @@
     <tbody>
       {% for rating in ratings %}
         <tr>
-          <td><a href="{% url 'rating' rating.id %}">{{ rating.name }}</a></td>
+          <td><a href="{% url 'ratings:rating' rating.id %}">{{ rating.name }}</a></td>
           <td>{{ rating.get_values }}</td>
           <td style="width: 150px">
-            <a href="" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
-            <a href="" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+            <a href="{% url 'ratings:rating' rating.id %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+            <a href="{% url 'ratings:delete' rating.id %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</a>
           </td>
         </tr>
       {% endfor %}

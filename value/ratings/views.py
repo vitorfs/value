@@ -11,7 +11,7 @@ def ratings(request):
     return render(request, 'ratings/ratings.html', { 'ratings' : ratings })
 
 @login_required
-def add_rating(request):
+def add(request):
     RatingValueFormSet = inlineformset_factory(Rating, RatingValue, fields=('description', 'weight',), extra=1)
     if request.method == 'POST':
         form = RatingForm(request.POST)
@@ -21,7 +21,7 @@ def add_rating(request):
             formset = RatingValueFormSet(request.POST, instance=rating)
             if formset.is_valid():
                 formset.save()
-                return redirect(reverse('ratings'))
+                return redirect(reverse('ratings:ratings'))
     else:
         rating = Rating()
         form = RatingForm(instance=rating)
@@ -38,8 +38,13 @@ def rating(request, rating_id):
         if form.is_valid() and formset.is_valid():
             form.save()
             formset.save()
-            return redirect(reverse('ratings'))
+            return redirect(reverse('ratings:ratings'))
     else:
         form = RatingForm(instance=rating)
         formset = RatingValueFormSet(instance=rating)
     return render(request, 'ratings/rating.html', { 'form' : form, 'formset' : formset })
+
+@login_required
+def delete(request, rating_id):
+    pass
+    

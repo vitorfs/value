@@ -28,37 +28,37 @@ def add(request):
 @login_required
 def user(request, username):
     Form = modelform_factory(User, form=UserChangeForm, exclude=('date_joined', 'email',))
-    page_user = User.objects.get(username=username)
+    user = User.objects.get(username=username)
     if request.method == 'POST':
-        form = Form(request.POST, instance=page_user)
+        form = Form(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            messages.success(request, u'The user {0} was changed successfully.'.format(page_user.username))
+            messages.success(request, u'The user {0} was changed successfully.'.format(user.username))
             return redirect(reverse('users:users'))
     else:
-        form = Form(instance=page_user)
-    return render(request, 'users/user.html', { 'page_user' : page_user, 'form' : form })
+        form = Form(instance=user)
+    return render(request, 'users/user.html', { 'form' : form })
 
 @login_required
 def password(request, username):
-    page_user = User.objects.get(username=username)
+    user = User.objects.get(username=username)
     if request.method == 'POST':
-        form = AdminPasswordChangeForm(page_user, request.POST)
+        form = AdminPasswordChangeForm(user, request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, u'Password changed successfully.')
-            if request.user == page_user:
+            if request.user == user:
                 update_session_auth_hash(request, form.user)
-            return redirect(reverse('users:user', args=(page_user.username,)))
+            return redirect(reverse('users:user', args=(user.username,)))
     else:
-        form = AdminPasswordChangeForm(page_user)
-    return render(request, 'users/password.html', { 'page_user' : page_user, 'form' : form })
+        form = AdminPasswordChangeForm(user)
+    return render(request, 'users/password.html', { 'form' : form })
 
 @login_required
 def delete(request, username):
-    page_user = User.objects.get(username=username)
+    user = User.objects.get(username=username)
     if request.method == 'POST':
-        page_user.delete()
-        messages.success(request, u'The user {0} was deleted successfully.'.format(page_user.username))
+        user.delete()
+        messages.success(request, u'The user {0} was deleted successfully.'.format(user.username))
         return redirect(reverse('users:users'))
-    return render(request, 'users/delete.html', { 'page_user' : page_user })
+    return render(request, 'users/delete.html', { 'delete_user' : user })

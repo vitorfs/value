@@ -4,11 +4,17 @@
 
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'ratings' %}">Ratings</a></li>
+    <li><a href="{% url 'ratings:ratings' %}">Ratings</a></li>
     <li class="active">Add rating</li>
   </ol>
 
-  <h1 class="lead" style="margin-bottom: 0">Add rating</h1>
+  <h1 class="lead" style="margin-bottom: 0">
+    {% if form.instance.pk %}
+      Change rating
+    {% else %}
+      Add rating
+    {% endif %}
+  </h1>
 
   <form method="post" class="form-horizontal" role="form">
 
@@ -88,8 +94,11 @@
 
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
+        {% if form.instance.pk %}
+          <a href="{% url 'ratings:delete' form.instance.pk %}" class="btn btn-danger pull-right">Delete</a>
+        {% endif %}
         <button type="submit" class="btn btn-primary">Save</button>
-        <a href="{% url 'ratings' %}" class="btn btn-default">Cancel</a>
+        <a href="{% url 'ratings:ratings' %}" class="btn btn-default">Cancel</a>
       </div>
     </div>
 
