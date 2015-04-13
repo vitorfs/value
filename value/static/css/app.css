@@ -31,3 +31,8 @@ body {
   background-color: #fe0074;
   color: #ffffff;
 }
+
+footer {
+  margin-bottom: 20px;
+  text-align: center;
+}
