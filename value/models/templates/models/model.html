@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 
-{% block main %}
+{% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
     <li><a href="{% url 'models:models' %}">Models</a></li>
     <li class="active">Sony Ericsson Xperia X10</li>
   </ol>
+{% endblock breadcrumb %}
 
+{% block main %}
   <p class="lead">Sony Ericsson Xperia X10</p>
 
   <div class="row">

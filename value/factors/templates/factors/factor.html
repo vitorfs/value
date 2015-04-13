@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block main %}
+{% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
     <li><a href="{% url 'factors:factors' %}">Factors</a></li>
@@ -10,7 +10,9 @@
       <li class="active">Add factor</li>
     {% endif %}
   </ol>
+{% endblock breadcrumb %}
 
+{% block main %}
   <h1 class="lead" style="margin-bottom: 0">
     {% if form.instance.pk %}
       Change factor

@@ -4,8 +4,7 @@
   <script src="{{ STATIC_URL }}js/ratings.js"></script>
 {% endblock javascript %}
 
-{% block main %}
-
+{% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
     <li><a href="{% url 'ratings:ratings' %}">Ratings</a></li>
@@ -15,7 +14,9 @@
       <li class="active">Add rating</li>
     {% endif %}
   </ol>
+{% endblock breadcrumb %}
 
+{% block main %}
   <h1 class="lead" style="margin-bottom: 0">
     {% if form.instance.pk %}
       Change rating

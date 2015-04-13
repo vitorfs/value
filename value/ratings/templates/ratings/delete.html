@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
 
-{% block main %}
+{% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
     <li><a href="{% url 'ratings:ratings' %}">Users</a></li>
     <li><a href="{% url 'ratings:rating' rating.id %}">{{ rating.name }}</a></li>
     <li class="active">Delete</li>
   </ol>
+{% endblock breadcrumb %}
 
+{% block main %}
   <h1 class="lead">Are you sure you want to delete the rating {{ rating.name }}?</h1>
 
   <form method="post" class="form-horizontal">

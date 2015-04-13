@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 
-{% block main %}
+{% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
     <li class="active">Factors</li>
   </ol>
+{% endblock breadcrumb %}
 
+{% block main %}
   <a href="{% url 'factors:add' %}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> Add factor</a>
 
   <p class="lead">Select factor to change</p>
@@ -41,5 +43,4 @@
       {% endfor %}
     </tbody>
   </table>
-
 {% endblock main %}
