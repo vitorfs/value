@@ -20,6 +20,8 @@ def add(request):
             user = form.save()
             messages.success(request, u'The user {0} was added successfully. You may edit it again below.'.format(user.username))
             return redirect(reverse('users:user', args=(user.pk,)))
+        else:
+            messages.error(request, u'Please correct the error below.')
     else:
         user = User()
         form = UserCreationForm(instance=user)
@@ -35,6 +37,8 @@ def user(request, user_id):
             form.save()
             messages.success(request, u'The user {0} was changed successfully.'.format(user.username))
             return redirect(reverse('users:users'))
+        else:
+            messages.error(request, u'Please correct the error below.')
     else:
         form = Form(instance=user)
     return render(request, 'users/user.html', { 'form' : form })
@@ -50,6 +54,8 @@ def password(request, user_id):
             if request.user == user:
                 update_session_auth_hash(request, form.user)
             return redirect(reverse('users:user', args=(user.pk,)))
+        else:
+            messages.error(request, u'Please correct the error below.')
     else:
         form = AdminPasswordChangeForm(user)
     return render(request, 'users/password.html', { 'form' : form })

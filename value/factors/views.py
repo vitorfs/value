@@ -19,6 +19,8 @@ def add(request):
             factor = form.save()
             messages.success(request, u'The factor {0} was added successfully.'.format(factor.name))
             return redirect(reverse('factors:factors'))
+        else:
+            messages.error(request, u'Please correct the error below.')
     else:
         factor = Factor()
         form = FactorForm(instance=factor)

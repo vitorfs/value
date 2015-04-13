@@ -1,7 +1,5 @@
 {% load fieldtype %}
 
-{% csrf_token %}
-
 {% for hidden in form.hidden_fields %}
   {{ hidden }}
 {% endfor %}
@@ -15,6 +13,9 @@
             {{ field }} {{ field.label }}
           </label>
         </div>
+        {% for error in field.errors %}
+          <p class="help-block">{{ error }}</p>
+        {% endfor %}
         <span class="help-block">{{ field.help_text }}</span>
       </div>
     {% else %}

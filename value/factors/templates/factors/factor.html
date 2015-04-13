@@ -11,7 +11,17 @@
     {% endif %}
   </ol>
 
+  <h1 class="lead" style="margin-bottom: 0">
+    {% if form.instance.pk %}
+      Change factor
+    {% else %}
+      Add factor
+    {% endif %}
+  </h1>
+
   <form method="post" class="form-horizontal" role="form">
+
+    {% csrf_token %}
 
     {% include 'includes/form_horizontal.html' with form=form %}
 

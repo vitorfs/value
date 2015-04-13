@@ -22,7 +22,10 @@ def add(request):
             formset = RatingValueFormSet(request.POST, instance=rating)
             if formset.is_valid():
                 formset.save()
+                messages.success(request, u'The rating {0} was added successfully.'.format(rating.name))
                 return redirect(reverse('ratings:ratings'))
+        else:
+            messages.error(request, u'Please correct the error below.')
     else:
         rating = Rating()
         form = RatingForm(instance=rating)
@@ -39,7 +42,10 @@ def rating(request, rating_id):
         if form.is_valid() and formset.is_valid():
             form.save()
             formset.save()
+            messages.success(request, u'The rating {0} was changed successfully.'.format(rating.name))
             return redirect(reverse('ratings:ratings'))
+        else:
+            messages.error(request, u'Please correct the error below.')
     else:
         form = RatingForm(instance=rating)
         formset = RatingValueFormSet(instance=rating)
