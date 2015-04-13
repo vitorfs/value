@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserChangeForm, UserCreationForm, AdminPas
 from django.contrib.auth import update_session_auth_hash
 from django.forms.models import modelform_factory
 from django.contrib import messages
+from value.factors.models import Factor
 
 @login_required
 def users(request):
@@ -31,6 +32,7 @@ def add(request):
 def user(request, user_id):
     Form = modelform_factory(User, form=UserChangeForm, exclude=('date_joined',))
     user = get_object_or_404(User, pk=user_id)
+    factors = Factor.objects.filter(is_active=True)
     if request.method == 'POST':
         form = Form(request.POST, instance=user)
         if form.is_valid():
@@ -41,7 +43,7 @@ def user(request, user_id):
             messages.error(request, u'Please correct the error below.')
     else:
         form = Form(instance=user)
-    return render(request, 'users/user.html', { 'form' : form })
+    return render(request, 'users/user.html', { 'form' : form, 'factors' : factors })
 
 @login_required
 def password(request, user_id):
