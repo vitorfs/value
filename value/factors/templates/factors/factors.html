@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block javascript %}
+  <script src="{{ STATIC_URL }}js/factors.js"></script>
+{% endblock javascript %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
@@ -27,7 +31,9 @@
       <tr>
         <td><a href="{% url 'factors:factor' factor.pk %}">{{ factor.name }}</a></td>
         <td>{{ factor.description }}</td>
-        <td>{{ factor.rating.name }}</td>
+        <td>
+          <a href="javascript:void(0);" tabindex="0" data-toggle="popover" data-trigger="focus" title="Rating Values" data-content="{{ factor.rating.get_values }}">{{ factor.rating.name }}</a>
+        </td>
         <td>
           {% if factor.is_active %}
             <span class="glyphicon glyphicon-ok-sign text-success"></span>
