@@ -29,7 +29,7 @@ def add(request):
 
 @login_required
 def user(request, user_id):
-    Form = modelform_factory(User, form=UserChangeForm, exclude=('date_joined', 'email',))
+    Form = modelform_factory(User, form=UserChangeForm, exclude=('date_joined',))
     user = get_object_or_404(User, pk=user_id)
     if request.method == 'POST':
         form = Form(request.POST, instance=user)
