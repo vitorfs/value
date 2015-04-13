@@ -8,4 +8,5 @@ urlpatterns = patterns('',
     url(r'^factors/', include('value.factors.urls', namespace='factors')),
     url(r'^ratings/', include('value.ratings.urls', namespace='ratings')),
     url(r'^users/', include('value.users.urls', namespace='users')),
+    url(r'^help/', include('value.help.urls', namespace='help')),
 )

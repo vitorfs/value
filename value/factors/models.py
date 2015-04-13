@@ -8,9 +8,9 @@ class Factor(models.Model):
     rating = models.ForeignKey(Rating)
     is_active = models.BooleanField(default=True)
     creation_date = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, related_name='creation_user')
+    created_by = models.ForeignKey(User, related_name='factor_creation_user')
     update_date = models.DateTimeField(null=True, blank=True)
-    updated_by = models.ForeignKey(User, null=True, related_name='update_user')
+    updated_by = models.ForeignKey(User, null=True, related_name='factor_update_user')
 
     def __unicode__(self):
         return self.name

@@ -28,6 +28,7 @@ INSTALLED_APPS = (
     'value.models',
     'value.ratings',
     'value.users',
+    'value.help',
 )
 
 MIDDLEWARE_CLASSES = (
