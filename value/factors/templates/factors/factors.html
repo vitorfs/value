@@ -1,4 +1,37 @@
 {% extends 'base.html' %}
 
 {% block main %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li class="active">Factors</li>
+  </ol>
+
+  <a href="#" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> Add factor</a>
+
+  <p class="lead">Select factor to change</p>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a href="#">Lorem ipsum</a></td>
+        <td>Duis aute irure dolor in reprehenderit in voluptate</td>
+        <td>
+          <span class="glyphicon glyphicon-ok-sign text-success"></span>
+        </td>
+        <td style="width: 150px">
+          <a href="" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+          <a href="" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
 {% endblock main %}
