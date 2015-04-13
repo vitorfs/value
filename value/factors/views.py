@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from value.factors.models import Factor
 from value.factors.forms import FactorForm
+from datetime import datetime
 
 @login_required
 def factors(request):
@@ -25,3 +26,29 @@ def add(request):
         factor = Factor()
         form = FactorForm(instance=factor)
     return render(request, 'factors/factor.html', { 'form' : form })
+
+@login_required
+def factor(request, factor_id):
+    factor = get_object_or_404(Factor, pk=factor_id)
+    if request.method == 'POST':
+        form = FactorForm(request.POST, instance=factor)
+        if form.is_valid():
+            form.instance.updated_by = request.user
+            form.instance.update_date = datetime.now()
+            factor = form.save()
+            messages.success(request, u'The factor {0} was changed successfully.'.format(factor.name))
+            return redirect(reverse('factors:factors'))
+        else:
+            messages.error(request, u'Please correct the error below.')
+    else:
+        form = FactorForm(instance=factor)
+    return render(request, 'factors/factor.html', { 'form' : form })
+
+@login_required
+def delete(request, factor_id):
+    factor = get_object_or_404(Factor, pk=factor_id)
+    if request.method == 'POST':
+        factor.delete()
+        messages.success(request, u'The factor {0} was deleted successfully.'.format(factor.name))
+        return redirect(reverse('factors:factors'))
+    return render(request, 'factors/delete.html', { 'factor' : factor })

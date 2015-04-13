@@ -25,7 +25,7 @@
     <tbody>
       {% for factor in factors %}
       <tr>
-        <td><a href="#">{{ factor.name }}</a></td>
+        <td><a href="{% url 'factors:factor' factor.pk %}">{{ factor.name }}</a></td>
         <td>{{ factor.description }}</td>
         <td>{{ factor.rating.name }}</td>
         <td>
@@ -36,8 +36,8 @@
           {% endif %}
         </td>
         <td style="width: 150px">
-          <a href="" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
-          <a href="" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+          <a href="{% url 'factors:factor' factor.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+          <a href="{% url 'factors:delete' factor.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</a>
         </td>
       </tr>
       {% endfor %}
