@@ -1,17 +1,19 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.forms.models import inlineformset_factory
 from value.ratings.models import Rating, RatingValue
 from value.ratings.forms import RatingForm
 from django.contrib import messages
 
 @login_required
+@user_passes_test(lambda user: user.is_superuser)
 def ratings(request):
     ratings = Rating.objects.all()
     return render(request, 'ratings/ratings.html', { 'ratings' : ratings })
 
 @login_required
+@user_passes_test(lambda user: user.is_superuser)
 def add(request):
     RatingValueFormSet = inlineformset_factory(Rating, RatingValue, fields=('description', 'weight',), extra=1)
     if request.method == 'POST':
@@ -34,6 +36,7 @@ def add(request):
     return render(request, 'ratings/rating.html', { 'form' : form, 'formset' : formset })
 
 @login_required
+@user_passes_test(lambda user: user.is_superuser)
 def rating(request, rating_id):
     rating = get_object_or_404(Rating, pk=rating_id)
     RatingValueFormSet = inlineformset_factory(Rating, RatingValue, fields=('description', 'weight',), extra=1)
@@ -54,6 +57,7 @@ def rating(request, rating_id):
     return render(request, 'ratings/rating.html', { 'form' : form, 'formset' : formset })
 
 @login_required
+@user_passes_test(lambda user: user.is_superuser)
 def delete(request, rating_id):
     rating = get_object_or_404(Rating, pk=rating_id)
     if request.method == 'POST':

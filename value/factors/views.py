@@ -1,16 +1,18 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from value.factors.models import Factor
 from value.factors.forms import FactorForm
 
 @login_required
+@user_passes_test(lambda user: user.is_superuser)
 def factors(request):
     factors = Factor.objects.all()
     return render(request, 'factors/factors.html', { 'factors' : factors })
 
 @login_required
+@user_passes_test(lambda user: user.is_superuser)
 def add(request):
     if request.method == 'POST':
         form = FactorForm(request.POST)
@@ -27,6 +29,7 @@ def add(request):
     return render(request, 'factors/factor.html', { 'form' : form })
 
 @login_required
+@user_passes_test(lambda user: user.is_superuser)
 def factor(request, factor_id):
     factor = get_object_or_404(Factor, pk=factor_id)
     if request.method == 'POST':
@@ -43,6 +46,7 @@ def factor(request, factor_id):
     return render(request, 'factors/factor.html', { 'form' : form })
 
 @login_required
+@user_passes_test(lambda user: user.is_superuser)
 def delete(request, factor_id):
     factor = get_object_or_404(Factor, pk=factor_id)
     if request.method == 'POST':
