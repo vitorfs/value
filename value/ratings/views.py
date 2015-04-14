@@ -18,6 +18,7 @@ def add(request):
         form = RatingForm(request.POST)
         formset = RatingValueFormSet(request.POST)
         if form.is_valid() and formset.is_valid():
+            form.instance.created_by = request.user
             rating = form.save()
             formset = RatingValueFormSet(request.POST, instance=rating)
             if formset.is_valid():
@@ -40,6 +41,7 @@ def rating(request, rating_id):
         form = RatingForm(request.POST, instance=rating)
         formset = RatingValueFormSet(request.POST, instance=rating)
         if form.is_valid() and formset.is_valid():
+            form.instance.updated_by = request.user
             form.save()
             formset.save()
             messages.success(request, u'The rating {0} was changed successfully.'.format(rating.name))

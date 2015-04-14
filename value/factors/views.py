@@ -4,7 +4,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from value.factors.models import Factor
 from value.factors.forms import FactorForm
-from datetime import datetime
 
 @login_required
 def factors(request):
@@ -34,7 +33,6 @@ def factor(request, factor_id):
         form = FactorForm(request.POST, instance=factor)
         if form.is_valid():
             form.instance.updated_by = request.user
-            form.instance.update_date = datetime.now()
             factor = form.save()
             messages.success(request, u'The factor {0} was changed successfully.'.format(factor.name))
             return redirect(reverse('factors:factors'))
