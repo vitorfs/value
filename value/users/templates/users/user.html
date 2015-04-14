@@ -101,7 +101,7 @@
             <div class="col-sm-3">
               <div class="checkbox">
                 <label>
-                  <input type="checkbox"> {{ factor.name }} 
+                  <input type="checkbox" id="id_factor" name="id_factor" value="{{ factor.id }}"> {{ factor.name }} 
                   {% if factor.description %}
                     <a href="javascript:void(0);" tabindex="0" data-toggle="popover" data-trigger="focus" title="Description" data-content="{{ factor.description }}" data-container="body"><span class="glyphicon glyphicon-question-sign"></span></a>
                   {% endif %}
