@@ -7,9 +7,9 @@ class Factor(models.Model):
     description = models.TextField(max_length=2000, null=True, blank=True)
     rating = models.ForeignKey(Rating)
     is_active = models.BooleanField(default=True)
-    creation_date = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, related_name='factor_creation_user')
-    update_date = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(User, null=True, related_name='factor_update_user')
 
     def __unicode__(self):

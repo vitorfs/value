@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 class Rating(models.Model):
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
-    creation_date = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, related_name='rating_creation_user')
-    update_date = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(User, null=True, related_name='rating_update_user')
 
     def __unicode__(self):

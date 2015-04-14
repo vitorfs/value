@@ -16,9 +16,9 @@ class Instance(models.Model):
     stakeholders = models.ManyToManyField(User)
     manager = models.ForeignKey(User, related_name='instance_manager_user')
     status = models.CharField(max_length=1, choices=STATUS, default=INITIALIZED)
-    creation_date = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, related_name='instance_creation_user')
-    update_date = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(User, null=True, related_name='instance_update_user')
 
     def __unicode__(self):

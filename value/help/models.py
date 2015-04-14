@@ -14,9 +14,9 @@ class Article(models.Model):
     description = models.TextField()
     category = models.CharField(max_length=2, choices=CATEGORIES)
     is_active = models.BooleanField(default=True)
-    creation_date = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, related_name='article_creation_user')
-    update_date = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(User, null=True, related_name='article_update_user')
 
     def __unicode__(self):
