@@ -25,10 +25,10 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'value.core',
     'value.factors',
-    'value.models',
     'value.ratings',
     'value.users',
     'value.help',
+    'value.workspace',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -78,6 +78,6 @@ TEMPLATE_DIRS = (
 )
 
 
-LOGIN_URL = '/login/'
+LOGIN_URL = '/signin/'
 
 LOGIN_REDIRECT_URL = '/'
