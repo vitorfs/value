@@ -6,7 +6,13 @@
 
 {% block content %}
   <header>
-    {% include 'includes/header.html' %}
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="{% url 'home' %}" class="navbar-brand">Value</a>
+        </div>
+      </div>
+    </nav>
   </header>
   <main>
     <div class="container">

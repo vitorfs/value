@@ -20,10 +20,11 @@ $(function () {
       "</tr>"
     ];
 
-    var count = parseInt($("#id_ratingvalue_set-TOTAL_FORMS").val()) + 1;
+    var count = parseInt($("#id_ratingvalue_set-TOTAL_FORMS").val());
     var html = template.join("\n").replace(/#/g, count);
-    $("#id_ratingvalue_set-TOTAL_FORMS").val(count);
     $("table tbody").append(html);
+    count = count + 1;
+    $("#id_ratingvalue_set-TOTAL_FORMS").val(count);
 
     return false;
   });
@@ -31,9 +32,6 @@ $(function () {
 
   $("table tbody").on("click", ".js-remove-value", function () {
     $(this).closest("tr").remove();
-
-    //var count = $("table tbody tr").length;
-    //$("#id_ratingvalue_set-TOTAL_FORMS").val(count);
 
     return false;
   });
