@@ -36,3 +36,8 @@ footer {
   margin-bottom: 20px;
   text-align: center;
 }
+
+.table-hover tbody tr td {
+  cursor: hand;
+  cursor: pointer;
+}

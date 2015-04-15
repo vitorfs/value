@@ -9,16 +9,45 @@
 
 {% block main %}
   {% if user.is_superuser %}
-    <a class="btn btn-primary pull-right" href="{% url 'ratings:add' %}"><span class="glyphicon glyphicon-plus"></span> New value project</a>
+    <a class="btn btn-primary pull-right" href="{% url 'workspace:new' %}"><span class="glyphicon glyphicon-plus"></span> New value project</a>
   {% endif %}
 
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th></th>
-      </tr>
-    </thead>
-  </table>
+  <h1 class="lead">Select a value project to get started</h1>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Work in Progress</h3>
+    </div>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Manager</th>
+          <th>Updated at</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Idea #1</td>
+          <td>Vitor Freitas</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Idea #1</td>
+          <td>Vitor Freitas</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span class="glyphicon glyphicon-plus pull-right"></span>
+      <h3 class="panel-title">Finished Projects</h3>
+    </div>
+    <table class="table">
+    </table>
+  </div>
 
 {% endblock main %}
