@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import User
 
 @login_required
 def index(request):
@@ -8,7 +9,8 @@ def index(request):
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def new(request):
-    return render(request, 'workspace/new.html')
+    users = User.objects.all()
+    return render(request, 'workspace/new.html', { 'users' : users })
 
 @login_required
 def instance(request, instance_id):

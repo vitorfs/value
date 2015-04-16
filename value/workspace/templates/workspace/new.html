@@ -55,6 +55,12 @@
           <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
           You may now define the stakeholders that will take part on the decision-making process
         </div>
+
+        {% for user in users %}
+          <div class="well">
+            <img src="{{ user.profile.get_picture_64 }}" alt="{{ user.profile.get_display_name }}" class="img-circle">
+          </div>
+        {% endfor %}
       </section>
 
       <section id="decision-making" style="display: none">

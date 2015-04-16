@@ -50,6 +50,13 @@ $(function () {
   $(".js-wizard-steps button").click(function () {
     var target;
     target = $(this).attr("data-target");
+
+    if ("#" + $(".wizard-content section:visible").attr("id") == target) {
+      return false;
+    }
+
+    
+
   });
 
   $(".js-next-wizard-step").click(function () {
