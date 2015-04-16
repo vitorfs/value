@@ -15,44 +15,65 @@
 {% block main %}
   <h1 class="lead">New project wizard</h1>
 
-  <div class="btn-group btn-group-justified" role="group" aria-label="Project Wizard" style="margin-bottom: 20px">
+  <div class="btn-group btn-group-justified js-wizard-steps" role="group" aria-label="Project Wizard" style="margin-bottom: 20px">
     <div class="btn-group" role="group">
-      <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-ok hide"></span> Basic data</button>
+      <button type="button" class="btn btn-primary" data-target="#basic-data"><span class="glyphicon glyphicon-ok hide"></span> Basic data</button>
     </div>
     <div class="btn-group" role="group">
-      <button type="button" class="btn btn-default" disabled="disabled"><span class="glyphicon glyphicon-ok hide"></span> Stakeholders</button>
+      <button type="button" class="btn btn-default" disabled="disabled" data-target="#stakeholders"><span class="glyphicon glyphicon-ok hide"></span> Stakeholders</button>
     </div>
     <div class="btn-group" role="group">
-      <button type="button" class="btn btn-default" disabled="disabled"><span class="glyphicon glyphicon-ok hide"></span> Decision making items</button>
+      <button type="button" class="btn btn-default" disabled="disabled" data-target="#decision-making"><span class="glyphicon glyphicon-ok hide"></span> Decision making items</button>
     </div>
   </div>
 
   <form class="form-horizontal" role="form">
-    <section id="basic-data">
-      <div class="form-group">
-        <label for="name" class="col-sm-2 control-label">Name</label>
-        <div class="col-sm-10">
-          <input type="text" class="form-control">
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="name" class="col-sm-2 control-label">Description</label>
-        <div class="col-sm-10">
-          <textarea class="form-control" rows="5"></textarea>
-        </div>
-      </div>
-    </section>
 
-    <section id="stakeholders" class="hide">
+    <div class="wizard-content">
 
-    </section>
+      <section id="basic-data">
+        <div class="alert alert-info" role="alert">
+          <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+          Provide basic data of the value project
+        </div>
+        <div class="form-group">
+          <label for="name" class="col-sm-2 control-label">Name</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="name" class="col-sm-2 control-label">Description</label>
+          <div class="col-sm-10">
+            <textarea class="form-control" rows="5"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section id="stakeholders" style="display: none">
+        <div class="alert alert-info" role="alert">
+          <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+          You may now define the stakeholders that will take part on the decision-making process
+        </div>
+      </section>
+
+      <section id="decision-making" style="display: none">
+        <div class="alert alert-info" role="alert">
+          <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+          Provide the decision-making data
+        </div>
+
+      </section>
+    </div>
 
     <div class="form-group">
-      <div class="col-sm-10 col-sm-offset-2">
+      <div class="col-sm-12">
         <button type="button" class="btn btn-primary js-previous-wizard-step" disabled="disabled"><span class="glyphicon glyphicon-arrow-left"></span> Previous</button>
         <button type="button" class="btn btn-primary pull-right js-next-wizard-step">Next <span class="glyphicon glyphicon-arrow-right"></span></button>
+        <button type="submit" class="btn btn-primary pull-right js-submit-wizard" style="display: none"><span class="glyphicon glyphicon-ok"></span> Create</button>
       </div>
     </div>
+
   </form>
 
 {% endblock main %}
