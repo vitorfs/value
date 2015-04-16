@@ -58,6 +58,17 @@ $(function () {
   });
 
   $(".js-next-wizard-step").click(function () {
+    if (current_step_index == 0) {
+      if ($("#id_name").val() === "") {
+        $("#id_name").closest(".form-group").addClass("has-error");
+        $("#id_name").siblings(".help-block").show();
+        return false;
+      }
+      else {
+        $("#id_name").closest(".form-group").removeClass("has-error");
+        $("#id_name").siblings(".help-block").hide();
+      }
+    }
     display_content(FORWARD);
   });
 

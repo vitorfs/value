@@ -31,22 +31,25 @@
     </div>
   </div>
 
-  <form class="form-horizontal" role="form">
+  <form method="post" class="form-horizontal" role="form">
+
+    {% csrf_token %}
 
     <div class="wizard-content">
 
-      <section id="basic-data">
+      <section id="basic-data" style="display: none">
         <p class="lead">Provide basic data of the value project</p>
         <div class="form-group">
-          <label for="name" class="col-sm-2 control-label">Name</label>
+          <label for="id_name" class="col-sm-2 control-label">Name</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" id="id_name" name="name">
+            <span class="help-block" style="display: none">This is a required field.</span>
           </div>
         </div>
         <div class="form-group">
-          <label for="name" class="col-sm-2 control-label">Description</label>
+          <label for="id_description" class="col-sm-2 control-label">Description</label>
           <div class="col-sm-10">
-            <textarea class="form-control" rows="5"></textarea>
+            <textarea class="form-control" rows="5" id="id_description" name="description"></textarea>
           </div>
         </div>
       </section>
@@ -70,7 +73,7 @@
                 <div class="col-md-11">
                   <img src="{{ user.profile.get_picture_32 }}" alt="{{ user.profile.get_display_name }}" class="img-circle" style="margin-right: 10px">
                   {{ user.profile.get_display_name }}
-                  <input type="checkbox" name="stakeholder" value="{{ user.pk }}" style="display: none">
+                  <input type="checkbox" name="stakeholders" value="{{ user.pk }}" style="display: none">
                 </div>
                 <div class="col-md-1 text-right">
                   <span class="glyphicon glyphicon-ok text-success" style="line-height: 28px; display: none"></span>
@@ -81,8 +84,44 @@
         {% endfor %}
       </section>
 
-      <section id="decision-making" style="display: none">
+      <section id="decision-making" style="display: block">
         <p class="lead">Provide the decision-making data</p>
+
+        <div class="form-group">
+          <label for="id_name" class="col-sm-3 control-label">Multiple items to evaluate?</label>
+          <div class="col-sm-9">
+            <label class="radio-inline">
+              <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Yes
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> No
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-3 control-label">Items</label>
+          <div class="col-sm-9">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Press enter to add">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button">Add</button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-9 col-sm-offset-3">
+            <ul class="list-group">
+              <li class="list-group-item">
+                <a href="javascript:void(0);" class="pull-right"><span class="glyphicon glyphicon-remove-sign"></span></a>
+                Cras justo odio
+              </li>
+            </ul>
+          </div>
+        </div>
+
       </section>
     </div>
 
