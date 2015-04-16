@@ -18,6 +18,9 @@ class Profile(models.Model):
         else:
             return self.user.username
 
+    def get_picture_32(self):
+        return self.get_picture(32)
+
     def get_picture_64(self):
         return self.get_picture(64)
 
@@ -39,9 +42,38 @@ class Profile(models.Model):
         else:
             initials = self.user.username
 
+        colors = {
+          'a' : 'AA3C39',
+          'b' : '993350',
+          'c' : '8A2E60',
+          'd' : '6F256F',
+          'e' : '592A71',
+          'f' : '4B2D73',
+          'g' : '403075',
+          'h' : '343477',
+          'i' : '2E4372',
+          'j' : '29516D',
+          'k' : '236467',
+          'l' : '277553',
+          'm' : '2D882D',
+          'n' : '609732',
+          'o' : '7B9F35',
+          'p' : '91A437',
+          'q' : 'AAA839',
+          'r' : 'AA9F39',
+          's' : 'AA9739',
+          't' : 'AA8E39',
+          'u' : 'AA8539',
+          'v' : 'AA7939',
+          'w' : 'AA6D39',
+          'x' : 'AA5A39',
+          'y' : 'AA5439',
+          'z' : '7F2A68'
+        }
+
         default = u'http://www.initials-avatar.com/{0}?{1}'.format(
             initials,
-            urllib.urlencode({ 'bg' : 'Salmon', 'fg' : 'White', 's' : size }))
+            urllib.urlencode({ 'bg' : colors[initials[:1].lower()], 'fg' : 'FFFFFF', 's' : size }))
 
         try:
             gravatar_url = u'http://www.gravatar.com/avatar/{0}?{1}'.format(

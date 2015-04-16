@@ -9,7 +9,7 @@ def index(request):
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def new(request):
-    users = User.objects.all()
+    users = User.objects.filter(is_active=True).exclude(pk=request.user.pk)
     return render(request, 'workspace/new.html', { 'users' : users })
 
 @login_required

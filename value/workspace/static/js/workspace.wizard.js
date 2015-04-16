@@ -55,8 +55,6 @@ $(function () {
       return false;
     }
 
-    
-
   });
 
   $(".js-next-wizard-step").click(function () {
@@ -65,6 +63,39 @@ $(function () {
 
   $(".js-previous-wizard-step").click(function () {
     display_content(BACKWARD);
+  });
+
+
+  $(".js-stakeholder-selection").click(function () {
+
+    if ($(this).hasClass("bg-success")) {
+      $(this).removeClass("bg-success");
+      $(".glyphicon-ok", this).hide();
+      $("[name='stakeholder']", this).prop("checked", false);
+    }
+
+    else {
+      $(this).addClass("bg-success");
+      $(".glyphicon-ok", this).show();
+      $("[name='stakeholder']", this).prop("checked", true);
+    }
+
+  });
+
+  $(".js-stakeholders-select-all").click(function () {
+    $(".js-stakeholder-selection").each(function () {
+      $(this).addClass("bg-success");
+      $(".glyphicon-ok", this).show();
+      $("[name='stakeholder']", this).prop("checked", true);
+    });
+  });
+
+  $(".js-stakeholders-select-none").click(function () {
+    $(".js-stakeholder-selection").each(function () {
+      $(this).removeClass("bg-success");
+      $(".glyphicon-ok", this).hide();
+      $("[name='stakeholder']", this).prop("checked", false);
+    });
   });
   
 });
