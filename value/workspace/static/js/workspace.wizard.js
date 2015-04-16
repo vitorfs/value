@@ -2,6 +2,7 @@ $(function () {
 
   var FORWARD = 1;
   var BACKWARD = -1;
+  var ENTER_KEY = 13;
 
   var wizard_steps = ["#basic-data", "#stakeholders", "#decision-making"];
   var current_step_index = 0;
@@ -82,13 +83,13 @@ $(function () {
     if ($(this).hasClass("bg-success")) {
       $(this).removeClass("bg-success");
       $(".glyphicon-ok", this).hide();
-      $("[name='stakeholder']", this).prop("checked", false);
+      $("[name='stakeholders']", this).prop("checked", false);
     }
 
     else {
       $(this).addClass("bg-success");
       $(".glyphicon-ok", this).show();
-      $("[name='stakeholder']", this).prop("checked", true);
+      $("[name='stakeholders']", this).prop("checked", true);
     }
 
   });
@@ -97,7 +98,7 @@ $(function () {
     $(".js-stakeholder-selection").each(function () {
       $(this).addClass("bg-success");
       $(".glyphicon-ok", this).show();
-      $("[name='stakeholder']", this).prop("checked", true);
+      $("[name='stakeholders']", this).prop("checked", true);
     });
   });
 
@@ -105,8 +106,49 @@ $(function () {
     $(".js-stakeholder-selection").each(function () {
       $(this).removeClass("bg-success");
       $(".glyphicon-ok", this).hide();
-      $("[name='stakeholder']", this).prop("checked", false);
+      $("[name='stakeholders']", this).prop("checked", false);
     });
+  });
+
+  $(".js-multiple-items").click(function () {
+
+    if ($(this).val() === "yes") {
+      $(".instance-items").show();
+      $(".js-add-item").focus();
+    }
+    else {
+      $(".instance-items").hide();
+    }
+
+  });
+
+  $(".js-add-item").keydown(function (evt) {
+
+    var key_code = evt.which?evt.which:evt.keyCode;
+    var value = $(this).val();
+
+    if (key_code == ENTER_KEY) {
+      var template = [
+        "<li class='list-group-item'>",
+        "<a href='javascript:void(0);' class='pull-right'><span class='glyphicon glyphicon-remove-sign js-remove-item'></span></a>",
+        "<input type='hidden' name='instance_item' value='{value}'>",
+        "{value}",
+        "</li>"
+        ];
+
+      var html = template.join("\n").replace(/{value}/g, value);
+
+      $(".instance-items .list-group").prepend(html);
+
+      $(this).val("");
+      return false;
+    }
+
+  });
+
+
+  $(".list-group").on("click", ".js-remove-item", function () {
+    $(this).closest("li").remove();
   });
   
 });

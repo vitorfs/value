@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
-from value.workspace.models import Instance
+from value.workspace.models import Instance, InstanceItem
 
 @login_required
 def index(request):
@@ -25,6 +25,14 @@ def new(request):
 
         users_id = request.POST.getlist('stakeholders')
         instance.stakeholders = User.objects.filter(pk__in=users_id)
+        instance.save()
+
+        items_names = request.POST.getlist('instance_item')
+        for name in items_names:
+            item = InstanceItem()
+            item.instance = instance
+            item.name = name
+            item.save()
 
         messages.success(request, u'The value project {0} was added successfully.'.format(instance.name))
         return redirect(reverse('workspace:index'))

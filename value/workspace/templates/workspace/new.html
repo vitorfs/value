@@ -37,7 +37,7 @@
 
     <div class="wizard-content">
 
-      <section id="basic-data" style="display: none">
+      <section id="basic-data" style="display: block">
         <p class="lead">Provide basic data of the value project</p>
         <div class="form-group">
           <label for="id_name" class="col-sm-2 control-label">Name</label>
@@ -84,41 +84,40 @@
         {% endfor %}
       </section>
 
-      <section id="decision-making" style="display: block">
+      <section id="decision-making" style="display: none">
         <p class="lead">Provide the decision-making data</p>
 
         <div class="form-group">
-          <label for="id_name" class="col-sm-3 control-label">Multiple items to evaluate?</label>
+          <label class="col-sm-3 control-label">Multiple items to evaluate?</label>
           <div class="col-sm-9">
             <label class="radio-inline">
-              <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Yes
+              <input type="radio" name="multiple-items" value="yes" class="js-multiple-items"> Yes
             </label>
             <label class="radio-inline">
-              <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> No
+              <input type="radio" name="multiple-items" value="no" class="js-multiple-items"> No
             </label>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="col-sm-3 control-label">Items</label>
-          <div class="col-sm-9">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Press enter to add">
-              <span class="input-group-btn">
-                <button class="btn btn-default" type="button">Add</button>
-              </span>
+        <div class="instance-items" style="display: none">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">Items</label>
+            <div class="col-sm-9">
+              <div class="input-group">
+                <input type="text" class="form-control js-add-item" placeholder="Press enter to add">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">Add</button>
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="form-group">
-          <div class="col-sm-9 col-sm-offset-3">
-            <ul class="list-group">
-              <li class="list-group-item">
-                <a href="javascript:void(0);" class="pull-right"><span class="glyphicon glyphicon-remove-sign"></span></a>
-                Cras justo odio
-              </li>
-            </ul>
+          <div class="form-group">
+            <div class="col-sm-9 col-sm-offset-3">
+              <ul class="list-group">
+
+              </ul>
+            </div>
           </div>
         </div>
 
