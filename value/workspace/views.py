@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
@@ -41,4 +41,5 @@ def new(request):
 
 @login_required
 def instance(request, instance_id):
-    return render(request, 'workspace/instance.html')
+    instance = get_object_or_404(Instance, pk=instance_id)
+    return render(request, 'workspace/instance.html', { 'instance' : instance })
