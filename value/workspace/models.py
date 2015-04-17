@@ -16,6 +16,7 @@ class Instance(models.Model):
     stakeholders = models.ManyToManyField(User)
     manager = models.ForeignKey(User, related_name='instance_manager_user')
     status = models.CharField(max_length=1, choices=STATUS, default=INITIALIZED)
+    has_backlog = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, related_name='instance_creation_user')
     updated_at = models.DateTimeField(auto_now=True)

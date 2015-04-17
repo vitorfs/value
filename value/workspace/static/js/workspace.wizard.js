@@ -122,12 +122,9 @@ $(function () {
 
   });
 
-  $(".js-add-item").keydown(function (evt) {
+  var add_item = function () {
+      var value = $(".js-add-item").val();
 
-    var key_code = evt.which?evt.which:evt.keyCode;
-    var value = $(this).val();
-
-    if (key_code == ENTER_KEY) {
       var template = [
         "<li class='list-group-item'>",
         "<a href='javascript:void(0);' class='pull-right'><span class='glyphicon glyphicon-remove-sign js-remove-item'></span></a>",
@@ -140,10 +137,22 @@ $(function () {
 
       $(".instance-items .list-group").prepend(html);
 
-      $(this).val("");
+      $(".js-add-item").val("");
+  };
+
+  $(".js-add-item").keydown(function (evt) {
+
+    var key_code = evt.which?evt.which:evt.keyCode;
+
+    if (key_code == ENTER_KEY) {
+      add_item();
       return false;
     }
 
+  });
+
+  $(".js-btn-add-item").click(function () {
+    add_item();
   });
 
 
