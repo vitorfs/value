@@ -37,11 +37,11 @@ $(function () {
     $(".wizard-content section:visible").fadeOut(400, function () {
       $(".wizard-content section" + current_step).fadeIn(400);
       if (direction == FORWARD) {
-        $(".js-wizard-steps button[data-target='" + last_step + "'] .glyphicon").removeClass("hide");
+        $(".js-wizard-steps button[data-target='" + last_step + "'] .glyphicon").show();
         $(".js-wizard-steps button[data-target='" + current_step + "']").removeClass("btn-default").addClass("btn-primary").prop("disabled", false);
       }
       else if (direction == BACKWARD) {
-        $(".js-wizard-steps button[data-target='" + current_step + "'] .glyphicon").addClass("hide");
+        $(".js-wizard-steps button[data-target='" + current_step + "'] .glyphicon").hide();
         $(".js-wizard-steps button[data-target='" + last_step + "']").removeClass("btn-primary").addClass("btn-default").prop("disabled", true);
       }
       wizard_integrity_control();
@@ -149,6 +149,10 @@ $(function () {
 
   $(".list-group").on("click", ".js-remove-item", function () {
     $(this).closest("li").remove();
+  });
+
+  $(".js-submit-wizard").click(function () {
+    $(".js-wizard-steps button[data-target='#decision-making'] .glyphicon").show();
   });
   
 });

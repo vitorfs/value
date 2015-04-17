@@ -23,6 +23,7 @@
         <tr>
           <th>Name</th>
           <th>Manager</th>
+          <th>Status</th>
           <th>Updated at</th>
         </tr>
       </thead>
@@ -31,6 +32,7 @@
           <tr>
             <td>{{ instance.name }}</td>
             <td>{{ instance.manager.profile.get_display_name }}</td>
+            <td>{{ instance.get_status_display }}</td>
             <td>{{ instance.updated_at }}</td>
           </tr>
         {% endfor %}
@@ -47,6 +49,7 @@
         <tr>
           <th>Name</th>
           <th>Manager</th>
+          <th>Status</th>
           <th>Updated at</th>
         </tr>
       </thead>
@@ -55,6 +58,7 @@
           <tr>
             <td>{{ instance.name }}</td>
             <td>{{ instance.manager.profile.get_display_name }}</td>
+            <td>{{ instance.get_status_display }}</td>
             <td>{{ instance.updated_at }}</td>
           </tr>
         {% endfor %}
