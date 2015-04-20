@@ -23,10 +23,10 @@ class Measure(models.Model):
 class MeasureValue(models.Model):
     measure = models.ForeignKey(Measure)
     description = models.CharField(max_length=255)
-    weight = models.FloatField()
+    order = models.IntegerField(default=0)
 
     class Meta:
-        ordering = ("-weight",)
+        ordering = ("-order",)
 
     def __unicode__(self):
         return self.description
