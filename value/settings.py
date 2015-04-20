@@ -1,6 +1,7 @@
 from unipath import Path
 import dj_database_url
 from django.contrib.messages import constants as message_constants
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 PROJECT_DIR = Path(__file__).parent
 
@@ -81,3 +82,5 @@ TEMPLATE_DIRS = (
 LOGIN_URL = '/signin/'
 
 LOGIN_REDIRECT_URL = '/'
+
+TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.request',)

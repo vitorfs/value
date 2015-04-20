@@ -2,11 +2,12 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm, AdminPasswordChangeForm
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm, AdminPasswordChangeForm, PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.forms.models import modelform_factory
 from django.contrib import messages
 from value.factors.models import Factor
+from value.users.forms import AccountForm
 
 @login_required
 def users(request):
@@ -72,3 +73,30 @@ def delete(request, user_id):
         messages.success(request, u'The user {0} was deleted successfully.'.format(user.username))
         return redirect(reverse('users:users'))
     return render(request, 'users/delete.html', { 'delete_user' : user })
+
+@login_required
+def account(request):
+    if request.method == 'POST':
+        form = AccountForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, u'Your profile was changed successfully.')
+        else:
+            messages.error(request, u'Please correct the error below.')
+    else:
+        form = AccountForm(instance=request.user)
+    return render(request, 'users/account.html', { 'form' : form })
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, u'Password changed successfully.')
+            update_session_auth_hash(request, form.user)
+        else:
+            messages.error(request, u'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'users/change_password.html', { 'form' : form })
