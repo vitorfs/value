@@ -29,7 +29,6 @@ INSTALLED_APPS = (
     'value.measures',
     'value.users',
     'value.workspace',
-    'value.ratings',
 )
 
 MIDDLEWARE_CLASSES = (
