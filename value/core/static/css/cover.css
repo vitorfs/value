@@ -1,5 +1,19 @@
-.login  {
-  padding-top: 100px;
+html, body {
+  height: 100%;
+}
+
+body {
+  padding-top: 0;
+}
+
+main .container  {
+  position: absolute;
+  height: 250px;
+  top: 50%;
+  margin-top: -125px;
+  width: 1170px;
+  margin-left: -585px;
+  left: 50%;
 }
 
 span {
