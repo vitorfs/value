@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'measures:measures' %}">Measures</a></li>
+    <li><a href="{% url 'measures:measure' measure.id %}">{{ measure.name }}</a></li>
+    <li class="active">Delete</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block main %}
+  <h1 class="lead">Are you sure you want to delete the measure {{ measure.name }}?</h1>
+
+  <form method="post" class="form-horizontal">
+    {% csrf_token %}
+    <div class="form-group">
+      <div class="col-sm-12">
+        <button type="submit" class="btn btn-primary">Confirm</button>
+        <a href="{% url 'measures:measures' %}" class="btn btn-default">Cancel</a>
+      </div>
+    </div>
+  </form>
+
+{% endblock main %}

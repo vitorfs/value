@@ -25,10 +25,11 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'value.core',
     'value.factors',
-    'value.ratings',
-    'value.users',
     'value.help',
+    'value.measures',
+    'value.users',
     'value.workspace',
+    'value.ratings',
 )
 
 MIDDLEWARE_CLASSES = (

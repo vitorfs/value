@@ -21,7 +21,7 @@
       <tr>
         <th>Name</th>
         <th>Description</th>
-        <th>Rating</th>
+        <th>Measure</th>
         <th>Active</th>
         <th></th>
       </tr>
@@ -32,7 +32,7 @@
         <td><a href="{% url 'factors:factor' factor.pk %}">{{ factor.name }}</a></td>
         <td>{{ factor.description }}</td>
         <td>
-          <a href="javascript:void(0);" tabindex="0" data-toggle="popover" data-trigger="focus" title="Rating Values" data-content="{{ factor.rating.get_values }}">{{ factor.rating.name }}</a>
+          <a href="javascript:void(0);" tabindex="0" data-toggle="popover" data-trigger="focus" title="Measure Values" data-content="{{ factor.measure.get_values }}">{{ factor.measure.name }}</a>
         </td>
         <td>
           {% if factor.is_active %}
@@ -41,11 +41,15 @@
             <span class="glyphicon glyphicon-remove-sign text-danger"></span>
           {% endif %}
         </td>
-        <td class="text-right">
+        <td class="text-right text-nowrap">
           <a href="{% url 'factors:factor' factor.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
           <a href="{% url 'factors:delete' factor.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</a>
         </td>
       </tr>
+      {% empty %}
+        <tr>
+          <td colspan="5">No data</td>
+        </tr>
       {% endfor %}
     </tbody>
   </table>
