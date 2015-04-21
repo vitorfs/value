@@ -37,7 +37,7 @@ def new(request):
         messages.success(request, u'The value project {0} was added successfully.'.format(instance.name))
         return redirect(reverse('workspace:index'))
     users = User.objects.filter(is_active=True).exclude(pk=request.user.pk)
-    return render(request, 'workspace/new.html', { 'users' : users })
+    return render(request, 'workspace/wizard.html', { 'users' : users })
 
 @login_required
 def instance(request, instance_id):
@@ -48,3 +48,9 @@ def instance(request, instance_id):
 def evaluate(request, instance_id):
     instance = get_object_or_404(Instance, pk=instance_id)
     return render(request, 'workspace/evaluate.html', { 'instance' : instance })
+
+@login_required
+def stakeholders(request, instance_id):
+    instance = get_object_or_404(Instance, pk=instance_id)
+    users = User.objects.filter(is_active=True).exclude(pk=request.user.pk)
+    return render(request, 'workspace/stakeholders.html', { 'instance' : instance, 'users' : users })

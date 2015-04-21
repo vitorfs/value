@@ -5,4 +5,5 @@ urlpatterns = patterns('value.workspace.views',
     url(r'^new/$', 'new', name='new'),
     url(r'^(\d+)/$', 'instance', name='instance'),
     url(r'^(\d+)/evaluate/$', 'evaluate', name='evaluate'),
+    url(r'^(\d+)/stakeholders/$', 'stakeholders', name='stakeholders'),
 )
