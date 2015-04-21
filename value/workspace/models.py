@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from value.factors.models import Factor
+from value.measures.models import Measure, MeasureValue
 
 class Instance(models.Model):
     INITIALIZED = u'I'
@@ -34,3 +36,11 @@ class InstanceItem(models.Model):
 
     def __unicode__(self):
         return self.name
+
+class InstanceItemEvaluation(models.Model):
+    instance = models.ForeignKey(Instance)
+    user = models.ForeignKey(User)
+    factor = models.ForeignKey(Factor)
+    measure = models.ForeignKey(Measure)
+    measure_value = models.ForeignKey(MeasureValue)
+    evaluated_at = models.DateTimeField(auto_now=True)
