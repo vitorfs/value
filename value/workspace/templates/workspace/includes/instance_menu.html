@@ -1,0 +1,5 @@
+<ul class="nav nav-tabs" style="margin-bottom: 20px">
+  <li role="presentation"{% if active == 'dashboard' %} class="active"{% endif %}><a href="{% url 'workspace:instance' instance.pk %}">Dashboard</a></li>
+  <li role="presentation"{% if active == 'evaluate' %} class="active"{% endif %}><a href="{% url 'workspace:evaluate' instance.pk %}">Evaluate</a></li>
+  <li role="presentation"{% if active == 'stakeholders' %} class="active"{% endif %}><a href="#">Stakeholders</a></li>
+</ul>

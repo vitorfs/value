@@ -9,7 +9,7 @@ from django.contrib import messages
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def measures(request):
-    measures = Measure.objects.all()
+    measures = Measure.objects.all().order_by('name')
     return render(request, 'measures/measures.html', { 'measures' : measures })
 
 @login_required

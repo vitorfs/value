@@ -32,7 +32,7 @@
         <td><a href="{% url 'factors:factor' factor.pk %}">{{ factor.name }}</a></td>
         <td>{{ factor.description }}</td>
         <td>
-          <a href="javascript:void(0);" tabindex="0" data-toggle="popover" data-trigger="focus" title="Measure Values" data-content="{{ factor.measure.get_values }}">{{ factor.measure.name }}</a>
+          <a href="javascript:void(0);" tabindex="0" data-toggle="popover" data-trigger="focus" title="Measure Values" data-content="{{ factor.measure.get_values_as_string }}">{{ factor.measure.name }}</a>
         </td>
         <td>
           {% if factor.is_active %}

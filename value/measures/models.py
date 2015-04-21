@@ -14,6 +14,10 @@ class Measure(models.Model):
 
     def get_values(self):
         values = MeasureValue.objects.filter(measure=self)
+        return values
+
+    def get_values_as_string(self):
+        values = self.get_values()
         string_values = []
         for value in values:
             string_values.append(value.description)

@@ -8,7 +8,7 @@ from value.factors.forms import FactorForm
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def factors(request):
-    factors = Factor.objects.all()
+    factors = Factor.objects.all().order_by('name')
     return render(request, 'factors/factors.html', { 'factors' : factors })
 
 @login_required

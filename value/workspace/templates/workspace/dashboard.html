@@ -148,12 +148,7 @@
 
 {% block main %}
 
-  <ul class="nav nav-tabs">
-    <li role="presentation" class="active"><a href="#">Dashboard</a></li>
-    <li role="presentation"><a href="#">Backlog</a></li>
-    <li role="presentation"><a href="#">Stakeholders</a></li>
-  </ul>
-
+  {% include 'workspace/includes/instance_menu.html' with active='dashboard' instance=instance %}
 
   <div class="row" style="margin-bottom: 20px">
     <div class="col-md-6">

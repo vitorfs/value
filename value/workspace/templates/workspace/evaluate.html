@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'workspace:index' %}">Workspace</a></li>
+    <li class="active">{{ instance.name }}</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block main %}
+
+  {% include 'workspace/includes/instance_menu.html' with active='evaluate' instance=instance %}
+
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+      <span class="sr-only">60% Complete</span>
+    </div>
+  </div>
+
+  {% for item in instance.get_items %}
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{ item.name }}</h3>
+      </div>
+
+      <div class="panel-body">
+        {% regroup user.profile.factors.all by measure as factors_grouped_by_measure %}
+
+        {% for factors_group in factors_grouped_by_measure %}
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th style="width: 25%">Value Factors</th>
+                {% with factors_group.list|first as first_factor %}
+                  {% for measure in first_factor.measure.get_values %}
+                    <th>{{ measure.description }}</th>
+                  {% endfor %}
+                {% endwith %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for factor in factors_group.list %}
+                <tr>
+                  <td>{{ factor }}</td>
+                  {% for measure in factor.measure.get_values %}
+                    <td>
+                      <input type="radio">
+                    </td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endfor %}
+      </div>
+    </div>
+
+  {% endfor %}
+
+{% endblock main %}
