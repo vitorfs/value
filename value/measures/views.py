@@ -15,7 +15,7 @@ def measures(request):
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def add(request):
-    MeasureValueFormSet = inlineformset_factory(Measure, MeasureValue, fields=('description', 'weight',), extra=1)
+    MeasureValueFormSet = inlineformset_factory(Measure, MeasureValue, fields=('description',), extra=1)
     if request.method == 'POST':
         form = MeasureForm(request.POST)
         formset = MeasureValueFormSet(request.POST)
@@ -39,7 +39,7 @@ def add(request):
 @user_passes_test(lambda user: user.is_superuser)
 def measure(request, measure_id):
     measure = get_object_or_404(Measure, pk=measure_id)
-    MeasureValueFormSet = inlineformset_factory(Measure, MeasureValue, fields=('description', 'weight',), extra=1)
+    MeasureValueFormSet = inlineformset_factory(Measure, MeasureValue, fields=('description',), extra=1)
     if request.method == 'POST':
         form = MeasureForm(request.POST, instance=measure)
         formset = MeasureValueFormSet(request.POST, instance=measure)

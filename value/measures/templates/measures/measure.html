@@ -41,7 +41,6 @@
           <thead>
             <tr>
               <th>Description</th>
-              <th>Weight</th>
               <th>Delete</th>
             </tr>
           </thead>
@@ -67,13 +66,6 @@
                          id="{{ form.description.id_for_label }}" 
                          name="{{ form.description.html_name }}" 
                          maxlength="{{ form.description.field.max_length }}">
-                </td>
-                <td>
-                  <input type="number" 
-                         class="form-control" 
-                         value="{{ form.weight.value|default_if_none:'' }}" 
-                         id="{{ form.weight.id_for_label }}" 
-                         name="{{ form.weight.html_name }}">
                 </td>
                 <td style="vertical-align: middle;">
                   {% if form.instance.pk %}
