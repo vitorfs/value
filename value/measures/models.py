@@ -25,12 +25,34 @@ class Measure(models.Model):
 
 
 class MeasureValue(models.Model):
+
+    LIME_GREEN = u'#32CD32'
+    COLORS = (
+        (u'#A0522D', u'sienna'),
+        (u'#CD5C5C', u'indianred'),
+        (u'#FF4500', u'orangered'),
+        (u'#008B8B', u'darkcyan'),
+        (u'#B8860B', u'darkgoldenrod'),
+        (LIME_GREEN, u'limegreen'),
+        (u'#FFD700', u'gold'),
+        (u'#48D1CC', u'mediumturquoise'),
+        (u'#87CEEB', u'skyblue'),
+        (u'#FF69B4', u'hotpink'),
+        (u'#CD5C5C', u'indianred'),
+        (u'#87CEFA', u'lightskyblue'),
+        (u'#6495ED', u'cornflowerblue'),
+        (u'#DC143C', u'crimson'),
+        (u'#FF8C00', u'darkorange'),
+        (u'#C71585', u'mediumvioletred'),
+        (u'#000000', u'black'),
+        )
     measure = models.ForeignKey(Measure)
-    description = models.CharField(max_length=255)
-    order = models.IntegerField(default=0)
+    description = models.CharField(max_length=255, null=True, blank=True)
+    order = models.IntegerField(default=0, null=True, blank=True)
+    color = models.CharField(max_length=7, null=True, blank=True, choices=COLORS, default=LIME_GREEN)
 
     class Meta:
-        ordering = ("-order",)
+        ordering = ("order",)
 
     def __unicode__(self):
         return self.description

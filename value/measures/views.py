@@ -15,7 +15,7 @@ def measures(request):
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def add(request):
-    MeasureValueFormSet = inlineformset_factory(Measure, MeasureValue, fields=('description',), extra=1)
+    MeasureValueFormSet = inlineformset_factory(Measure, MeasureValue, fields=('description', 'order', 'color'), extra=1)
     if request.method == 'POST':
         form = MeasureForm(request.POST)
         formset = MeasureValueFormSet(request.POST)
@@ -26,6 +26,11 @@ def add(request):
             if formset.is_valid():
                 formset.save()
                 messages.success(request, u'The measure {0} was added successfully.'.format(measure.name))
+
+                for value in measure.get_values(): 
+                    if len(value.description.strip()) == 0:
+                        value.delete()
+
                 return redirect(reverse('measures:measures'))
         else:
             messages.error(request, u'Please correct the error below.')
@@ -39,7 +44,7 @@ def add(request):
 @user_passes_test(lambda user: user.is_superuser)
 def measure(request, measure_id):
     measure = get_object_or_404(Measure, pk=measure_id)
-    MeasureValueFormSet = inlineformset_factory(Measure, MeasureValue, fields=('description',), extra=1)
+    MeasureValueFormSet = inlineformset_factory(Measure, MeasureValue, fields=('description', 'order', 'color'), extra=0)
     if request.method == 'POST':
         form = MeasureForm(request.POST, instance=measure)
         formset = MeasureValueFormSet(request.POST, instance=measure)
@@ -47,9 +52,15 @@ def measure(request, measure_id):
             form.instance.updated_by = request.user
             form.save()
             formset.save()
+
+            for value in measure.get_values(): 
+                if len(value.description.strip()) == 0:
+                    value.delete()
+
             messages.success(request, u'The measure {0} was changed successfully.'.format(measure.name))
             return redirect(reverse('measures:measures'))
         else:
+            print formset.errors
             messages.error(request, u'Please correct the error below.')
     else:
         form = MeasureForm(instance=measure)

@@ -1,5 +1,5 @@
 from django import forms
-from value.measures.models import Measure, MeasureValue
+from value.measures.models import Measure
 
 class MeasureForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class' : 'form-control'}), max_length=255)
