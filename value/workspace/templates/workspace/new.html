@@ -84,7 +84,7 @@
         {% endfor %}
       </section>
 
-      <section id="decision-making" style="display: none">
+      <section id="decision-making" style="">
         <p class="lead">Provide the decision-making data</p>
 
         <div class="form-group">
@@ -94,21 +94,28 @@
               <input type="radio" name="multiple-items" value="yes" class="js-multiple-items"> Yes
             </label>
             <label class="radio-inline">
-              <input type="radio" name="multiple-items" value="no" class="js-multiple-items"> No
+              <input type="radio" name="multiple-items" value="no" class="js-multiple-items" checked="checked"> No
             </label>
           </div>
         </div>
 
-        <div class="instance-items" style="display: none">
+        <div class="instance-items" style="">
           <div class="form-group">
             <label class="col-sm-2 control-label">Items</label>
-            <div class="col-sm-10">
-              <div class="input-group">
+            <div class="col-sm-8">
+              <textarea class="form-control js-add-item" rows="1" placeholder="Press enter to add"></textarea>
+              <!--div class="input-group">
                 <input type="text" class="form-control js-add-item" placeholder="Press enter to add">
                 <span class="input-group-btn">
                   <button class="btn btn-default js-btn-add-item" type="button">Add</button>
                 </span>
-              </div>
+              </div-->
+              <span class="help-block">Add several items at once separating them with commas, semicolons or line-breaks. Please note, pasting items separated by line-breaks will result in a instant add.</span>
+            </div>
+            <div class="col-sm-2">
+              <button class="btn btn-default js-btn-add-item btn-block" type="button">
+                <span class="glyphicon glyphicon-plus"></span> Add
+              </button>
             </div>
           </div>
 

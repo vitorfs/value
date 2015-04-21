@@ -122,9 +122,9 @@ $(function () {
 
   });
 
-  var add_item = function () {
-      var value = $(".js-add-item").val();
+  var add_item = function (value) {
 
+    if (value.length > 0) {
       var template = [
         "<li class='list-group-item'>",
         "<a href='javascript:void(0);' class='pull-right'><span class='glyphicon glyphicon-remove-sign js-remove-item'></span></a>",
@@ -132,12 +132,11 @@ $(function () {
         "{value}",
         "</li>"
         ];
-
       var html = template.join("\n").replace(/{value}/g, value);
-
       $(".instance-items .list-group").prepend(html);
-
       $(".js-add-item").val("");
+    }
+
   };
 
   $(".js-add-item").keydown(function (evt) {
@@ -145,14 +144,66 @@ $(function () {
     var key_code = evt.which?evt.which:evt.keyCode;
 
     if (key_code == ENTER_KEY) {
-      add_item();
+      var value = $(this).val();
+      var list = [];
+
+      if (value.indexOf(",") !== -1) {
+        list = value.split(",");
+      }
+
+      else if (value.indexOf(";") !== -1) {
+        list = value.split(";");
+      }
+
+      if (list.length > 0) {
+        list.forEach(function (e) {
+          add_item(e);
+        });
+      }
+
+      else {
+        add_item(value);
+      }
+
       return false;
     }
 
   });
 
+  $(".js-add-item").keyup(function (evt) {
+
+    var data = $(".js-add-item").val();
+    var match = /\r|\n/.exec(data);
+    if (match) {
+      var list = data.split("\n");
+      list.forEach(function (e) {
+        add_item(e);
+      });
+    }
+
+  });
+
   $(".js-btn-add-item").click(function () {
-    add_item();
+    var value = $(".js-add-item").val();
+    var list = [];
+
+    if (value.indexOf(",") !== -1) {
+      list = value.split(",");
+    }
+
+    else if (value.indexOf(";") !== -1) {
+      list = value.split(";");
+    }
+
+    if (list.length > 0) {
+      list.forEach(function (e) {
+        add_item(e);
+      });
+    }
+
+    else {
+      add_item(value);
+    }
   });
 
 
