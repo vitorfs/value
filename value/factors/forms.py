@@ -5,7 +5,7 @@ from value.measures.models import Measure
 class FactorForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class' : 'form-control'}), max_length=255)
     description = forms.CharField(widget=forms.Textarea(attrs={'class' : 'form-control'}), max_length=2000, required=False)
-    measure = forms.ModelChoiceField(widget=forms.Select(attrs={'class' : 'form-control'}), queryset=Measure.objects.filter(is_active=True), empty_label=None)
+    measure = forms.ModelChoiceField(widget=forms.Select(attrs={'class' : 'form-control'}), queryset=Measure.objects.filter(is_active=True), empty_label='Select...', required=False)
     is_active = forms.BooleanField(
         widget=forms.CheckboxInput(), 
         label='Active',
