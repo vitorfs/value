@@ -26,30 +26,49 @@ class Measure(models.Model):
 
 class MeasureValue(models.Model):
 
-    LIME_GREEN = u'#32CD32'
+    PRIMARY_BLUE = u'#337BB7'
+
     COLORS = (
-        (u'#A0522D', u'sienna'),
-        (u'#CD5C5C', u'indianred'),
-        (u'#FF4500', u'orangered'),
-        (u'#008B8B', u'darkcyan'),
-        (u'#B8860B', u'darkgoldenrod'),
-        (LIME_GREEN, u'limegreen'),
-        (u'#FFD700', u'gold'),
-        (u'#48D1CC', u'mediumturquoise'),
-        (u'#87CEEB', u'skyblue'),
-        (u'#FF69B4', u'hotpink'),
-        (u'#CD5C5C', u'indianred'),
-        (u'#87CEFA', u'lightskyblue'),
-        (u'#6495ED', u'cornflowerblue'),
-        (u'#DC143C', u'crimson'),
-        (u'#FF8C00', u'darkorange'),
-        (u'#C71585', u'mediumvioletred'),
-        (u'#000000', u'black'),
+        (u'#5CB85C', u'#5CB85C'),
+        (u'#BAE8BA', u'#BAE8BA'),
+        (u'#8AD38A', u'#8AD38A'),
+        (u'#369836', u'#369836'),
+        (u'#1B7C1B', u'#1B7C1B'),
+
+        (u'#F0AD4E', u'#F0AD4E'),
+        (u'#FFD8A0', u'#FFD8A0'),
+        (u'#FFC675', u'#FFC675'),
+        (u'#DE9226', u'#DE9226'),
+        (u'#AD6D11', u'#AD6D11'),
+
+        (u'#D9534F', u'#D9534F'),
+        (u'#FFADAB', u'#FFADAB'),
+        (u'#FC827F', u'#FC827F'),
+        (u'#BE2F2B', u'#BE2F2B'),
+        (u'#961512', u'#961512'),
+
+        (u'#5BC1DE', u'#5BC1DE'),
+        (u'#BAEAF8', u'#BAEAF8'),
+        (u'#85D5EC', u'#85D5EC'),
+        (u'#39ACCD', u'#39ACCD'),
+        (u'#1993B6', u'#1993B6'),
+
+        (PRIMARY_BLUE, u'#337BB7'),
+        (u'#7EB1DC', u'#7EB1DC'),
+        (u'#5393C8', u'#5393C8'),
+        (u'#1265AB', u'#1265AB'),
+        (u'#094B83', u'#094B83'),
+
+        (u'#222222', u'#222222'),
+        (u'#929191', u'#929191'),
+        (u'#5E5E5E', u'#5E5E5E'),
+        (u'#000000', u'#000000'),
+        (u'#030202', u'#030202'),
         )
     measure = models.ForeignKey(Measure)
     description = models.CharField(max_length=255, null=True, blank=True)
     order = models.IntegerField(default=0, null=True, blank=True)
-    color = models.CharField(max_length=7, null=True, blank=True, choices=COLORS, default=LIME_GREEN)
+    color = models.CharField(max_length=7, null=True, blank=True, choices=COLORS, default=PRIMARY_BLUE)
 
     class Meta:
         ordering = ("order",)
