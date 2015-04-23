@@ -7,7 +7,7 @@
   </ol>
 {% endblock breadcrumb %}
 
-{% block main %}
+{% block content %}
   <a class="btn btn-primary pull-right" href="{% url 'users:add' %}"><span class="glyphicon glyphicon-plus"></span> Add user</a>
 
   <h1 class="lead">Select user to change</h1>
@@ -51,4 +51,4 @@
       {% endfor %}
     </tbody>
   </table>
-{% endblock main %}
+{% endblock content %}

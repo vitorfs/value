@@ -30,12 +30,14 @@ class Instance(models.Model):
     def get_items(self):
         return InstanceItem.objects.filter(instance=self)
 
+
 class InstanceItem(models.Model):
     name = models.CharField(max_length=255)
     instance = models.ForeignKey(Instance)
 
     def __unicode__(self):
         return self.name
+
 
 class InstanceItemEvaluation(models.Model):
     instance = models.ForeignKey(Instance)

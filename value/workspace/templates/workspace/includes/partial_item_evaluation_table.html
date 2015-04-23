@@ -1,0 +1,54 @@
+{% load relative_col_size %}
+
+{% for item in instance.get_items %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span class="badge pull-right">0%</span>
+      <!--span class="glyphicon glyphicon-ok pull-right"></span-->
+      <h3 class="panel-title">{{ item.name }}</h3>
+    </div>
+
+    {% regroup factors by measure as factors_grouped_by_measure %}
+
+    {% if factors_grouped_by_measure|length > 1 %}
+      <div class="panel-body">
+    {% endif %}
+
+    {% for factors_group in factors_grouped_by_measure %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width: 25%">Value Factors</th>
+            {% with factors_group.list|first as first_factor %}
+              {% for measure in first_factor.measure.get_values %}
+                <th class="text-center" style="width: {{ first_factor.measure.get_values|relative_col_size }}">{{ measure.description }}</th>
+              {% endfor %}
+            {% endwith %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for factor in factors_group.list %}
+            <tr>
+              <td>{{ factor }}</td>
+              {% for measure in factor.measure.get_values %}
+                <td class="text-center evaluable" 
+                    data-color="{{ measure.color }}"
+                    data-instance-id="{{ instance.pk }}"
+                    data-factor-id="{{ factor.pk }}"
+                    data-measure-id="{{ measure.measure.pk }}"
+                    data-measure-value-id="{{ measure.pk }}">
+                  <span class="glyphicon glyphicon-unchecked"></span>
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endfor %}
+
+    {% if factors_grouped_by_measure|length > 1 %}
+      </div>
+    {% endif %}
+
+  </div>
+{% endfor %}

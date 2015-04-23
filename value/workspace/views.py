@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from value.workspace.models import Instance, InstanceItem
+from value.factors.models import Factor
 
 @login_required
 def index(request):
@@ -47,7 +48,8 @@ def instance(request, instance_id):
 @login_required
 def evaluate(request, instance_id):
     instance = get_object_or_404(Instance, pk=instance_id)
-    return render(request, 'workspace/evaluate.html', { 'instance' : instance })
+    factors = Factor.objects.filter(is_active=True).exclude(measure=None)
+    return render(request, 'workspace/evaluate.html', { 'instance' : instance, 'factors' : factors })
 
 @login_required
 def stakeholders(request, instance_id):

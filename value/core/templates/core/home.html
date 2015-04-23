@@ -6,6 +6,6 @@
   </ol>
 {% endblock breadcrumb %}
 
-{% block main %}
+{% block content %}
   <p class="lead">You are signed in as <strong>{% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}</strong></p>
-{% endblock main %}
+{% endblock content %}

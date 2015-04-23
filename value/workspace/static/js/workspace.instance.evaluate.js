@@ -13,4 +13,23 @@ $(function () {
     $(".glyphicon", this).removeClass("glyphicon-unchecked").addClass("glyphicon-check");
   });
 
+  $(".js-factors-selection a").click(function () {
+
+    if ($(this).attr("data-selected") === "unselected") {
+      $(this).attr("data-selected", "selected");
+      $(this).css("font-weight", "bold");
+      $(".glyphicon", this).removeClass("glyphicon-unchecked").addClass("glyphicon-check");
+    }
+    else {
+      $(this).attr("data-selected", "unselected");
+      $(this).css("font-weight", "normal");
+      $(".glyphicon", this).removeClass("glyphicon-check").addClass("glyphicon-unchecked");
+    }
+
+    $(this).blur();
+
+    return false;
+
+  });
+
 });

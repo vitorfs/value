@@ -11,7 +11,7 @@
   </ol>
 {% endblock breadcrumb %}
 
-{% block main %}
+{% block content %}
   <a href="{% url 'factors:add' %}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> Add factor</a>
 
   <p class="lead">Select factor to change</p>
@@ -53,4 +53,4 @@
       {% endfor %}
     </tbody>
   </table>
-{% endblock main %}
+{% endblock content %}

@@ -11,7 +11,7 @@
   </ol>
 {% endblock breadcrumb %}
 
-{% block main %}
+{% block content %}
   {% if user.is_superuser %}
     <a class="btn btn-primary pull-right" href="{% url 'workspace:new' %}"><span class="glyphicon glyphicon-plus"></span> New value project</a>
   {% endif %}
@@ -70,4 +70,4 @@
     </table>
   </div>
 
-{% endblock main %}
+{% endblock content %}
