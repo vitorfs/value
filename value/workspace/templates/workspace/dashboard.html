@@ -5,40 +5,173 @@
   <script type="text/javascript">
     $(function () {
       var data = {
-          labels: ["January", "February", "March", "April", "May", "June", "July"],
+          labels: ["Core Competencies", "Streamline Processes", "Architectures Quality", "Continuous Improvement", "Revenue Growth", "Customer Retention", "Customer Satisfaction"],
           datasets: [
               {
-                  label: "My First dataset",
-                  fillColor: "rgba(220,220,220,0.2)",
-                  strokeColor: "rgba(220,220,220,1)",
-                  pointColor: "rgba(220,220,220,1)",
+                  label: "Positive Impact",
+                  fillColor: "rgba(92, 184, 92, 0.8)",
+                  strokeColor: "rgba(92, 184, 92, 1)",
+                  pointColor: "rgba(92, 184, 92, 1)",
                   pointStrokeColor: "#fff",
                   pointHighlightFill: "#fff",
-                  pointHighlightStroke: "rgba(220,220,220,1)",
-                  data: [65, 59, 80, 81, 56, 55, 40]
+                  pointHighlightStroke: "rgba(92, 184, 92, 1)",
+                  data: [3, 2, 3, 3, 3, 2, 2]
+              },
+
+              {
+                  label: "Neutral Impact",
+                  fillColor: "rgba(240, 173, 78, 0.8)",
+                  strokeColor: "rgba(240, 173, 78, 1)",
+                  pointColor: "rgba(240, 173, 78, 1)",
+                  pointStrokeColor: "#fff",
+                  pointHighlightFill: "#fff",
+                  pointHighlightStroke: "rgba(240, 173, 78, 1)",
+                  data: [1, 1, 2, 0, 0, 3, 3]
               },
               {
-                  label: "My Second dataset",
-                  fillColor: "rgba(151,187,205,0.2)",
-                  strokeColor: "rgba(151,187,205,1)",
-                  pointColor: "rgba(151,187,205,1)",
+                  label: "Negative Impact",
+                  fillColor: "rgba(217, 83, 79, 0.8)",
+                  strokeColor: "rgba(217, 83, 79, 1)",
+                  pointColor: "rgba(217, 83, 79, 1)",
                   pointStrokeColor: "#fff",
                   pointHighlightFill: "#fff",
-                  pointHighlightStroke: "rgba(151,187,205,1)",
-                  data: [28, 48, 40, 19, 86, 27, 90]
+                  pointHighlightStroke: "rgba(217, 83, 79, 1)",
+                  data: [1, 2, 0, 2, 2, 0, 0]
               }
           ]
       };
-
-      var ctx = $("#line-chart").get(0).getContext("2d");
-      var myLineChart = new Chart(ctx).Line(data);
 
       ctx = $("#bar-chart").get(0).getContext("2d");
       var myBarChart = new Chart(ctx).Bar(data);
 
 
+
+data = {
+          labels: ["Core Competencies", "Streamline Processes", "Architectures Quality", "Continuous Improvement", "Revenue Growth", "Customer Retention", "Customer Satisfaction"],
+          datasets: [
+              {
+                  label: "Positive Impact",
+                  fillColor: "rgba(92, 184, 92, 0.2)",
+                  strokeColor: "rgba(92, 184, 92, 1)",
+                  pointColor: "rgba(92, 184, 92, 1)",
+                  pointStrokeColor: "#fff",
+                  pointHighlightFill: "#fff",
+                  pointHighlightStroke: "rgba(92, 184, 92, 1)",
+                  data: [3, 2, 3, 3, 3, 2, 2]
+              },
+
+              {
+                  label: "Neutral Impact",
+                  fillColor: "rgba(240, 173, 78, 0.2)",
+                  strokeColor: "rgba(240, 173, 78, 1)",
+                  pointColor: "rgba(240, 173, 78, 1)",
+                  pointStrokeColor: "#fff",
+                  pointHighlightFill: "#fff",
+                  pointHighlightStroke: "rgba(240, 173, 78, 1)",
+                  data: [1, 1, 2, 0, 0, 3, 3]
+              },
+              {
+                  label: "Negative Impact",
+                  fillColor: "rgba(217, 83, 79, 0.2)",
+                  strokeColor: "rgba(217, 83, 79, 1)",
+                  pointColor: "rgba(217, 83, 79, 1)",
+                  pointStrokeColor: "#fff",
+                  pointHighlightFill: "#fff",
+                  pointHighlightStroke: "rgba(217, 83, 79, 1)",
+                  data: [1, 2, 0, 2, 2, 0, 0]
+              }
+          ]
+      };
+
+      ctx = $("#bar-chart-2").get(0).getContext("2d");
+      var myBarChart = new Chart(ctx).Line(data);
+
+
       data = {
-          labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
+          labels: ["Core Competencies", "Streamline Processes", "Architectures Quality", "Continuous Improvement", "Revenue Growth", "Customer Retention", "Customer Satisfaction"],
+          datasets: [
+              {
+                  label: "Positive Impact",
+                  fillColor: "rgba(92, 184, 92, 0.8)",
+                  strokeColor: "rgba(92, 184, 92, 1)",
+                  pointColor: "rgba(92, 184, 92, 1)",
+                  pointStrokeColor: "#fff",
+                  pointHighlightFill: "#fff",
+                  pointHighlightStroke: "rgba(92, 184, 92, 1)",
+                  data: [4, 3, 1, 3, 1, 0, 2]
+              },
+
+              {
+                  label: "Neutral Impact",
+                  fillColor: "rgba(240, 173, 78, 0.8)",
+                  strokeColor: "rgba(240, 173, 78, 1)",
+                  pointColor: "rgba(240, 173, 78, 1)",
+                  pointStrokeColor: "#fff",
+                  pointHighlightFill: "#fff",
+                  pointHighlightStroke: "rgba(240, 173, 78, 1)",
+                  data: [1, 2, 3, 1, 3, 3, 3]
+              },
+              {
+                  label: "Negative Impact",
+                  fillColor: "rgba(217, 83, 79, 0.8)",
+                  strokeColor: "rgba(217, 83, 79, 1)",
+                  pointColor: "rgba(217, 83, 79, 1)",
+                  pointStrokeColor: "#fff",
+                  pointHighlightFill: "#fff",
+                  pointHighlightStroke: "rgba(217, 83, 79, 1)",
+                  data: [0, 0, 1, 1, 1, 2, 0]
+              }
+          ]
+      };
+
+      ctx = $("#bar-chart-3").get(0).getContext("2d");
+      var myBarChart = new Chart(ctx).Bar(data);
+
+
+      data = {
+          labels: ["Core Competencies", "Streamline Processes", "Architectures Quality", "Continuous Improvement", "Revenue Growth", "Customer Retention", "Customer Satisfaction"],
+          datasets: [
+              {
+                  label: "Positive Impact",
+                  fillColor: "rgba(92, 184, 92, 0.2)",
+                  strokeColor: "rgba(92, 184, 92, 1)",
+                  pointColor: "rgba(92, 184, 92, 1)",
+                  pointStrokeColor: "#fff",
+                  pointHighlightFill: "#fff",
+                  pointHighlightStroke: "rgba(92, 184, 92, 1)",
+                  data: [4, 3, 1, 3, 1, 0, 2]
+              },
+
+              {
+                  label: "Neutral Impact",
+                  fillColor: "rgba(240, 173, 78, 0.2)",
+                  strokeColor: "rgba(240, 173, 78, 1)",
+                  pointColor: "rgba(240, 173, 78, 1)",
+                  pointStrokeColor: "#fff",
+                  pointHighlightFill: "#fff",
+                  pointHighlightStroke: "rgba(240, 173, 78, 1)",
+                  data: [1, 2, 3, 1, 3, 3, 3]
+              },
+              {
+                  label: "Negative Impact",
+                  fillColor: "rgba(217, 83, 79, 0.2)",
+                  strokeColor: "rgba(217, 83, 79, 1)",
+                  pointColor: "rgba(217, 83, 79, 1)",
+                  pointStrokeColor: "#fff",
+                  pointHighlightFill: "#fff",
+                  pointHighlightStroke: "rgba(217, 83, 79, 1)",
+                  data: [0, 0, 1, 1, 1, 2, 0]
+              }
+          ]
+      };
+
+      ctx = $("#bar-chart-4").get(0).getContext("2d");
+      var myBarChart = new Chart(ctx).Line(data);
+
+
+
+      data = {
+          labels: ["Architecture's Quality", "Business Process Perspective", "Company's Perspective", "Continuous Improvement", "Core Competencies", "Customer Retention", "Customer Satisfaction"],
           datasets: [
               {
                   label: "My First dataset",
@@ -61,6 +194,8 @@
                   data: [28, 48, 40, 19, 96, 27, 100]
               }
           ]
+
+
       };
 
       ctx = $("#radar-chart").get(0).getContext("2d");
@@ -68,42 +203,37 @@
 
 
 
-      data = [
-          {
-              value: 300,
-              color:"#F7464A",
-              highlight: "#FF5A5E",
-              label: "Red"
-          },
-          {
-              value: 50,
-              color: "#46BFBD",
-              highlight: "#5AD3D1",
-              label: "Green"
-          },
-          {
-              value: 100,
-              color: "#FDB45C",
-              highlight: "#FFC870",
-              label: "Yellow"
-          },
-          {
-              value: 40,
-              color: "#949FB1",
-              highlight: "#A8B3C5",
-              label: "Grey"
-          },
-          {
-              value: 120,
-              color: "#4D5360",
-              highlight: "#616774",
-              label: "Dark Grey"
-          }
+      data = {
+          labels: ["Architecture's Quality", "Business Process Perspective", "Company's Perspective", "Continuous Improvement", "Core Competencies", "Customer Retention", "Customer Satisfaction"],
+          datasets: [
+              {
+                  label: "My First dataset",
+                  fillColor: "rgba(220,220,220,0.2)",
+                  strokeColor: "rgba(220,220,220,1)",
+                  pointColor: "rgba(220,220,220,1)",
+                  pointStrokeColor: "#fff",
+                  pointHighlightFill: "#fff",
+                  pointHighlightStroke: "rgba(220,220,220,1)",
+                  data: [55, 89, 31, 81, 56, 55, 40]
+              },
+              {
+                  label: "My Second dataset",
+                  fillColor: "rgba(151,187,205,0.2)",
+                  strokeColor: "rgba(151,187,205,1)",
+                  pointColor: "rgba(151,187,205,1)",
+                  pointStrokeColor: "#fff",
+                  pointHighlightFill: "#fff",
+                  pointHighlightStroke: "rgba(151,187,205,1)",
+                  data: [98, 28, 80, 59, 96, 27, 100]
+              }
+          ]
 
-      ];
+
+      };
 
       ctx = $("#polar-chart").get(0).getContext("2d");
-      new Chart(ctx).PolarArea(data);
+      new Chart(ctx).Radar(data);
+      
 
 
 
@@ -152,22 +282,35 @@
 
   <div class="row" style="margin-bottom: 20px">
     <div class="col-md-6">
-      <h3>Line charts</h3>
-      <canvas id="line-chart" style="width: 100%"></canvas>
-    </div>
-    <div class="col-md-6">
-      <h3>Bar charts</h3>
+      <h3>Mul-standard mixed mode feature</h3>
       <canvas id="bar-chart" style="width: 100%"></canvas>
+    </div>
+
+    <div class="col-md-6">
+      <h3>Mul-standard mixed mode feature</h3>
+      <canvas id="bar-chart-2" style="width: 100%"></canvas>
     </div>
   </div>
 
   <div class="row" style="margin-bottom: 20px">
     <div class="col-md-6">
-      <h3>Radar charts</h3>
+      <h3>Feature 2</h3>
+      <canvas id="bar-chart-3" style="width: 100%"></canvas>
+    </div>
+
+    <div class="col-md-6">
+      <h3>Feature 2</h3>
+      <canvas id="bar-chart-4" style="width: 100%"></canvas>
+    </div>
+  </div>
+
+  <div class="row" style="margin-bottom: 20px">
+    <div class="col-md-6">
+      <h3>Radar Chart - Stakeholder 1</h3>
       <canvas id="radar-chart" style="width: 100%"></canvas>
     </div>
     <div class="col-md-6">
-      <h3>Polar charts</h3>
+      <h3>Radar Chart - Stakeholder 2</h3>
       <canvas id="polar-chart" style="width: 100%"></canvas>
     </div>
   </div>

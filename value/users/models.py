@@ -42,6 +42,8 @@ class Profile(models.Model):
         else:
             initials = self.user.username
 
+        return '/static/img/' + initials.upper() + '.png'
+
         colors = {
           'a' : 'AA3C39',
           'b' : '993350',
