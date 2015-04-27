@@ -1,4 +1,4 @@
-/*@import url(http://fonts.googleapis.com/css?family=Oswald:400,700);*/
+@import url(http://fonts.googleapis.com/css?family=Oswald:400,700);
 
 body {
   background-color: #f6f6f6;
@@ -18,7 +18,7 @@ body {
 }
 
 .navbar-default .navbar-brand {
-  /*font-family: 'Oswald', sans-serif;*/
+  font-family: 'Oswald', sans-serif;
   color: #fe0074;
   text-transform: uppercase;
 }

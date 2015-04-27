@@ -30,6 +30,7 @@ INSTALLED_APPS = (
     'value.measures',
     'value.users',
     'value.workspace',
+    'value.djavatar',
 )
 
 MIDDLEWARE_CLASSES = (
