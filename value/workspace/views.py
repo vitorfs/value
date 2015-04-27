@@ -51,12 +51,15 @@ def instance(request, instance_id):
 @login_required
 def evaluate(request, instance_id):
     instance = get_object_or_404(Instance, pk=instance_id)
-    factors = Factor.objects.filter(is_active=True).exclude(measure=None)
-    evaluations = InstanceItemEvaluation.objects.filter(user=request.user, instance=instance)
+    factors = Factor.get_factors()
+    evaluations = InstanceItemEvaluation.get_user_evaluations_by_instance(user=request.user, instance=instance)
     return render(request, 'workspace/evaluate.html', { 'instance' : instance, 'factors' : factors, 'evaluations' : evaluations })
 
 def save_evaluation(request, instance_id):
     instance = get_object_or_404(Instance, pk=instance_id)
+
+    item_id = request.POST.get('item_id')
+    item = get_object_or_404(InstanceItem, pk=item_id)
 
     factor_id = request.POST.get('factor_id')
     factor = get_object_or_404(Factor, pk=factor_id)
@@ -70,12 +73,14 @@ def save_evaluation(request, instance_id):
     if measure_value_id:
         measure_value = get_object_or_404(MeasureValue, pk=measure_value_id)
 
-    evaluation, created = InstanceItemEvaluation.objects.get_or_create(instance=instance, user=request.user, factor=factor, measure=measure)
+    evaluation, created = InstanceItemEvaluation.objects.get_or_create(instance=instance, item=item, user=request.user, factor=factor, measure=measure)
 
-    evaluation.evaluated_at = datetime.now()
-    evaluation.measure_value = measure_value
-
-    evaluation.save()
+    if evaluation.measure_value == measure_value:
+        evaluation.delete()
+    else:
+        evaluation.evaluated_at = datetime.now()
+        evaluation.measure_value = measure_value
+        evaluation.save()
 
     return HttpResponse('')
 

@@ -41,8 +41,18 @@ class InstanceItem(models.Model):
 
 class InstanceItemEvaluation(models.Model):
     instance = models.ForeignKey(Instance)
+    item = models.ForeignKey(InstanceItem)
     user = models.ForeignKey(User)
     factor = models.ForeignKey(Factor)
     measure = models.ForeignKey(Measure)
     measure_value = models.ForeignKey(MeasureValue, null=True, blank=True)
     evaluated_at = models.DateTimeField(null=True, blank=True)
+
+    @staticmethod
+    def get_user_evaluations_by_instance(user, instance):
+        return InstanceItemEvaluation.objects.filter(
+            user=user, 
+            instance=instance, 
+            factor__is_active=True, 
+            measure__is_active=True).exclude(factor__measure=None)
+

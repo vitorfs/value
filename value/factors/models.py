@@ -14,3 +14,7 @@ class Factor(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @staticmethod
+    def get_factors():
+        return Factor.objects.filter(is_active=True).exclude(measure=None).order_by('name')

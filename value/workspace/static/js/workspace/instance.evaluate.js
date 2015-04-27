@@ -1,16 +1,26 @@
 $(function () {
 
   $(".evaluable").click(function () {
+
+    var do_evaluate = true
+
+    if ($(".glyphicon", this).hasClass("glyphicon-check")) {
+      do_evaluate = false;
+    }
+
     var row = $(this).closest("tr");
-    $(row).addClass("selected");
+    $(row).removeClass("selected");
     $(".evaluable", row).each(function () {
       $(this).css("background-color", "transparent");
       $(".glyphicon", this).removeClass("glyphicon-check").addClass("glyphicon-unchecked");
     });
 
-    var color = $(this).attr("data-color");
-    $(this).css("background-color", color);
-    $(".glyphicon", this).removeClass("glyphicon-unchecked").addClass("glyphicon-check");
+    if (do_evaluate) {
+      $(row).addClass("selected");
+      var color = $(this).attr("data-color");
+      $(this).css("background-color", color);
+      $(".glyphicon", this).removeClass("glyphicon-unchecked").addClass("glyphicon-check");
+    }
 
     var rows_count = $(this).closest("tbody").find("tr").length;
     var selected_rows_count = $(this).closest("tbody").find("tr.selected").length;
@@ -24,11 +34,15 @@ $(function () {
     if (percent === 100) {
       $(panel).removeClass("panel-default").addClass("panel-success");
     }
+    else {
+      $(panel).removeClass("panel-success").addClass("panel-default");
+    }
 
     $(".badge", panel).text(percent + "%");
 
     var url = "/workspace/" + $(this).attr("data-instance-id") + "/evaluate/save/";
     var csrf = $("[name='csrfmiddlewaretoken']").val();
+    var item_id = $(this).attr("data-item-id");
     var factor_id = $(this).attr("data-factor-id");
     var measure_id = $(this).attr("data-measure-id");
     var measure_value_id = $(this).attr("data-measure-value-id");
@@ -37,6 +51,7 @@ $(function () {
       url: url,
       data: {
         'csrfmiddlewaretoken': csrf,
+        'item_id': item_id,
         'factor_id': factor_id,
         'measure_id': measure_id,
         'measure_value_id': measure_value_id
