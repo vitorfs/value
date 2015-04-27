@@ -1,5 +1,7 @@
 {% load relative_col_size %}
 
+{% csrf_token %}
+
 {% for item in instance.get_items %}
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -31,17 +33,27 @@
           {% for factor in factors_group.list %}
             <tr>
               <td>{{ factor }}</td>
-              {% for measure in factor.measure.get_values %}
+              {% for measure_value in factor.measure.get_values %}
                 <td class="text-center evaluable" 
                     data-color="{{ measure.color }}"
                     data-instance-id="{{ instance.pk }}"
                     data-factor-id="{{ factor.pk }}"
-                    data-measure-id="{{ measure.measure.pk }}"
-                    data-measure-value-id="{{ measure.pk }}">
+                    data-measure-id="{{ factor.measure.pk }}"
+                    data-measure-value-id="{{ measure_value.pk }}">
                   <span class="glyphicon glyphicon-unchecked"></span>
+                {% for e in evaluations %}
+                  {% if e.instance.pk == instance.pk and e.factor.pk == factor.pk and e.measure.pk == factor.measure.pk and e.measure_value.pk == measure_value.pk %}
+                    aqui.
+                  {% endif %}
+                {% endfor %}
                 </td>
               {% endfor %}
-              <td class="text-center evaluable" data-color="#E7E7E7">
+              <td class="text-center evaluable" 
+                  data-color="#E7E7E7"
+                  data-instance-id="{{ instance.pk }}"
+                  data-factor-id="{{ factor.pk }}"
+                  data-measure-id="{{ factor.measure.pk }}"
+                  data-measure-value-id="">
                 <span class="glyphicon glyphicon-unchecked"></span>
               </td>
             </tr>

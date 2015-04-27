@@ -44,5 +44,5 @@ class InstanceItemEvaluation(models.Model):
     user = models.ForeignKey(User)
     factor = models.ForeignKey(Factor)
     measure = models.ForeignKey(Measure)
-    measure_value = models.ForeignKey(MeasureValue)
-    evaluated_at = models.DateTimeField(auto_now=True)
+    measure_value = models.ForeignKey(MeasureValue, null=True, blank=True)
+    evaluated_at = models.DateTimeField(null=True, blank=True)

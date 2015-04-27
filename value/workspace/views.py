@@ -1,10 +1,13 @@
+from datetime import datetime
+from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
-from value.workspace.models import Instance, InstanceItem
+from value.workspace.models import Instance, InstanceItem, InstanceItemEvaluation
 from value.factors.models import Factor
+from value.measures.models import Measure, MeasureValue
 
 @login_required
 def index(request):
@@ -49,7 +52,32 @@ def instance(request, instance_id):
 def evaluate(request, instance_id):
     instance = get_object_or_404(Instance, pk=instance_id)
     factors = Factor.objects.filter(is_active=True).exclude(measure=None)
-    return render(request, 'workspace/evaluate.html', { 'instance' : instance, 'factors' : factors })
+    evaluations = InstanceItemEvaluation.objects.filter(user=request.user, instance=instance)
+    return render(request, 'workspace/evaluate.html', { 'instance' : instance, 'factors' : factors, 'evaluations' : evaluations })
+
+def save_evaluation(request, instance_id):
+    instance = get_object_or_404(Instance, pk=instance_id)
+
+    factor_id = request.POST.get('factor_id')
+    factor = get_object_or_404(Factor, pk=factor_id)
+
+    measure_id = request.POST.get('measure_id')
+    measure = get_object_or_404(Measure, pk=measure_id)
+
+    measure_value_id = request.POST.get('measure_value_id')
+
+    measure_value = None
+    if measure_value_id:
+        measure_value = get_object_or_404(MeasureValue, pk=measure_value_id)
+
+    evaluation, created = InstanceItemEvaluation.objects.get_or_create(instance=instance, user=request.user, factor=factor, measure=measure)
+
+    evaluation.evaluated_at = datetime.now()
+    evaluation.measure_value = measure_value
+
+    evaluation.save()
+
+    return HttpResponse('')
 
 @login_required
 def stakeholders(request, instance_id):

@@ -26,24 +26,26 @@ $(function () {
     }
 
     $(".badge", panel).text(percent + "%");
-  });
 
-  $(".js-factors-selection a").click(function () {
+    var url = "/workspace/" + $(this).attr("data-instance-id") + "/evaluate/save/";
+    var csrf = $("[name='csrfmiddlewaretoken']").val();
+    var factor_id = $(this).attr("data-factor-id");
+    var measure_id = $(this).attr("data-measure-id");
+    var measure_value_id = $(this).attr("data-measure-value-id");
 
-    if ($(this).attr("data-selected") === "unselected") {
-      $(this).attr("data-selected", "selected");
-      $(this).css("font-weight", "bold");
-      $(".glyphicon", this).removeClass("glyphicon-unchecked").addClass("glyphicon-check");
-    }
-    else {
-      $(this).attr("data-selected", "unselected");
-      $(this).css("font-weight", "normal");
-      $(".glyphicon", this).removeClass("glyphicon-check").addClass("glyphicon-unchecked");
-    }
+    $.ajax({
+      url: url,
+      data: {
+        'csrfmiddlewaretoken': csrf,
+        'factor_id': factor_id,
+        'measure_id': measure_id,
+        'measure_value_id': measure_value_id
+      },
+      type: 'post',
+      success: function (data) {
 
-    $(this).blur();
-
-    return false;
+      }
+    });
 
   });
 
