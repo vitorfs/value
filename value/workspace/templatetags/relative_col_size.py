@@ -5,6 +5,6 @@ register = template.Library()
 def relative_col_size(list):
     length = len(list)
     if length > 0:
-        size = 75.0/length
+        size = 75.0/(length + 1)
         return '{0}%'.format(size)
     return ''

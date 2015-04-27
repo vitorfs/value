@@ -23,6 +23,7 @@
               {% for measure in first_factor.measure.get_values %}
                 <th class="text-center" style="width: {{ first_factor.measure.get_values|relative_col_size }}">{{ measure.description }}</th>
               {% endfor %}
+              <th class="text-center" style="width: {{ first_factor.measure.get_values|relative_col_size }}">N/A</th>
             {% endwith %}
           </tr>
         </thead>
@@ -40,6 +41,9 @@
                   <span class="glyphicon glyphicon-unchecked"></span>
                 </td>
               {% endfor %}
+              <td class="text-center evaluable" data-color="#E7E7E7">
+                <span class="glyphicon glyphicon-unchecked"></span>
+              </td>
             </tr>
           {% endfor %}
         </tbody>

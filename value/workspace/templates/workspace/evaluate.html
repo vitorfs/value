@@ -51,21 +51,7 @@
   </div>
 
   <div class="row">
-    <div class="col-md-3">
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          <h3 class="panel-title">Click to select factors</h3>
-        </div>
-        <div class="list-group js-factors-selection">
-          {% for factor in factors %}
-            <a href="#" class="list-group-item" data-selected="selected" style="font-weight: bold">
-              <span class="glyphicon glyphicon-check"></span> {{ factor.name }}
-            </a>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-    <div class="col-md-9">
+    <div class="col-md-12">
       {% include 'workspace/includes/partial_item_evaluation_table.html' with instance=instance factors=factors %}
     </div>
   </div>
