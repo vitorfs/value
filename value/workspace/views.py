@@ -75,7 +75,7 @@ def save_evaluation(request, instance_id):
 
     evaluation, created = InstanceItemEvaluation.objects.get_or_create(instance=instance, item=item, user=request.user, factor=factor, measure=measure)
 
-    if evaluation.measure_value == measure_value:
+    if evaluation.measure_value == measure_value and not created:
         evaluation.delete()
     else:
         evaluation.evaluated_at = datetime.now()

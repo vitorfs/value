@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import F
 from django.contrib.auth.models import User
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
@@ -50,9 +51,12 @@ class InstanceItemEvaluation(models.Model):
 
     @staticmethod
     def get_user_evaluations_by_instance(user, instance):
-        return InstanceItemEvaluation.objects.filter(
+        qs = InstanceItemEvaluation.objects.filter(
             user=user, 
             instance=instance, 
             factor__is_active=True, 
-            measure__is_active=True).exclude(factor__measure=None)
+            measure__is_active=True).exclude(
+            factor__measure=None).filter(
+            factor__measure_id=F('measure_id'))
+        return qs
 

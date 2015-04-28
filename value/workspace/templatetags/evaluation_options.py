@@ -23,7 +23,7 @@ def evaluation_options(evaluations, item, factor):
 
     is_evaluated = False
     for evaluation in evaluations:
-        if item.pk == evaluation.item.pk and factor.pk == evaluation.factor.pk:
+        if item.pk == evaluation.item.pk and factor.pk == evaluation.factor.pk and evaluation.measure.pk == evaluation.factor.measure.pk:
             is_evaluated = True
 
     html = '<tr{0}><td>{1}</td>'.format(selected(is_evaluated), factor.name)
@@ -47,7 +47,7 @@ data-measure-value-id="{5}"
 
     is_none = False
     for evaluation in evaluations:
-        if evaluation.instance.pk == item.instance.pk and evaluation.item.pk == item.pk and evaluation.factor.pk == factor.pk and evaluation.measure_value == None:
+        if evaluation.instance.pk == item.instance.pk and evaluation.item.pk == item.pk and evaluation.factor.pk == factor.pk and not evaluation.measure_value:
             is_none = True
 
     html += '''<td class="text-center evaluable" 
