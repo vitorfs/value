@@ -18,7 +18,7 @@
     {% endif %}
 
     {% for factors_group in factors_grouped_by_measure %}
-      <table class="table" style="display: none">
+      <table class="table"{% if factors_grouped_by_measure|length <= 1 %} style="display: none"{% endif %}>
         <thead>
           <tr>
             <th style="width: 25%">Value Factors</th>

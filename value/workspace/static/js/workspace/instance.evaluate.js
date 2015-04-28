@@ -67,8 +67,8 @@ $(function () {
       $(".glyphicon", this).removeClass("glyphicon-unchecked").addClass("glyphicon-check");
     }
 
-    var rows_count = $(this).closest("tbody").find("tr").length;
-    var selected_rows_count = $(this).closest("tbody").find("tr.selected").length;
+    var rows_count = $(this).closest(".panel").find("tbody > tr").length;
+    var selected_rows_count = $(this).closest(".panel").find("tbody > tr.selected").length;
 
     var percent = (selected_rows_count / rows_count) * 100;
 
