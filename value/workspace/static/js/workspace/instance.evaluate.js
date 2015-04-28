@@ -1,5 +1,50 @@
 $(function () {
 
+  $(".js-show-all").click(function () {
+
+    $(".panel-group .panel-collapsable").each(function () {
+      $(this).togglePanel(true);
+    });
+
+  });
+
+  $(".js-hide-all").click(function () {
+
+    $(".panel-group .panel-collapsable").each(function () {
+      $(this).togglePanel(false);
+    });
+
+  });
+
+  $.fn.togglePanel = function (is_collapsed) {
+
+    if (is_collapsed === undefined) {
+      is_collapsed = $(this).hasClass("panel-collapsed");
+    }
+
+    var container;
+
+    if ($(this).find(".panel-body").length > 0) {
+      container = $(".panel-body", this);
+    }
+    else {
+      container = $("table", this);
+    }
+
+    if (is_collapsed) {
+      $(container).show();
+      $(this).removeClass("panel-collapsed");
+    }
+    else {
+      $(container).hide();
+      $(this).addClass("panel-collapsed");
+    }
+  };
+
+  $(".panel-collapsable").click(function () {
+    $(this).togglePanel();
+  });
+
   $(".evaluable").click(function () {
 
     var do_evaluate = true

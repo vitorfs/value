@@ -1,3 +1,3 @@
-.evaluable {
+.evaluable, .panel-collapsable {
   cursor: pointer;
 }

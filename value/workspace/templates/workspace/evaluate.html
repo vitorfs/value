@@ -22,8 +22,14 @@
   {% include 'workspace/includes/instance_menu.html' with active='evaluate' instance=instance %}
 
   <div class="row" style="margin-bottom: 20px">
-    <div class="col-md-12">
-      <div class="dropdown pull-right">
+    <div class="col-md-10">
+      <div class="btn-group" role="group" aria-label="Panel Display Options">
+        <button class="btn btn-default js-show-all">Show all</button>
+        <button class="btn btn-default js-hide-all">Hide all</button>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="dropdown text-right">
         <button class="btn btn-default dropdown-toggle" type="button" id="filter" data-toggle="dropdown" aria-expanded="true">
           <span class="glyphicon glyphicon-eye-open"></span> View
           <span class="caret"></span>
@@ -39,7 +45,9 @@
 
   <div class="row">
     <div class="col-md-12">
-      {% include 'workspace/includes/partial_item_evaluation_table.html' with instance=instance factors=factors evaluations=evaluations %}
+      <div class="panel-group" role="tablist" aria-multiselectable="true">
+        {% include 'workspace/includes/partial_item_evaluation_table.html' with instance=instance factors=factors evaluations=evaluations %}
+      </div>
     </div>
   </div>
 
