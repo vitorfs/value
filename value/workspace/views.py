@@ -55,6 +55,7 @@ def evaluate(request, instance_id):
     evaluations = InstanceItemEvaluation.get_user_evaluations_by_instance(user=request.user, instance=instance)
     return render(request, 'workspace/evaluate.html', { 'instance' : instance, 'factors' : factors, 'evaluations' : evaluations })
 
+@login_required
 def save_evaluation(request, instance_id):
     instance = get_object_or_404(Instance, pk=instance_id)
 
@@ -89,3 +90,8 @@ def stakeholders(request, instance_id):
     instance = get_object_or_404(Instance, pk=instance_id)
     users = User.objects.filter(is_active=True).exclude(pk=request.user.pk)
     return render(request, 'workspace/stakeholders.html', { 'instance' : instance, 'users' : users })
+
+@login_required
+def analyze(request, instance_id):
+    instance = get_object_or_404(Instance, pk=instance_id)
+    return render(request, 'workspace/analyze.html', { 'instance' : instance })

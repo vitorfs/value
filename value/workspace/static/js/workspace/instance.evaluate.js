@@ -41,8 +41,8 @@ $(function () {
     }
   };
 
-  $(".panel-collapsable").click(function () {
-    $(this).togglePanel();
+  $(".panel-collapsable .panel-heading").click(function () {
+    $(this).closest(".panel-collapsable").togglePanel();
   });
 
   $(".evaluable").click(function () {

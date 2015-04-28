@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'workspace:index' %}">Workspace</a></li>
+    <li><a href="{% url 'workspace:instance' instance.pk %}">{{ instance.name }}</a></li>
+    <li class="active">Analyze</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+  {% include 'workspace/includes/instance_menu.html' with active='analyze' instance=instance %}
+
+  <div class="row" style="margin-bottom: 20px">
+    <div class="col-md-3">
+
+      <ul class="nav nav-pills nav-stacked">
+        <li role="presentation" class="active"><a href="#">Overall Value Factors</a></li>
+        <li role="presentation"><a href="#">Features Selection</a></li>
+        <li role="presentation"><a href="#">Stakeholders Opinion</a></li>
+      </ul>
+
+    </div>
+    <div class="col-md-9">
+
+    </div>
+  </div>
+
+{% endblock content %}
