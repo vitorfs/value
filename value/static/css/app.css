@@ -1,20 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Oswald:400,700);
 
 body {
-  background-color: #f6f6f6;
   padding-top: 70px;
-}
-
-.content {
-  background-color: #ffffff;
-  border-radius: 4px;
-  box-shadow: 0 0 2px #ccc;
-  padding-top: 15px;
-  margin-bottom: 20px;
-}
-
-.navbar-default {
-  background-color: #ffffff;
 }
 
 .navbar-default .navbar-brand {
