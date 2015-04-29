@@ -118,6 +118,9 @@ def analyze(request, instance_id):
 
 @login_required
 def analyze_features(request, instance_id):
+
+    chart_type = request.GET.get('chart', 'bar')
+
     instance = get_object_or_404(Instance, pk=instance_id)
     items = instance.get_items()
     evaluations = InstanceItemEvaluation.get_evaluations_by_instance(instance)
@@ -143,34 +146,41 @@ def analyze_features(request, instance_id):
                 mv = e.measure_value.description
             data[item.name][e.factor.name][mv] = data[item.name][e.factor.name][mv] + 1
 
-    data = data[u'Feature 3']
-    sorted_data = sorted(data.items(), key=operator.itemgetter(0))
+    feature_charts = {}
 
-    categories = []
-    for factor in sorted_data:
-        categories.append(factor[0])
+    for item in items:
 
-    series = []
-    for value in measure.get_values():
+        feature_data = data[item.name]
+        sorted_data = sorted(feature_data.items(), key=operator.itemgetter(0))
+
+        categories = []
+        for factor in sorted_data:
+            categories.append(factor[0])
+
+        series = []
+        for value in measure.get_values():
+            serie_data = []
+            for factor in sorted_data:
+                serie_data.append(factor[1][value.description])
+            series.append({ 'name': value.description, 'data': serie_data, 'color': value.color })
+
         serie_data = []
         for factor in sorted_data:
-            serie_data.append(factor[1][value.description])
-        series.append({ 'name': value.description, 'data': serie_data, 'color': value.color })
+            serie_data.append(factor[1][u'None'])
+        series.append({ 'name': 'N/A', 'data': serie_data, 'color': '#E7E7E7' })
 
-    serie_data = []
-    for factor in sorted_data:
-        serie_data.append(factor[1][u'None'])
-    series.append({ 'name': 'N/A', 'data': serie_data, 'color': '#E7E7E7' })
+        highchart_data = {
+            'chart': { 'type': chart_type },
+            'title': { 'text': item.name },
+            'xAxis': { 'categories': categories },
+            'yAxis': { 'min': 0, 'title': { 'text': 'Number of votes' } },
+            'legend': { 'reversed': True },
+            'plotOptions': { 'series': { 'stacking': 'normal' }},
+            'series': series
+        }
 
-    highchart_data = {
-        'chart': { 'type': 'bar' },
-        'title': { 'text': 'Feature 3' },
-        'xAxis': { 'categories': categories },
-        'yAxis': { 'min': 0, 'title': { 'text': 'Number of votes' } },
-        'legend': { 'reversed': True },
-        'plotOptions': { 'series': { 'stacking': 'normal' }},
-        'series': series
-    }
+        dump = json.dumps(highchart_data)
 
-    dump = json.dumps(highchart_data)
-    return render(request, 'workspace/analyze_features.html', { 'instance' : instance, 'data' : dump })
+        feature_charts[item.id] = dump
+
+    return render(request, 'workspace/analyze_features.html', { 'instance' : instance, 'feature_charts' : feature_charts })

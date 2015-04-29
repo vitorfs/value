@@ -6,7 +6,9 @@
   <script src="{% static 'js/highcharts.js' %}"></script>
   <script type="text/javascript">
     $(function () {
-        $('#chart-container').highcharts({{ data|safe }});
+        {% for k, v in feature_charts.items %}
+            $('#chart-container-{{ k }}').highcharts({{ v|safe }});
+        {% endfor %}
     });
   </script>
 {% endblock javascript %}
@@ -31,9 +33,13 @@
 
     </div>
     <div class="col-md-9">
-
-      <div id="chart-container"></div>
-
+        {% for k, v in feature_charts.items %}
+            <div class="row">
+                <div class="col-md-12" style="margin-bottom: 20px">
+                    <div id="chart-container-{{ k }}"></div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
   </div>
 
