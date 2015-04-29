@@ -1,4 +1,5 @@
 import json
+import operator
 from datetime import datetime
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
@@ -118,10 +119,58 @@ def analyze(request, instance_id):
 @login_required
 def analyze_features(request, instance_id):
     instance = get_object_or_404(Instance, pk=instance_id)
+    items = instance.get_items()
     evaluations = InstanceItemEvaluation.get_evaluations_by_instance(instance)
-    factors = Factor.get_factors()
-    data = []
-    for factor in factors:
-        data.append([factor.name, evaluations.filter(factor=factor).exclude(measure_value=None).count()])
-    dump = json.dumps(data)
+
+    data = {}
+
+    measure = None
+
+    for item in items:
+        data[item.name] = {}
+        item_evaluation = InstanceItemEvaluation.get_evaluations_by_instance(instance).filter(item=item)
+
+        for e in item_evaluation:
+            measure = e.measure
+            data[item.name][e.factor.name] = {}
+            for value in e.factor.measure.get_values():
+                data[item.name][e.factor.name][value.description] = 0
+            data[item.name][e.factor.name][u'None'] = 0
+
+        for e in item_evaluation:
+            mv = u'None'
+            if e.measure_value:
+                mv = e.measure_value.description
+            data[item.name][e.factor.name][mv] = data[item.name][e.factor.name][mv] + 1
+
+    data = data[u'Feature 3']
+    sorted_data = sorted(data.items(), key=operator.itemgetter(0))
+
+    categories = []
+    for factor in sorted_data:
+        categories.append(factor[0])
+
+    series = []
+    for value in measure.get_values():
+        serie_data = []
+        for factor in sorted_data:
+            serie_data.append(factor[1][value.description])
+        series.append({ 'name': value.description, 'data': serie_data, 'color': value.color })
+
+    serie_data = []
+    for factor in sorted_data:
+        serie_data.append(factor[1][u'None'])
+    series.append({ 'name': 'N/A', 'data': serie_data, 'color': '#E7E7E7' })
+
+    highchart_data = {
+        'chart': { 'type': 'bar' },
+        'title': { 'text': 'Feature 3' },
+        'xAxis': { 'categories': categories },
+        'yAxis': { 'min': 0, 'title': { 'text': 'Number of votes' } },
+        'legend': { 'reversed': True },
+        'plotOptions': { 'series': { 'stacking': 'normal' }},
+        'series': series
+    }
+
+    dump = json.dumps(highchart_data)
     return render(request, 'workspace/analyze_features.html', { 'instance' : instance, 'data' : dump })

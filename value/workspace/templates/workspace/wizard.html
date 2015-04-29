@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 
+{% load staticfiles %}
+
 {% block stylesheet %}
-  <link href="{{ STATIC_URL }}css/workspace/wizard.css" rel="stylesheet">
+  <link href="{% static 'css/workspace/wizard.css' %}" rel="stylesheet">
 {% endblock stylesheet %}
 
 {% block javascript %}
-  <script src="{{ STATIC_URL }}js/workspace/wizard.js"></script>
+  <script src="{% static 'js/workspace/wizard.js' %}"></script>
 {% endblock javascript %}
 
 {% block breadcrumb %}

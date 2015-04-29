@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
+{% load staticfiles %}
+
 {% block javascript %}
-  <script src="{{ STATIC_URL }}js/Chart.min.js"></script>
+  <script src="{% static 'js/Chart.min.js' %}"></script>
   <script type="text/javascript">
     $(function () {
       var data = {

@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
+{% load staticfiles %}
+
 {% block javascript %}
-  <script src="{{ STATIC_URL }}js/workspace/workspace.js"></script>
+  <script src="{% static 'js/workspace/workspace.js' %}"></script>
 {% endblock javascript %}
 
 {% block breadcrumb %}

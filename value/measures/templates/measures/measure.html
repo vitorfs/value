@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 
+{% load staticfiles %}
+
 {% block stylesheet %}
-  <link href="{{ STATIC_URL }}css/bootstrap-colorselector.css" rel="stylesheet">
+  <link href="{% static 'css/bootstrap-colorselector.css' %}" rel="stylesheet">
 {% endblock stylesheet %}
 
 {% block javascript %}
-  <script src="{{ STATIC_URL }}js/bootstrap-colorselector.js"></script>
-  <script src="{{ STATIC_URL }}js/measures/measure.js"></script>
+  <script src="{% static 'js/bootstrap-colorselector.js' %}"></script>
+  <script src="{% static 'js/measures/measure.js' %}"></script>
 {% endblock javascript %}
 
 {% block breadcrumb %}

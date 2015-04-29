@@ -49,6 +49,12 @@ class InstanceItemEvaluation(models.Model):
     measure_value = models.ForeignKey(MeasureValue, null=True, blank=True)
     evaluated_at = models.DateTimeField(null=True, blank=True)
 
+    def __unicode__(self):
+        mv = 'N/A'
+        if self.measure_value:
+            mv = self.measure_value.description
+        return '{0} {1} {2} {3} {4} {5}'.format(self.instance.name, self.item.name, self.user.username, self.factor.name, self.measure.name, mv)
+
     @staticmethod
     def get_evaluations_by_instance(instance):
         qs = InstanceItemEvaluation.objects.filter(
