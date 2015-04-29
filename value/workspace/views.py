@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
@@ -106,4 +107,21 @@ def stakeholders(request, instance_id):
 @login_required
 def analyze(request, instance_id):
     instance = get_object_or_404(Instance, pk=instance_id)
-    return render(request, 'workspace/analyze.html', { 'instance' : instance })
+    evaluations = InstanceItemEvaluation.get_evaluations_by_instance(instance)
+    factors = Factor.get_factors()
+    data = []
+    for factor in factors:
+        data.append([factor.name, evaluations.filter(factor=factor).exclude(measure_value=None).count()])
+    dump = json.dumps(data)
+    return render(request, 'workspace/analyze.html', { 'instance' : instance, 'data' : dump })
+
+@login_required
+def analyze_features(request, instance_id):
+    instance = get_object_or_404(Instance, pk=instance_id)
+    evaluations = InstanceItemEvaluation.get_evaluations_by_instance(instance)
+    factors = Factor.get_factors()
+    data = []
+    for factor in factors:
+        data.append([factor.name, evaluations.filter(factor=factor).exclude(measure_value=None).count()])
+    dump = json.dumps(data)
+    return render(request, 'workspace/analyze_features.html', { 'instance' : instance, 'data' : dump })

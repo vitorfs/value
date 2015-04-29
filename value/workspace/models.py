@@ -50,13 +50,17 @@ class InstanceItemEvaluation(models.Model):
     evaluated_at = models.DateTimeField(null=True, blank=True)
 
     @staticmethod
-    def get_user_evaluations_by_instance(user, instance):
+    def get_evaluations_by_instance(instance):
         qs = InstanceItemEvaluation.objects.filter(
-            user=user, 
             instance=instance, 
             factor__is_active=True, 
             measure__is_active=True).exclude(
             factor__measure=None).filter(
             factor__measure_id=F('measure_id'))
+        return qs
+
+    @staticmethod
+    def get_user_evaluations_by_instance(user, instance):
+        qs = InstanceItemEvaluation.get_evaluations_by_instance(instance).filter(user=user)
         return qs
 

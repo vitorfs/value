@@ -8,4 +8,5 @@ urlpatterns = patterns('value.workspace.views',
     url(r'^(\d+)/evaluate/save/$', 'save_evaluation', name='save_evaluation'),
     url(r'^(\d+)/stakeholders/$', 'stakeholders', name='stakeholders'),
     url(r'^(\d+)/analyze/$', 'analyze', name='analyze'),
+    url(r'^(\d+)/analyze/features/$', 'analyze_features', name='analyze_features'),
 )

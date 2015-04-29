@@ -4,35 +4,39 @@
   <script src="{{ STATIC_URL }}js/highcharts.js"></script>
   <script type="text/javascript">
     $(function () {
-        $("#chart-container").highcharts({
+        $('#chart-container').highcharts({
             chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false
+                type: 'bar'
             },
             title: {
-                text: "Overall Value Factors Usage"
+                text: 'Stacked bar chart'
             },
-            tooltip: {
-                pointFormat: "{series.name}: <strong>{point.percentage:.1f}%</strong>"
+            xAxis: {
+                categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Total fruit consumption'
+                }
+            },
+            legend: {
+                reversed: true
             },
             plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: "pointer",
-                    dataLabels: {
-                        enabled: true,
-                        format: "<strong>{point.name}</strong>: {point.percentage:.1f} %",
-                        style: {
-                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || "black"
-                        }
-                    }
+                series: {
+                    stacking: 'normal'
                 }
             },
             series: [{
-                type: "pie",
-                name: "Overall usage",
-                data: {{ data|safe }}
+                name: 'John',
+                data: [5, 3, 4, 7, 2]
+            }, {
+                name: 'Jane',
+                data: [2, 2, 3, 2, 1]
+            }, {
+                name: 'Joe',
+                data: [3, 4, 4, 2, 5]
             }]
         });
         $("text[text-anchor='end']").remove();
@@ -56,7 +60,7 @@
   <div class="row" style="margin-bottom: 20px">
     <div class="col-md-3">
 
-      {% include 'workspace/includes/analyze_menu.html' with active='factors_usage' instance=instance %}
+      {% include 'workspace/includes/analyze_menu.html' with active='features' instance=instance %}
 
     </div>
     <div class="col-md-9">
