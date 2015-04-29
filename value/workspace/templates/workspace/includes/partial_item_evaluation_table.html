@@ -6,7 +6,7 @@
 {% csrf_token %}
 
 {% for item in items %}
-  <div class="panel {% panel_class evaluations=evaluations item=item factors=factors %} panel-collapsable panel-collapsed">
+  <div class="panel {% panel_class evaluations=evaluations item=item factors=factors %} panel-collapsable{% if not forloop.first %} panel-collapsed{% endif %}">
     <div class="panel-heading">
       <span class="badge pull-right">{% evaluation_percent evaluations=evaluations item=item factors=factors %}</span>
       <h3 class="panel-title">{{ item.name }}</h3>
@@ -14,11 +14,11 @@
     {% regroup factors by measure as factors_grouped_by_measure %}
 
     {% if factors_grouped_by_measure|length > 1 %}
-      <div class="panel-body" style="display: none">
+      <div class="panel-body"{% if not forloop.first %} style="display: none"{% endif %}>
     {% endif %}
 
     {% for factors_group in factors_grouped_by_measure %}
-      <table class="table"{% if factors_grouped_by_measure|length <= 1 %} style="display: none"{% endif %}>
+      <table class="table"{% if not forloop.parentloop.first %}{% if factors_grouped_by_measure|length <= 1 %} style="display: none"{% endif %}{% endif %}>
         <thead>
           <tr>
             <th style="width: 25%">Value Factors</th>

@@ -1,5 +1,31 @@
 $(function () {
 
+  $(".js-grid-filters a").click(function () {
+
+    $(".panel-group .panel-collapsable").togglePanel(false);
+
+    $(".js-grid-filters .glyphicon").removeClass("glyphicon-check").addClass("glyphicon-unchecked");
+
+    var action = $(this).attr("data-action");
+
+    if (action === "all") {
+      $(".panel-group .panel").show();
+    }
+
+    else if (action === "todo") {
+      $(".panel-group .panel").hide();
+      $(".panel-group .panel-default").show();
+    }
+
+    else if (action === "finished") {
+      $(".panel-group .panel").hide();
+      $(".panel-group .panel-success").show();
+    }
+
+    $(".glyphicon", this).removeClass("glyphicon-unchecked").addClass("glyphicon-check");
+
+  });
+
   $(".js-show-all").click(function () {
     $(".panel-group .panel-collapsable").togglePanel(true);
   });

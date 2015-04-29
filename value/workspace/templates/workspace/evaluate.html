@@ -25,10 +25,10 @@
     <div class="col-md-2">
       <div class="btn-group btn-group-justified" role="group" aria-label="Panel Display Options">
         <div class="btn-group">
-          <button class="btn btn-default js-show-all">Show all</button>
+          <button class="btn btn-default js-show-all">Show details</button>
         </div>
         <div class="btn-group">
-          <button class="btn btn-default js-hide-all">Hide all</button>
+          <button class="btn btn-default js-hide-all">Hide details</button>
         </div>
       </div>
     </div>
@@ -53,15 +53,21 @@
       </span>
     </div>
     <div class="col-md-2 col-md-offset-2">
-      <div class="dropdown text-right">
+      <div class="dropdown pull-right js-grid-filters">
         <button class="btn btn-default dropdown-toggle" type="button" id="filter" data-toggle="dropdown" aria-expanded="true">
-          <span class="glyphicon glyphicon-eye-open"></span> View
+          View
           <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="filter">
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-check"></span> All</a></li>
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-unchecked"></span> To-do</a></li>
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-unchecked"></span> Finished</a></li>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="filter">
+          <li role="presentation">
+            <a role="menuitem" tabindex="-1" href="javascript:void(0);" data-action="all"><span class="glyphicon glyphicon-check"></span> All</a>
+          </li>
+          <li role="presentation">
+            <a role="menuitem" tabindex="-1" href="javascript:void(0);" data-action="todo"><span class="glyphicon glyphicon-unchecked"></span> To-do</a>
+          </li>
+          <li role="presentation">
+            <a role="menuitem" tabindex="-1" href="javascript:void(0);" data-action="finished"><span class="glyphicon glyphicon-unchecked"></span> Finished</a>
+          </li>
         </ul>
       </div>
     </div>
