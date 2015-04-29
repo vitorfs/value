@@ -1,20 +1,19 @@
 $(function () {
 
   $(".js-show-all").click(function () {
-
-    $(".panel-group .panel-collapsable").each(function () {
-      $(this).togglePanel(true);
-    });
-
+    $(".panel-group .panel-collapsable").togglePanel(true);
   });
 
   $(".js-hide-all").click(function () {
-
-    $(".panel-group .panel-collapsable").each(function () {
-      $(this).togglePanel(false);
-    });
-
+    $(".panel-group .panel-collapsable").togglePanel(false);
   });
+
+  var content_type = "table";
+
+  if ($(".panel-group .panel-body").length > 0) {
+    content_type = ".panel-body";
+  }
+  
 
   $.fn.togglePanel = function (is_collapsed) {
 
@@ -22,14 +21,7 @@ $(function () {
       is_collapsed = $(this).hasClass("panel-collapsed");
     }
 
-    var container;
-
-    if ($(this).find(".panel-body").length > 0) {
-      container = $(".panel-body", this);
-    }
-    else {
-      container = $("table", this);
-    }
+    var container = $(content_type, this);
 
     if (is_collapsed) {
       $(container).show();

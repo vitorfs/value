@@ -53,7 +53,19 @@ def evaluate(request, instance_id):
     instance = get_object_or_404(Instance, pk=instance_id)
     factors = Factor.get_factors()
     evaluations = InstanceItemEvaluation.get_user_evaluations_by_instance(user=request.user, instance=instance)
-    return render(request, 'workspace/evaluate.html', { 'instance' : instance, 'factors' : factors, 'evaluations' : evaluations })
+    items = instance.get_items()
+    total_items = items.count()
+    search_query = request.GET.get('search')
+    if search_query:
+        items = items.filter(name__icontains=search_query)
+    return render(request, 'workspace/evaluate.html', { 
+        'instance' : instance, 
+        'factors' : factors, 
+        'evaluations' : evaluations,
+        'total_items': total_items,
+        'items': items,
+        'search_query': search_query
+        })
 
 @login_required
 def save_evaluation(request, instance_id):

@@ -5,7 +5,7 @@
 
 {% csrf_token %}
 
-{% for item in instance.get_items %}
+{% for item in items %}
   <div class="panel {% panel_class evaluations=evaluations item=item factors=factors %} panel-collapsable panel-collapsed">
     <div class="panel-heading">
       <span class="badge pull-right">{% evaluation_percent evaluations=evaluations item=item factors=factors %}</span>
