@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
+from django.db.models import Count
 from value.workspace.models import Instance, InstanceItem, InstanceItemEvaluation
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
@@ -83,10 +84,7 @@ def save_evaluation(request, instance_id):
     measure = get_object_or_404(Measure, pk=measure_id)
 
     measure_value_id = request.POST.get('measure_value_id')
-
-    measure_value = None
-    if measure_value_id:
-        measure_value = get_object_or_404(MeasureValue, pk=measure_value_id)
+    measure_value = get_object_or_404(MeasureValue, pk=measure_value_id)
 
     evaluation, created = InstanceItemEvaluation.objects.get_or_create(instance=instance, item=item, user=request.user, factor=factor, measure=measure)
 
@@ -167,7 +165,6 @@ def analyze_features(request, instance_id):
         serie_data = []
         for factor in sorted_data:
             serie_data.append(factor[1][u'None'])
-        series.append({ 'name': 'N/A', 'data': serie_data, 'color': '#E7E7E7' })
 
         highchart_data = {
             'chart': { 'type': chart_type },
@@ -184,3 +181,49 @@ def analyze_features(request, instance_id):
         feature_charts[item.id] = dump
 
     return render(request, 'workspace/analyze_features.html', { 'instance' : instance, 'feature_charts' : feature_charts })
+
+@login_required
+def analyze_features_acceptance(request, instance_id):
+    instance = get_object_or_404(Instance, pk=instance_id)
+    items = instance.get_items()
+    evaluations = InstanceItemEvaluation.get_evaluations_by_instance(instance)
+
+    feature_charts = {}
+
+    for item in items:
+
+        item_evaluation = InstanceItemEvaluation.get_evaluations_by_instance(instance).filter(item=item)
+
+        vqs = item_evaluation.values('measure_value__description', 'measure_value__color').annotate(value=Count('measure_value__description')).order_by()
+        data = [kv for kv in vqs]
+
+        for d in data:
+            d['name'] = d.pop('measure_value__description')
+            d['color'] = d.pop('measure_value__color')
+
+        print data
+
+        highchart_data = {
+            'series': [{
+                'type': 'treemap',
+                'layoutAlgorithm': 'stripes',
+                'alternateStartingDirection': True,
+                'levels': [{
+                    'level': 1,
+                    'layoutAlgorithm': 'sliceAndDice',
+                    'dataLabels': {
+                        'enabled': True,
+                        'align': 'left',
+                        'verticalAlign': 'top',
+                        'style': { 'fontSize': '15px', 'fontWeight': 'bold' }
+                    }
+                }],
+                'data': data
+            }],
+            'title': { 'text': item.name }
+        }
+
+        dump = json.dumps(highchart_data)
+        feature_charts[item.id] = dump
+
+    return render(request, 'workspace/analyze_features_acceptance.html', { 'instance' : instance, 'feature_charts' : feature_charts })

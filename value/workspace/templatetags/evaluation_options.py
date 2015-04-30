@@ -45,22 +45,6 @@ data-measure-value-id="{5}"
 {7}
 </td>'''.format(measure_value.color, item.instance.pk, item.pk, factor.pk, factor.measure.pk, measure_value.pk, background(is_checked, measure_value.color), checksign(is_checked))
 
-    is_none = False
-    for evaluation in evaluations:
-        if evaluation.instance.pk == item.instance.pk and evaluation.item.pk == item.pk and evaluation.factor.pk == factor.pk and not evaluation.measure_value:
-            is_none = True
-
-    html += '''<td class="text-center evaluable" 
-data-color="#E7E7E7"
-data-instance-id="{0}"
-data-item-id="{1}"
-data-factor-id="{2}"
-data-measure-id="{3}"
-data-measure-value-id=""
-{4}>
-{5}
-</td>'''.format(item.instance.pk, item.pk, factor.pk, factor.measure.pk, background(is_none, '#E7E7E7'), checksign(is_none))
-
     html += '</tr>'
 
     return html

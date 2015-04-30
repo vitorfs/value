@@ -3,6 +3,8 @@
 {% load staticfiles %}
 
 {% block javascript %}
+
+{% comment %}
   <script src="{% static 'js/Chart.min.js' %}"></script>
   <script type="text/javascript">
     $(function () {
@@ -268,6 +270,7 @@ data = {
 
     });
   </script>
+  {% endcomment %}
 {% endblock javascript %}
 
 {% block breadcrumb %}
@@ -336,6 +339,7 @@ data = {
     </div>
   </div>
 
+  {% comment %}
   <div class="row" style="margin-bottom: 20px">
     <div class="col-md-6">
       <h3>Mul-standard mixed mode feature</h3>
@@ -381,5 +385,7 @@ data = {
       <canvas id="donut-chart" style="width: 100%"></canvas>
     </div>
   </div>
+
+  {% endcomment %}
 
 {% endblock content %}
