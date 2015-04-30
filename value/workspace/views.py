@@ -136,13 +136,9 @@ def analyze_features(request, instance_id):
             data[item.name][e.factor.name] = {}
             for value in e.factor.measure.get_values():
                 data[item.name][e.factor.name][value.description] = 0
-            data[item.name][e.factor.name][u'None'] = 0
 
         for e in item_evaluation:
-            mv = u'None'
-            if e.measure_value:
-                mv = e.measure_value.description
-            data[item.name][e.factor.name][mv] = data[item.name][e.factor.name][mv] + 1
+            data[item.name][e.factor.name][e.measure_value.description] = data[item.name][e.factor.name][e.measure_value.description] + 1
 
     feature_charts = {}
 
@@ -156,16 +152,12 @@ def analyze_features(request, instance_id):
             categories.append(factor[0])
 
         series = []
-        if measure != None:
+        if measure:
             for value in measure.get_values():
                 serie_data = []
                 for factor in sorted_data:
                     serie_data.append(factor[1][value.description])
                 series.append({ 'name': value.description, 'data': serie_data, 'color': value.color })
-
-        serie_data = []
-        for factor in sorted_data:
-            serie_data.append(factor[1][u'None'])
 
         highchart_data = {
             'chart': { 'type': chart_type },
@@ -236,11 +228,9 @@ def analyze_features_acceptance_factors(request, instance_id):
     feature_charts = {}
 
     for item in items:
-
         item_evaluation = InstanceItemEvaluation.get_evaluations_by_instance(instance).filter(item=item)
 
         vqs = item_evaluation.order_by('measure_value__description', 'measure_value__id', 'measure_value__color').distinct('measure_value__description', 'measure_value__id', 'measure_value__color').values('measure_value__description', 'measure_value__id', 'measure_value__color')
-
         groups = [kv for kv in vqs]
         for g in groups:
             g['id'] = g['measure_value__description']
@@ -251,12 +241,11 @@ def analyze_features_acceptance_factors(request, instance_id):
 
         vqs = item_evaluation.values('measure_value__description', 'factor__name').annotate(value=Count('measure_value__description')).order_by()
         data = [kv for kv in vqs]
-
         for d in data:
             d['name'] = d.pop('factor__name')
             d['parent'] = d.pop('measure_value__description')
 
-        data = groups + data 
+        data = groups + data
 
         highchart_data = {
             'series': [{
@@ -282,3 +271,65 @@ def analyze_features_acceptance_factors(request, instance_id):
         feature_charts[item.id] = dump
 
     return render(request, 'workspace/analyze_features_acceptance_factors.html', { 'instance' : instance, 'feature_charts' : feature_charts })
+
+@login_required
+def analyze_features_drilldown(request, instance_id):
+    instance = get_object_or_404(Instance, pk=instance_id)
+    items = instance.get_items()
+    evaluations = InstanceItemEvaluation.get_evaluations_by_instance(instance)
+
+    feature_charts = {}
+
+    for item in items:
+
+        item_evaluation = InstanceItemEvaluation.get_evaluations_by_instance(instance).filter(item=item)
+
+        vqs = item_evaluation.values('measure_value__description', 'measure_value__color').annotate(y=Count('measure_value__description')).order_by('y')
+        series = [kv for kv in vqs]
+        for serie in series:
+            serie['name'] = serie['measure_value__description']
+            serie['drilldown'] = serie['measure_value__description']
+            del serie['measure_value__description']
+            serie['color'] = serie.pop('measure_value__color')
+
+        vqs = item_evaluation.order_by('measure_value__id', 'measure_value__description').distinct('measure_value__id', 'measure_value__description').values('measure_value__id', 'measure_value__description')
+
+        drilldownSeries = []
+
+        for v in vqs:
+            vqs = item_evaluation.filter(measure_value__id=v['measure_value__id']).values('measure_value__description', 'factor__name').annotate(y=Count('measure_value__description')).order_by('y')
+            data = []
+            for value in vqs:
+                data.append([value['factor__name'], value['y']])
+
+            drilldown = {
+                'data': data,
+                'id': v['measure_value__description'],
+                'name': v['measure_value__description']
+            }
+
+            drilldownSeries.append(drilldown)
+
+        highchart_data = {
+                'chart': { 'type': 'pie' },
+                'title': { 'text': item.name },
+                'subtitle': { 'text': 'Stakeholders opinion. Click the slices to view value factors.' },
+                'plotOptions': { 'series': { 'dataLabels': { 'enabled': True, 'format': '{point.name}: {point.y} votes' } } },
+                'tooltip': {
+                    'headerFormat': '<span style="font-size:11px">{series.name}</span><br>',
+                    'pointFormat': '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+                },
+                'series': [{
+                    'name': 'Votes',
+                    'colorByPoint': True,
+                    'data': series
+                }],
+                'drilldown': {
+                    'series': drilldownSeries
+                }
+            }
+
+        dump = json.dumps(highchart_data)
+        feature_charts[item.id] = dump
+
+    return render(request, 'workspace/analyze_features_drilldown.html', { 'instance' : instance, 'feature_charts' : feature_charts })
