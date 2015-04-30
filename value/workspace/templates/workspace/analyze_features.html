@@ -26,20 +26,18 @@
 
   {% include 'workspace/includes/instance_menu.html' with active='analyze' instance=instance %}
 
-  <div class="row" style="margin-bottom: 20px">
+  <div class="row">
     <div class="col-md-3">
-
       {% include 'workspace/includes/analyze_menu.html' with active='features' instance=instance %}
-
     </div>
     <div class="col-md-9">
-        {% for k, v in feature_charts.items %}
-            <div class="row">
-                <div class="col-md-12" style="margin-bottom: 20px">
-                    <div id="chart-container-{{ k }}"></div>
-                </div>
-            </div>
-        {% endfor %}
+      {% for k, v in feature_charts.items %}
+        <div class="row">
+          <div class="col-md-12" style="margin-bottom: 20px">
+            <div id="chart-container-{{ k }}"></div>
+          </div>
+        </div>
+      {% endfor %}
     </div>
   </div>
 
