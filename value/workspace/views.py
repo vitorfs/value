@@ -201,8 +201,6 @@ def analyze_features_acceptance(request, instance_id):
             d['name'] = d.pop('measure_value__description')
             d['color'] = d.pop('measure_value__color')
 
-        print data
-
         highchart_data = {
             'series': [{
                 'type': 'treemap',
@@ -227,3 +225,59 @@ def analyze_features_acceptance(request, instance_id):
         feature_charts[item.id] = dump
 
     return render(request, 'workspace/analyze_features_acceptance.html', { 'instance' : instance, 'feature_charts' : feature_charts })
+
+@login_required
+def analyze_features_acceptance_factors(request, instance_id):
+    instance = get_object_or_404(Instance, pk=instance_id)
+    items = instance.get_items()
+    evaluations = InstanceItemEvaluation.get_evaluations_by_instance(instance)
+
+    feature_charts = {}
+
+    for item in items:
+
+        item_evaluation = InstanceItemEvaluation.get_evaluations_by_instance(instance).filter(item=item)
+
+        vqs = item_evaluation.order_by('measure_value__description', 'measure_value__id', 'measure_value__color').distinct('measure_value__description', 'measure_value__id', 'measure_value__color').values('measure_value__description', 'measure_value__id', 'measure_value__color')
+
+        groups = [kv for kv in vqs]
+        for g in groups:
+            g['id'] = g['measure_value__description']
+            g['name'] = g['measure_value__description']
+            del g['measure_value__description']
+            g['color'] = g.pop('measure_value__color')
+
+
+        vqs = item_evaluation.values('measure_value__description', 'factor__name').annotate(value=Count('measure_value__description')).order_by()
+        data = [kv for kv in vqs]
+
+        for d in data:
+            d['name'] = d.pop('factor__name')
+            d['parent'] = d.pop('measure_value__description')
+
+        data = groups + data 
+
+        highchart_data = {
+            'series': [{
+                'type': 'treemap',
+                'layoutAlgorithm': 'stripes',
+                'alternateStartingDirection': True,
+                'levels': [{
+                    'level': 1,
+                    'layoutAlgorithm': 'sliceAndDice',
+                    'dataLabels': {
+                        'enabled': True,
+                        'align': 'left',
+                        'verticalAlign': 'top',
+                        'style': { 'fontSize': '15px', 'fontWeight': 'bold' }
+                    }
+                }],
+                'data': data
+            }],
+            'title': { 'text': item.name }
+        }
+
+        dump = json.dumps(highchart_data)
+        feature_charts[item.id] = dump
+
+    return render(request, 'workspace/analyze_features_acceptance_factors.html', { 'instance' : instance, 'feature_charts' : feature_charts })

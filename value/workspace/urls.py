@@ -10,4 +10,6 @@ urlpatterns = patterns('value.workspace.views',
     url(r'^(\d+)/analyze/$', 'analyze', name='analyze'),
     url(r'^(\d+)/analyze/features/$', 'analyze_features', name='analyze_features'),
     url(r'^(\d+)/analyze/features-acceptance/$', 'analyze_features_acceptance', name='analyze_features_acceptance'),
+    url(r'^(\d+)/analyze/features-acceptance-factors/$', 'analyze_features_acceptance_factors', name='analyze_features_acceptance_factors'),
+    
 )

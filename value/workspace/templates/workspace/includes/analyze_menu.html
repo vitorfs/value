@@ -2,5 +2,6 @@
   <li role="presentation"{% if active == 'factors_usage' %} class="active"{% endif %}><a href="{% url 'workspace:analyze' instance.pk %}">Overall Value Factors Usage</a></li>
   <li role="presentation"{% if active == 'features' %} class="active"{% endif %}><a href="{% url 'workspace:analyze_features' instance.pk %}">Features Selection</a></li>
   <li role="presentation"{% if active == 'features_acceptance' %} class="active"{% endif %}><a href="{% url 'workspace:analyze_features_acceptance' instance.pk %}">Features Acceptance</a></li>
+  <li role="presentation"{% if active == 'features_acceptance_factors' %} class="active"{% endif %}><a href="{% url 'workspace:analyze_features_acceptance_factors' instance.pk %}">Features Acceptance by Factors</a></li>
   <li role="presentation"{% if active == 'stakeholders' %} class="active"{% endif %}><a href="#">Stakeholders Opinion</a></li>
 </ul>

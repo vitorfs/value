@@ -4,6 +4,7 @@
 
 {% block javascript %}
   <script src="{% static 'js/highcharts.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/treemap.js' %}"></script>
   <script type="text/javascript">
     $(function () {
         {% for k, v in feature_charts.items %}
@@ -19,7 +20,7 @@
     <li><a href="{% url 'workspace:index' %}">Workspace</a></li>
     <li><a href="{% url 'workspace:instance' instance.pk %}">{{ instance.name }}</a></li>
     <li><a href="{% url 'workspace:analyze' instance.pk %}">Analyze</a></li>
-    <li class="active">Overall Value Factors Usage</li>
+    <li class="active">Features Acceptance by Factors</li>
   </ol>
 {% endblock breadcrumb %}
 
@@ -29,27 +30,9 @@
 
   <div class="row">
     <div class="col-md-3">
-      {% include 'workspace/includes/analyze_menu.html' with active='features' instance=instance %}
+      {% include 'workspace/includes/analyze_menu.html' with active='features_acceptance_factors' instance=instance %}
     </div>
     <div class="col-md-9">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="filter" data-toggle="dropdown" aria-expanded="true">
-              Chart Type
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="filter">
-              <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze_features' instance.pk %}?chart=bar"><span class="glyphicon glyphicon-align-left"></span> Stacked Bars</a>
-              </li>
-              <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze_features' instance.pk %}?chart=column"><span class="glyphicon glyphicon-signal"></span> Stacked Columns</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
       {% for k, v in feature_charts.items %}
         <div class="row">
           <div class="col-md-12" style="margin-bottom: 20px">
