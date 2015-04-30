@@ -156,11 +156,12 @@ def analyze_features(request, instance_id):
             categories.append(factor[0])
 
         series = []
-        for value in measure.get_values():
-            serie_data = []
-            for factor in sorted_data:
-                serie_data.append(factor[1][value.description])
-            series.append({ 'name': value.description, 'data': serie_data, 'color': value.color })
+        if measure != None:
+            for value in measure.get_values():
+                serie_data = []
+                for factor in sorted_data:
+                    serie_data.append(factor[1][value.description])
+                series.append({ 'name': value.description, 'data': serie_data, 'color': value.color })
 
         serie_data = []
         for factor in sorted_data:
