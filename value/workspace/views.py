@@ -115,6 +115,12 @@ def analyze(request, instance_id):
     return render(request, 'workspace/analyze.html', { 'instance' : instance, 'data' : dump })
 
 @login_required
+def backlog(request, instance_id):
+    instance = get_object_or_404(Instance, pk=instance_id)
+    backlog = instance.get_items()
+    return render(request, 'workspace/backlog.html', { 'instance' : instance, 'backlog' : backlog })
+
+@login_required
 def analyze_features(request, instance_id):
 
     chart_type = request.GET.get('chart', 'bar')

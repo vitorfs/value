@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block javascript %}
+
+{% endblock javascript %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'workspace:index' %}">Workspace</a></li>
+    <li><a href="{% url 'workspace:instance' instance.pk %}">{{ instance.name }}</a></li>
+    <li class="active">Backlog</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+  {% include 'workspace/includes/instance_menu.html' with active='backlog' instance=instance %}
+
+
+  <a href="#" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> Add item</a>
+
+  <p class="lead">Select item to change</p>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th><input type="checkbox"></th>
+        <th>Name</th>
+        <th>Description</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in backlog %}
+      <tr>
+        <td><input type="checkbox"></td>
+        <td><a href="#">{{ item.name }}</a></td>
+        <td>{{ item.description }}</td>
+        <td class="text-right text-nowrap">
+          <a href="#"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+          <a href="#"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+        <tr>
+          <td colspan="4">No data</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock content %}

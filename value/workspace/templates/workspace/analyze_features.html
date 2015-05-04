@@ -2,14 +2,20 @@
 
 {% load staticfiles %}
 
+{% block stylesheet %}
+  <link href="{% static 'css/workspace/instance.css' %}" rel="stylesheet">
+{% endblock stylesheet %}
+
 {% block javascript %}
+  <script src="{% static 'js/workspace/analyze.js' %}"></script>
   <script src="{% static 'js/highcharts.js' %}"></script>
   <script type="text/javascript">
-    $(function () {
-        {% for k, v in feature_charts.items %}
-            $('#chart-container-{{ k }}').highcharts({{ v|safe }});
-        {% endfor %}
-    });
+    var options = Array();
+
+    {% for k, v in feature_charts.items %}
+        options[{{ k }}] = {{ v|safe }};
+    {% endfor %}    
+
   </script>
 {% endblock javascript %}
 
@@ -32,11 +38,11 @@
       {% include 'workspace/includes/analyze_menu.html' with active='features' instance=instance %}
     </div>
     <div class="col-md-9">
-      <div class="row">
+      <div class="row" style="margin-bottom: 20px">
         <div class="col-md-12">
-          <div class="dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="filter" data-toggle="dropdown" aria-expanded="true">
-              Chart Type
+          <div class="btn-group">
+            <button class="btn btn-default dropdown-toggle" type="button" id="filter" data-toggle="dropdown" aria-expanded="false">
+              Chart type
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="filter">
@@ -48,15 +54,49 @@
               </li>
             </ul>
           </div>
-        </div>
-      </div>
-      {% for k, v in feature_charts.items %}
-        <div class="row">
-          <div class="col-md-12" style="margin-bottom: 20px">
-            <div id="chart-container-{{ k }}"></div>
+          <div class="btn-group">
+            <button class="btn btn-default dropdown-toggle" type="button" id="order_by" data-toggle="dropdown" aria-expanded="false">
+              Order by
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="order_by">
+              <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze_features' instance.pk %}">Name</a>
+              </li>
+              <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze_features' instance.pk %}">Positive</a>
+              </li>
+              <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze_features' instance.pk %}">Neutral</a>
+              </li>
+              <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze_features' instance.pk %}">Negative</a>
+              </li>
+              <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze_features' instance.pk %}">N/A</a>
+              </li>
+            </ul>
           </div>
         </div>
-      {% endfor %}
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel-group">
+          {% for k, v in feature_charts.items %}
+            <div class="panel panel-default panel-collapsable">
+              <div class="panel-heading" id="chart-heading-{{ k }}" data-target="#collapse-{{ k }}" data-chart-id="{{ k }}">
+                <h4 class="panel-title">{{ k }}</h4>
+              </div>
+              <div id="collapse-{{ k }}" class="panel-collapse collapse{% if forloop.first %} in{% endif %}">
+                <div class="panel-body">
+                  <div id="chart-container-{{ k }}"></div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
