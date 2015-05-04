@@ -7,7 +7,6 @@ from value.factors.models import Factor
 
 class Profile(models.Model):
     user = models.OneToOneField(User)
-    factors = models.ManyToManyField(Factor)
 
     def get_display_name(self):
         if self.user.first_name and self.user.last_name:

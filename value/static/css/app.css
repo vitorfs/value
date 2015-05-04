@@ -42,6 +42,10 @@ footer {
   padding-top: 14px;
 }
 
+h3.page-header {
+  margin-top: 10px;
+}
+
 .table-hover tbody tr td, .panel-collapsable .panel-heading {
   cursor: hand;
   cursor: pointer;

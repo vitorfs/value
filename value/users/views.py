@@ -36,8 +36,6 @@ def user(request, user_id):
     if request.method == 'POST':
         form = Form(request.POST, instance=user)
         if form.is_valid():
-            factor_ids = request.POST.getlist('id_factor')
-            form.instance.profile.factors = Factor.objects.filter(is_active=True, pk__in=factor_ids)
             form.save()
             messages.success(request, u'The user {0} was changed successfully.'.format(user.username))
             return redirect(reverse('users:users'))
@@ -45,8 +43,7 @@ def user(request, user_id):
             messages.error(request, u'Please correct the error below.')
     else:
         form = Form(instance=user)
-    factors = Factor.objects.filter(is_active=True)
-    return render(request, 'users/user.html', { 'form' : form, 'factors' : factors })
+    return render(request, 'users/user.html', { 'form' : form })
 
 @login_required
 def password(request, user_id):

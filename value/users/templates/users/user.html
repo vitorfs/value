@@ -91,29 +91,6 @@
       </div>
     </div>
 
-    <hr>
-
-    <div class="form-group">
-      <label class="col-sm-2 control-label">Value Factors</label>
-      <div class="col-sm-10">
-        <div class="row">
-          {% for factor in factors %}
-            <div class="col-sm-3">
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" id="id_factor" name="id_factor" value="{{ factor.id }}"{% if factor in form.instance.profile.factors.all %} checked{% endif %}> {{ factor.name }} 
-                  {% if factor.description %}
-                    <a href="javascript:void(0);" tabindex="0" data-toggle="popover" data-trigger="focus" title="Description" data-content="{{ factor.description }}" data-container="body"><span class="glyphicon glyphicon-question-sign"></span></a>
-                  {% endif %}
-                </label>
-              </div>
-            </div>
-            {% if forloop.counter|divisibleby:4 %}</div><div class="row">{% endif %}
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
         <a href="{% url 'users:delete' form.instance.pk %}" class="btn btn-danger pull-right">Delete</a>
