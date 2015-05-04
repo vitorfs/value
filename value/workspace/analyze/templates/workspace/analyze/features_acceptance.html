@@ -19,8 +19,8 @@
     <li><a href="{% url 'home' %}">Home</a></li>
     <li><a href="{% url 'workspace:index' %}">Workspace</a></li>
     <li><a href="{% url 'workspace:instance' instance.pk %}">{{ instance.name }}</a></li>
-    <li><a href="{% url 'workspace:analyze' instance.pk %}">Analyze</a></li>
-    <li class="active">Features Acceptance by Factors</li>
+    <li><a href="{% url 'workspace:analyze:index' instance.pk %}">Analyze</a></li>
+    <li class="active">Features Acceptance</li>
   </ol>
 {% endblock breadcrumb %}
 
@@ -30,7 +30,7 @@
 
   <div class="row">
     <div class="col-md-3">
-      {% include 'workspace/includes/analyze_menu.html' with active='features_acceptance_factors' instance=instance %}
+      {% include 'workspace/analyze/includes/chart_menu.html' with active='features_acceptance' instance=instance %}
     </div>
     <div class="col-md-9">
       {% for k, v in feature_charts.items %}

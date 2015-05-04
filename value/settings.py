@@ -30,6 +30,7 @@ INSTALLED_APPS = (
     'value.measures',
     'value.users',
     'value.workspace',
+    'value.workspace.analyze',
     'value.djavatar',
 )
 

@@ -3,5 +3,5 @@
   <li role="presentation"{% if active == 'evaluate' %} class="active"{% endif %}><a href="{% url 'workspace:evaluate' instance.pk %}">Evaluate</a></li>
   <li role="presentation"{% if active == 'stakeholders' %} class="active"{% endif %}><a href="{% url 'workspace:stakeholders' instance.pk %}">Stakeholders</a></li>
   <li role="presentation"{% if active == 'backlog' %} class="active"{% endif %}><a href="{% url 'workspace:backlog' instance.pk %}">Backlog</a></li>
-  <li role="presentation"{% if active == 'analyze' %} class="active"{% endif %}><a href="{% url 'workspace:analyze' instance.pk %}">Analyze</a></li>
+  <li role="presentation"{% if active == 'analyze' %} class="active"{% endif %}><a href="{% url 'workspace:analyze:index' instance.pk %}">Analyze</a></li>
 </ul>

@@ -4,7 +4,8 @@
 
 {% block javascript %}
   <script src="{% static 'js/highcharts.js' %}"></script>
-  <script src="{% static 'js/highcharts/modules/treemap.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/data.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/drilldown.js' %}"></script>
   <script type="text/javascript">
     $(function () {
         {% for k, v in feature_charts.items %}
@@ -19,8 +20,8 @@
     <li><a href="{% url 'home' %}">Home</a></li>
     <li><a href="{% url 'workspace:index' %}">Workspace</a></li>
     <li><a href="{% url 'workspace:instance' instance.pk %}">{{ instance.name }}</a></li>
-    <li><a href="{% url 'workspace:analyze' instance.pk %}">Analyze</a></li>
-    <li class="active">Features Acceptance</li>
+    <li><a href="{% url 'workspace:analyze:index' instance.pk %}">Analyze</a></li>
+    <li class="active">Features Drilldown</li>
   </ol>
 {% endblock breadcrumb %}
 
@@ -30,7 +31,7 @@
 
   <div class="row">
     <div class="col-md-3">
-      {% include 'workspace/includes/analyze_menu.html' with active='features_acceptance' instance=instance %}
+      {% include 'workspace/analyze/includes/chart_menu.html' with active='features_drilldown' instance=instance %}
     </div>
     <div class="col-md-9">
       {% for k, v in feature_charts.items %}

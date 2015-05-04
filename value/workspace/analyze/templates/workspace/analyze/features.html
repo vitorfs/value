@@ -24,7 +24,7 @@
     <li><a href="{% url 'home' %}">Home</a></li>
     <li><a href="{% url 'workspace:index' %}">Workspace</a></li>
     <li><a href="{% url 'workspace:instance' instance.pk %}">{{ instance.name }}</a></li>
-    <li><a href="{% url 'workspace:analyze' instance.pk %}">Analyze</a></li>
+    <li><a href="{% url 'workspace:analyze:index' instance.pk %}">Analyze</a></li>
     <li class="active">Overall Value Factors Usage</li>
   </ol>
 {% endblock breadcrumb %}
@@ -35,7 +35,7 @@
 
   <div class="row">
     <div class="col-md-3">
-      {% include 'workspace/includes/analyze_menu.html' with active='features' instance=instance %}
+      {% include 'workspace/analyze/includes/chart_menu.html' with active='features' instance=instance %}
     </div>
     <div class="col-md-9">
       <div class="row" style="margin-bottom: 20px">
@@ -47,10 +47,10 @@
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="filter">
               <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze_features' instance.pk %}?chart=bar"><span class="glyphicon glyphicon-align-left"></span> Stacked Bars</a>
+                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze:features' instance.pk %}?chart=bar"><span class="glyphicon glyphicon-align-left"></span> Stacked Bars</a>
               </li>
               <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze_features' instance.pk %}?chart=column"><span class="glyphicon glyphicon-signal"></span> Stacked Columns</a>
+                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze:features' instance.pk %}?chart=column"><span class="glyphicon glyphicon-signal"></span> Stacked Columns</a>
               </li>
             </ul>
           </div>
@@ -61,19 +61,19 @@
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="order_by">
               <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze_features' instance.pk %}">Name</a>
+                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze:features' instance.pk %}">Name</a>
               </li>
               <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze_features' instance.pk %}">Positive</a>
+                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze:features' instance.pk %}">Positive</a>
               </li>
               <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze_features' instance.pk %}">Neutral</a>
+                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze:features' instance.pk %}">Neutral</a>
               </li>
               <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze_features' instance.pk %}">Negative</a>
+                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze:features' instance.pk %}">Negative</a>
               </li>
               <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze_features' instance.pk %}">N/A</a>
+                <a role="menuitem" tabindex="-1" href="{% url 'workspace:analyze:features' instance.pk %}">N/A</a>
               </li>
             </ul>
           </div>
