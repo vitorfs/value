@@ -2,10 +2,12 @@ import json
 import operator
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from value.workspace.models import Instance, InstanceItem, InstanceItemEvaluation
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
+from django.template.loader import render_to_string
 
 @login_required
 def index(request, instance_id):
@@ -20,50 +22,57 @@ def index(request, instance_id):
 
 @login_required
 def features(request, instance_id):
+    instance = get_object_or_404(Instance, pk=instance_id)
+    charts = instance.get_items()
+    return render(request, 'workspace/analyze/charts.html', { 
+        'instance' : instance,
+        'charts' : charts,
+        'chart_menu_active' : 'features',
+        'chart_page_title' : 'Features Selection'
+        })
+
+@login_required
+def features_chart(request, instance_id, item_id):
 
     chart_type = request.GET.get('chart', 'bar')
 
+    if chart_type not in ['bar', 'column']:
+        chart_type = 'bar'
+
     instance = get_object_or_404(Instance, pk=instance_id)
-    items = instance.get_items()
-    evaluations = InstanceItemEvaluation.get_evaluations_by_instance(instance)
+    item = get_object_or_404(InstanceItem, pk=item_id)
 
-    data = {}
+    evaluations = InstanceItemEvaluation.get_evaluations_by_instance(instance).filter(item=item)
 
-    measure = None
+    if evaluations:
+        data = {}
 
-    for item in items:
-        data[item.name] = {}
-        item_evaluation = InstanceItemEvaluation.get_evaluations_by_instance(instance).filter(item=item)
+        for evaluation in evaluations:
+            data[evaluation.factor.name] = {}
+            for value in evaluation.factor.measure.get_values():
+                data[evaluation.factor.name][value.description] = 0
 
-        for e in item_evaluation:
-            measure = e.measure
-            data[item.name][e.factor.name] = {}
-            for value in e.factor.measure.get_values():
-                data[item.name][e.factor.name][value.description] = 0
+        for evaluation in evaluations:
+            data[evaluation.factor.name][evaluation.measure_value.description] = data[evaluation.factor.name][evaluation.measure_value.description] + 1
 
-        for e in item_evaluation:
-            data[item.name][e.factor.name][e.measure_value.description] = data[item.name][e.factor.name][e.measure_value.description] + 1
-
-    feature_charts = {}
-
-    for item in items:
-
-        feature_data = data[item.name]
-        sorted_data = sorted(feature_data.items(), key=operator.itemgetter(0))
+        sorted_data = sorted(data.items(), key=operator.itemgetter(0))
 
         categories = []
         for factor in sorted_data:
             categories.append(factor[0])
 
-        series = []
-        if measure:
-            for value in measure.get_values():
-                serie_data = []
-                for factor in sorted_data:
-                    serie_data.append(factor[1][value.description])
-                series.append({ 'name': value.description, 'data': serie_data, 'color': value.color })
+        measure = evaluations[0].measure
 
-        highchart_data = {
+        print measure.name
+
+        series = []
+        for value in measure.get_values():
+            serie_data = []
+            for factor in sorted_data:
+                serie_data.append(factor[1][value.description])
+            series.append({ 'name': value.description, 'data': serie_data, 'color': value.color })
+
+        options = {
             'chart': { 'type': chart_type },
             'title': { 'text': item.name },
             'xAxis': { 'categories': categories },
@@ -73,11 +82,13 @@ def features(request, instance_id):
             'series': series
         }
 
-        dump = json.dumps(highchart_data)
+        dump = json.dumps(options)
 
-        feature_charts[item.id] = dump
+        return HttpResponse(dump, content_type='application/json')
 
-    return render(request, 'workspace/analyze/features.html', { 'instance' : instance, 'feature_charts' : feature_charts })
+    else:
+
+        return HttpResponse('')
 
 @login_required
 def features_acceptance(request, instance_id):

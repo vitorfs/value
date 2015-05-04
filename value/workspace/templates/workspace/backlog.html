@@ -20,7 +20,17 @@
   {% include 'workspace/includes/instance_menu.html' with active='backlog' instance=instance %}
 
 
-  <a href="#" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> Add item</a>
+  <div class="btn-group pull-right">
+    <a href="#" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add item</a>
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      <span class="caret"></span>
+      <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a href="#">Add many at once</a></li>
+      <li><a href="#">Import .csv file</a></li>
+    </ul>
+  </div>
 
   <p class="lead">Select item to change</p>
 
