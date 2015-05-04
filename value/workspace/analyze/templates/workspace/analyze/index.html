@@ -3,7 +3,7 @@
 {% load staticfiles %}
 
 {% block javascript %}
-  <script src="{% static 'js/highcharts.js' %}"></script>
+  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
   <script type="text/javascript">
     $(function () {
         $("#chart-container").highcharts({
@@ -54,7 +54,7 @@
 
   {% include 'workspace/includes/instance_menu.html' with active='analyze' instance=instance %}
 
-  <div class="row" style="margin-bottom: 20px">
+  <div class="row">
     <div class="col-md-3">
       {% include 'workspace/analyze/includes/chart_menu.html' with active='factors_usage' instance=instance %}
     </div>

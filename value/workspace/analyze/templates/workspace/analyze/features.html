@@ -2,20 +2,15 @@
 
 {% load staticfiles %}
 
-{% block stylesheet %}
-  <link href="{% static 'css/workspace/instance.css' %}" rel="stylesheet">
-{% endblock stylesheet %}
-
 {% block javascript %}
-  <script src="{% static 'js/workspace/analyze.js' %}"></script>
-  <script src="{% static 'js/highcharts.js' %}"></script>
+  <script src="{% static 'js/workspace/analyze/analyze.js' %}"></script>
+  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
   <script type="text/javascript">
-    var options = Array();
-
-    {% for k, v in feature_charts.items %}
-        options[{{ k }}] = {{ v|safe }};
-    {% endfor %}    
-
+    $(function () {
+        {% for k, v in feature_charts.items %}
+            $('#chart-container-{{ k }}').highcharts({{ v|safe }});
+        {% endfor %}
+    });
   </script>
 {% endblock javascript %}
 
@@ -25,7 +20,7 @@
     <li><a href="{% url 'workspace:index' %}">Workspace</a></li>
     <li><a href="{% url 'workspace:instance' instance.pk %}">{{ instance.name }}</a></li>
     <li><a href="{% url 'workspace:analyze:index' instance.pk %}">Analyze</a></li>
-    <li class="active">Overall Value Factors Usage</li>
+    <li class="active">Features Selection</li>
   </ol>
 {% endblock breadcrumb %}
 
@@ -79,24 +74,13 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="panel-group">
-          {% for k, v in feature_charts.items %}
-            <div class="panel panel-default panel-collapsable">
-              <div class="panel-heading" id="chart-heading-{{ k }}" data-target="#collapse-{{ k }}" data-chart-id="{{ k }}">
-                <h4 class="panel-title">{{ k }}</h4>
-              </div>
-              <div id="collapse-{{ k }}" class="panel-collapse collapse{% if forloop.first %} in{% endif %}">
-                <div class="panel-body">
-                  <div id="chart-container-{{ k }}"></div>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
+      {% for k, v in feature_charts.items %}
+        <div class="row">
+          <div class="col-md-12">
+            <div id="chart-container-{{ k }}"></div>
           </div>
         </div>
-      </div>
+      {% endfor %}
     </div>
   </div>
 

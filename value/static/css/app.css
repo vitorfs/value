@@ -37,7 +37,7 @@ footer {
   padding-top: 14px;
 }
 
-.table-hover tbody tr td {
+.table-hover tbody tr td, .panel-collapsable .panel-heading {
   cursor: hand;
   cursor: pointer;
 }

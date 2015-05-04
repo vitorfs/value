@@ -9,13 +9,12 @@ from value.measures.models import Measure, MeasureValue
 
 @login_required
 def index(request, instance_id):
-    #instance_id = 5
     instance = get_object_or_404(Instance, pk=instance_id)
     evaluations = InstanceItemEvaluation.get_evaluations_by_instance(instance)
     factors = Factor.get_factors()
     data = []
     for factor in factors:
-        data.append([factor.name, evaluations.filter(factor=factor).exclude(measure_value=None).count()])
+        data.append([factor.name, evaluations.filter(factor=factor).exclude(measure_value__description='N/A').count()])
     dump = json.dumps(data)
     return render(request, 'workspace/analyze/index.html', { 'instance' : instance, 'data' : dump })
 

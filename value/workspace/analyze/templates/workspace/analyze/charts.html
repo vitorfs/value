@@ -4,15 +4,9 @@
 
 {% block javascript %}
   <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/treemap.js' %}"></script>
   <script src="{% static 'js/highcharts/modules/data.js' %}"></script>
   <script src="{% static 'js/highcharts/modules/drilldown.js' %}"></script>
-  <script type="text/javascript">
-    $(function () {
-        {% for k, v in feature_charts.items %}
-            $('#chart-container-{{ k }}').highcharts({{ v|safe }});
-        {% endfor %}
-    });
-  </script>
 {% endblock javascript %}
 
 {% block breadcrumb %}
@@ -21,7 +15,7 @@
     <li><a href="{% url 'workspace:index' %}">Workspace</a></li>
     <li><a href="{% url 'workspace:instance' instance.pk %}">{{ instance.name }}</a></li>
     <li><a href="{% url 'workspace:analyze:index' instance.pk %}">Analyze</a></li>
-    <li class="active">Features Drilldown</li>
+    <li class="active">{{ chart_page_title }}</li>
   </ol>
 {% endblock breadcrumb %}
 
@@ -31,16 +25,23 @@
 
   <div class="row">
     <div class="col-md-3">
-      {% include 'workspace/analyze/includes/chart_menu.html' with active='features_drilldown' instance=instance %}
+      {% include 'workspace/analyze/includes/chart_menu.html' with active=chart_menu_active instance=instance %}
     </div>
     <div class="col-md-9">
-      {% for k, v in feature_charts.items %}
-        <div class="row">
-          <div class="col-md-12" style="margin-bottom: 20px">
-            <div id="chart-container-{{ k }}"></div>
+      <div class="panel-group">
+        {% for chart in charts %}
+          <div class="panel panel-default panel-collapsable">
+            <div class="panel-heading" id="chart-heading-{{ chart.id }}" data-target="#collapse-{{ chart.id }}" data-chart-id="{{ chart.id }}">
+              <h4 class="panel-title">{{ chart.title }}</h4>
+            </div>
+            <div id="collapse-{{ chart-id }}" class="panel-collapse collapse{% if forloop.first %} in{% endif %}">
+              <div class="panel-body">
+                
+              </div>
+            </div>
           </div>
-        </div>
-      {% endfor %}
+        {% endfor %}
+      </div>
     </div>
   </div>
 
