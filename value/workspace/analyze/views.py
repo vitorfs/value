@@ -37,7 +37,7 @@ def features(request, instance_id):
 
 @login_required
 def features_chart(request, instance_id, item_id):
-    chart_type = request.GET.get('chart', 'bar')
+    chart_type = request.GET.get('chart')
     chart = Highcharts()
     options = chart.features_selection_stacked_chart(instance_id, item_id, chart_type)
     dump = json.dumps(options)

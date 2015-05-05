@@ -28,9 +28,16 @@ class Highcharts(object):
 
         return options
 
-    def features_selection_stacked_chart(self, instance_id, item_id, chart_type):
-        if chart_type not in ['bar', 'column']:
-            chart_type = 'bar'
+    def features_selection_stacked_chart(self, instance_id, item_id, chart):
+        
+        chart_type = 'bar'
+        stacking = None
+
+        if chart in ['stacked_bars', 'stacked_columns',]:
+            stacking = 'normal'
+
+        if chart in ['stacked_columns', 'basic_columns',]:
+            chart_type = 'column'
 
         instance = Instance.objects.get(pk=instance_id)
         item = InstanceItem.objects.get(pk=item_id)
@@ -68,7 +75,7 @@ class Highcharts(object):
                 'xAxis': { 'categories': categories },
                 'yAxis': { 'min': 0, 'title': { 'text': 'Number of votes' } },
                 'legend': { 'reversed': True },
-                'plotOptions': { 'series': { 'stacking': 'normal' }},
+                'plotOptions': { 'series': { 'stacking': stacking }},
                 'series': series
             }
 
