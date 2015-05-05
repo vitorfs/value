@@ -69,13 +69,32 @@
                 </div>
               </div>
 
-              <h4 class="panel-title" style="line-height: 1.4">{{ chart.name }}</h4>
+              <h4 class="panel-title" style="line-height: 1.4">
+                <a href="javascript:void(0)" class="btn-chart-toggle">{{ chart.name }}</a>
+              </h4>
             </div>
             <div id="collapse-{{ chart.id }}" class="panel-collapse collapse"{% if forloop.first %} style="display: block;"{% endif %}>
               <div class="panel-body" style="min-height: 400px"></div>
             </div>
           </div>
         {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="expand-chart">
+    <div class="modal-dialog" style="width: 95%">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+          <div id="modal-chart-container" style="min-height: 500px"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>

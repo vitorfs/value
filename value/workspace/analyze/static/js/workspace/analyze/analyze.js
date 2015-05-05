@@ -39,6 +39,25 @@ $.fn.loadchart = function (callback) {
 
 $(function () {
 
+  $(".btn-chart-expand").click(function () {
+
+    var container = $(this).closest(".panel");
+    var title = $(".panel-title", container).text();
+
+    $("#expand-chart .modal-title").text(title);
+    $("#expand-chart .modal-body").html("<div id='modal-chart-container' style='min-height: 500px'></div>")
+
+    var chart = $(".panel-body", container).highcharts();
+    
+
+    $("#expand-chart").modal();
+
+    $("#expand-chart").on("shown.bs.modal", function () {
+      $("#modal-chart-container").highcharts(chart.options);
+    })
+
+  });
+
   $(".btn-chart-toggle").click(function () {
 
     var container = $(this).closest(".panel-heading");
