@@ -1,46 +1,22 @@
-{% extends 'base.html' %}
+{% extends 'workspace/analyze/instance_item_charts.html' %}
 
-{% load staticfiles %}
-
-{% block javascript %}
-  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
-  <script src="{% static 'js/highcharts/modules/treemap.js' %}"></script>
-  <script type="text/javascript">
-    $(function () {
-        {% for k, v in feature_charts.items %}
-            $('#chart-container-{{ k }}').highcharts({{ v|safe }});
-        {% endfor %}
-    });
-  </script>
-{% endblock javascript %}
-
-{% block breadcrumb %}
-  <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'workspace:index' %}">Workspace</a></li>
-    <li><a href="{% url 'workspace:instance' instance.pk %}">{{ instance.name }}</a></li>
-    <li><a href="{% url 'workspace:analyze:index' instance.pk %}">Analyze</a></li>
-    <li class="active">Features Acceptance</li>
-  </ol>
-{% endblock breadcrumb %}
-
-{% block content %}
-
-  {% include 'workspace/includes/instance_menu.html' with active='analyze' instance=instance %}
-
-  <div class="row">
-    <div class="col-md-3">
-      {% include 'workspace/analyze/includes/chart_menu.html' with active='features_acceptance' instance=instance %}
-    </div>
-    <div class="col-md-9">
-      {% for k, v in feature_charts.items %}
-        <div class="row">
-          <div class="col-md-12" style="margin-bottom: 20px">
-            <div id="chart-container-{{ k }}"></div>
-          </div>
-        </div>
-      {% endfor %}
-    </div>
+{% block toolbar %}
+  <div class="btn-group btn-group-xs" role="group">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"{% if not forloop.first %} disabled{% endif %}>
+      <span class="fa fa-bar-chart"></span>
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-right js-chart-type" role="menu">
+      <li role="presentation" class="dropdown-header">Chart type</li>
+      <li role="presentation" class="active">
+        <a role="menuitem" tabindex="-1" href="javascript:void(0);" data-chart="simple"><span class="fa fa-th-large"></span> Simple Treemap</a>
+      </li>
+      <li role="presentation">
+        <a role="menuitem" tabindex="-1" href="javascript:void(0);" data-chart="detailed"><span class="fa fa-th"></span> Detailed Treemap</a>
+      </li>
+      <li role="presentation">
+        <a role="menuitem" tabindex="-1" href="javascript:void(0);" data-chart="pie"><span class="fa fa-pie-chart"></span> Detailed Pie Chart</a>
+      </li>
+    </ul>
   </div>
-
-{% endblock content %}
+{% endblock toolbar %}

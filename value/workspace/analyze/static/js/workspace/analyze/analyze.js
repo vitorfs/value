@@ -2,9 +2,11 @@ $.fn.loadchart = function (callback) {
 
   callback = callback || function () {};
 
-  var instance_id = $(this).attr("data-instance-id");
-  var item_id = $(this).attr("data-item-id");
+  var url = $(this).attr("data-uri");
   var chart_type = $(".js-chart-type li.active a", this).attr("data-chart");
+  if (chart_type) {
+    url += "?chart=" + chart_type;
+  }
 
   var container = $(this);
   var chart_container = $(this).closest(".panel").find(".panel-body");
@@ -13,12 +15,10 @@ $.fn.loadchart = function (callback) {
   display_loading=true;
 
   $.ajax({
-    url: '/workspace/' + instance_id + '/analyze/features/' + item_id + '/',
-    data: {
-      'chart': chart_type
-    },
+    url: url,
     type: 'GET',
     dataType: 'json',
+    cache: false,
     beforeSend: function () {
       if (display_loading) {
         $(chart_container).loading();
@@ -65,10 +65,6 @@ $(function () {
     var target = $(container).attr("data-target");
     var id = $(container).attr("data-chart-id");
 
-    if (!$(container).hasClass("loaded")) {
-      $(container).loadchart();
-    }
-
     if ($(target).is(":visible")) {
       $(".btn-chart-toggle .glyphicon", container).removeClass("glyphicon-minus").addClass("glyphicon-plus");
       $(".btn-chart-expand, .btn-chart-reload, .dropdown-toggle", container).prop("disabled", true);
@@ -77,7 +73,11 @@ $(function () {
     else {
       $(".btn-chart-toggle .glyphicon", container).addClass("glyphicon-minus").removeClass("glyphicon-plus");
       $(".btn-chart-expand, .btn-chart-reload, .dropdown-toggle", container).prop("disabled", false);
-      $(target).slideDown();
+      $(target).slideDown(400, function () {
+        if (!$(container).hasClass("loaded")) {
+          $(container).loadchart();
+        }
+      });
     }
 
   });
