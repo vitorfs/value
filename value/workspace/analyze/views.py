@@ -24,7 +24,7 @@ def index(request, instance_id):
 def features(request, instance_id):
     instance = get_object_or_404(Instance, pk=instance_id)
     charts = instance.get_items()
-    return render(request, 'workspace/analyze/charts.html', { 
+    return render(request, 'workspace/analyze/features.html', { 
         'instance' : instance,
         'charts' : charts,
         'chart_menu_active' : 'features',
@@ -90,6 +90,17 @@ def features_chart(request, instance_id, item_id):
 
 @login_required
 def features_acceptance(request, instance_id):
+    instance = get_object_or_404(Instance, pk=instance_id)
+    charts = instance.get_items()
+    return render(request, 'workspace/analyze/base_charts.html', { 
+        'instance' : instance,
+        'charts' : charts,
+        'chart_menu_active' : 'features_acceptance',
+        'chart_page_title' : 'Features Acceptance'
+        })
+
+@login_required
+def features_acceptance_chart(request, instance_id, item_id):
     instance = get_object_or_404(Instance, pk=instance_id)
     items = instance.get_items()
     evaluations = InstanceItemEvaluation.get_evaluations_by_instance(instance)
