@@ -63,8 +63,6 @@ def features_chart(request, instance_id, item_id):
 
         measure = evaluations[0].measure
 
-        print measure.name
-
         series = []
         for value in measure.get_values():
             serie_data = []

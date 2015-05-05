@@ -80,7 +80,7 @@ h3.page-header {
 .page-loading .spinner > div {
   width: 18px;
   height: 18px;
-  background-color: #fe0074;
+  background-color: rgba(0, 0, 0, .3);
   border-radius: 100%;
   display: inline-block;
   -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
@@ -118,7 +118,8 @@ h3.page-header {
 .block-spinner {
   width: 40px;
   height: 40px;
-  margin: 10px auto;
+  margin-left: auto;
+  margin-right: auto;
   background-color: #333;
   border-radius: 100%;  
   -webkit-animation: scaleout 1.0s infinite ease-in-out;
@@ -142,4 +143,8 @@ h3.page-header {
     -webkit-transform: scale(1.0);
     opacity: 0;
   }
+}
+
+.spin {
+  animation: 2s linear 0s normal none infinite running spin;
 }
