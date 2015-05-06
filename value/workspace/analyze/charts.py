@@ -5,6 +5,49 @@ from value.workspace.models import Instance, InstanceItem, InstanceItemEvaluatio
 
 class Highcharts(object):
 
+    def feature_comparison_pie_chart(self, instance):
+        evaluations = InstanceItemEvaluation.get_evaluations_by_instance(instance)
+        measure = evaluations[0].measure
+        measure_value = measure.get_values().order_by('order')[0]
+        filtered_evaluations = evaluations.filter(measure_value=measure_value)
+
+        vqs = filtered_evaluations.values('item__id', 'item__name').annotate(count=Count('item__id')).order_by('-count')
+
+        data = []
+        for result in vqs:
+            data.append([result['item__name'], result['count']])
+
+        options = {
+            'chart': { 'type': 'column' },
+            'title': { 'text': None },
+            'xAxis': {
+                'type': 'category',
+                'labels': {
+                    'rotation': -45,
+                    'style': { 'fontSize': '13px', 'fontFamily': 'Verdana, sans-serif' }
+                }
+            },
+            'yAxis': { 'min': 0, 'title': { 'text': measure_value.description + ' votes' }},
+            'legend': { 'enabled': False },
+            'tooltip': { 'pointFormat': 'Overall ' + measure_value.description.lower() + ' votes: <strong>{point.y}</strong>' },
+            'series': [{
+                'name': measure_value.description + ' Votes',
+                'data': data,
+                'color': measure_value.color,
+                'dataLabels': {
+                    'enabled': True,
+                    'rotation': -90,
+                    'color': '#FFFFFF',
+                    'align': 'right',
+                    'format': '{point.y}',
+                    'y': 10,
+                    'style': { 'fontSize': '13px', 'fontFamily': 'Verdana, sans-serif' }
+                }
+            }]
+        }
+
+        return options
+
     def factors_usage_pie_chart(self, instance):
         evaluations = InstanceItemEvaluation.get_evaluations_by_instance(instance)
         factors = Factor.get_factors()

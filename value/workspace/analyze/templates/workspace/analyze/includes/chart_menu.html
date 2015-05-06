@@ -2,4 +2,5 @@
   <li role="presentation"{% if active == 'factors_usage' %} class="active"{% endif %}><a href="{% url 'workspace:analyze:index' instance.pk %}">Overall Factors Usage</a></li>
   <li role="presentation"{% if active == 'features' %} class="active"{% endif %}><a href="{% url 'workspace:analyze:features' instance.pk %}">Features Selection</a></li>
   <li role="presentation"{% if active == 'features_acceptance' %} class="active"{% endif %}><a href="{% url 'workspace:analyze:features_acceptance' instance.pk %}">Features Acceptance</a></li>
+  <li role="presentation"{% if active == 'features_comparison' %} class="active"{% endif %}><a href="{% url 'workspace:analyze:features_comparison' instance.pk %}">Features Comparison</a></li>
 </ul>

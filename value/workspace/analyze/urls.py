@@ -8,5 +8,7 @@ urlpatterns = patterns('value.workspace.analyze.views',
 
     url(r'^features-acceptance/$', 'features_acceptance', name='features_acceptance'),
     url(r'^features-acceptance/(?P<item_id>\d+)/$', 'features_acceptance_chart', name='features_acceptance_chart'),
+
+    url(r'^features-comparison/$', 'features_comparison', name='features_comparison'),
     
 )

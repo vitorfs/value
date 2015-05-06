@@ -17,10 +17,12 @@ def index(request, instance_id):
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        return render(request, 'workspace/analyze/index.html', { 
+        return render(request, 'workspace/analyze/generic_chart.html', { 
             'instance' : instance, 
             'dump' : dump,
-            'chart_menu_active': 'factors_usage'
+            'chart_uri': '',
+            'chart_menu_active': 'factors_usage',
+            'chart_page_title': 'Overall Factors Usage'
             })
 
 @login_required
@@ -72,3 +74,21 @@ def features_acceptance_chart(request, instance_id, item_id):
 
     dump = json.dumps(options)
     return HttpResponse(dump, content_type='application/json')
+
+@login_required
+def features_comparison(request, instance_id):
+    instance = get_object_or_404(Instance, pk=instance_id)
+    chart = Highcharts()
+    options = chart.feature_comparison_pie_chart(instance)
+    dump = json.dumps(options)
+
+    if 'application/json' in request.META.get('HTTP_ACCEPT'):
+        return HttpResponse(dump, content_type='application/json')
+    else:
+        return render(request, 'workspace/analyze/generic_chart.html', { 
+            'instance' : instance, 
+            'dump' : dump,
+            'chart_uri': 'features-comparison',
+            'chart_menu_active': 'features_comparison',
+            'chart_page_title': 'Features Comparison'
+            })
