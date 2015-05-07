@@ -46,7 +46,7 @@ def new(request):
 @login_required
 def instance(request, instance_id):
     instance = get_object_or_404(Instance, pk=instance_id)
-    return render(request, 'workspace/dashboard.html', { 'instance' : instance })
+    return render(request, 'workspace/summary.html', { 'instance' : instance })
 
 @login_required
 def evaluate(request, instance_id):

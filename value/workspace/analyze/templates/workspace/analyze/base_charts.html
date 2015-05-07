@@ -10,9 +10,9 @@
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'workspace:index' %}">Workspace</a></li>
+    <li><a href="{% url 'workspace:index' %}">Deliverable</a></li>
     <li><a href="{% url 'workspace:instance' instance.pk %}">{{ instance.name }}</a></li>
-    <li><a href="{% url 'workspace:analyze:index' instance.pk %}">Analyze</a></li>
+    <li><a href="{% url 'workspace:analyze:index' instance.pk %}">Dashboard</a></li>
     <li class="active">{{ chart_page_title }}</li>
   </ol>
 {% endblock breadcrumb %}

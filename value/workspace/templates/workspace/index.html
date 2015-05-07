@@ -9,20 +9,22 @@
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
-    <li class="active">Workspace</li>
+    <li class="active">Deliverable</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
-  {% if user.is_superuser %}
-    <a class="btn btn-primary pull-right" href="{% url 'workspace:new' %}"><span class="glyphicon glyphicon-plus"></span> New value project</a>
-  {% endif %}
 
-  <h1 class="lead">Select a value project to get started</h1>
+  {% if user.is_superuser %}
+    <div class="clearfix" style="margin-bottom: 20px">
+      <a class="btn btn-primary pull-right" href="{% url 'workspace:new' %}"><span class="glyphicon glyphicon-plus"></span> New deliverable</a>
+    </div>
+
+  {% endif %}
 
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">Work in Progress</h3>
+      <h3 class="panel-title">Deliverables</h3>
     </div>
     <table class="table table-hover js-tbl-instances">
       <thead>

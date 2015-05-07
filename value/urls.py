@@ -10,6 +10,6 @@ urlpatterns = patterns('',
     url(r'^measures/', include('value.measures.urls', namespace='measures')),
     url(r'^users/', include('value.users.urls', namespace='users')),
     url(r'^help/', include('value.help.urls', namespace='help')),
-    url(r'^workspace/', include('value.workspace.urls', namespace='workspace')),
+    url(r'^deliverable/', include('value.workspace.urls', namespace='workspace')),
     url(r'^avatar/', include('value.djavatar.urls')),
 )

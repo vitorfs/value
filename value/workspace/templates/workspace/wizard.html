@@ -13,13 +13,13 @@
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'workspace:index' %}">Workspace</a></li>
-    <li class="active">New value project</li>
+    <li><a href="{% url 'workspace:index' %}">Deliverable</a></li>
+    <li class="active">New deliverable</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
-  <h1 class="lead">New project wizard</h1>
+  <h1 class="lead">New deliverable</h1>
 
   <div class="btn-group btn-group-justified js-wizard-steps" role="group" aria-label="Project Wizard" style="margin-bottom: 20px">
     <div class="btn-group" role="group">
