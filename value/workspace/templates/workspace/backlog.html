@@ -37,18 +37,22 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th><input type="checkbox"></th>
+        <th style="width: 40px" class="text-center"><input type="checkbox"></th>
+        <th>ID</th>
         <th>Name</th>
         <th>Description</th>
+        <th>Release</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
       {% for item in backlog %}
       <tr>
-        <td><input type="checkbox"></td>
+        <td class="text-center"><input type="checkbox"></td>
+        <td></td>
         <td><a href="#">{{ item.name }}</a></td>
         <td>{{ item.description }}</td>
+        <td></td>
         <td class="text-right text-nowrap">
           <a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
           <a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</a>

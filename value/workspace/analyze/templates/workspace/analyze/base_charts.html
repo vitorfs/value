@@ -2,6 +2,10 @@
 
 {% load staticfiles %}
 
+{% block stylesheet %}
+  <link href="{% static 'css/workspace/analyze/charts.css' %}" rel="stylesheet">
+{% endblock stylesheet %}
+
 {% block javascript %}
   <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
   <script src="{% static 'js/workspace/analyze/analyze.js' %}"></script>

@@ -67,12 +67,12 @@ $(function () {
 
     if ($(target).is(":visible")) {
       $(".btn-chart-toggle .glyphicon", container).removeClass("glyphicon-minus").addClass("glyphicon-plus");
-      $(".btn-chart-expand, .btn-chart-reload, .dropdown-toggle", container).prop("disabled", true);
+      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .dropdown-toggle", container).prop("disabled", true);
       $(target).slideUp();
     }
     else {
       $(".btn-chart-toggle .glyphicon", container).addClass("glyphicon-minus").removeClass("glyphicon-plus");
-      $(".btn-chart-expand, .btn-chart-reload, .dropdown-toggle", container).prop("disabled", false);
+      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .dropdown-toggle", container).prop("disabled", false);
       $(target).slideDown(400, function () {
         if (!$(container).hasClass("loaded")) {
           $(container).loadchart();
@@ -101,4 +101,59 @@ $(function () {
     }
   });
 
+  $(".btn-chart-modal").click(function () {
+
+    var container = $(this).closest(".panel");
+    var title = $(".panel-title", container).text();
+    var chart = $(".panel-body", container).highcharts();
+
+    $("body").prepend("<div class='chart-window'></div>");
+
+    $(".chart-window").highcharts(chart.options);
+
+    var window_chart = $(".chart-window").highcharts();
+
+    interact('.chart-window')
+      .draggable({
+        inertia: true,
+        restrict: {
+          restriction: "parent",
+          endOnly: true,
+          elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+        },
+        onmove: function (event) {
+          var target = event.target,
+              x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+              y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+          target.style.webkitTransform =
+          target.style.transform =
+            'translate(' + x + 'px, ' + y + 'px)';
+
+          target.setAttribute('data-x', x);
+          target.setAttribute('data-y', y);
+        }
+      }).resizable({
+        edges: { left: true, right: true, bottom: true, top: true }
+      }).on('resizemove', function (event) {
+        var target = event.target,
+            x = (parseFloat(target.getAttribute('data-x')) || 0),
+            y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+        target.style.width  = event.rect.width + 'px';
+        target.style.height = event.rect.height + 'px';
+
+        x += event.deltaRect.left;
+        y += event.deltaRect.top;
+
+        target.style.webkitTransform = target.style.transform =
+            'translate(' + x + 'px,' + y + 'px)';
+
+        target.setAttribute('data-x', x);
+        target.setAttribute('data-y', y);
+
+        window_chart.reflow();
+
+    });
+  });
 });

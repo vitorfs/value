@@ -1,0 +1,26 @@
+.panel-chart .panel-title {
+  font-size: 14px;
+}
+
+.panel-chart .panel-heading {
+  padding: 5px 10px;
+}
+
+.panel-chart .panel-body {
+  min-height: 400px;
+  padding: 10px;
+}
+
+.panel-chart .chart-options {
+  margin-top: -1px;
+}
+
+.chart-window {
+  background-color: #fff;
+  position: fixed;
+  padding: 10px;
+  z-index: 9000;
+  border: 1px solid #dddddd;
+  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  overflow: hidden;
+}
