@@ -33,11 +33,60 @@ class Instance(models.Model):
 
 
 class InstanceItem(models.Model):
-    name = models.CharField(max_length=255)
     instance = models.ForeignKey(Instance)
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=2000, null=True, blank=True)
+    final_decision = models.NullBooleanField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, related_name='deliverable_item_creation_user')
+    updated_at = models.DateTimeField(auto_now=True)
+    updated_by = models.ForeignKey(User, null=True, related_name='deliverable_item_update_user')
+    column_1 = models.CharField(max_length=255, null=True, blank=True)
+    column_2 = models.CharField(max_length=255, null=True, blank=True)
+    column_3 = models.CharField(max_length=255, null=True, blank=True)
+    column_4 = models.CharField(max_length=255, null=True, blank=True)
+    column_5 = models.CharField(max_length=255, null=True, blank=True)
+    column_6 = models.CharField(max_length=255, null=True, blank=True)
+    column_7 = models.CharField(max_length=255, null=True, blank=True)
+    column_8 = models.CharField(max_length=255, null=True, blank=True)
+    column_9 = models.CharField(max_length=255, null=True, blank=True)
+    column_10 = models.CharField(max_length=255, null=True, blank=True)
+    column_11 = models.CharField(max_length=255, null=True, blank=True)
+    column_12 = models.CharField(max_length=255, null=True, blank=True)
+    column_13 = models.CharField(max_length=255, null=True, blank=True)
+    column_14 = models.CharField(max_length=255, null=True, blank=True)
+    column_15 = models.CharField(max_length=255, null=True, blank=True)
+    column_16 = models.CharField(max_length=255, null=True, blank=True)
+    column_17 = models.CharField(max_length=255, null=True, blank=True)
+    column_18 = models.CharField(max_length=255, null=True, blank=True)
+    column_19 = models.CharField(max_length=255, null=True, blank=True)
+    column_20 = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
+
+
+class Meeting(models.Model):
+    name = models.CharField(max_length=255)
+    deliverable = models.ForeignKey(Instance)
+    started_at = models.DateTimeField(null=True, blank=True)
+    ended_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, related_name='meeting_creation_user')
+    updated_at = models.DateTimeField(auto_now=True)
+    updated_by = models.ForeignKey(User, null=True, related_name='meeting_update_user')    
+    
+    def __unicode__(self):
+        return self.name
+
+
+class MeetingItems(models.Model):
+    meeting = models.ForeignKey(Meeting)
+    decision_item = models.ForeignKey(InstanceItem)
+    meeting_decision = models.NullBooleanField(null=True, blank=True)
+
+    def __unicode__(self):
+        return '{0} {1}'.format(meeting.name, decision_item.name)
 
 
 class InstanceItemEvaluation(models.Model):

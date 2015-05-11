@@ -105,3 +105,15 @@ def backlog(request, instance_id):
     instance = get_object_or_404(Instance, pk=instance_id)
     backlog = instance.get_items()
     return render(request, 'workspace/backlog.html', { 'instance' : instance, 'backlog' : backlog })
+
+@login_required
+def meetings(request, instance_id):
+    pass
+
+@login_required
+def new_meeting(request, instance_id):
+    pass
+
+@login_required
+def meeting(request, instance_id, meeting_id):
+    pass
