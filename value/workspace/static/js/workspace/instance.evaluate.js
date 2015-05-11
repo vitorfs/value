@@ -103,7 +103,7 @@ $(function () {
 
     $(".badge", panel).text(percent + "%");
 
-    var url = "/workspace/" + $(this).attr("data-instance-id") + "/evaluate/save/";
+    var url = "/deliverable/" + $(this).attr("data-instance-id") + "/decision-making/save/";
     var csrf = $("[name='csrfmiddlewaretoken']").val();
     var item_id = $(this).attr("data-item-id");
     var factor_id = $(this).attr("data-factor-id");
