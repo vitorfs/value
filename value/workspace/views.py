@@ -112,7 +112,8 @@ def meetings(request, instance_id):
 
 @login_required
 def new_meeting(request, instance_id):
-    pass
+    instance = get_object_or_404(Instance, pk=instance_id)
+    return render(request, 'workspace/new_meeting.html', { 'instance' : instance })
 
 @login_required
 def meeting(request, instance_id, meeting_id):

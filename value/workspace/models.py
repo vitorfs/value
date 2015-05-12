@@ -61,9 +61,38 @@ class InstanceItem(models.Model):
     column_18 = models.CharField(max_length=255, null=True, blank=True)
     column_19 = models.CharField(max_length=255, null=True, blank=True)
     column_20 = models.CharField(max_length=255, null=True, blank=True)
+    column_21 = models.CharField(max_length=255, null=True, blank=True)
+    column_22 = models.CharField(max_length=255, null=True, blank=True)
+    column_23 = models.CharField(max_length=255, null=True, blank=True)
+    column_24 = models.CharField(max_length=255, null=True, blank=True)
+    column_25 = models.CharField(max_length=255, null=True, blank=True)
+    column_26 = models.CharField(max_length=255, null=True, blank=True)
+    column_27 = models.CharField(max_length=255, null=True, blank=True)
+    column_28 = models.CharField(max_length=255, null=True, blank=True)
+    column_29 = models.CharField(max_length=255, null=True, blank=True)
+    column_30 = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
+
+class DecisionItemLookup(models.Model):
+    BOOLEAN = u'B'
+    STRING = u'S'
+    FLOAT = u'F'
+    INTEGER = u'I'
+    DATE = u'D'
+    DATE_TIME = u'T'
+    COLUMN_TYPES = (
+        (BOOLEAN, u'Boolean'),
+        (STRING, u'String'),
+        (FLOAT, u'Float'),
+        (INTEGER, u'Integer'),
+        (DATE, u'Date'),
+        (DATE_TIME, u'Date Time'),
+        )
+    column_name = models.CharField(max_length=255, null=True, blank=True, unique=True)
+    column_label = models.CharField(max_length=255, null=True, blank=True)
+    column_type = models.CharField(max_length=1, choices=COLUMN_TYPES, default=STRING)
 
 
 class Meeting(models.Model):
@@ -80,13 +109,22 @@ class Meeting(models.Model):
         return self.name
 
 
-class MeetingItems(models.Model):
+class MeetingItem(models.Model):
     meeting = models.ForeignKey(Meeting)
     decision_item = models.ForeignKey(InstanceItem)
     meeting_decision = models.NullBooleanField(null=True, blank=True)
 
     def __unicode__(self):
         return '{0} {1}'.format(meeting.name, decision_item.name)
+
+
+class MeetingStakeholder(models.Model):
+    meeting = models.ForeignKey(Meeting)
+    stakeholder = models.ForeignKey(User)
+    meeting_input = models.FloatField(default=0.0)
+
+    def __unicode__(self):
+        return '{0} {1}'.format(meeting.name, stakeholder.username)
 
 
 class InstanceItemEvaluation(models.Model):

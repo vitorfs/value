@@ -18,6 +18,9 @@ class Profile(models.Model):
         else:
             return self.user.username
 
+    def get_picture_16(self):
+        return self.get_picture(16)
+
     def get_picture_32(self):
         return self.get_picture(32)
 

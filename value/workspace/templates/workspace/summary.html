@@ -23,51 +23,6 @@
       <h2 style="margin-top: 0">{{ instance.name }}</h2>
 
       {% if instance.description %}<p>{{ instance.description }}</p>{% endif %}
-
-      <div class="row">
-        <div class="col-md-2 text-right">
-          <strong>Status</strong>
-        </div>
-        <div class="col-md-10">
-          {{ instance.get_status_display }}
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-2 text-right">
-          <strong>Number of Features</strong>
-        </div>
-        <div class="col-md-10">
-          {{ instance.get_items.count }}
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-2 text-right">
-          <strong>Number of Stakeholders</strong>
-        </div>
-        <div class="col-md-10">
-          {{ instance.stakeholders.all.count }}
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-2 text-right">
-          <strong>Created at</strong>
-        </div>
-        <div class="col-md-10">
-          {{ instance.created_at }}
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-2 text-right">
-          <strong>Last update</strong>
-        </div>
-        <div class="col-md-10">
-          {{ instance.updated_at }}
-        </div>
-      </div>
       
     </div>
   </div>

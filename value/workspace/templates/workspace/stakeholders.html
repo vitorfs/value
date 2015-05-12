@@ -30,21 +30,22 @@
   </div>
 
   <h4>Stakeholders</h4>
-  {% for stakeholder in instance.stakeholders.all %}
-    <div class="panel panel-default">
-      <div class="panel-body js-stakeholder-selection">
-        <div class="row">
-          <div class="col-md-11">
-            <img src="{{ stakeholder.profile.get_picture_32 }}" alt="{{ stakeholder.profile.get_display_name }}" class="img-circle" style="margin-right: 10px">
-            {{ stakeholder.profile.get_display_name }}
-            <input type="checkbox" name="stakeholders" value="{{ stakeholder.pk }}" style="display: none">
-          </div>
-          <div class="col-md-1 text-right">
-            <span class="glyphicon glyphicon-ok text-success" style="line-height: 28px; display: none"></span>
+  <div class="panel-group">
+    {% for stakeholder in instance.stakeholders.all %}
+      <div class="panel panel-default">
+        <div class="panel-body js-stakeholder-selection">
+          <div class="row">
+            <div class="col-md-11">
+              <img src="{{ stakeholder.profile.get_picture_32 }}" alt="{{ stakeholder.profile.get_display_name }}" class="img-circle" style="margin-right: 10px">
+              {{ stakeholder.profile.get_display_name }}
+              <input type="checkbox" name="stakeholders" value="{{ stakeholder.pk }}" style="display: none">
+            </div>
+            <div class="col-md-1 text-right">
+              <span class="glyphicon glyphicon-ok text-success" style="line-height: 28px; display: none"></span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  {% endfor %}
-
+    {% endfor %}
+  </div>
 {% endblock content %}
