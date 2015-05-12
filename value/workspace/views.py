@@ -104,7 +104,7 @@ def stakeholders(request, instance_id):
 def backlog(request, instance_id):
     instance = get_object_or_404(Instance, pk=instance_id)
     backlog = instance.get_items()
-    return render(request, 'workspace/backlog.html', { 'instance' : instance, 'backlog' : backlog })
+    return render(request, 'workspace/decision_items.html', { 'instance' : instance, 'backlog' : backlog })
 
 @login_required
 def meetings(request, instance_id):

@@ -24,7 +24,7 @@
       <div class="panel-heading" role="tab" id="heading-basic-data">
         <h4 class="panel-title">
           <a data-toggle="collapse" data-parent="#accordion" href="#collapse-basic-data" aria-expanded="true" aria-controls="collapse-basic-data">
-            1. Provide Basic Data
+            1. Provide Meeting Details
           </a>
         </h4>
       </div>
@@ -56,11 +56,11 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row" id="meeting-more-details">
             <div class="col-sm-4">
               <div class="form-group">
                 <label>Location</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" id="id_location">
               </div>
             </div>
             <div class="col-sm-8">
@@ -90,7 +90,7 @@
           </div>
 
           <div class="panel-group">
-            {% for stakeholder in instance.stakeholders.all %}
+            {% for stakeholder in instance.stakeholders.all|dictsort:"first_name" %}
             <div class="panel panel-success">
               <div class="panel-body bg-success">
                 <div class="row">
