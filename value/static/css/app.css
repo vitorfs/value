@@ -148,3 +148,34 @@ h3.page-header {
 .spin {
   animation: 2s linear 0s normal none infinite running spin;
 }
+
+th.header {
+  cursor: pointer;
+}
+
+th.header:after {
+  font-family: "FontAwesome";
+  float: right;
+  content: "\f0dc";
+}
+
+th.headerSortDown:after {
+  font-family: "FontAwesome";
+  float: right;
+  content: "\f0dd";
+}
+
+th.headerSortUp:after {
+  font-family: "FontAwesome";
+  float: right;
+  content: "\f0de";
+}
+
+.table-check-all thead tr th:first-child, .table-check-all tbody tr td:first-child {
+  width: 45px;
+  text-align: center;
+}
+
+.table-check-all input[type="checkbox"] {
+  cursor: pointer;
+}

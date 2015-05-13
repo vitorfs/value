@@ -21,6 +21,9 @@ class Profile(models.Model):
     def get_picture_16(self):
         return self.get_picture(16)
 
+    def get_picture_20(self):
+        return self.get_picture(20)
+
     def get_picture_32(self):
         return self.get_picture(32)
 

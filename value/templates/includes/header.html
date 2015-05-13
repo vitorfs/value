@@ -25,6 +25,7 @@
                   <li{% if '/factors/' in request.path %} class="active"{% endif %}><a href="{% url 'factors:factors' %}">Factors</a></li>
                   <li{% if '/measures/' in request.path %} class="active"{% endif %}><a href="{% url 'measures:measures' %}">Measures</a></li>
                   <li{% if '/users/' in request.path %} class="active"{% endif %}><a href="{% url 'users:users' %}">Users</a></li>
+                  <li{% if '/groups/' in request.path %} class="active"{% endif %}><a href="{% url 'users:users' %}">Groups</a></li>
                 </ul>
               </li>
             {% endif %}
