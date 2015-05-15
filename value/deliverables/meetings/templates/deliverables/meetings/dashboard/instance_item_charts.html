@@ -1,4 +1,4 @@
-{% extends 'deliverables/analyze/base_charts.html' %}
+{% extends 'deliverables/meetings/dashboard/base_charts.html' %}
 
 {% load staticfiles %}
 
@@ -20,7 +20,7 @@
   <div class="panel-group charts">
     {% for chart in charts %}
       <div class="panel panel-default panel-chart">
-        <div class="panel-heading" data-target="#collapse-{{ chart.id }}" data-instance-id="{{ instance.id }}" data-item-id="{{ chart.id }}" data-uri="{% url 'deliverables:instance' instance.id %}dashboard/{{ chart_uri }}/{{ chart.id }}/">
+        <div class="panel-heading" data-target="#collapse-{{ chart.id }}" data-instance-id="{{ instance.id }}" data-item-id="{{ chart.id }}" data-uri="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}dashboard/{{ chart_uri }}/{{ chart.id }}/">
           <div class="btn-group btn-group-xs pull-right chart-options" role="group" aria-label="Chart Options">
             <button type="button" class="btn btn-default btn-xs btn-chart-toggle">
               {% if forloop.first %}
@@ -35,7 +35,7 @@
             {% block toolbar %}
             {% endblock toolbar %}
           </div>
-          <p class="panel-title"><a href="javascript:void(0)" class="btn-chart-toggle">{{ chart.name }}</a></p>
+          <p class="panel-title"><a href="javascript:void(0)" class="btn-chart-toggle">{{ chart.decision_item.name }}</a></p>
         </div>
         <div id="collapse-{{ chart.id }}" class="panel-collapse collapse"{% if forloop.first %} style="display: block;"{% endif %}>
           <div class="panel-body"></div>

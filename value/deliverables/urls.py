@@ -7,5 +7,4 @@ urlpatterns = patterns('value.deliverables.views',
     url(r'^(?P<deliverable_id>\d+)/stakeholders/$', 'stakeholders', name='stakeholders'),
     url(r'^(?P<deliverable_id>\d+)/decision-items/$', 'decision_items', name='decision_items'),
     url(r'(?P<deliverable_id>\d+)/meetings/', include('value.deliverables.meetings.urls', namespace='meetings')),
-    url(r'(?P<deliverable_id>\d+)/dashboard/', include('value.deliverables.analyze.urls', namespace='analyze')),
 )
