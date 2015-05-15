@@ -13,8 +13,8 @@
       {% if user.is_authenticated %}
         <div class="collapse navbar-collapse" id="header-menu">
           <ul class="nav navbar-nav">
-            <li{% if '/workspace/' in request.path %} class="active"{% endif %}>
-              <a href="{% url 'workspace:index' %}"><span class="glyphicon glyphicon-inbox"></span> Deliverable</a>
+            <li{% if '/deliverables/' in request.path %} class="active"{% endif %}>
+              <a href="{% url 'deliverables:index' %}"><span class="glyphicon glyphicon-inbox"></span> Deliverables</a>
             </li>
             {% if user.is_superuser %}
               <li class="dropdown">

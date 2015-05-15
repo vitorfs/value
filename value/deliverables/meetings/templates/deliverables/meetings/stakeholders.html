@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% load avatar %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a></li>
+    <li><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
+    <li class="active">Stakeholders</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+  {% include 'deliverables/meetings/includes/menu.html' with active='meeting_stakeholders' meeting=meeting %}
+
+  <div class="panel-group">
+    {% for stakeholder in meeting.meetingstakeholder_set.all %}
+      <div class="panel panel-default">
+        <div class="panel-body js-stakeholder-selection">
+          <div class="row">
+            <div class="col-sm-11">
+              <img src="{% avatar stakeholder.stakeholder 32 %}" alt="{{ stakeholder.stakeholder.profile.get_display_name }}" class="img-circle" style="margin-right: 10px">
+              {{ stakeholder.stakeholder.profile.get_display_name }}
+              <input type="checkbox" name="stakeholders" value="{{ stakeholder.stakeholder.pk }}" style="display: none">
+            </div>
+            <div class="col-sm-1 text-right">
+              <span class="glyphicon glyphicon-ok text-success" style="line-height: 28px; display: none"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+{% endblock content %}

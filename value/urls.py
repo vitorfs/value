@@ -12,7 +12,7 @@ urlpatterns = patterns('',
     url(r'^measures/', include('value.measures.urls', namespace='measures')),
     url(r'^users/', include('value.users.urls', namespace='users')),
     url(r'^help/', include('value.help.urls', namespace='help')),
-    url(r'^deliverable/', include('value.workspace.urls', namespace='workspace')),
+    url(r'^deliverables/', include('value.deliverables.urls', namespace='deliverables')),
     url(r'^avatar/', include('value.avatar.urls')),
 )
 

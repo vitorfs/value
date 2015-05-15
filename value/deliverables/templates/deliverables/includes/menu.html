@@ -1,0 +1,25 @@
+<ul class="nav nav-tabs" style="margin-bottom: 20px">
+  <li role="presentation"{% if active == 'dashboard' %} class="active"{% endif %}><a href="{% url 'deliverables:deliverable' deliverable.pk %}">Summary</a></li>
+  <li role="presentation"{% if active == 'stakeholders' %} class="active"{% endif %}><a href="{% url 'deliverables:stakeholders' deliverable.pk %}">Stakeholders</a></li>
+  <li role="presentation"{% if active == 'decision_items' %} class="active"{% endif %}><a href="{% url 'deliverables:decision_items' deliverable.pk %}">Decision Items</a></li>
+  <li role="presentation"{% if active == 'historical_dashboard' %} class="active"{% endif %}><a href="#">Historical Dashboard</a></li>
+  <li role="presentation"{% if active == 'historical_dashboard' %} class="active"{% endif %}><a href="#">Final Decision</a></li>
+  <li class="dropdown pull-right{% if active == 'meetings' %} active{% endif %}" role="presentation">
+    <a aria-expanded="false" role="button" href="#" data-toggle="dropdown" class="dropdown-toggle">
+      Meetings <span class="caret"></span>
+    </a>
+    <ul role="menu" class="dropdown-menu dropdown-menu-right">
+      {% with meetings=deliverable.meeting_set.all %}
+        {% if meetings %}
+          {% for meeting in meetings %}
+            <li><a href="{% url 'deliverables:meetings:meeting' deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
+          {% endfor %}
+          <li class="divider"></li>
+          <li><a href="{% url 'deliverables:meetings:new' deliverable.pk %}">New Meeting</a></li>
+        {% else %}
+          <li><a href="{% url 'deliverables:meetings:new' deliverable.pk %}">Start a Meeting</a></li>
+        {% endif %}
+      {% endwith %}
+    </ul>
+  </li>
+</ul>

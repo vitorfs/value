@@ -10,8 +10,6 @@ register = template.Library()
 @register.simple_tag
 def avatar(user, size=128):
 
-    print settings.MEDIA_ROOT
-
     initials = ''
 
     if user.first_name and user.last_name:

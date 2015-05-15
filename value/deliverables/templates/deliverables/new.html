@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+{% load avatar %}
+
+{% block stylesheet %}
+  <link href="{% static 'css/deliverables/deliverables.css' %}" rel="stylesheet">
+{% endblock stylesheet %}
+
+{% block javascript %}
+  <script src="{% static 'js/deliverables/new.js' %}"></script>
+{% endblock javascript %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'deliverables:index' %}">Deliverable</a></li>
+    <li class="active">New deliverable</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+  <h2>New deliverable</h2>
+
+  <form method="post" role="form">
+
+    {% csrf_token %}
+
+    
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">1. Provide the Deliverable Details</h3>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="id_name">Name</label>
+            <input type="text" class="form-control" id="id_name" name="name">
+            <span class="help-block" style="display: none">This is a required field.</span>
+          </div>
+          <div class="form-group" style="margin-bottom: 0">
+            <label for="id_description">Description</label>
+            <textarea class="form-control expanding" rows="1" id="id_description" name="description"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">2. Define the Stakeholders</h3>
+        </div>
+        <div class="panel-body">
+          <div class="clearfix" style="margin-bottom: 20px">
+            <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="selection-options" data-toggle="dropdown" aria-expanded="true">
+                Select
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="selection-options">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" class="js-stakeholders-select-all">All</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" class="js-stakeholders-select-none">None</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="panel-group" id="stakeholders" style="margin-bottom: 0">
+            {% for user in users %}
+              <div class="panel panel-default">
+                <div class="panel-body js-stakeholder-selection">
+                  <div class="row">
+                    <div class="col-md-11">
+                      <img src="{% avatar user 32 %}" alt="{{ user.profile.get_display_name }}" class="img-circle" style="margin-right: 10px">
+                      {{ user.profile.get_display_name }}
+                      <input type="checkbox" name="stakeholders" value="{{ user.pk }}" style="display: none">
+                    </div>
+                    <div class="col-md-1 text-right">
+                      <span class="glyphicon glyphicon-ok text-success" style="line-height: 28px; display: none"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">3. Define the Decision Items</h3>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <div class="col-sm-12">
+              <textarea class="form-control js-add-item" rows="1" placeholder="Press enter to add"></textarea>
+              <span class="help-block">Add several items at once separating them with commas, semicolons or line-breaks. Please note, pasting items separated by line-breaks will result in a instant add.</span>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: 0">
+            <div class="col-sm-12">
+              <ul class="list-group decision-items" style="margin-bottom: 0"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <div style="margin-bottom: 20px">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <a href="{% url 'deliverables:index' %}" class="btn btn-default" alt="Cancel">Cancel</a>
+    </div>
+
+  </form>
+
+{% endblock content %}

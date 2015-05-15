@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block javascript %}
+
+{% endblock javascript %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li class="active">{{ deliverable.name }}</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+  {% include 'deliverables/includes/menu.html' with active='dashboard' deliverable=deliverable %}
+
+  <h2>{{ deliverable.name }}</h2>
+
+  {% if deliverable.description %}<p>{{ deliverable.description }}</p>{% endif %}
+
+  <div style="margin-bottom: 20px">
+    <button class="btn btn-primary">Start a New Meeting</button>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Ongoing Meetings</h3>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Notes</th>
+          <th>Started at</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for meeting in deliverable.meeting_set.all %}
+          <tr>
+            <td><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></td>
+            <td>{{ meeting.description }}</td>
+            <td>{{ meeting.started_at }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Past Meetings</h3>
+    </div>
+    <div class="panel-body">
+      No record
+    </div>
+  </div>
+
+{% endblock content %}

@@ -8,7 +8,7 @@ from django.conf import settings
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('measures', '__first__'),
+        ('measures', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('created_by', models.ForeignKey(related_name='factor_creation_user', to=settings.AUTH_USER_MODEL)),
-                ('measure', models.ForeignKey(to='measures.Measure', null=True)),
+                ('measure', models.ForeignKey(blank=True, to='measures.Measure', null=True)),
                 ('updated_by', models.ForeignKey(related_name='factor_update_user', to=settings.AUTH_USER_MODEL, null=True)),
             ],
         ),
