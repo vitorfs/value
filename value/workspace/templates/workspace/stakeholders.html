@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load avatar %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
@@ -18,7 +20,7 @@
     <div class="panel-body js-stakeholder-selection">
       <div class="row">
         <div class="col-md-11">
-          <img src="{{ instance.manager.profile.get_picture_32 }}" alt="{{ instance.manager.profile.get_display_name }}" class="img-circle" style="margin-right: 10px">
+          <img src="{% avatar instance.manager 32 %}" alt="{{ instance.manager.profile.get_display_name }}" class="img-circle" style="margin-right: 10px">
           {{ instance.manager.profile.get_display_name }}
           <input type="checkbox" name="stakeholders" value="{{ instance.manager.pk }}" style="display: none">
         </div>
@@ -36,7 +38,7 @@
         <div class="panel-body js-stakeholder-selection">
           <div class="row">
             <div class="col-md-11">
-              <img src="{{ stakeholder.profile.get_picture_32 }}" alt="{{ stakeholder.profile.get_display_name }}" class="img-circle" style="margin-right: 10px">
+              <img src="{% avatar stakeholder 32 %}" alt="{{ stakeholder.profile.get_display_name }}" class="img-circle" style="margin-right: 10px">
               {{ stakeholder.profile.get_display_name }}
               <input type="checkbox" name="stakeholders" value="{{ stakeholder.pk }}" style="display: none">
             </div>

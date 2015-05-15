@@ -10,6 +10,14 @@ $(function () {
     defaultDate: moment().add(1, 'hours')
   });
 
-  $(".table").tablesorter({ headers: { 0: { sorter: false }}});
+  $(".sortable").tablesorter({ headers: { 0: { sorter: false }}});
+
+  $(".panel").on("show.bs.collapse", function (e) {
+    $(".panel-info", $(this)).fadeOut();
+  });
+
+  $(".panel").on("hide.bs.collapse", function (e) {
+    $(".panel-info", $(this)).fadeIn();
+  });
 
 });

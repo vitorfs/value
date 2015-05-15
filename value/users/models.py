@@ -1,9 +1,7 @@
-import urllib
-from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.db import models
-from value.factors.models import Factor
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User)
@@ -18,41 +16,6 @@ class Profile(models.Model):
         else:
             return self.user.username
 
-    def get_picture_16(self):
-        return self.get_picture(16)
-
-    def get_picture_20(self):
-        return self.get_picture(20)
-
-    def get_picture_32(self):
-        return self.get_picture(32)
-
-    def get_picture_64(self):
-        return self.get_picture(64)
-
-    def get_picture(self, size=128):
-        
-        initials = ''
-
-        if self.user.first_name and self.user.last_name:
-            initials = '{0}{1}'.format(self.user.first_name[:1], self.user.last_name[:1])
-        elif self.user.first_name and len(self.user.first_name) > 1:
-            initials = self.user.first_name[:2]
-        elif self.user.last_name and len(self.user.last_name) > 1:
-            initials = self.user.last_name[:2]
-        elif len(self.user.username) > 1:
-            initials = self.user.username[:2]
-        else:
-            initials = self.user.username
-
-        colors = { 'a' : 'AA3C39', 'b' : '993350', 'c' : '8A2E60', 'd' : '6F256F', 'e' : '592A71', 'f' : '4B2D73', 'g' : '403075', 'h' : '343477', 'i' : '2E4372', 'j' : '29516D', 'k' : '236467', 'l' : '277553', 'm' : '2D882D', 'n' : '609732', 'o' : '7B9F35', 'p' : '91A437', 'q' : 'AAA839', 'r' : 'AA9F39', 's' : 'AA9739', 't' : 'AA8E39', 'u' : 'AA8539', 'v' : 'AA7939', 'w' : 'AA6D39', 'x' : 'AA5A39', 'y' : 'AA5439', 'z' : '7F2A68' }
-
-        url = '{0}?{1}'.format(
-          reverse('avatar', args=(initials,)),
-          urllib.urlencode({ 'size' : size, 'bg' : colors[initials[:1].lower()], 'fg' : 'ffffff' })
-          )
-
-        return url
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

@@ -31,7 +31,7 @@ INSTALLED_APPS = (
     'value.users',
     'value.workspace',
     'value.workspace.analyze',
-    'value.djavatar',
+    'value.avatar',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -66,14 +66,14 @@ USE_L10N = True
 USE_TZ = True
 
 
-STATIC_ROOT = PROJECT_DIR.parent.child('staticfiles')
+STATIC_ROOT = PROJECT_DIR.parent.parent.child('staticfiles')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     PROJECT_DIR.child('static'),
 )
 
-MEDIA_ROOT = PROJECT_DIR.parent.child('media')
+MEDIA_ROOT = PROJECT_DIR.parent.parent.child('media')
 MEDIA_URL = '/media/'
 
 TEMPLATE_DIRS = (

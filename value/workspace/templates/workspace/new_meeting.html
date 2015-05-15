@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load staticfiles %}
+{% load avatar %}
 
 {% block javascript %}
   <script src="{% static 'js/workspace/new_meeting.js' %}"></script>
@@ -23,18 +24,18 @@
 
     {% csrf_token %}
 
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel-group" id="meeting-setup" role="tablist" aria-multiselectable="true">
       <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="heading-basic-data">
-          <div class="pull-right">
+          <div class="pull-right panel-info" style="display: none">
             <span class="fa fa-tag" style="margin-right: 3px"></span> Meeting #1
             <span class="fa fa-calendar" style="margin-left: 10px; margin-right: 3px"></span> 13/05/2015
             <span class="fa fa-clock-o" style="margin-left: 10px; margin-right: 3px"></span> 18:17 - 19:17
             <span class="fa fa-map-marker" style="margin-left: 10px; margin-right: 3px"></span> Oulu
           </div>
           <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#accordion" href="#collapse-basic-data" aria-expanded="true" aria-controls="collapse-basic-data">
-              1. Provide Meeting Details
+            <a data-toggle="collapse" data-parent="#meeting-setup" href="#collapse-basic-data" aria-expanded="true" aria-controls="collapse-basic-data">
+              1. Provide the Meeting Details
             </a>
           </h4>
         </div>
@@ -85,32 +86,30 @@
       </div>
       <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="heading-stakeholders">
-          <h4 class="panel-title">
-            <div class="pull-right">
+          <div class="pull-right panel-info" style="margin-top: -2px">
             {% for stakeholder in instance.stakeholders.all|dictsort:"first_name" %}
-              <img src="{{ stakeholder.profile.get_picture_20 }}" alt="{{ stakeholder.profile.get_display_name }}" class="img-circle" style="margin-left: 5px; margin-top: -2px">
+              <img src="{% avatar stakeholder 20 %}" alt="{{ stakeholder.profile.get_display_name }}" class="img-circle" style="margin-left: 5px">
             {% endfor %}
-            </div>
-            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse-stakeholders" aria-expanded="false" aria-controls="collapse-stakeholders">
+          </div>
+          <h4 class="panel-title">
+            <a class="collapsed" data-toggle="collapse" data-parent="#meeting-setup" href="#collapse-stakeholders" aria-expanded="false" aria-controls="collapse-stakeholders">
               2. Review the Stakeholders
             </a>
           </h4>
         </div>
         <div id="collapse-stakeholders" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-stakeholders">
           <div class="panel-body">
-            
             <div class="alert alert-info alert-dismissible fade in" role="alert">
               <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               Click to remove a stakeholder from the meeting.
             </div>
-
             <div class="panel-group">
               {% for stakeholder in instance.stakeholders.all|dictsort:"first_name" %}
               <div class="panel panel-success">
                 <div class="panel-body bg-success">
                   <div class="row">
                     <div class="col-md-11">
-                      <img src="{{ stakeholder.profile.get_picture_32 }}" alt="{{ stakeholder.profile.get_display_name }}" class="img-circle" style="margin-right: 10px">
+                      <img src="{% avatar stakeholder 32 %}" alt="{{ stakeholder.profile.get_display_name }}" class="img-circle" style="margin-right: 10px">
                       {{ stakeholder.profile.get_display_name }}
                       <input type="checkbox" name="stakeholders" value="{{ stakeholder.pk }}" style="display: none" checked>
                     </div>
@@ -128,9 +127,11 @@
       </div>
       <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="heading-decision-items">
-          <span class="pull-right" style="line-height: 16px">3 items to discuss</span>
+          <div class="pull-right panel-info" style="line-height: 16px">
+            3 items to discuss
+          </div>
           <h4 class="panel-title">
-            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse-decision-items" aria-expanded="false" aria-controls="collapse-decision-items">
+            <a class="collapsed" data-toggle="collapse" data-parent="#meeting-setup" href="#collapse-decision-items" aria-expanded="false" aria-controls="collapse-decision-items">
               3. Select the Decision Items
             </a>
           </h4>
@@ -143,7 +144,7 @@
             </div>
 
             {% with items=instance.instanceitem_set.all %}
-              <table class="table table-striped table-bordered table-check-all">
+              <table class="table table-striped table-bordered table-sortable table-check-all">
                 <thead>
                   <tr>
                     <th><input type="checkbox" checked></th>

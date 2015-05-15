@@ -179,3 +179,17 @@ th.headerSortUp:after {
 .table-check-all input[type="checkbox"] {
   cursor: pointer;
 }
+
+.table-calendar tbody tr td, .table-calendar thead tr th {
+  font-weight: bold;
+  text-align: center;
+}
+
+.table-calendar tbody tr td:first-child, .table-calendar tbody tr td:last-child {
+  color: #bbb;
+}
+
+.table-calendar tbody tr td:hover {
+  background-color: #E7E7E7;
+  cursor: pointer;
+}
