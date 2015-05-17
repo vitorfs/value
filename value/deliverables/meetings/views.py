@@ -146,7 +146,7 @@ def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
 @login_required
 def features_acceptance(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    charts = instance.get_items()
+    charts = meeting.meetingitem_set.all()
     return render(request, 'deliverables/meetings/dashboard/features_acceptance.html', { 
         'meeting' : meeting,
         'charts' : charts,
@@ -176,7 +176,7 @@ def features_acceptance_chart(request, deliverable_id, meeting_id, meeting_item_
 def features_comparison(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     chart = Highcharts()
-    options = chart.feature_comparison_pie_chart(instance)
+    options = chart.feature_comparison_pie_chart(meeting)
     dump = json.dumps(options)
 
     if 'application/json' in request.META.get('HTTP_ACCEPT'):

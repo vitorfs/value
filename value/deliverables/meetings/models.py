@@ -51,7 +51,7 @@ class Evaluation(models.Model):
         mv = 'N/A'
         if self.measure_value:
             mv = self.measure_value.description
-        return '{0} {1} {2} {3} {4} {5}'.format(self.meeting.name, self.item.name, self.user.username, self.factor.name, self.measure.name, mv)
+        return '{0} {1} {2} {3} {4} {5}'.format(self.meeting.name, self.meeting_item.decision_item.name, self.user.username, self.factor.name, self.measure.name, mv)
 
     @staticmethod
     def get_evaluations_by_meeting(meeting):

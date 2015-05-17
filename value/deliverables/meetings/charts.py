@@ -14,11 +14,11 @@ class Highcharts(object):
         measure_value = measure.get_values().order_by('order')[0]
         filtered_evaluations = evaluations.filter(measure_value=measure_value)
 
-        vqs = filtered_evaluations.values('item__id', 'item__name').annotate(count=Count('item__id')).order_by('-count')
+        vqs = filtered_evaluations.values('meeting_item__id', 'meeting_item__decision_item__name').annotate(count=Count('meeting_item__id')).order_by('-count')
 
         data = []
         for result in vqs:
-            data.append([result['item__name'], result['count']])
+            data.append([result['meeting_item__decision_item__name'], result['count']])
 
         options = {
             'chart': { 'type': 'column' },
@@ -74,7 +74,7 @@ class Highcharts(object):
 
         return options
 
-    def features_selection_stacked_chart(self, instance_id, item_id, chart):
+    def features_selection_stacked_chart(self, meeting_id, meeting_item_id, chart):
         
         chart_type = 'bar'
         stacking = None
@@ -85,16 +85,16 @@ class Highcharts(object):
         if chart in ['stacked_columns', 'basic_columns',]:
             chart_type = 'column'
 
-        instance = Meeting.objects.get(pk=instance_id)
-        item = MeetingItem.objects.get(pk=item_id)
-        evaluations = Evaluation.get_evaluations_by_meeting(instance).filter(item=item)
+        meeting = Meeting.objects.get(pk=meeting_id)
+        meeting_item = MeetingItem.objects.get(pk=meeting_item_id)
+        evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(meeting_item=meeting_item)
 
         if evaluations:
             data = {}
 
             for evaluation in evaluations:
                 data[evaluation.factor.name] = {}
-                for value in evaluation.factor.measure.get_values():
+                for value in evaluation.factor.measure.measurevalue_set.all():
                     data[evaluation.factor.name][value.description] = 0
 
             for evaluation in evaluations:
@@ -109,7 +109,7 @@ class Highcharts(object):
             measure = evaluations[0].measure
 
             series = []
-            for value in measure.get_values():
+            for value in measure.measurevalue_set.all():
                 serie_data = []
                 for factor in sorted_data:
                     serie_data.append(factor[1][value.description])
@@ -155,7 +155,7 @@ class Highcharts(object):
     def features_acceptance_simple_treemap(self, instance_id, item_id):
         instance = Meeting.objects.get(pk=instance_id)
         item = MeetingItem.objects.get(pk=item_id)
-        evaluations = Evaluation.get_evaluations_by_meeting(instance).filter(item=item)
+        evaluations = Evaluation.get_evaluations_by_meeting(instance).filter(meeting_item=item)
 
         vqs = evaluations.values('measure_value__description', 'measure_value__color').annotate(value=Count('measure_value__description')).order_by()
         data = [kv for kv in vqs]
@@ -168,7 +168,7 @@ class Highcharts(object):
     def features_acceptance_detailed_treemap(self, instance_id, item_id):
         instance = Meeting.objects.get(pk=instance_id)
         item = MeetingItem.objects.get(pk=item_id)
-        evaluations = Evaluation.get_evaluations_by_meeting(instance).filter(item=item)
+        evaluations = Evaluation.get_evaluations_by_meeting(instance).filter(meeting_item=item)
 
         vqs = evaluations.order_by('measure_value__description', 'measure_value__id', 'measure_value__color').distinct('measure_value__description', 'measure_value__id', 'measure_value__color').values('measure_value__description', 'measure_value__id', 'measure_value__color')
         groups = [kv for kv in vqs]
@@ -191,7 +191,7 @@ class Highcharts(object):
     def features_acceptance_pie_chart_drilldown(self, instance_id, item_id):
         instance = Meeting.objects.get(pk=instance_id)
         item = MeetingItem.objects.get(pk=item_id)
-        evaluations = Evaluation.get_evaluations_by_meeting(instance).filter(item=item)
+        evaluations = Evaluation.get_evaluations_by_meeting(instance).filter(meeting_item=item)
 
         vqs = evaluations.values('measure_value__description', 'measure_value__color').annotate(y=Count('measure_value__description')).order_by('y')
         series = [kv for kv in vqs]
