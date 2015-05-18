@@ -8,10 +8,10 @@ from value.deliverables.meetings.models import Meeting, MeetingItem, Evaluation
 
 class Highcharts(object):
 
-    def feature_comparison_pie_chart(self, meeting):
+    label_style = { 'fontSize': '13px', 'fontFamily': '"Helvetica Neue", Helvetica, Arial, sans-serif' }
+
+    def feature_comparison_pie_chart(self, meeting, measure_value):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting)
-        measure = evaluations[0].measure
-        measure_value = measure.get_values().order_by('order')[0]
         filtered_evaluations = evaluations.filter(measure_value=measure_value)
 
         vqs = filtered_evaluations.values('meeting_item__id', 'meeting_item__decision_item__name').annotate(count=Count('meeting_item__id')).order_by('-count')
@@ -44,32 +44,109 @@ class Highcharts(object):
                     'align': 'right',
                     'format': '{point.y}',
                     'y': 10,
-                    'style': { 'fontSize': '13px', 'fontFamily': 'Verdana, sans-serif' }
+                    'style': self.label_style
                 }
             }]
         }
 
         return options
 
-    def factors_usage_pie_chart(self, instance):
-        evaluations = Evaluation.get_evaluations_by_meeting(instance)
+
+    def stakeholders_input_bar_chart(self, meeting):
+        evaluations = Evaluation.get_evaluations_by_meeting(meeting)
+        meeting_stakeholders = meeting.meetingstakeholder_set.all()
+        factors = Factor.get_factors()
+
+        data = []
+
+        meeting_items_count = meeting.meetingitem_set.count()
+        factors_count = factors.count()
+
+        max_input = factors_count * meeting_items_count
+
+        for meeting_stakeholder in meeting_stakeholders:
+            votes = evaluations.filter(user=meeting_stakeholder.stakeholder).count()
+            if max_input != 0:
+                percentage = round((votes / float(max_input)) * 100.0, 2)
+            else:
+                percentage = 0.0
+            data.append([meeting_stakeholder.stakeholder.profile.get_display_name(), percentage])
+
+        data = sorted(data, key=operator.itemgetter(1))
+        data.reverse()
+
+        options = {
+            'chart': { 'type': 'bar' },
+            'title': { 'text': None },
+            'xAxis': {
+                'type': 'category',
+                'labels': { 'style': self.label_style }
+            },
+            'yAxis': { 'min': 0, 'max': 100, 'title': { 'text': 'Stakeholder Meeting Input' }},
+            'legend': { 'enabled': False },
+            'tooltip': { 'pointFormat': 'Usage percentage: <strong>{point.y}%</strong>' },
+            'series': [{
+                'name': 'Stakeholder Meeting Input',
+                'data': data,
+                'color': '#337AB7',
+                'dataLabels': {
+                    'enabled': True,
+                    'color': '#FFFFFF',
+                    'align': 'right',
+                    'format': '{point.y}%',
+                    'style': self.label_style
+                }
+            }]
+        }
+
+        return options
+
+
+    def factors_usage_bar_chart(self, meeting):
+        evaluations = Evaluation.get_evaluations_by_meeting(meeting)
         factors = Factor.get_factors()
         data = []
 
+        meeting_items_count = meeting.meetingitem_set.count()
+        stakeholders_count = meeting.meetingstakeholder_set.count()
+
+        max_votes = stakeholders_count * meeting_items_count
+
         for factor in factors:
-            data.append([factor.name, evaluations.filter(factor=factor).exclude(measure_value__description='N/A').count()])
+            votes = evaluations.filter(factor=factor).exclude(measure_value__description='N/A').count()
+            if max_votes != 0:
+                percentage = round((votes / float(max_votes)) * 100.0, 2)
+            else:
+                percentage = 0.0
+            data.append([factor.name, percentage])
+
+        data = sorted(data, key=operator.itemgetter(1))
+        data.reverse()
 
         options = {
-            'title': { 'text': '' },
-            'tooltip': { 'pointFormat': '{series.name}: <strong>{point.percentage:.1f}%</strong>' },
-            'plotOptions': { 
-                'pie': { 
-                    'allowPointSelect': True, 
-                    'cursor': 'pointer',
-                    'dataLabels': { 'enabled': True, 'format': '<strong>{point.name}</strong>: {point.percentage:.1f} %' }
-                }
+            'chart': { 'type': 'column' },
+            'title': { 'text': None },
+            'xAxis': {
+                'type': 'category',
+                'labels': { 'style': self.label_style }
             },
-            'series': [{ 'type': 'pie', 'name': 'Overall usage', 'data': data }]
+            'yAxis': { 'min': 0, 'max': 100, 'title': { 'text': 'Factors usage percentage' }},
+            'legend': { 'enabled': False },
+            'tooltip': { 'pointFormat': 'Usage percentage: <strong>{point.y}%</strong>' },
+            'series': [{
+                'name': 'Factors usage percentage',
+                'data': data,
+                'color': '#337AB7',
+                'dataLabels': {
+                    'enabled': True,
+                    'rotation': -90,
+                    'color': '#FFFFFF',
+                    'align': 'right',
+                    'format': '{point.y}%',
+                    'y': 10,
+                    'style': self.label_style
+                }
+            }]
         }
 
         return options

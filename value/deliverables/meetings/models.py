@@ -26,7 +26,7 @@ class MeetingItem(models.Model):
     meeting_decision = models.NullBooleanField(null=True, blank=True)
 
     def __unicode__(self):
-        return '{0} {1}'.format(meeting.name, decision_item.name)
+        return '{0} {1}'.format(self.meeting.name, self.decision_item.name)
 
 
 class MeetingStakeholder(models.Model):
@@ -35,7 +35,7 @@ class MeetingStakeholder(models.Model):
     meeting_input = models.FloatField(default=0.0)
 
     def __unicode__(self):
-        return '{0} {1}'.format(meeting.name, stakeholder.username)
+        return '{0} {1}'.format(self.meeting.name, self.stakeholder.username)
 
 
 class Evaluation(models.Model):

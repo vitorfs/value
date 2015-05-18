@@ -108,19 +108,32 @@ def meeting_items(request, deliverable_id, meeting_id):
 def dashboard(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     chart = Highcharts()
-    options = chart.factors_usage_pie_chart(meeting)
-    dump = json.dumps(options)
+    
+    charts = []
+    charts.append({ 'chart_id': 'factors_usage',  'chart_title': 'Factors Usage', 'chart_uri': reverse('deliverables:meetings:dashboard_factors_usage_chart', args=(deliverable_id, meeting_id,)) })
+    charts.append({ 'chart_id': 'stakeholders_input', 'chart_title': 'Stakeholders Input', 'chart_uri': reverse('deliverables:meetings:dashboard_stakeholders_input_chart', args=(deliverable_id, meeting_id,)) })
 
-    if 'application/json' in request.META.get('HTTP_ACCEPT'):
-        return HttpResponse(dump, content_type='application/json')
-    else:
-        return render(request, 'deliverables/meetings/dashboard/generic_chart.html', { 
-            'meeting' : meeting,
-            'dump' : dump,
-            'chart_uri': '',
-            'chart_menu_active': 'factors_usage',
-            'chart_page_title': 'Overall Factors Usage'
-            })
+    return render(request, 'deliverables/meetings/dashboard/dashboard.html', { 
+        'meeting' : meeting,
+        'charts' : charts,
+        'chart_menu_active': 'overview'
+        })
+
+@login_required
+def dashboard_factors_usage_chart(request, deliverable_id, meeting_id):
+    meeting = Meeting.objects.get(pk=meeting_id)
+    chart = Highcharts()
+    options = chart.factors_usage_bar_chart(meeting)
+    dump = json.dumps(options)
+    return HttpResponse(dump, content_type='application/json')
+
+@login_required
+def dashboard_stakeholders_input_chart(request, deliverable_id, meeting_id):
+    meeting = Meeting.objects.get(pk=meeting_id)
+    chart = Highcharts()
+    options = chart.stakeholders_input_bar_chart(meeting)
+    dump = json.dumps(options)
+    return HttpResponse(dump, content_type='application/json')
 
 @login_required
 def features(request, deliverable_id, meeting_id):
@@ -175,8 +188,23 @@ def features_acceptance_chart(request, deliverable_id, meeting_id, meeting_item_
 @login_required
 def features_comparison(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    evaluations = Evaluation.get_evaluations_by_meeting(meeting)
+    measure = evaluations[0].measure
+    charts = measure.measurevalue_set.all()
+    return render(request, 'deliverables/meetings/dashboard/measure_values_charts.html', { 
+        'meeting' : meeting, 
+        'charts' : charts,
+        'chart_uri': 'features-comparison',
+        'chart_menu_active': 'features_comparison',
+        'chart_page_title': 'Features Comparison'
+        })
+
+@login_required
+def features_comparison_chart(request, deliverable_id, meeting_id, measure_value_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    measure_value = MeasureValue.objects.get(pk=measure_value_id)
     chart = Highcharts()
-    options = chart.feature_comparison_pie_chart(meeting)
+    options = chart.feature_comparison_pie_chart(meeting, measure_value)
     dump = json.dumps(options)
 
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
