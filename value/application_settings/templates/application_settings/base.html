@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li class="active">Settings</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-lg-2 col-md-3 col-sm-4">
+      {% include 'application_settings/includes/menu.html' %}
+    </div>
+    <div class="col-lg-10 col-md-9 col-sm-8">
+      {% block settings_content %}
+      {% endblock settings_content %}
+    </div>
+  </div>
+
+{% endblock content %}

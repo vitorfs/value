@@ -32,6 +32,7 @@ INSTALLED_APPS = (
     'value.measures',
     'value.users',
     'value.avatar',
+    'value.application_settings',
 )
 
 MIDDLEWARE_CLASSES = (

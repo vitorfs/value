@@ -43,13 +43,15 @@
         <main>
           <div class="container-fluid">
             <div class="row">
-              {% block left_col %}{% endblock left_col %}
-              <div class="col-md-{% block content_size %}12{% endblock %}">
-                {% block breadcrumb %}{% endblock breadcrumb %}
+              <div class="col-md-12">
+                {% block breadcrumb %}
+                {% endblock breadcrumb %}
+
                 {% include 'includes/messages.html' with messages=messages %}
-                {% block content %}{% endblock content %}
+
+                {% block content %}
+                {% endblock content %}
               </div>
-              {% block right_col %}{% endblock right_col %}
             </div>
           </div>
         </main>
