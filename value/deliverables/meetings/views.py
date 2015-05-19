@@ -1,10 +1,10 @@
 import json
-from datetime import datetime
 
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.utils import timezone
 
 from value.deliverables.models import Deliverable
 from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
@@ -88,7 +88,7 @@ def save_evaluation(request, deliverable_id, meeting_id):
     if evaluation.measure_value == measure_value and not created:
         evaluation.delete()
     else:
-        evaluation.evaluated_at = datetime.now()
+        evaluation.evaluated_at = timezone.now()
         evaluation.measure_value = measure_value
         evaluation.save()
 
@@ -179,6 +179,8 @@ def features_acceptance_chart(request, deliverable_id, meeting_id, meeting_item_
         options = chart.features_acceptance_simple_treemap(meeting_id, meeting_item_id)
     elif chart_type == 'detailed':
         options = chart.features_acceptance_detailed_treemap(meeting_id, meeting_item_id)
+    elif chart_type == 'bubble':
+        options = chart.features_acceptance_bubbles(meeting_id, meeting_item_id)
     else:
         options = chart.features_acceptance_pie_chart_drilldown(meeting_id, meeting_item_id)
 

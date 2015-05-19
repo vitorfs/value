@@ -34,20 +34,13 @@ $(function () {
     $(".panel-group .panel-collapsable").togglePanel(false);
   });
 
-  var content_type = "table";
-
-  if ($(".panel-group .panel-body").length > 0) {
-    content_type = ".panel-body";
-  }
-  
-
   $.fn.togglePanel = function (is_collapsed) {
 
     if (is_collapsed === undefined) {
       is_collapsed = $(this).hasClass("panel-collapsed");
     }
 
-    var container = $(content_type, this);
+    var container = $("table", this);
 
     if (is_collapsed) {
       $(container).show();

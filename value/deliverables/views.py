@@ -1,4 +1,3 @@
-from datetime import datetime
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
