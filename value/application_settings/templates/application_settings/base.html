@@ -3,12 +3,11 @@
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
-    <li class="active">Settings</li>
+    <li class="active">Application settings</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
-
   <div class="row">
     <div class="col-lg-2 col-md-3 col-sm-4">
       {% include 'application_settings/includes/menu.html' %}
@@ -18,5 +17,4 @@
       {% endblock settings_content %}
     </div>
   </div>
-
 {% endblock content %}

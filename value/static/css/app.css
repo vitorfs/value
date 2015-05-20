@@ -190,6 +190,19 @@ th.headerSortUp:after {
 }
 
 .table-calendar tbody tr td:hover {
-  background-color: #E7E7E7;
+  background-color: #e7e7e7;
   cursor: pointer;
+}
+
+.panel-menu .list-group a.list-group-item.active {
+  color: #555;
+  background-color: #fff;
+  border-color: #ddd;
+  border-left: 2px solid #df5e00;
+  padding-left: 13px;
+  cursor: default;
+}
+
+.panel-menu .list-group a.list-group-item {
+  color: #337ab7;
 }

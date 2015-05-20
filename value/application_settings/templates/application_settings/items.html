@@ -1,0 +1,20 @@
+{% extends 'application_settings/base.html' %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'settings:index' %}">Application settings</a></li>
+    <li class="active">Decision items</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block settings_content %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Decision items</h3>
+    </div>
+    <div class="panel-body">
+      
+    </div>
+  </div>
+{% endblock settings_content %}
