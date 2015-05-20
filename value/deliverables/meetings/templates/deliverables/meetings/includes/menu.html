@@ -4,4 +4,19 @@
   <li role="presentation"{% if active == 'meeting_items' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:meeting_items' meeting.deliverable.pk meeting.pk %}">Meeting Items</a></li>
   <li role="presentation"{% if active == 'evaluate' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:evaluate' meeting.deliverable.pk meeting.pk %}">Evaluate</a></li>
   <li role="presentation"{% if active == 'dashboard' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:dashboard' meeting.deliverable.pk meeting.pk %}">Dashboard</a></li>
+  <li class="dropdown pull-right" role="presentation">
+    <a aria-expanded="false" role="button" href="#" data-toggle="dropdown" class="dropdown-toggle">
+      Meetings <span class="caret"></span>
+    </a>
+    <ul role="menu" class="dropdown-menu dropdown-menu-right">
+      {% with meetings=meeting.deliverable.meeting_set.all %}
+        {% for m in meetings %}
+          <li{% if m.pk == meeting.pk %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:meeting' m.deliverable.pk m.pk %}">{{ m.name }}</a></li>
+        {% endfor %}
+        <li class="divider"></li>
+        <li><a href="{% url 'deliverables:meetings:new' meeting.deliverable.pk %}">New Meeting</a></li>
+        <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">Return to {{ meeting.deliverable.name }}</a></li>
+      {% endwith %}
+    </ul>
+  </li>
 </ul>
