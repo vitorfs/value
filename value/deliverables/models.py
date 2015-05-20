@@ -80,6 +80,18 @@ class DecisionItemLookup(models.Model):
         (DATE, u'Date'),
         (DATE_TIME, u'Date Time'),
         )
-    column_name = models.CharField(max_length=255, null=True, blank=True, unique=True)
+
+    column_name = models.CharField(max_length=255, primary_key=True)
     column_label = models.CharField(max_length=255, null=True, blank=True)
     column_type = models.CharField(max_length=1, choices=COLUMN_TYPES, default=STRING)
+
+    def __unicode__(self):
+        return self.column_name
+
+    @staticmethod
+    def get_custom_fields():
+        fields = {}
+        qs = DecisionItemLookup.objects.all()
+        for result in qs:
+            fields[result.column_name] = { 'label': result.column_label, 'type': result.column_type }
+        return fields

@@ -4,5 +4,6 @@
     <a href="{% url 'settings:index' %}" class="list-group-item{% if '/settings/' = request.path %} active{% endif %}">General</a>
     <a href="{% url 'settings:items' %}" class="list-group-item{% if '/settings/items/' = request.path %} active{% endif %}">Decision items</a>
     <a href="{% url 'settings:notifications' %}" class="list-group-item{% if '/settings/notifications/' = request.path %} active{% endif %}">Notification center</a>
+    <a href="#" class="list-group-item">JIRA integration</a>
   </div>
 </div>

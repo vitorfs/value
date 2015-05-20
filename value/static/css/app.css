@@ -206,3 +206,11 @@ th.headerSortUp:after {
 .panel-menu .list-group a.list-group-item {
   color: #337ab7;
 }
+
+.sortable {
+  cursor: move;
+}
+
+.sortable-ghost {
+  background-color: #f8f8f8;
+}
