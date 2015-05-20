@@ -11,7 +11,8 @@ def index(request):
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def items(request):
-    return render(request, 'application_settings/items.html')
+    custom_columns = range(1, 31)
+    return render(request, 'application_settings/items.html', { 'custom_columns': custom_columns })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)

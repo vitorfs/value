@@ -68,14 +68,12 @@ class DecisionItem(models.Model):
         return self.name
 
 class DecisionItemLookup(models.Model):
-    BOOLEAN = u'B'
     STRING = u'S'
     FLOAT = u'F'
     INTEGER = u'I'
     DATE = u'D'
     DATE_TIME = u'T'
     COLUMN_TYPES = (
-        (BOOLEAN, u'Boolean'),
         (STRING, u'String'),
         (FLOAT, u'Float'),
         (INTEGER, u'Integer'),

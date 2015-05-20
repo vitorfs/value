@@ -1,5 +1,15 @@
 {% extends 'application_settings/base.html' %}
 
+{% load staticfiles %}
+
+{% block stylesheet %}
+  <link href="{% static 'css/prism.css' %}" rel="stylesheet">
+{% endblock stylesheet %}
+
+{% block javascript %}
+  <script src="{% static 'js/prism.js' %}"></script>
+{% endblock javascript %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
@@ -9,12 +19,245 @@
 {% endblock breadcrumb %}
 
 {% block settings_content %}
+
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">Decision items</h3>
     </div>
     <div class="panel-body">
-      
+      <form method="post">
+        <div class="form-group">
+          <label>Default ordering</label>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="panel panel-default" style="margin-bottom: 0">
+                <div class="panel-heading">
+                  Order by
+                </div>
+                <ul class="list-group" style="margin-bottom: 0">
+                  <li class="list-group-item">Cras justo odio</li>
+                  <li class="list-group-item">Dapibus ac facilisis in</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="panel panel-default" style="margin-bottom: 0">
+                <div class="panel-heading">
+                  Available columns
+                </div>
+                <ul class="list-group" style="margin-bottom: 0">
+                  <li class="list-group-item">Cras justo odio</li>
+                  <li class="list-group-item">Dapibus ac facilisis in</li>
+                  <li class="list-group-item">Morbi leo risus</li>
+                  <li class="list-group-item">Porta ac consectetur ac</li>
+                  <li class="list-group-item">Vestibulum at eros</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Import template</h3>
+    </div>
+    <div class="panel-body">
+      <p>You may import decision items for a given deliverable or meeting from a external file. Supported file types are <strong>xls</strong>, <strong>xlsx</strong>, <strong>csv</strong>, <strong>txt</strong>, <strong>json</strong> and <strong>xml</strong>.</p>
+
+      <div class="panel-group" id="templates" role="tablist" aria-multiselectable="true" style="margin-bottom: 0">
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="heading-xls">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#templates" href="#collapse-xls" aria-expanded="true" aria-controls="collapse-xls">
+                Excel
+              </a>
+            </h4>
+          </div>
+          <div id="collapse-xls" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-xls">
+            <div class="panel-body">
+              
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="heading-csv">
+            <h4 class="panel-title">
+              <a class="collapsed" data-toggle="collapse" data-parent="#templates" href="#collapse-csv" aria-expanded="false" aria-controls="collapse-csv">
+                CSV and TXT
+              </a>
+            </h4>
+          </div>
+          <div id="collapse-csv" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-csv">
+            <div class="panel-body">
+              <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="id_separator">Separator</label>
+                  <div>
+                    <label class="radio-inline">
+                      <input type="radio" name="separator" id="id_comma" value="comma"> Comma
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" name="separator" id="id_tab" value="tab"> Tab
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" name="separator" id="id_semicolon" value="semicolon"> Semicolon
+                    </label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="id_start_line">Start line</label>
+                  <input type="number" class="form-control" style="width: 100px" id="id_start_line" name="start_line">
+                </div>
+                <div class="form-group">
+                  <label>Column order</label>
+                  <div class="well"></div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="heading-json">
+            <h4 class="panel-title">
+              <a class="collapsed" data-toggle="collapse" data-parent="#templates" href="#collapse-json" aria-expanded="false" aria-controls="collapse-json">
+                JSON
+              </a>
+            </h4>
+          </div>
+          <div id="collapse-json" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-json">
+            <div class="panel-body">
+              <p>Use the following template to import data from a json file. Please note any attribute with different name will be ignored. Entries with empty <strong>name</strong> will be ignored as well. The attribute order doesn't matter and you don't have to put all the 30 custom attributes in the file.</p>
+              <pre><code class="language-js">[
+  {
+    'name': '',
+    'description': '',
+    'column_1': '',
+    'column_2': '',
+    'column_3': '',
+    …
+    'column_30': ''
+  },
+  {
+    'name': '',
+    'description': '',
+    'column_1': '',
+    'column_2': '',
+    'column_3': '',
+    …
+    'column_30': ''
+  }
+]</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="heading-xml">
+            <h4 class="panel-title">
+              <a class="collapsed" data-toggle="collapse" data-parent="#templates" href="#collapse-xml" aria-expanded="false" aria-controls="collapse-xml">
+                XML
+              </a>
+            </h4>
+          </div>
+          <div id="collapse-xml" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-xml">
+            <div class="panel-body">
+              <p>Use the following template to import data from a xml file. Please note any attribute with different name will be ignored. Entries with empty <strong>name</strong> will be ignored as well. The attribute order doesn't matter and you don't have to put all the 30 custom attributes in the file.</p>
+              <pre><code class="language-markup">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;items&gt;
+  &lt;item&gt;
+    &lt;name&gt;&lt;/name&gt;
+    &lt;description&gt;&lt;/description&gt;
+    &lt;column_1&gt;&lt;/column_1&gt;
+    &lt;column_2&gt;&lt;/column_2&gt;
+    &lt;column_3&gt;&lt;/column_3&gt;
+    …
+    &lt;column_30&gt;&lt;/column_30&gt;
+  &lt;/item&gt;
+  &lt;item&gt;
+    &lt;name&gt;&lt;/name&gt;
+    &lt;description&gt;&lt;/description&gt;
+    &lt;column_1&gt;&lt;/column_1&gt;
+    &lt;column_2&gt;&lt;/column_2&gt;
+    &lt;column_3&gt;&lt;/column_3&gt;
+    …
+    &lt;column_30&gt;&lt;/column_30&gt;
+  &lt;/item&gt;
+&lt;/items&gt;</code></pre>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="panel-footer">
+      <button class="btn btn-primary" type="submit">Save changes</button>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Custom fields</h3>
+    </div>
+    <div class="panel-body">
+      Add custom fields to the decision items model. Please note that the fields <strong>name</strong> and <strong>description</strong> are fixed.
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Label</th>
+          <th>Data type</th>
+          <th>Active</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="vertical-align: middle">name</td>
+          <td><input type="text" class="form-control" disabled value="Name"></td>
+          <td>
+            <select class="form-control" disabled>
+              <option>String</option>
+            </select>
+          </td>
+          <td><input type="checkbox" checked disabled></td>
+        </tr>
+        <tr>
+          <td style="vertical-align: middle">description</td>
+          <td><input type="text" class="form-control" disabled value="Description"></td>
+          <td>
+            <select class="form-control" disabled>
+              <option>String</option>
+            </select>
+          </td>
+          <td><input type="checkbox" checked disabled></td>
+        </tr>
+        {% for i in custom_columns %}
+        <tr>
+          <td style="vertical-align: middle">
+            column_{{ i }}
+          </td>
+          <td>
+            <input type="text" class="form-control">
+          </td>
+          <td>
+            <select class="form-control">
+              <option>Select...</option>
+            </select>
+          </td>
+          <td>
+            <input type="checkbox">
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="panel-footer">
+      <button class="btn btn-primary" type="submit">Save changes</button>
     </div>
   </div>
 {% endblock settings_content %}
