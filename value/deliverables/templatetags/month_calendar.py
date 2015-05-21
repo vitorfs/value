@@ -17,7 +17,7 @@ def get_calendar(year, month):
 def month_calendar(year, month):
     calendar.setfirstweekday(calendar.SUNDAY)
     month_calendar = calendar.monthcalendar(year, month)
-    html = '<h4>{0}</h4>'.format(calendar.month_name[month])
+    html = '<h4><a href="javascript:void(0);"><span class="fa fa-chevron-left pull-left"></span></a>{0} {1}<a href="javascript:void(0);"><span class="fa fa-chevron-right pull-right"></span></a></h4>'.format(calendar.month_name[month], year)
     html += '<table class="table table-calendar">'
     html += '<thead><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th></tr></thead>'
     html += '<tbody>'

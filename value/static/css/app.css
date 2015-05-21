@@ -36,6 +36,10 @@ body {
   height: 50px;
 }
 
+header {
+  position: relative;
+}
+
 footer {
   border-top: 1px solid #E7E7E7;
   text-align: center;
@@ -222,15 +226,20 @@ th.headerSortUp:after {
   font-size: 12px;
   margin-right: 5px;
   padding: 0.4em 1em 0.5em;
+  display: inline-block;
 }
 
 .sortable-ghost.label {
   background-color: #ddd;
 }
 
+.menu-link.active {
+  background-color: #e7e7e7!important;
+}
+
 .context-menu {
   padding-top: 70px;
-  background-color: #555555;
+  background-color: #555;
   border-left: 1px solid #444;
   color: #9d9d9d;
   position: fixed;
@@ -243,4 +252,64 @@ th.headerSortUp:after {
 
 .context-menu .big-portrait {
   text-align: center;
+  margin-bottom: 20px;
+}
+
+.context-menu .list-group {
+  margin-bottom: 0;
+}
+
+.context-menu .list-group .list-group-item:last-child, 
+.context-menu .list-group .list-group-item:first-child {
+  border-radius: 0;
+}
+
+.context-menu .list-group .list-group-item {
+  background-color: transparent;
+  border-left: 0;
+  border-right: 0;
+  border-color: #444;
+  color: #f1f1f1;
+  transition: all 0.2s ease 0s;
+  padding-top: 13px;
+  padding-bottom: 13px;
+  font-size: 16px;
+}
+
+.context-menu .list-group .list-group-item .fa {
+  margin-right: 5px;
+}
+
+.context-menu .list-group .list-group-item:hover {
+  background-color: #666;
+}
+
+.context-menu .calendar {
+  padding: 10px 15px;
+  color: #fff;
+}
+
+.context-menu .calendar .table-calendar {
+  color: #fff;
+}
+
+.context-menu .calendar .table-calendar tbody tr td {
+  transition: all 0.2s ease 0s;
+}
+
+.context-menu .calendar .table-calendar tbody tr td:hover {
+  background-color: #666;
+}
+
+.context-menu .calendar h4 {
+  text-align: center;
+}
+
+.context-menu .calendar h4 a {
+  color: #fff;
+  transition: all 0.2s ease 0s;
+}
+
+.context-menu .calendar h4 a:hover {
+  color: #ddd;
 }

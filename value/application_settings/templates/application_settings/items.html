@@ -142,7 +142,9 @@
                 </div>
                 <div class="form-group">
                   <label>Column order</label>
-                  <div class="well"></div>
+                  <div id="plain-text-column-order">
+                    <span class="label label-default sortable">Name</span><span class="label label-default sortable">Description</span>{% for name, field in custom_fields.items %}<span class="label label-default sortable">{{ field.label }}</span>{% endfor %}
+                  </div>
                 </div>
               </form>
             </div>

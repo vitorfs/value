@@ -1,6 +1,16 @@
 {% load avatar %}
+{% load month_calendar %}
 
 <div class="big-portrait">
-  <img src="{% avatar user 64 %}" class="img-circle">
-  <h4>{{ user.profile.get_display_name }}</h4>
+  <img src="{% avatar user 64 %}" class="img-circle" alt="{{ user.profile.get_display_name }}">
+</div>
+
+<div class="list-group">
+  <a href="#" class="list-group-item"><span class="fa fa-question-circle"></span> Help</a>
+  <a href="#" class="list-group-item"><span class="fa fa-cog"></span> Application settings</a>
+  <a href="#" class="list-group-item"><span class="fa fa-bug"></span> Report a bug</a>
+</div>
+
+<div class="calendar">
+  {% month_calendar 2015 5 %}
 </div>

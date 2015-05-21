@@ -25,4 +25,8 @@ $(function () {
     draggable: ".sortable"
   });
 
+  $("#plain-text-column-order").sortable({
+    draggable: ".sortable"
+  });
+
 });

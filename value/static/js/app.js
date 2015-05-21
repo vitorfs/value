@@ -26,7 +26,7 @@ $(function () {
 
   $(".menu-link").bigSlide({
     side: 'right',
-    push: '.wrapper',
+    push: '.wrapper, footer',
     menuWidth: '18.6em'
   });
 
