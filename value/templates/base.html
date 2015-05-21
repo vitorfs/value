@@ -38,6 +38,13 @@
   </head>
   <body>
     {% block body %}
+
+      <nav id="menu" class="context-menu" role="navigation">
+        {% include 'includes/contextmenu.html' %}
+        {% block contextmenu %}
+        {% endblock contextmenu %}
+      </nav>
+      
       <div class="wrapper">
         {% include 'includes/header.html' %}
         <main>
@@ -74,6 +81,7 @@
     <script src="{% static 'js/expanding.js' %}"></script>
     <script src="{% static 'js/Sortable.min.js' %}"></script>
     <script src="{% static 'js/jquery.binding.js' %}"></script>
+    <script src="{% static 'js/bigSlide.min.js' %}"></script>
     <script src="{% static 'js/app.js' %}"></script>
     {% block javascript %}
     {% endblock javascript %}

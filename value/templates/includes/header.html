@@ -30,6 +30,18 @@
               </li>
             {% endif %}
           </ul>
+          <form class="navbar-form navbar-left" role="search">
+            <div class="form-group">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </button>
+                </span>
+              </div>
+            </div>
+          </form>
           <ul class="nav navbar-nav navbar-right">
             <li{% if '/help/' in request.path %} class="active"{% endif %}>
               <a href="{% url 'help:index' %}"><span class="glyphicon glyphicon-question-sign"></span></a>
@@ -47,6 +59,7 @@
                 <li><a href="{% url 'signout' %}">Sign out</a></li>
               </ul>
             </li>
+            <li><a href="#menu" class="menu-link"><span class="glyphicon glyphicon-menu-hamburger"></span></a></li>
           </ul>
         </div>
       {% endif %}

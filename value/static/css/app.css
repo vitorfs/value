@@ -25,6 +25,7 @@ body {
 }
 
 .wrapper {
+  position: relative;
   min-height: 100%;
   height: auto !important;
   height: 100%;
@@ -40,6 +41,8 @@ footer {
   text-align: center;
   height: 50px;
   padding-top: 14px;
+  background-color: #fff;
+  position: relative;
 }
 
 h3.page-header {
@@ -223,4 +226,21 @@ th.headerSortUp:after {
 
 .sortable-ghost.label {
   background-color: #ddd;
+}
+
+.context-menu {
+  padding-top: 70px;
+  background-color: #555555;
+  border-left: 1px solid #444;
+  color: #9d9d9d;
+  position: fixed;
+  right: -18.625em;
+  width: 18.625em;
+  -webkit-box-shadow: inset 10px 0px 28px -10px rgba(0,0,0,0.5);
+  -moz-box-shadow: inset 10px 0px 28px -10px rgba(0,0,0,0.5);
+  box-shadow: inset 10px 0px 28px -10px rgba(0,0,0,0.5);
+}
+
+.context-menu .big-portrait {
+  text-align: center;
 }

@@ -1,0 +1,6 @@
+{% load avatar %}
+
+<div class="big-portrait">
+  <img src="{% avatar user 64 %}" class="img-circle">
+  <h4>{{ user.profile.get_display_name }}</h4>
+</div>

@@ -24,6 +24,12 @@ $(function () {
 
   $("[data-toggle='popover']").popover();
 
+  $(".menu-link").bigSlide({
+    side: 'right',
+    push: '.wrapper',
+    menuWidth: '18.6em'
+  });
+
   $("table.table-check-all thead tr th input[type='checkbox']").click(function () {
     var is_checked = $(this).is(":checked");
     var table = $(this).closest("table");
