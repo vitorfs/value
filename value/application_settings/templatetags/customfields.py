@@ -1,4 +1,5 @@
 from django import template
+from value.deliverables.models import DecisionItemLookup
 
 register = template.Library()
 
@@ -24,3 +25,12 @@ def custom_field_selected(fields, column, field_type):
             return 'selected'
     else:
         return ''
+
+@register.simple_tag
+def custom_field_sort_icon(field, order):
+    template = '<span class="fa fa-sort-{0}-{1}"></span>'
+    if field['type'] == DecisionItemLookup.STRING:
+        icon = 'alpha'
+    else:
+        icon = 'numeric'
+    return template.format(icon, order)

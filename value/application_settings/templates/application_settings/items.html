@@ -32,18 +32,18 @@
           <label>Define the default ordering for every screen that display decision items</label>
           <div class="row">
             <div class="col-sm-6">
-              <div class="panel panel-default" style="margin-bottom: 0">
+              <div class="panel panel-default">
                 <div class="panel-heading">
                   Order by
                 </div>
-                <ul class="list-group sortable" style="min-height: 38px" id="order_by">
+                <ul class="list-group sortable" style="min-height: 38px" id="order-by">
                   <li class="list-group-item">
                     <span class="pull-right">
                       <label class="radio-inline">
-                        <input type="radio" name="order_criteria" value="asc"> Asc
+                        <input type="radio" name="name_order_criteria" value="asc" checked> <span class="fa fa-sort-alpha-asc"></span>
                       </label>
                       <label class="radio-inline">
-                        <input type="radio" name="order_criteria" value="desc"> Desc
+                        <input type="radio" name="name_order_criteria" value="desc"> <span class="fa fa-sort-alpha-desc"></span>
                       </label>
                     </span>
                     Name
@@ -58,13 +58,28 @@
                 </div>
                 <ul class="list-group sortable" style="min-height: 38px" id="columns">
                   {% for name, field in custom_fields.items %}
-                  <li class="list-group-item">{{ field.label }}</li>
+                  <li class="list-group-item">
+                    <span class="pull-right">
+                      <label class="radio-inline">
+                        <input type="radio" name="{{ name }}_order_criteria" value="asc" checked> {% custom_field_sort_icon field "asc" %}
+                      </label>
+                      <label class="radio-inline">
+                        <input type="radio" name="{{ name }}_order_criteria" value="desc"> {% custom_field_sort_icon field "desc" %}
+                      </label>
+                    </span>
+                    {{ field.label }}
+                  </li>
                   {% endfor %}
                 </ul>
               </div>
             </div>
           </div>
-          <p class="help-block" style="margin-bottom: 0">Hint: drag and drop the desired columns</p>
+        </div>
+        <div class="form-group" style="margin-bottom: 0">
+          <label>Define the column display order</label>
+          <div id="column-display-order">
+            <span class="label label-default sortable">Name</span><span class="label label-default sortable">Description</span>{% for name, field in custom_fields.items %}<span class="label label-default sortable">{{ field.label }}</span>{% endfor %}
+          </div>
         </div>
       </form>
     </div>

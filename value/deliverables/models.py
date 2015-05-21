@@ -23,6 +23,12 @@ class Deliverable(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_decision_items_fields(self):
+        fields = DecisionItemLookup.get_custom_fields()
+        fields['name'] = { 'label': 'Name', 'type': DecisionItemLookup.STRING }
+        fields['description'] = { 'label': 'Description', 'type': DecisionItemLookup.STRING }
+        return fields
+
 
 class DecisionItem(models.Model):
     deliverable = models.ForeignKey(Deliverable)

@@ -214,3 +214,13 @@ th.headerSortUp:after {
 .sortable-ghost {
   background-color: #f8f8f8;
 }
+
+.sortable.label {
+  font-size: 12px;
+  margin-right: 5px;
+  padding: 0.4em 1em 0.5em;
+}
+
+.sortable-ghost.label {
+  background-color: #ddd;
+}
