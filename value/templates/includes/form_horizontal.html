@@ -19,7 +19,7 @@
         <span class="help-block">{{ field.help_text }}</span>
       </div>
     {% else %}
-      <label for="{{ field.label }}" class="col-md-2 col-sm-4 control-label">{{ field.label }}</label>
+      <label for="{{ field.id_for_label }}" class="col-md-2 col-sm-4 control-label">{{ field.label }}</label>
       <div class="col-md-10 col-sm-8">
         {{ field }}
         {% for error in field.errors %}

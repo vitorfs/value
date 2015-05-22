@@ -30,6 +30,10 @@ $(function () {
     menuWidth: '18.6em'
   });
 
+  $("[data-toggle='tooltip']").tooltip();
+
+  $("[data-toggle='popover']").popover();
+
   $("table.table-check-all thead tr th input[type='checkbox']").click(function () {
     var is_checked = $(this).is(":checked");
     var table = $(this).closest("table");

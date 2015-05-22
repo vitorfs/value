@@ -28,6 +28,7 @@ INSTALLED_APPS = (
     'value.deliverables',
     'value.deliverables.meetings',
     'value.factors',
+    'value.groups',
     'value.help',
     'value.measures',
     'value.search',

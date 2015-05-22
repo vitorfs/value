@@ -313,3 +313,7 @@ th.headerSortUp:after {
 .context-menu .calendar h4 a:hover {
   color: #ddd;
 }
+
+.help {
+  cursor: help;
+}
