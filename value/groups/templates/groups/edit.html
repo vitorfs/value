@@ -4,6 +4,11 @@
 
 {% block javascript %}
   <script src="{% static 'js/groups/groups.js' %}"></script>
+  <script>
+    $(function () {
+      $("#id_stakeholders").fancymultiple();
+    });
+  </script>
 {% endblock javascript %}
 
 {% block breadcrumb %}

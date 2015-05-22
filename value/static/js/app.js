@@ -34,6 +34,12 @@ $(function () {
 
   $("[data-toggle='popover']").popover();
 
+  toastr.options = {
+    "closeButton": true,
+    "preventDuplicates": true,
+    "progressBar": true
+  };
+
   $("table.table-check-all thead tr th input[type='checkbox']").click(function () {
     var is_checked = $(this).is(":checked");
     var table = $(this).closest("table");

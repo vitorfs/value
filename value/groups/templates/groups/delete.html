@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'groups:index' %}">Groups</a></li>
+    <li><a href="{% url 'groups:edit' group.pk %}">{{ group.name }}</a></li>
+    <li class="active">Delete</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+  <h1 class="lead">Are you sure you want to delete the group {{ group.name }}?</h1>
+
+  <form method="post" class="form-horizontal">
+    {% csrf_token %}
+    <div class="form-group">
+      <div class="col-sm-12">
+        <button type="submit" class="btn btn-primary">Confirm</button>
+        <a href="{% url 'groups:edit' group.pk %}" class="btn btn-default">Cancel</a>
+      </div>
+    </div>
+  </form>
+{% endblock content %}

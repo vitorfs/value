@@ -1,5 +1,25 @@
 $(function () {
 
+  $(".js-delete-selected").click(function () {
+    $("#id_action").val("delete_selected");
+
+    var can_submit = false;
+
+    $("table tbody tr td input[type='checkbox']").each(function () {
+      if ($(this).is(":checked")) {
+        can_submit = true;
+        return;
+      }
+    });
+
+    if (can_submit) {
+      $(this).closest("form").submit();
+    }
+    else {
+      toastr.warning("Groups must be selected in order to perform actions on them.");
+    }
+  });
+
   $.fn.fancymultiple = function () {
 
     var select = $(this);
@@ -67,8 +87,5 @@ $(function () {
     });
 
   };
-
-
-  $("#id_stakeholders").fancymultiple();
 
 });
