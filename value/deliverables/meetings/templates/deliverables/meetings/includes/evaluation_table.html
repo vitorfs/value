@@ -6,29 +6,45 @@
 {% csrf_token %}
 
 {% for meeting_item in meeting_items %}
-  <div class="panel {% panel_class evaluations=evaluations meeting_item=meeting_item factors=factors %} panel-collapsable{% if not forloop.first %} panel-collapsed{% endif %}">
-    <div class="panel-heading">
-      <span class="badge pull-right">{% evaluation_percent evaluations=evaluations meeting_item=meeting_item factors=factors %}</span>
-      <h3 class="panel-title">{{ meeting_item.decision_item.name }}</h3>
-    </div>
 
-    <table class="table table-hover"{% if not forloop.first %} style="display: none"{% endif %}>
-      <thead>
-        <tr>
-          <th style="width: 25%">Value Factors</th>
-          {% with measures=factors.0.measure.measurevalue_set.all %}
-            {% for measure in measures %}
-              <th class="text-center" style="width: {{ measures|relative_col_size }}">{{ measure.description }}</th>
+  {% with measure_values=factors.0.measure.measurevalue_set.all %}
+    <div class="panel {% panel_class evaluations=evaluations meeting_item=meeting_item factors=factors %}">
+      <div class="panel-heading" data-target="#collapse-{{ meeting_item.pk }}">
+        <table style="width: 100%">
+          <body>
+            <tr>
+              <td style="width: 25%">
+                <p class="panel-title">
+                  <a href="javascript:void(0);" class="btn-toggle">{{ meeting_item.decision_item.name }}</a>
+                </p>
+              </td>
+              {% for measure_value in measure_values %}
+                <td class="text-center" style="width: {{ measure_values|relative_col_size }}">
+                  <span class="badge" style="color: #fff; background-color: {{ measure_value.color }}">{{ measure_value.description }}: <span class="measure-percent" data-measure-id="{{ measure_value.pk }}">{% evaluation_percent evaluations=evaluations meeting_item=meeting_item factors=factors measure_value=measure_value %}</span>%</span>
+                </td>
+              {% endfor %}
+            </tr>
+          </body>
+        </table>
+      </div>
+      <div id="collapse-{{ meeting_item.pk }}" class="panel-collapse collapse"{% if forloop.first %} style="display: block;"{% endif %}>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th style="width: 25%">Value Factors</th>
+              {% for measure_value in measure_values %}
+                <th class="text-center" style="width: {{ measure_values|relative_col_size }}">{{ measure_value.description }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for factor in factors %}
+              {% evaluation_options evaluations=evaluations meeting_item=meeting_item factor=factor %}
             {% endfor %}
-          {% endwith %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for factor in factors %}
-          {% evaluation_options evaluations=evaluations meeting_item=meeting_item factor=factor %}
-        {% endfor %}
-      </tbody>
-    </table>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% endwith %}
 
-  </div>
 {% endfor %}

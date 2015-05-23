@@ -1,11 +1,24 @@
 $(function () {
 
+  $(".btn-toggle").click(function () {
+    var container = $(this).closest(".panel-heading");
+    var target = $(container).attr("data-target");
+    if ($(target).is(":visible")) {
+      $(target).slideUp();
+    }
+    else {
+      $(target).slideDown(400, function () {
+        if (!$(container).hasClass("loaded")) {
+          // async load
+        }
+      });
+    }
+  });
+
   $(".js-grid-filters a").click(function () {
 
     $(".panel-group .panel-collapsable").togglePanel(false);
-
     $(".js-grid-filters .glyphicon").removeClass("glyphicon-check").addClass("glyphicon-unchecked");
-
     var action = $(this).attr("data-action");
 
     if (action === "all") {
@@ -27,33 +40,11 @@ $(function () {
   });
 
   $(".js-show-all").click(function () {
-    $(".panel-group .panel-collapsable").togglePanel(true);
+    
   });
 
   $(".js-hide-all").click(function () {
-    $(".panel-group .panel-collapsable").togglePanel(false);
-  });
-
-  $.fn.togglePanel = function (is_collapsed) {
-
-    if (is_collapsed === undefined) {
-      is_collapsed = $(this).hasClass("panel-collapsed");
-    }
-
-    var container = $("table", this);
-
-    if (is_collapsed) {
-      $(container).show();
-      $(this).removeClass("panel-collapsed");
-    }
-    else {
-      $(container).hide();
-      $(this).addClass("panel-collapsed");
-    }
-  };
-
-  $(".panel-collapsable .panel-heading").click(function () {
-    $(this).closest(".panel-collapsable").togglePanel();
+    
   });
 
   $(".evaluable").click(function () {
@@ -78,15 +69,13 @@ $(function () {
       $(".glyphicon", this).removeClass("glyphicon-unchecked").addClass("glyphicon-check");
     }
 
-    var rows_count = $(this).closest(".panel").find("tbody > tr").length;
-    var selected_rows_count = $(this).closest(".panel").find("tbody > tr.selected").length;
-
-    var percent = (selected_rows_count / rows_count) * 100;
-
-    percent = Math.round(percent, 1);
-
     var panel = $(this).closest(".panel");
 
+    var rows_count = $(panel).find(".table tbody > tr").length;
+    var selected_rows_count = $(this).closest(".panel").find(".table tbody > tr.selected").length;
+    var percent = (selected_rows_count / rows_count) * 100;
+    percent = Math.round(percent, 1);
+    var panel = $(this).closest(".panel");
     if (percent === 100) {
       $(panel).removeClass("panel-default").addClass("panel-success");
     }
@@ -94,7 +83,20 @@ $(function () {
       $(panel).removeClass("panel-success").addClass("panel-default");
     }
 
-    $(".badge", panel).text(percent + "%");
+    var measure_value_percent = {};
+    $(".table tbody tr.selected", panel).each(function () {
+      var measure_value_id = $(".glyphicon-check", this).closest("td").attr("data-measure-value-id");
+      if (measure_value_percent[measure_value_id] === undefined) {
+        measure_value_percent[measure_value_id] = 0;
+      }
+      measure_value_percent[measure_value_id] += 1;
+    });
+    $(".measure-percent", panel).text("0");
+    for (var key in measure_value_percent) {
+      var percent = (measure_value_percent[key] / rows_count) * 100;
+      percent = Math.round(percent, 1);
+      $(".measure-percent[data-measure-id='" + key + "']", panel).text(percent);
+    }
 
     var url = "/deliverables/" + $(this).attr("data-deliverable-id") + "/meetings/" + $(this).attr("data-meeting-id") + "/evaluate/save/";
     var csrf = $("[name='csrfmiddlewaretoken']").val();
