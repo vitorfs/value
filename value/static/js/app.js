@@ -36,8 +36,7 @@ $(function () {
 
   toastr.options = {
     "closeButton": true,
-    "preventDuplicates": true,
-    "progressBar": true
+    "preventDuplicates": true
   };
 
   $("table.table-check-all thead tr th input[type='checkbox']").click(function () {
