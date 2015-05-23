@@ -11,6 +11,6 @@ def evaluation_percent(evaluations, meeting_item, factors, measure_value):
 
     f = len(factors)
     if f > 0:
-        percent = int(round(count / float(f), 2) * 100.0)
-        return percent
+        percent = (count / float(f)) * 100.0
+        return '{0:.2f}'.format(percent)
     return '0'

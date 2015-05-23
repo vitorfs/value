@@ -17,7 +17,6 @@ $(function () {
 
   $(".js-grid-filters a").click(function () {
 
-    $(".panel-group .panel-collapsable").togglePanel(false);
     $(".js-grid-filters .glyphicon").removeClass("glyphicon-check").addClass("glyphicon-unchecked");
     var action = $(this).attr("data-action");
 
@@ -92,10 +91,12 @@ $(function () {
       measure_value_percent[measure_value_id] += 1;
     });
     $(".measure-percent", panel).text("0");
+    $(".measure-percent", panel).closest(".progress-bar").css("width", "0%");
     for (var key in measure_value_percent) {
       var percent = (measure_value_percent[key] / rows_count) * 100;
-      percent = Math.round(percent, 1);
+      percent = percent.toFixed(2);
       $(".measure-percent[data-measure-id='" + key + "']", panel).text(percent);
+      $(".measure-percent[data-measure-id='" + key + "']", panel).closest(".progress-bar").css("width", percent + "%");
     }
 
     var url = "/deliverables/" + $(this).attr("data-deliverable-id") + "/meetings/" + $(this).attr("data-meeting-id") + "/evaluate/save/";

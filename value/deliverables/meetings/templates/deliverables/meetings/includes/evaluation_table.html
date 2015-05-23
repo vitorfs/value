@@ -18,11 +18,15 @@
                   <a href="javascript:void(0);" class="btn-toggle">{{ meeting_item.decision_item.name }}</a>
                 </p>
               </td>
-              {% for measure_value in measure_values %}
-                <td class="text-center" style="width: {{ measure_values|relative_col_size }}">
-                  <span class="badge" style="color: #fff; background-color: {{ measure_value.color }}">{{ measure_value.description }}: <span class="measure-percent" data-measure-id="{{ measure_value.pk }}">{% evaluation_percent evaluations=evaluations meeting_item=meeting_item factors=factors measure_value=measure_value %}</span>%</span>
-                </td>
-              {% endfor %}
+              <td>
+                <div class="progress" style="margin-bottom: 0">
+                  {% for measure_value in measure_values %}
+                    <div class="progress-bar" style="width: {% evaluation_percent evaluations=evaluations meeting_item=meeting_item factors=factors measure_value=measure_value %}%; background-color: {{ measure_value.color }}">
+                      <span class="measure-percent" data-measure-id="{{ measure_value.pk }}">{% evaluation_percent evaluations=evaluations meeting_item=meeting_item factors=factors measure_value=measure_value %}</span>%
+                    </div>
+                  {% endfor %}
+                </div>
+              </td>
             </tr>
           </body>
         </table>
