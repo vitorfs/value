@@ -89,88 +89,89 @@
     </div>
   </div>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Import template</h3>
-    </div>
-    <div class="panel-body">
-      <p>You may import decision items for a given deliverable or meeting from a external file. Supported file types are <strong>xls</strong>, <strong>xlsx</strong>, <strong>csv</strong>, <strong>txt</strong>, <strong>json</strong> and <strong>xml</strong>.</p>
+  <form id="form_import_templates" action="{% url 'settings:save_import_templates' %}" method="post">
+    
+    {% csrf_token %}
 
-      <div class="panel-group" id="templates" role="tablist" aria-multiselectable="true" style="margin-bottom: 0">
-        <div class="panel panel-default">
-          <div class="panel-heading" role="tab" id="heading-xls">
-            <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#templates" href="#collapse-xls" aria-expanded="true" aria-controls="collapse-xls">
-                Excel <small>.xls, .xlsx</small>
-              </a>
-            </h4>
-          </div>
-          <div id="collapse-xls" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-xls">
-            <div class="panel-body">
-              <form method="post" class="form-horizontal">
-                {% csrf_token %}
-                <div class="form-group">
-                  <div class="col-sm-8 col-md-6 col-lg-4">
-                    <label for="id_start_line">Orientation</label>
-                    <select id="id_orientation" name="orientation" class="form-control">
-                      <option value=".entry_per_row">One entry per row</option>
-                      <option value=".entry_per_col">One entry per column</option>
-                    </select>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Import template</h3>
+      </div>
+      <div class="panel-body">
+        <p>You may import decision items for a given deliverable or meeting from a external file. Supported file types are <strong>xls</strong>, <strong>xlsx</strong>, <strong>csv</strong>, <strong>txt</strong>, <strong>json</strong> and <strong>xml</strong>.</p>
+        
+        <div class="panel-group" id="templates" role="tablist" aria-multiselectable="true" style="margin-bottom: 0">
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading-xls">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#templates" href="#collapse-xls" aria-expanded="true" aria-controls="collapse-xls">
+                  Excel <small>.xls, .xlsx</small>
+                </a>
+              </h4>
+            </div>
+            <div id="collapse-xls" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-xls">
+              <div class="panel-body">
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <div class="col-sm-8 col-md-6 col-lg-4">
+                      <label for="id_start_line">Orientation</label>
+                      <select id="id_orientation" name="orientation" class="form-control">
+                        <option value="row">One entry per row</option>
+                        <option value="column">One entry per column</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-4 col-md-3 col-lg-2">
+                      <label for="id_starting_row" class="entry_per_row">Starting row</label>
+                      <label for="id_starting_column" class="entry_per_col" style="display: none">Starting column</label>
+                      <input type="text" class="form-control" id="id_starting_row_column" name="starting_row_column">
+                    </div>
                   </div>
-                  <div class="col-sm-4 col-md-3 col-lg-2">
-                    <label for="id_starting_row entry_per_row">Starting row</label>
-                    <label for="id_starting_column entry_per_col" style="display: none">Starting column</label>
-                    <input type="text" class="form-control" id="id_starting_row_column" name="starting_row">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-sm-12">
-                    <label>Spreadsheet template</label>
-                    <table class="table table-bordered" style="margin-bottom: 0; width: auto">
-                      <thead>
-                        <tr>
-                          <th>Field</th>
-                          <th class="entry_per_row">Column</th>
-                          <th class="entry_per_col" style="display: none">Row</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {% for name, field in decision_items_fields.items %}
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <label>Spreadsheet template</label>
+                      <table class="table table-bordered" style="margin-bottom: 0; width: auto">
+                        <thead>
                           <tr>
-                            <td>{{ field.label }}</td>
-                            <td class="entry_per_row">
-                              {% excel_columns name %}
-                            </td>
-                            <td class="entry_per_col" style="display: none">
-                              {% excel_rows name %}
+                            <th>Field</th>
+                            <th class="entry_per_row">Column</th>
+                            <th class="entry_per_col" style="display: none">Row</th>
                           </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {% for name, field in decision_items_fields.items %}
+                            <tr>
+                              <td>{{ field.label }}</td>
+                              <td class="entry_per_row">
+                                {% excel_columns name %}
+                              </td>
+                              <td class="entry_per_col" style="display: none">
+                                {% excel_rows name %}
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-sm-4">
-                    <label for="id_start_line">Sheet index <small>(leave empty for all)</small></label>
-                    <input type="number" class="form-control" id="id_start_line" name="start_line">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label for="id_excel_sheet_index">Sheet index <small>(leave empty for all)</small></label>
+                      <input type="number" class="form-control" id="id_excel_sheet_index" name="excel_sheet_index">
+                    </div>
                   </div>
-                </div>
-              </form>              
+                </div>              
+              </div>
             </div>
           </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading" role="tab" id="heading-csv">
-            <h4 class="panel-title">
-              <a class="collapsed" data-toggle="collapse" data-parent="#templates" href="#collapse-csv" aria-expanded="false" aria-controls="collapse-csv">
-                Plain text <small>.csv, .txt</small>
-              </a>
-            </h4>
-          </div>
-          <div id="collapse-csv" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-csv">
-            <div class="panel-body">
-              <form method="post">
-                {% csrf_token %}
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading-csv">
+              <h4 class="panel-title">
+                <a class="collapsed" data-toggle="collapse" data-parent="#templates" href="#collapse-csv" aria-expanded="false" aria-controls="collapse-csv">
+                  Plain text <small>.csv, .txt</small>
+                </a>
+              </h4>
+            </div>
+            <div id="collapse-csv" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-csv">
+              <div class="panel-body">
                 <div class="form-group">
                   <label for="id_separator">Separator</label>
                   <div>
@@ -195,22 +196,21 @@
                     <span class="label label-default sortable">Name</span><span class="label label-default sortable">Description</span>{% for name, field in custom_fields.items %}<span class="label label-default sortable">{{ field.label }}</span>{% endfor %}
                   </div>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading" role="tab" id="heading-json">
-            <h4 class="panel-title">
-              <a class="collapsed" data-toggle="collapse" data-parent="#templates" href="#collapse-json" aria-expanded="false" aria-controls="collapse-json">
-                JSON
-              </a>
-            </h4>
-          </div>
-          <div id="collapse-json" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-json">
-            <div class="panel-body">
-              <p>Use the following template to import data from a json file. Please note any attribute with different name will be ignored. Entries with empty <strong>name</strong> will be ignored as well. The attribute order doesn't matter and you don't have to put all the 30 custom attributes in the file.</p>
-              <pre><code class="language-js">[
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading-json">
+              <h4 class="panel-title">
+                <a class="collapsed" data-toggle="collapse" data-parent="#templates" href="#collapse-json" aria-expanded="false" aria-controls="collapse-json">
+                  JSON
+                </a>
+              </h4>
+            </div>
+            <div id="collapse-json" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-json">
+              <div class="panel-body">
+                <p>Use the following template to import data from a json file. Please note any attribute with different name will be ignored. Entries with empty <strong>name</strong> will be ignored as well. The attribute order doesn't matter and you don't have to put all the 30 custom attributes in the file.</p>
+                <pre><code class="language-js">[
   {
     'name': '',
     'description': '',
@@ -230,22 +230,22 @@
     'column_30': ''
   }
 ]</code></pre>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="panel panel-default">
-          <div class="panel-heading" role="tab" id="heading-xml">
-            <h4 class="panel-title">
-              <a class="collapsed" data-toggle="collapse" data-parent="#templates" href="#collapse-xml" aria-expanded="false" aria-controls="collapse-xml">
-                XML
-              </a>
-            </h4>
-          </div>
-          <div id="collapse-xml" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-xml">
-            <div class="panel-body">
-              <p>Use the following template to import data from a xml file. Please note any attribute with different name will be ignored. Entries with empty <strong>name</strong> will be ignored as well. The attribute order doesn't matter and you don't have to put all the 30 custom attributes in the file.</p>
-              <pre><code class="language-markup">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading-xml">
+              <h4 class="panel-title">
+                <a class="collapsed" data-toggle="collapse" data-parent="#templates" href="#collapse-xml" aria-expanded="false" aria-controls="collapse-xml">
+                  XML
+                </a>
+              </h4>
+            </div>
+            <div id="collapse-xml" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-xml">
+              <div class="panel-body">
+                <p>Use the following template to import data from a xml file. Please note any attribute with different name will be ignored. Entries with empty <strong>name</strong> will be ignored as well. The attribute order doesn't matter and you don't have to put all the 30 custom attributes in the file.</p>
+                <pre><code class="language-markup">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;items&gt;
   &lt;item&gt;
     &lt;name&gt;&lt;/name&gt;
@@ -266,17 +266,18 @@
     &lt;column_30&gt;&lt;/column_30&gt;
   &lt;/item&gt;
 &lt;/items&gt;</code></pre>
+              </div>
             </div>
           </div>
+
         </div>
 
       </div>
-
+      <div class="panel-footer">
+        <button class="btn btn-primary" type="submit">Save changes</button>
+      </div>
     </div>
-    <div class="panel-footer">
-      <button class="btn btn-primary" type="submit">Save changes</button>
-    </div>
-  </div>
+  </form>
 
   <form method="post" action="{% url 'settings:save_custom_fields' %}">
     
