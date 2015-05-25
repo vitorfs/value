@@ -85,8 +85,9 @@ def save_custom_fields(request):
             item.column_label = label
             item.column_type = request.POST.get('column_type_{0}'.format(column), 'S')
             item.save()
-    messages.success(request, 'Custom fields were saved successfully.')
-    return redirect(reverse('settings:items'))
+    return HttpResponse('Custom fields were saved successfully.')
+    #messages.success(request, 'Custom fields were saved successfully.')
+    #return redirect(reverse('settings:items'))
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)

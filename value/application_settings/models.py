@@ -46,7 +46,8 @@ class ApplicationSetting(models.Model):
                 except Exception, e:
                     settings[setting.name] = {}
 
-            elif setting.name == ApplicationSetting.EXCEL_SHEET_INDEX:
+            elif setting.name == ApplicationSetting.EXCEL_STARTING_ROW_COLUMN or \
+                    setting.name == ApplicationSetting.EXCEL_SHEET_INDEX:
                 try:
                     settings[setting.name] = int(setting.value)
                 except Exception, e:

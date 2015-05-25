@@ -9,7 +9,10 @@ def excel_columns(name, index, settings):
     option = '<option value="{0}"{1}>{0}</option>'
 
     if settings['EXCEL_ENTRY_ORIENTATION'] == 'row':
-        selected = settings['EXCEL_IMPORT_TEMPLATE'][name]
+        if name in settings['EXCEL_IMPORT_TEMPLATE'].keys():
+            selected = settings['EXCEL_IMPORT_TEMPLATE'][name]
+        else:
+            selected = index
     else:
         selected = index
 

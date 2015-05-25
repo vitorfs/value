@@ -1,0 +1,30 @@
+{% load attr %}
+
+<div class="alert alert-info" role="alert">
+  <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+  <span class="sr-only">Info:</span>
+  Imported <strong>{{ decision_items|length }}</strong> entries from file <strong>{{ filename }}</strong>.
+</div>
+
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      {% for name, field in fields.items %}
+        <th>{{ field.label }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for decision_item in decision_items %}
+      <tr>
+        {% for name, field in fields.items %}
+          <td>{{ decision_item|attr:name }}</td>
+        {% endfor %}
+      </tr>
+    {% empty %}
+      <tr>
+        <td>No data</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
