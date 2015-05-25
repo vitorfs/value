@@ -116,14 +116,14 @@
                     <div class="col-sm-8 col-md-6 col-lg-4">
                       <label for="id_start_line">Orientation</label>
                       <select id="id_orientation" name="orientation" class="form-control">
-                        <option value="row">One entry per row</option>
-                        <option value="column">One entry per column</option>
+                        <option value="row"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'row' %} selected="selected"{% endif %}>One entry per row</option>
+                        <option value="column"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'column' %} selected="selected"{% endif %}>One entry per column</option>
                       </select>
                     </div>
                     <div class="col-sm-4 col-md-3 col-lg-2">
-                      <label for="id_starting_row" class="entry_per_row">Starting row</label>
-                      <label for="id_starting_column" class="entry_per_col" style="display: none">Starting column</label>
-                      <input type="text" class="form-control" id="id_starting_row_column" name="starting_row_column">
+                      <label for="id_starting_row" class="entry_per_row"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'column' %} style="display: none"{% endif %}>Starting row</label>
+                      <label for="id_starting_column" class="entry_per_column"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'row' %} style="display: none"{% endif %}>Starting column</label>
+                      <input type="text" class="form-control" id="id_starting_row_column" name="starting_row_column" value="{{ app_settings.EXCEL_STARTING_ROW_COLUMN }}">
                     </div>
                   </div>
                   <div class="form-group">
@@ -133,19 +133,19 @@
                         <thead>
                           <tr>
                             <th>Field</th>
-                            <th class="entry_per_row">Column</th>
-                            <th class="entry_per_col" style="display: none">Row</th>
+                            <th class="entry_per_row"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'column' %} style="display: none"{% endif %}>Column</th>
+                            <th class="entry_per_column"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'row' %} style="display: none"{% endif %}>Row</th>
                           </tr>
                         </thead>
                         <tbody>
                           {% for name, field in decision_items_fields.items %}
                             <tr>
                               <td>{{ field.label }}</td>
-                              <td class="entry_per_row">
-                                {% excel_columns name %}
+                              <td class="entry_per_row"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'column' %} style="display: none"{% endif %}>
+                                {% excel_columns name forloop.counter app_settings %}
                               </td>
-                              <td class="entry_per_col" style="display: none">
-                                {% excel_rows name %}
+                              <td class="entry_per_column"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'row' %} style="display: none"{% endif %}>
+                                {% excel_rows name forloop.counter app_settings %}
                             </tr>
                           {% endfor %}
                         </tbody>
@@ -154,8 +154,8 @@
                   </div>
                   <div class="form-group">
                     <div class="col-sm-4">
-                      <label for="id_excel_sheet_index">Sheet index <small>(leave empty for all)</small></label>
-                      <input type="number" class="form-control" id="id_excel_sheet_index" name="excel_sheet_index">
+                      <label for="id_excel_sheet_index">Sheet index <small>(Zero based index. Leave empty for all.)</small></label>
+                      <input type="text" class="form-control" id="id_excel_sheet_index" name="excel_sheet_index" value="{{ app_settings.EXCEL_SHEET_INDEX }}">
                     </div>
                   </div>
                 </div>              

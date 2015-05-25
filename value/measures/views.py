@@ -60,7 +60,6 @@ def measure(request, measure_id):
             messages.success(request, u'The measure {0} was changed successfully.'.format(measure.name))
             return redirect(reverse('measures:measures'))
         else:
-            print formset.errors
             messages.error(request, u'Please correct the error below.')
     else:
         form = MeasureForm(instance=measure)

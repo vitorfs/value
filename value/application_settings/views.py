@@ -28,11 +28,13 @@ def items(request):
     custom_fields = DecisionItemLookup.get_custom_fields()
     column_types = DecisionItemLookup.COLUMN_TYPES
     decision_items_fields = DecisionItemLookup.get_all_fields()
+    app_settings = ApplicationSetting.get()
     return render(request, 'application_settings/items.html', { 
         'custom_fields_range': custom_fields_range,
         'custom_fields': custom_fields,
         'column_types': column_types,
-        'decision_items_fields': decision_items_fields
+        'decision_items_fields': decision_items_fields,
+        'app_settings': app_settings
         })
 
 @login_required
@@ -50,8 +52,11 @@ def save_import_templates(request):
 
     decision_items_fields = DecisionItemLookup.get_all_fields()
     template = {}
+    input_name = 'column'
+    if orientation.value == 'column':
+        input_name = 'row'
     for name, field in decision_items_fields.items():
-        template[name] = request.POST.get('{0}_{1}'.format(orientation.value, name))
+        template[name] = request.POST.get('{0}_{1}'.format(input_name, name))
     import_template, created = ApplicationSetting.objects.get_or_create(name=ApplicationSetting.EXCEL_IMPORT_TEMPLATE)
     import_template.value = pickle.dumps(template)
     import_template.save()
