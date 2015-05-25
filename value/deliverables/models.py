@@ -24,10 +24,7 @@ class Deliverable(models.Model):
         return self.name
 
     def get_decision_items_fields(self):
-        fields = DecisionItemLookup.get_custom_fields()
-        fields['name'] = { 'label': 'Name', 'type': DecisionItemLookup.STRING }
-        fields['description'] = { 'label': 'Description', 'type': DecisionItemLookup.STRING }
-        return fields
+        return DecisionItemLookup.get_all_fields()
 
 
 class DecisionItem(models.Model):
@@ -100,4 +97,11 @@ class DecisionItemLookup(models.Model):
         qs = DecisionItemLookup.objects.all()
         for result in qs:
             fields[result.column_name] = { 'label': result.column_label, 'type': result.column_type }
+        return fields
+
+    @staticmethod
+    def get_all_fields():
+        fields = DecisionItemLookup.get_custom_fields()
+        fields['name'] = { 'label': 'Name', 'type': DecisionItemLookup.STRING }
+        fields['description'] = { 'label': 'Description', 'type': DecisionItemLookup.STRING }
         return fields

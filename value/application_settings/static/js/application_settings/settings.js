@@ -29,4 +29,13 @@ $(function () {
     draggable: ".sortable"
   });
 
+  $("#id_orientation").change(function () {
+    $("#id_orientation option").each(function () {
+      var cssclass = $(this).val();
+      $(cssclass).hide();
+    });
+    var cssclass = $(this).val();
+    $(cssclass).show();
+  });
+
 });

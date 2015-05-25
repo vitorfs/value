@@ -20,10 +20,12 @@ def items(request):
     custom_fields_range = range(1, 31)
     custom_fields = DecisionItemLookup.get_custom_fields()
     column_types = DecisionItemLookup.COLUMN_TYPES
+    decision_items_fields = DecisionItemLookup.get_all_fields()
     return render(request, 'application_settings/items.html', { 
         'custom_fields_range': custom_fields_range,
         'custom_fields': custom_fields,
-        'column_types': column_types
+        'column_types': column_types,
+        'decision_items_fields': decision_items_fields
         })
 
 @login_required
