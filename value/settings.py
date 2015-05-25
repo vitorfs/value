@@ -24,6 +24,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # 'debug_toolbar',
+
     'value.core',
     'value.deliverables',
     'value.deliverables.meetings',
@@ -85,6 +88,7 @@ TEMPLATE_DIRS = (
 
 
 LOGIN_URL = '/signin/'
+LOGOUT_URL = '/signout/'
 
 LOGIN_REDIRECT_URL = '/'
 

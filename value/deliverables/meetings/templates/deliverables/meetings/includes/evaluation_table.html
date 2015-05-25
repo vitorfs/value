@@ -1,4 +1,3 @@
-{% load relative_col_size %}
 {% load evaluation_options %}
 {% load panel_class %}
 {% load evaluation_percent %}
@@ -6,49 +5,47 @@
 {% csrf_token %}
 
 {% for meeting_item in meeting_items %}
-
-  {% with measure_values=factors.0.measure.measurevalue_set.all %}
-    <div class="panel {% panel_class evaluations=evaluations meeting_item=meeting_item factors=factors %}">
-      <div class="panel-heading" data-target="#collapse-{{ meeting_item.pk }}">
-        <table style="width: 100%">
-          <body>
-            <tr>
-              <td style="width: 25%">
-                <p class="panel-title">
-                  <a href="javascript:void(0);" class="btn-toggle">{{ meeting_item.decision_item.name }}</a>
-                </p>
-              </td>
-              <td>
-                <div class="progress" style="margin-bottom: 0">
-                  {% for measure_value in measure_values %}
-                    <div class="progress-bar" style="width: {% evaluation_percent evaluations=evaluations meeting_item=meeting_item factors=factors measure_value=measure_value %}%; background-color: {{ measure_value.color }}">
-                      <span class="measure-percent" data-measure-id="{{ measure_value.pk }}">{% evaluation_percent evaluations=evaluations meeting_item=meeting_item factors=factors measure_value=measure_value %}</span>%
-                    </div>
-                  {% endfor %}
-                </div>
-              </td>
-            </tr>
-          </body>
-        </table>
-      </div>
-      <div id="collapse-{{ meeting_item.pk }}" class="panel-collapse collapse"{% if forloop.first %} style="display: block;"{% endif %}>
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th style="width: 25%">Value Factors</th>
-              {% for measure_value in measure_values %}
-                <th class="text-center" style="width: {{ measure_values|relative_col_size }}">{{ measure_value.description }}</th>
-              {% endfor %}
-            </tr>
-          </thead>
-          <tbody>
-            {% for factor in factors %}
-              {% evaluation_options evaluations=evaluations meeting_item=meeting_item factor=factor %}
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+  
+  <div class="panel {% panel_class evaluations=evaluations meeting_item=meeting_item factors=factors %}">
+    <div class="panel-heading" data-target="#collapse-{{ meeting_item.pk }}">
+      <table style="width: 100%">
+        <body>
+          <tr>
+            <td style="width: 25%">
+              <p class="panel-title">
+                <a href="javascript:void(0);" class="btn-toggle">{{ meeting_item.decision_item.name }}</a>
+              </p>
+            </td>
+            <td>
+              <div class="progress" style="margin-bottom: 0">
+                {% for measure_value in measure_values %}
+                  <div class="progress-bar" style="width: {% evaluation_percent evaluations=evaluations meeting_item=meeting_item factors=factors measure_value=measure_value %}%; background-color: {{ measure_value.color }}">
+                    <span class="measure-percent" data-measure-id="{{ measure_value.pk }}">{% evaluation_percent evaluations=evaluations meeting_item=meeting_item factors=factors measure_value=measure_value %}</span>%
+                  </div>
+                {% endfor %}
+              </div>
+            </td>
+          </tr>
+        </body>
+      </table>
     </div>
-  {% endwith %}
-
+    <div id="collapse-{{ meeting_item.pk }}" class="panel-collapse collapse"{% if forloop.first %} style="display: block;"{% endif %}>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th style="width: 25%">Value Factors</th>
+            {% for measure_value in measure_values %}
+              <th class="text-center" style="width: {{ relative_col_size }}">{{ measure_value.description }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for factor in factors %}
+            {% evaluation_options evaluations=evaluations meeting_item=meeting_item factor=factor measure_values=measure_values %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
 {% endfor %}

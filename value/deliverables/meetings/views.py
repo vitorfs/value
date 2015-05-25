@@ -52,6 +52,16 @@ def meeting(request, deliverable_id, meeting_id):
 def evaluate(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     factors = Factor.get_factors()
+
+    measure_values = factors[0].measure.measurevalue_set.all()
+
+    count = measure_values.count()
+    if count > 0:
+        size = 75.0/count
+        relative_col_size = '{0}%'.format(size)
+    else:
+        relative_col_size = 'auto'
+
     evaluations = Evaluation.get_user_evaluations_by_meeting(user=request.user, meeting=meeting)
     meeting_items = meeting.meetingitem_set.all()
     total_items = meeting_items.count()
@@ -60,7 +70,9 @@ def evaluate(request, deliverable_id, meeting_id):
         meeting_items = meeting_items.filter(decision_item__name__icontains=search_query)
     return render(request, 'deliverables/meetings/evaluate.html', { 
         'meeting' : meeting, 
-        'factors' : factors, 
+        'factors' : factors,
+        'measure_values': measure_values,
+        'relative_col_size': relative_col_size,
         'evaluations' : evaluations,
         'total_items': total_items,
         'meeting_items': meeting_items,

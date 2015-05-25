@@ -51,7 +51,7 @@
       <span class="help-block">
         {% if search_query %}
           {{ meeting_items.count }} result{% if meeting_items.count > 1 %}s{% endif %}
-          (<a href="{% url 'deliverables:evaluate' instance.pk %}">{{ total_items }} total</a>)
+          (<a href="{% url 'deliverables:meetings:evaluate' meeting.deliverable.pk meeting.pk %}">{{ total_items }} total</a>)
         {% endif %}
       </span>
     </div>
@@ -79,7 +79,7 @@
   <div class="row">
     <div class="col-md-12">
       <div class="panel-group" role="tablist" aria-multiselectable="true">
-        {% include 'deliverables/meetings/includes/evaluation_table.html' with meeting=meeting meeting_items=meeting_items factors=factors evaluations=evaluations %}
+        {% include 'deliverables/meetings/includes/evaluation_table.html' with meeting=meeting meeting_items=meeting_items factors=factors measure_values=measure_values evaluations=evaluations %}
       </div>
     </div>
   </div>
