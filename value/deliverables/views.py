@@ -36,11 +36,7 @@ def new(request):
         if form.is_valid() and formset.is_valid():
             form.instance.manager = request.user
             form.instance.created_by = request.user
-            deliverable = form.save(commit=False)
-
-            users_id = request.POST.getlist('stakeholders')
-            deliverable.stakeholders = User.objects.filter(pk__in=users_id)
-            deliverable.stakeholders.add(request.user)
+            deliverable = form.save()
 
             for form in formset:
                 form.instance.deliverable = deliverable
@@ -57,9 +53,7 @@ def new(request):
     else:
         form = DeliverableForm()
         formset = DecisionItemFormSet(prefix='decision_item', queryset=DecisionItem.objects.none())
-    users = User.objects.filter(is_active=True).exclude(pk=request.user.pk)
     return render(request, 'deliverables/new.html', { 
-        'users' : users,
         'fields': fields,
         'form': form,
         'formset': formset
@@ -96,18 +90,21 @@ def import_decision_items(request):
         decision_items = []
         for sheet in wb.sheets():
             for row in range(app_settings['EXCEL_STARTING_ROW_COLUMN'] - 1, sheet.nrows):
-                decision_item = DecisionItem()
+                decision_item = {}
                 for key in app_settings['EXCEL_IMPORT_TEMPLATE'].keys():
                     column_name = app_settings['EXCEL_IMPORT_TEMPLATE'][key]
                     try:
-                        setattr(decision_item, key, sheet.cell(row, column_map[column_name]).value)
+                        decision_item[key] = sheet.cell(row, column_map[column_name]).value
                     except:
                         pass
                 decision_items.append(decision_item)
         fields = DecisionItemLookup.get_all_fields()
+        DecisionItemFormSet = modelformset_factory(DecisionItem, fields=fields.keys(), extra=len(decision_items))
+        formset = DecisionItemFormSet(prefix='decision_item', queryset=DecisionItem.objects.none(), initial=decision_items)
         html = render_to_string('deliverables/includes/decision_items_import_table.html', {
             'decision_items': decision_items,
             'fields': fields,
+            'formset': formset,
             'filename': filename
             })
     return HttpResponse(html)

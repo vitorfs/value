@@ -4,6 +4,7 @@ import urllib
 from django import template
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.contrib.auth.models import User
 
 register = template.Library()
 
@@ -35,3 +36,9 @@ def avatar(user, size=128):
           urllib.urlencode({ 'size' : size, 'bg' : colors[initials[:1].lower()], 'fg' : 'ffffff' })
           )
         return url
+
+@register.simple_tag
+def avatar_id(pk, size=128):
+    user = User.objects.get(pk=pk)
+    return avatar(user, size)
+    

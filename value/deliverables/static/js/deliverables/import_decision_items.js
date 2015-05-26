@@ -10,7 +10,7 @@ $(function () {
       var url = $(this).attr("data-import-url")
       var data = new FormData();
       data.append("file", $(this)[0].files[0]);
-      data.append("csrfmiddlewaretoken", $(this).attr("data-csrf-token"))
+      data.append("csrfmiddlewaretoken", $(this).attr("data-csrf-token"));
 
       $.ajax({
         url: url,

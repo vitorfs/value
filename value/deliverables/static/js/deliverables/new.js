@@ -4,12 +4,14 @@ $(function () {
 
     if ($(this).hasClass("bg-success")) {
       $(this).removeClass("bg-success");
+      $(this).closest(".panel").addClass("panel-default").removeClass("panel-success");
       $(".glyphicon-ok", this).hide();
       $("[name='stakeholders']", this).prop("checked", false);
     }
 
     else {
       $(this).addClass("bg-success");
+      $(this).closest(".panel").removeClass("panel-default").addClass("panel-success");
       $(".glyphicon-ok", this).show();
       $("[name='stakeholders']", this).prop("checked", true);
     }
@@ -38,23 +40,16 @@ $(function () {
     var totalForms = $(tableRows).length;
     $("#id_decision_item-TOTAL_FORMS").val(totalForms);
 
-    var iteration = function () {
-      $(tableRows).each(function () {
-        var rowIndex = $(this).index();
-        $(".empty-row td", table).each(function () {
-          if ($("input", this).length > 0) {
-            var id = $("input", this).attr("id").replace("__prefix__", rowIndex.toString());
-            var name = $("input", this).attr("name").replace("__prefix__", rowIndex.toString());
-            var colIndex = $(this).index();
-            var input = $("tbody tr:eq(" + rowIndex + ") td:eq(" + colIndex + ") input", table);
-            $(input).attr("id", id);
-            $(input).attr("name", name);
-          }
-        });
+    $(tableRows).each(function () {
+      var rowIndex = $(this).index();
+      $("td input", this).each(function () {
+        var name = $(this).attr("name");
+        $(this).attr("name", name.replace(/-(.*?)-/, "-" + rowIndex + "-"));
+        var id = $(this).attr("id");
+        $(this).attr("id", id.replace(/-(.*?)-/, "-" + rowIndex + "-"));
       });
-    };
-    iteration();
-    
+    });
+
   };
 
   $("main").on("click", "table tbody tr td a.js-remove-row", function (e) {

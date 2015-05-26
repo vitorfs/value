@@ -1,9 +1,8 @@
 from django import forms
 from django.contrib.auth.models import Group, User
 
-class StakeholderMultipleModelChoiceField(forms.ModelMultipleChoiceField):
-    def label_from_instance(self, obj):
-        return obj.profile.get_display_name()
+from value.users.forms import StakeholderMultipleModelChoiceField
+
 
 class GroupForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class' : 'form-control'}), max_length=80)

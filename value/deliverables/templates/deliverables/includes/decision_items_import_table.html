@@ -3,34 +3,34 @@
 <div class="alert alert-info" role="alert">
   <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
   <span class="sr-only">Info:</span>
-  Imported <strong>{{ decision_items|length }}</strong> entries from file <strong>{{ filename }}</strong>.
+  Imported <strong>{{ formset|length }}</strong> entries from file <strong>{{ filename }}</strong>.
 </div>
 
 <table id="decision-items-import-table" class="table table-bordered table-striped" style="margin-bottom: 0">
   <thead>
     <tr>
-      {% for name, field in fields.items %}
-        <th>{{ field.label }}</th>
+      {% for field in formset.0 %}
+        {% if field.name in fields.keys %}
+          <th>{{ fields|dictkey:field.name|dictkey:"label" }}</th>
+        {% endif %}
       {% endfor %}
       <th></th>
     </tr>
   </thead>
   <tbody>
-    {% for decision_item in decision_items %}
+    {% for form in formset %}
       <tr>
-        {% for name, field in fields.items %}
+        {% for field in form.visible_fields %}
           <td>
-            <input type="text" class="form-control input-sm" value="{{ decision_item|attr:name }}">
+            <input type="text" class="form-control input-sm" id="{{ field.id_for_label }}" name="{{ field.html_name }}" value="{{ field.value|default_if_none:'' }}" maxlength="{{ field.field.max_length }}">
           </td>
         {% endfor %}
         <td style="text-align: center; vertical-align: middle">
-          <input type="hidden" value="">
+          {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+          {% endfor %}
           <a href="javascript:void(0);" class="js-remove-row"><span class="glyphicon glyphicon-remove-sign"></span></a>
         </td>
-      </tr>
-    {% empty %}
-      <tr>
-        <td>No data</td>
       </tr>
     {% endfor %}
   </tbody>
