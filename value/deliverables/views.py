@@ -9,9 +9,11 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.views.decorators.http import require_POST
 from django.template.loader import render_to_string
+from django.forms.models import modelformset_factory
+from django.db import transaction
 
 from value.deliverables.models import Deliverable, DecisionItem, DecisionItemLookup
-from value.deliverables.forms import UploadFileForm
+from value.deliverables.forms import UploadFileForm, DeliverableForm
 from value.application_settings.models import ApplicationSetting
 
 
@@ -22,32 +24,46 @@ def index(request):
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
+@transaction.atomic
 def new(request):
+    fields = DecisionItemLookup.get_all_fields()
+    DecisionItemFormSet = modelformset_factory(DecisionItem, fields=fields.keys())
+
     if request.method == 'POST':
-        deliverable = Deliverable()
-        deliverable.name = request.POST.get('name')
-        deliverable.description = request.POST.get('description')
-        deliverable.manager = request.user
-        deliverable.created_by = request.user
-        deliverable.save()
+        form = DeliverableForm(request.POST)
+        formset = DecisionItemFormSet(request.POST, prefix='decision_item')
 
-        users_id = request.POST.getlist('stakeholders')
-        deliverable.stakeholders = User.objects.filter(pk__in=users_id)
-        deliverable.stakeholders.add(request.user)
-        deliverable.save()
+        if form.is_valid() and formset.is_valid():
+            form.instance.manager = request.user
+            form.instance.created_by = request.user
+            deliverable = form.save(commit=False)
 
-        items_names = request.POST.getlist('decision_item')
-        for name in items_names:
-            item = DecisionItem()
-            item.deliverable = deliverable
-            item.name = name
-            item.created_by = request.user
-            item.save()
+            users_id = request.POST.getlist('stakeholders')
+            deliverable.stakeholders = User.objects.filter(pk__in=users_id)
+            deliverable.stakeholders.add(request.user)
 
-        messages.success(request, u'The deliverable {0} was added successfully.'.format(deliverable.name))
-        return redirect(reverse('deliverables:index'))
+            for form in formset:
+                form.instance.deliverable = deliverable
+                form.instance.created_by = request.user
+
+            formset.save()
+            deliverable.save()
+
+            messages.success(request, u'The deliverable {0} was added successfully.'.format(deliverable.name))
+
+            return redirect(reverse('deliverables:index'))
+        else:
+            messages.error(request, u'Please correct the error below.')
+    else:
+        form = DeliverableForm()
+        formset = DecisionItemFormSet(prefix='decision_item', queryset=DecisionItem.objects.none())
     users = User.objects.filter(is_active=True).exclude(pk=request.user.pk)
-    return render(request, 'deliverables/new.html', { 'users' : users })
+    return render(request, 'deliverables/new.html', { 
+        'users' : users,
+        'fields': fields,
+        'form': form,
+        'formset': formset
+        })
 
 def excel_column_map():
     column_map = {}
@@ -83,13 +99,16 @@ def import_decision_items(request):
                 decision_item = DecisionItem()
                 for key in app_settings['EXCEL_IMPORT_TEMPLATE'].keys():
                     column_name = app_settings['EXCEL_IMPORT_TEMPLATE'][key]
-                    setattr(decision_item, key, sheet.cell(row, column_map[column_name]).value)
+                    try:
+                        setattr(decision_item, key, sheet.cell(row, column_map[column_name]).value)
+                    except:
+                        pass
                 decision_items.append(decision_item)
         fields = DecisionItemLookup.get_all_fields()
         html = render_to_string('deliverables/includes/decision_items_import_table.html', {
             'decision_items': decision_items,
             'fields': fields,
-            'filename': filename,
+            'filename': filename
             })
     return HttpResponse(html)
 

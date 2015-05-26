@@ -1,7 +1,5 @@
 $(function () {
 
-  var ENTER_KEY = 13;
-
   $(".js-stakeholder-selection").click(function () {
 
     if ($(this).hasClass("bg-success")) {
@@ -33,6 +31,46 @@ $(function () {
       $("[name='stakeholders']", this).prop("checked", false);
     });
   });
+
+  $.fn.updateFormsetIndex = function () {
+    var table = $(this);
+    var tableRows = $("tbody tr:not(.empty-row)", this);
+    var totalForms = $(tableRows).length;
+    $("#id_decision_item-TOTAL_FORMS").val(totalForms);
+
+    var iteration = function () {
+      $(tableRows).each(function () {
+        var rowIndex = $(this).index();
+        $(".empty-row td", table).each(function () {
+          if ($("input", this).length > 0) {
+            var id = $("input", this).attr("id").replace("__prefix__", rowIndex.toString());
+            var name = $("input", this).attr("name").replace("__prefix__", rowIndex.toString());
+            var colIndex = $(this).index();
+            var input = $("tbody tr:eq(" + rowIndex + ") td:eq(" + colIndex + ") input", table);
+            $(input).attr("id", id);
+            $(input).attr("name", name);
+          }
+        });
+      });
+    };
+    iteration();
+    
+  };
+
+  $("main").on("click", "table tbody tr td a.js-remove-row", function (e) {
+    $(this).closest("tr").fadeOut(200, function () {
+      $(this).remove();
+      $("#decision-items-formset").updateFormsetIndex();
+    });
+  });
+
+  $(".js-add-row").click(function () {
+    $(".empty-row").clone().removeClass("empty-row").insertBefore("#decision-items-formset tbody tr.empty-row");
+    $("#decision-items-formset").updateFormsetIndex();
+  });
+
+/* TODO remove
+  var ENTER_KEY = 13;
 
   var add_item = function (value) {
 
@@ -98,5 +136,6 @@ $(function () {
   $(".list-group").on("click", ".js-remove-item", function () {
     $(this).closest("li").remove();
   });
-  
+*/
+
 });

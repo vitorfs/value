@@ -2,6 +2,7 @@
 
 {% load staticfiles %}
 {% load avatar %}
+{% load attr %}
 
 {% block stylesheet %}
   <link href="{% static 'css/deliverables/deliverables.css' %}" rel="stylesheet">
@@ -29,18 +30,18 @@
     
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">1. Provide the Deliverable Details</h3>
+          <h3 class="panel-title">1. Provide the deliverable details</h3>
         </div>
         <div class="panel-body">
-          <div class="form-group">
-            <label for="id_name">Name</label>
-            <input type="text" class="form-control" id="id_name" name="name">
-            <span class="help-block" style="display: none">This is a required field.</span>
+          {% for field in form.visible_fields %}
+          <div class="form-group{% if field.errors %} has-error{% endif %}">
+            <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
+            {{ field }}
+            {% for error in field.errors %}
+              <p class="help-block">{{ error }}</p>
+            {% endfor %}
           </div>
-          <div class="form-group" style="margin-bottom: 0">
-            <label for="id_description">Description</label>
-            <textarea class="form-control expanding" rows="1" id="id_description" name="description"></textarea>
-          </div>
+          {% endfor %}
         </div>
       </div>
 
@@ -87,17 +88,60 @@
           <h3 class="panel-title">3. Define the Decision Items</h3>
         </div>
         <div class="panel-body">
-          <div class="form-group">
-            {% include 'deliverables/includes/import_decision_items.html' %}
-          </div>
-          <div class="form-group">
-            <textarea class="form-control js-add-item" rows="1" placeholder="Press enter to add"></textarea>
-            <span class="help-block">Add several items at once separating them with commas, semicolons or line-breaks. Please note, pasting items separated by line-breaks will result in a instant add.</span>
-          </div>
           <div class="form-group" style="margin-bottom: 0">
-            <div class="col-sm-12">
-              <ul class="list-group decision-items" style="margin-bottom: 0"></ul>
-            </div>
+            {{ formset.management_form }}
+            <table id="decision-items-formset" class="table table-bordered table-striped" style="margin-bottom: 0">
+              <thead>
+                <tr>
+                  {% for field in formset.0 %}
+                    {% if field.name in fields.keys %}
+                      <th>{{ fields|dictkey:field.name|dictkey:"label" }}</th>
+                    {% endif %}
+                  {% endfor %}
+                  <th></th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <td colspan="{{ fields|length|add:'1' }}">
+                    <button type="button" class="btn btn-primary btn-sm js-add-row"><span class="glyphicon glyphicon-plus"></span> Add</button>
+                    {% include 'deliverables/includes/import_decision_items.html' %}
+                  </td>
+                </tr>
+              </tfoot>
+              <tbody>
+                {% for form in formset %}
+                  <tr>
+                    {% for field in form.visible_fields %}
+                      <td>
+                        <input type="text" class="form-control input-sm" id="{{ field.id_for_label }}" name="{{ field.html_name }}" value="{{ field.value|default_if_none:'' }}" maxlength="{{ field.field.max_length }}">
+                      </td>
+                    {% endfor %}
+                    <td style="text-align: center; vertical-align: middle">
+                      {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                      {% endfor %}
+                      {% if formset.can_delete %}
+                        <a href="javascript:void(0);" class="js-remove-row"><span class="glyphicon glyphicon-remove-sign"></span></a>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+                <tr class="empty-row">
+                  {% for field in formset.0.visible_fields %}
+                    <td>
+                      <input type="text" id="id_{{ formset.prefix }}-__prefix__-{{ field.name }}" name="{{ formset.prefix }}-__prefix__-{{ field.name }}" maxlength="{{ field.field.max_length }}" class="form-control input-sm">
+                    </td>
+                  {% endfor %}
+                  <td style="text-align: center; vertical-align: middle">
+                    {% for hidden in formset.0.hidden_fields %}
+                      <input type="hidden" id="id_{{ formset.prefix }}-__prefix__-{{ hidden.name }}" name="{{ formset.prefix }}-__prefix__-{{ hidden.name }}">
+                    {% endfor %}
+                    <a href="javascript:void(0);" class="js-remove-row"><span class="glyphicon glyphicon-remove-sign"></span></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

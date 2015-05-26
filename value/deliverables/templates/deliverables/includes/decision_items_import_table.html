@@ -6,20 +6,27 @@
   Imported <strong>{{ decision_items|length }}</strong> entries from file <strong>{{ filename }}</strong>.
 </div>
 
-<table class="table table-bordered table-striped">
+<table id="decision-items-import-table" class="table table-bordered table-striped" style="margin-bottom: 0">
   <thead>
     <tr>
       {% for name, field in fields.items %}
         <th>{{ field.label }}</th>
       {% endfor %}
+      <th></th>
     </tr>
   </thead>
   <tbody>
     {% for decision_item in decision_items %}
       <tr>
         {% for name, field in fields.items %}
-          <td>{{ decision_item|attr:name }}</td>
+          <td>
+            <input type="text" class="form-control input-sm" value="{{ decision_item|attr:name }}">
+          </td>
         {% endfor %}
+        <td style="text-align: center; vertical-align: middle">
+          <input type="hidden" value="">
+          <a href="javascript:void(0);" class="js-remove-row"><span class="glyphicon glyphicon-remove-sign"></span></a>
+        </td>
       </tr>
     {% empty %}
       <tr>

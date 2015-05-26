@@ -102,6 +102,6 @@ class DecisionItemLookup(models.Model):
     @staticmethod
     def get_all_fields():
         fields = DecisionItemLookup.get_custom_fields()
-        fields['name'] = { 'label': 'Name', 'type': DecisionItemLookup.STRING }
-        fields['description'] = { 'label': 'Description', 'type': DecisionItemLookup.STRING }
+        fields[u'name'] = { 'label': u'Name', 'type': DecisionItemLookup.STRING }
+        fields[u'description'] = { 'label': u'Description', 'type': DecisionItemLookup.STRING }
         return fields

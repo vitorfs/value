@@ -8,34 +8,27 @@ def excel_columns(name, index, settings):
     select = '<select id="id_column_{0}" name="column_{0}" class="form-control">{1}</select>'
     option = '<option value="{0}"{1}>{0}</option>'
 
+    selected = ''
     if settings['EXCEL_ENTRY_ORIENTATION'] == 'row':
         if name in settings['EXCEL_IMPORT_TEMPLATE'].keys():
             selected = settings['EXCEL_IMPORT_TEMPLATE'][name]
-        else:
-            selected = index
-    else:
-        selected = index
 
     options = ''
-    i = 0
     for c in ascii_uppercase:
-        i = i + 1
         txt_selected = ''
-        if c == selected or i == index:
+        if c == selected:
             txt_selected = ' selected'
         options += option.format(c, txt_selected)
     for c in ascii_uppercase:
-        i = i + 1
         c = 'A{0}'.format(c)
         txt_selected = ''
-        if c == selected or i == index:
+        if c == selected:
             txt_selected = ' selected'
         options += option.format(c, txt_selected)
     for c in ascii_uppercase:
-        i = i + 1
         c = 'B{0}'.format(c)
         txt_selected = ''
-        if c == selected or i == index:
+        if c == selected:
             txt_selected = ' selected'
         options += option.format(c, txt_selected)
 
