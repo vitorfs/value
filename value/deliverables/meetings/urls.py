@@ -18,7 +18,9 @@ urlpatterns = patterns('value.deliverables.meetings.views',
 
     url(r'^(?P<meeting_id>\d+)/dashboard/features-acceptance/$', 'features_acceptance', name='features_acceptance'),
     url(r'^(?P<meeting_id>\d+)/dashboard/features-acceptance/(?P<meeting_item_id>\d+)/$', 'features_acceptance_chart', name='features_acceptance_chart'),
-    
+
+    url(r'^(?P<meeting_id>\d+)/dashboard/decision-items-overview/$', 'decision_items_overview', name='decision_items_overview'),
+
     url(r'^(?P<meeting_id>\d+)/dashboard/features-comparison/$', 'features_comparison', name='features_comparison'),
     url(r'^(?P<meeting_id>\d+)/dashboard/features-comparison/(?P<measure_value_id>\d+)/$', 'features_comparison_chart', name='features_comparison_chart'),
 )

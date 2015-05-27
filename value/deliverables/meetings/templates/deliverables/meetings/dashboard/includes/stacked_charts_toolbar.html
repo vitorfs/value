@@ -1,0 +1,21 @@
+<div class="btn-group btn-group-xs" role="group">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"{% if disable %} disabled{% endif %}>
+    <span class="fa fa-bar-chart"></span>
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-right js-chart-type" role="menu">
+    <li role="presentation" class="dropdown-header">Chart type</li>
+    <li role="presentation" class="active">
+      <a role="menuitem" tabindex="-1" href="javascript:void(0);" data-chart="stacked_bars"><span class="glyphicon glyphicon-align-left"></span> Stacked Bars</a>
+    </li>
+    <li role="presentation">
+      <a role="menuitem" tabindex="-1" href="javascript:void(0);" data-chart="basic_bars"><span class="glyphicon glyphicon-align-left"></span> Basic Bars</a>
+    </li>
+    <li role="presentation">
+      <a role="menuitem" tabindex="-1" href="javascript:void(0);" data-chart="stacked_columns"><span class="glyphicon glyphicon-signal"></span> Stacked Columns</a>
+    </li>
+    <li role="presentation">
+      <a role="menuitem" tabindex="-1" href="javascript:void(0);" data-chart="basic_columns"><span class="glyphicon glyphicon-signal"></span> Basic Columns</a>
+    </li>
+  </ul>
+</div>

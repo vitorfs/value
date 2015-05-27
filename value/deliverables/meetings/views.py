@@ -200,6 +200,25 @@ def features_acceptance_chart(request, deliverable_id, meeting_id, meeting_item_
     return HttpResponse(dump, content_type='application/json')
 
 @login_required
+def decision_items_overview(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    chart_type = request.GET.get('chart')
+    chart = Highcharts()
+    options = chart.decision_items_overview(meeting, chart_type)
+    dump = json.dumps(options)
+
+    if 'application/json' in request.META.get('HTTP_ACCEPT'):
+        return HttpResponse(dump, content_type='application/json')
+    else:
+        return render(request, 'deliverables/meetings/dashboard/decision_items_overview.html', { 
+            'meeting' : meeting, 
+            'dump' : dump,
+            'chart_uri': 'decision-items-overview',
+            'chart_menu_active': 'decision_items_overview',
+            'chart_page_title': 'Decision Items Overview'
+            })
+
+@login_required
 def features_comparison(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     evaluations = Evaluation.get_evaluations_by_meeting(meeting)

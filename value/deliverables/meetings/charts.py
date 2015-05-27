@@ -160,8 +160,9 @@ class Highcharts(object):
 
         return options
 
-    def features_selection_stacked_chart(self, meeting_id, meeting_item_id, chart):
-        
+
+    def _base_stacked_chart(self, categories, series, chart='stacked_columns'):
+
         chart_type = 'bar'
         stacking = None
 
@@ -171,11 +172,56 @@ class Highcharts(object):
         if chart in ['stacked_columns', 'basic_columns',]:
             chart_type = 'column'
 
+        options = {
+            'chart': { 'type': chart_type },
+            'title': { 'text': '' },
+            'xAxis': { 'categories': categories },
+            'yAxis': { 'min': 0, 'title': { 'text': 'Number of votes' } },
+            'legend': { 'reversed': True },
+            'plotOptions': { 'series': { 'stacking': stacking }},
+            'series': series
+        }
+
+        return options
+
+
+    def decision_items_overview(self, meeting, chart):
+        evaluations = Evaluation.get_evaluations_by_meeting(meeting)
+        measure = evaluations[0].measure
+        stakeholders_count = meeting.meetingstakeholder_set.count()
+        factors_count = Factor.get_factors().count()
+        max_votes = stakeholders_count * factors_count
+
+        categories = []
+        series = []
+
+        for meeting_item in meeting.meetingitem_set.all():
+            categories.append(meeting_item.decision_item.name)
+
+        for measure_value in measure.measurevalue_set.all():
+            filtered_evaluations = evaluations.filter(measure_value=measure_value)
+            vqs = filtered_evaluations.values('meeting_item__id', 'meeting_item__decision_item__name').annotate(count=Count('meeting_item__id')).order_by('-meeting_item__decision_item__name')
+            serie_data = []
+            for result in vqs:
+                votes = result['count']
+                if max_votes != 0:
+                    percentage = round((votes / float(max_votes)) * 100.0, 2)
+                else:
+                    percentage = 0.0
+                serie_data.append(percentage)
+            series.append({ 'name': measure_value.description, 'data': serie_data, 'color': measure_value.color })
+
+        return self._base_stacked_chart(categories, series, chart)
+
+
+    def features_selection_stacked_chart(self, meeting_id, meeting_item_id, chart):
+        
         meeting = Meeting.objects.get(pk=meeting_id)
         meeting_item = MeetingItem.objects.get(pk=meeting_item_id)
         evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(meeting_item=meeting_item)
 
         if evaluations:
+
             data = {}
 
             for evaluation in evaluations:
@@ -201,20 +247,9 @@ class Highcharts(object):
                     serie_data.append(factor[1][value.description])
                 series.append({ 'name': value.description, 'data': serie_data, 'color': value.color })
 
-            options = {
-                'chart': { 'type': chart_type },
-                'title': { 'text': '' },
-                'xAxis': { 'categories': categories },
-                'yAxis': { 'min': 0, 'title': { 'text': 'Number of votes' } },
-                'legend': { 'reversed': True },
-                'plotOptions': { 'series': { 'stacking': stacking }},
-                'series': series
-            }
+            return self._base_stacked_chart(categories, series, chart)
 
-        else:
-            options = {}
-
-        return options
+        return {}
 
     def _base_treemap(self, data):
         options = {
