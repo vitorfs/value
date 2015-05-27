@@ -4,8 +4,6 @@ urlpatterns = patterns('value.deliverables.meetings.views',
     url(r'^$', 'index', name='index'),
     url(r'^new/$', 'new', name='new'),
     url(r'^(?P<meeting_id>\d+)/$', 'meeting', name='meeting'),
-    url(r'^(?P<meeting_id>\d+)/stakeholders/$', 'stakeholders', name='stakeholders'),
-    url(r'^(?P<meeting_id>\d+)/meeting-items/$', 'meeting_items', name='meeting_items'),
     url(r'^(?P<meeting_id>\d+)/evaluate/$', 'evaluate', name='evaluate'),
     url(r'^(?P<meeting_id>\d+)/evaluate/save/$', 'save_evaluation', name='save_evaluation'),
 

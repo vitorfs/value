@@ -1,7 +1,5 @@
 <ul class="nav nav-tabs" style="margin-bottom: 20px">
   <li role="presentation"{% if active == 'meeting_summary' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">Summary</a></li>
-  <li role="presentation"{% if active == 'meeting_stakeholders' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:stakeholders' meeting.deliverable.pk meeting.pk %}">Stakeholders</a></li>
-  <li role="presentation"{% if active == 'meeting_items' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:meeting_items' meeting.deliverable.pk meeting.pk %}">Meeting Items</a></li>
   <li role="presentation"{% if active == 'evaluate' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:evaluate' meeting.deliverable.pk meeting.pk %}">Evaluate</a></li>
   <li role="presentation"{% if active == 'dashboard' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:dashboard' meeting.deliverable.pk meeting.pk %}">Dashboard</a></li>
   <li class="dropdown pull-right" role="presentation">

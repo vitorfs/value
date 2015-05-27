@@ -107,16 +107,6 @@ def save_evaluation(request, deliverable_id, meeting_id):
     return HttpResponse('')
 
 @login_required
-def stakeholders(request, deliverable_id, meeting_id):
-    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    return render(request, 'deliverables/meetings/stakeholders.html', { 'meeting': meeting })
-
-@login_required
-def meeting_items(request, deliverable_id, meeting_id):
-    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    return render(request, 'deliverables/meetings/meeting_items.html', { 'meeting': meeting })
-
-@login_required
 def dashboard(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     chart = Highcharts()
