@@ -110,7 +110,7 @@
                 <tr>
                   <td colspan="{{ fields|length|add:'1' }}">
                     <button type="button" class="btn btn-primary btn-sm js-add-row"><span class="glyphicon glyphicon-plus"></span> Add</button>
-                    {% include 'deliverables/includes/import_decision_items.html' %}
+                    {% include 'deliverables/includes/import_decision_items.html' with btn='btn-sm' %}
                   </td>
                 </tr>
               </tfoot>

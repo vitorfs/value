@@ -1,4 +1,4 @@
-<button type="button" class="btn btn-primary btn-sm js-import-decision-items"><span class="fa fa-cloud-upload"></span> Import</button>
+<button type="button" class="btn btn-primary js-import-decision-items {{ btn }}"><span class="fa fa-cloud-upload"></span> Import</button>
 <input type="file" id="id_import_decision_items" name="import_decision_items" data-import-url="{% url 'deliverables:import_decision_items' %}" data-csrf-token="{{ csrf_token }}" style="display: none">
 <div class="modal fade" id="import-modal" tabindex="-1" role="dialog" aria-labelledby="import-modal-title" aria-hidden="true">
   <div class="modal-dialog modal-lg">
