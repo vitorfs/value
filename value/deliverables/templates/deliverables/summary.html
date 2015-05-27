@@ -18,8 +18,8 @@
 
   {% if deliverable.description %}<p>{{ deliverable.description }}</p>{% endif %}
 
-  <div style="margin-bottom: 20px">
-    <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary">Start a New Meeting</a>
+  <div style="margin-bottom: 20px" class="clearfix">
+    <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary">Start new meeting</a>
   </div>
 
   <div class="panel panel-default">

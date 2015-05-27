@@ -39,11 +39,23 @@ $(function () {
   });
 
   $(".js-show-all").click(function () {
-    
+    $(".panel-group-evaluation .panel").each(function () {
+      var container = $(".panel-heading", this);
+      var target = $(container).attr("data-target");
+      if (!$(target).is(":visible")) {
+        $(target).slideDown();
+      }
+    });    
   });
 
   $(".js-hide-all").click(function () {
-    
+    $(".panel-group-evaluation .panel").each(function () {
+      var container = $(".panel-heading", this);
+      var target = $(container).attr("data-target");
+      if ($(target).is(":visible")) {
+        $(target).slideUp();
+      }
+    });
   });
 
   $(".evaluable").click(function () {

@@ -53,7 +53,7 @@ def meeting(request, deliverable_id, meeting_id):
 @login_required
 def evaluate(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    factors = Factor.get_factors()
+    factors = Factor.get_factors().select_related('measure')
 
     measure_values = factors[0].measure.measurevalue_set.all()
 
@@ -64,8 +64,9 @@ def evaluate(request, deliverable_id, meeting_id):
     else:
         relative_col_size = 'auto'
 
-    evaluations = Evaluation.get_user_evaluations_by_meeting(user=request.user, meeting=meeting)
-    meeting_items = meeting.meetingitem_set.all()
+    evaluations = Evaluation.get_user_evaluations_by_meeting(user=request.user, meeting=meeting) \
+            .select_related('meeting', 'meeting_item', 'user', 'factor', 'factor__measure', 'measure', 'measure_value')
+    meeting_items = meeting.meetingitem_set.select_related('decision_item').all()
     total_items = meeting_items.count()
     search_query = request.GET.get('search')
     if search_query:

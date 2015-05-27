@@ -12,12 +12,12 @@
       {% with meetings=deliverable.meeting_set.all %}
         {% if meetings %}
           {% for meeting in meetings %}
-            <li><a href="{% url 'deliverables:meetings:meeting' deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
+            <li><a href="{% url 'deliverables:meetings:meeting' deliverable.pk meeting.pk %}"><span class="fa fa-square-o"></span> {{ meeting.name }}</a></li>
           {% endfor %}
           <li class="divider"></li>
-          <li><a href="{% url 'deliverables:meetings:new' deliverable.pk %}">New Meeting</a></li>
+          <li><a href="{% url 'deliverables:meetings:new' deliverable.pk %}"><span class="fa fa-plus"></span> New meeting</a></li>
         {% else %}
-          <li><a href="{% url 'deliverables:meetings:new' deliverable.pk %}">Start a Meeting</a></li>
+          <li><a href="{% url 'deliverables:meetings:new' deliverable.pk %}"><span class="fa fa-plus"></span> Start a meeting</a></li>
         {% endif %}
       {% endwith %}
     </ul>

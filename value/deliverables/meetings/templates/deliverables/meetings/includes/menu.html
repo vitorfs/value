@@ -9,11 +9,30 @@
     <ul role="menu" class="dropdown-menu dropdown-menu-right">
       {% with meetings=meeting.deliverable.meeting_set.all %}
         {% for m in meetings %}
-          <li{% if m.pk == meeting.pk %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:meeting' m.deliverable.pk m.pk %}">{{ m.name }}</a></li>
+          <li{% if m.pk == meeting.pk %} class="active"{% endif %}>
+            <a href="{% url 'deliverables:meetings:meeting' m.deliverable.pk m.pk %}">
+              {% if m.pk == meeting.pk %}
+                <span class="fa fa-check-square-o"></span>
+              {% else %}
+                <span class="fa fa-square-o"></span>
+              {% endif %}
+              {{ m.name }}
+            </a>
+          </li>
         {% endfor %}
         <li class="divider"></li>
-        <li><a href="{% url 'deliverables:meetings:new' meeting.deliverable.pk %}">New Meeting</a></li>
-        <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">Return to {{ meeting.deliverable.name }}</a></li>
+        <li>
+          <a href="{% url 'deliverables:meetings:new' meeting.deliverable.pk %}">
+            <span class="fa fa-plus"></span>
+            New meeting
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">
+            <span class="fa fa-rotate-left"></span>
+            Return to {{ meeting.deliverable.name }}
+          </a>
+        </li>
       {% endwith %}
     </ul>
   </li>
