@@ -10,15 +10,24 @@ class Highcharts(object):
 
     label_style = { 'fontSize': '13px', 'fontFamily': '"Helvetica Neue", Helvetica, Arial, sans-serif' }
 
-    def feature_comparison_pie_chart(self, meeting, measure_value):
+    def feature_comparison_bar_chart(self, meeting, measure_value):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting)
         filtered_evaluations = evaluations.filter(measure_value=measure_value)
+
+        stakeholders_count = meeting.meetingstakeholder_set.count()
+        factors_count = Factor.get_factors().count()
+        max_votes = stakeholders_count * factors_count
 
         vqs = filtered_evaluations.values('meeting_item__id', 'meeting_item__decision_item__name').annotate(count=Count('meeting_item__id')).order_by('-count')
 
         data = []
         for result in vqs:
-            data.append([result['meeting_item__decision_item__name'], result['count']])
+            votes = result['count']
+            if max_votes != 0:
+                percentage = round((votes / float(max_votes)) * 100.0, 2)
+            else:
+                percentage = 0.0
+            data.append([result['meeting_item__decision_item__name'], percentage])
 
         options = {
             'chart': { 'type': 'column' },
@@ -27,12 +36,12 @@ class Highcharts(object):
                 'type': 'category',
                 'labels': {
                     'rotation': -45,
-                    'style': { 'fontSize': '13px', 'fontFamily': 'Verdana, sans-serif' }
+                    'style': self.label_style
                 }
             },
-            'yAxis': { 'min': 0, 'title': { 'text': measure_value.description + ' votes' }},
+            'yAxis': { 'min': 0, 'title': { 'text': measure_value.description + ' ' + measure_value.measure.name }},
             'legend': { 'enabled': False },
-            'tooltip': { 'pointFormat': 'Overall ' + measure_value.description.lower() + ' votes: <strong>{point.y}</strong>' },
+            'tooltip': { 'pointFormat': measure_value.description + ' ' + measure_value.measure.name + ': <strong>{point.y}%</strong>' },
             'series': [{
                 'name': measure_value.description + ' Votes',
                 'data': data,
@@ -42,7 +51,7 @@ class Highcharts(object):
                     'rotation': -90,
                     'color': '#FFFFFF',
                     'align': 'right',
-                    'format': '{point.y}',
+                    'format': '{point.y}%',
                     'y': 10,
                     'style': self.label_style
                 }

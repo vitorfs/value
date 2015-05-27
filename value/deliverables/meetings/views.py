@@ -218,7 +218,7 @@ def features_comparison_chart(request, deliverable_id, meeting_id, measure_value
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     measure_value = MeasureValue.objects.get(pk=measure_value_id)
     chart = Highcharts()
-    options = chart.feature_comparison_pie_chart(meeting, measure_value)
+    options = chart.feature_comparison_bar_chart(meeting, measure_value)
     dump = json.dumps(options)
 
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
