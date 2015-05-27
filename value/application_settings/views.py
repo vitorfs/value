@@ -83,17 +83,22 @@ def save_import_templates(request):
 def save_custom_fields(request):
     DecisionItemLookup.objects.all().delete()
     custom_columns = range(1, 31)
+    column_display = u'name,description,'
     for column in custom_columns:
         is_active = request.POST.get('column_is_active_{0}'.format(column))
         if is_active:
             item = DecisionItemLookup()
             item.column_name = 'column_{0}'.format(column)
+            column_display += '{0},'.format(item.column_name)
             label = request.POST.get('column_label_{0}'.format(column))[:255]
             if not label:
                 label = item.column_name
             item.column_label = label
             item.column_type = request.POST.get('column_type_{0}'.format(column), 'S')
             item.save()
+    setting, created = ApplicationSetting.objects.get_or_create(name=ApplicationSetting.DECISION_ITEMS_COLUMNS_DISPLAY)
+    setting.value = column_display
+    setting.save()
     return HttpResponse('Custom fields were saved successfully.')
 
 @login_required
