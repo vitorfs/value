@@ -19,6 +19,25 @@ class Meeting(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_evaluations(self):
+        return Evaluation.get_evaluations_by_meeting(self)
+
+    def get_progress(self):
+        stakeholders_count = self.meetingstakeholder_set.count()
+        meeting_items_count = self.meetingitem_set.count()
+        factors_count = Factor.get_factors().count()
+
+        max_evaluations = stakeholders_count * meeting_items_count * factors_count
+        total_evaluations = self.get_evaluations().count()
+
+        if max_evaluations != 0:
+            percentage = round((total_evaluations / float(max_evaluations)) * 100.0, 2)
+        else:
+            percentage = 0.0
+
+        return percentage
+
+
 
 class MeetingItem(models.Model):
     meeting = models.ForeignKey(Meeting)
@@ -33,6 +52,9 @@ class MeetingStakeholder(models.Model):
     meeting = models.ForeignKey(Meeting)
     stakeholder = models.ForeignKey(User)
     meeting_input = models.FloatField(default=0.0)
+
+    class Meta:
+        ordering = ('stakeholder__first_name', 'stakeholder__last_name', 'stakeholder__username',)
 
     def __unicode__(self):
         return '{0} {1}'.format(self.meeting.name, self.stakeholder.username)

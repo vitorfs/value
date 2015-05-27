@@ -1,10 +1,6 @@
 {% extends 'base.html' %}
 
-{% load staticfiles %}
-
-{% block javascript %}
-
-{% endblock javascript %}
+{% load staticfiles avatar %}
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
@@ -30,20 +26,42 @@
     <div class="panel-heading">
       <h3 class="panel-title">Ongoing Meetings</h3>
     </div>
-    <table class="table table-striped">
+    <table class="table table-hover table-clickable-row">
       <thead>
         <tr>
           <th>Name</th>
-          <th>Notes</th>
-          <th>Started at</th>
+          <th>Stakeholders</th>
+          <th>Items</th>
+          <th>Progress</th>
+          <th>
+            <span class="fa fa-calendar"></span>
+          </th>
+          <th>
+            <span class="fa fa-clock-o"></span>
+          </th>
         </tr>
       </thead>
       <tbody>
         {% for meeting in deliverable.meeting_set.all %}
-          <tr>
+          <tr data-href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">
             <td><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></td>
-            <td>{{ meeting.description }}</td>
-            <td>{{ meeting.started_at }}</td>
+            <td>
+              {% for meeting_stakeholder in meeting.meetingstakeholder_set.all %}
+                <img src="{% avatar meeting_stakeholder.stakeholder 20 %}" alt="{{ meeting_stakeholder.stakeholder.profile.get_display_name }}" class="img-circle" data-toggle="tooltip" data-placement="top" title="{{ meeting_stakeholder.stakeholder.profile.get_display_name }}">
+              {% endfor %}
+            </td>
+            <td>{{ meeting.meetingitem_set.count }}</td>
+            <td>
+              {% with progress=meeting.get_progress %}
+                <div class="progress" style="margin-bottom: 0">
+                  <div class="progress-bar{% if progress == 100.0 %} progress-bar-success{% else %} progress-bar-warning{% endif %}" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%;">
+                    {{ progress }}%
+                  </div>
+                </div>
+              {% endwith %}
+            </td>
+            <td>{{ meeting.created_at|date:"D, d M, Y" }}</td>
+            <td>{{ meeting.created_at|date:"P" }}</td>
           </tr>
         {% endfor %}
       </tbody>

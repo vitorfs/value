@@ -23,6 +23,14 @@
       </div>
       <div class="panel-body">
         <h3 style="margin-top: 0">{{ meeting.name }}</h3>
+        <strong>Meeting progress</strong>
+        {% with progress=meeting.get_progress %}
+          <div class="progress" style="margin-bottom: 0">
+            <div class="progress-bar{% if progress == 100.0 %} progress-bar-success{% else %} progress-bar-warning{% endif %}" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%;">
+              {{ progress }}%
+            </div>
+          </div>
+        {% endwith %}
       </div>
     </div>
 

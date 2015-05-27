@@ -39,6 +39,8 @@ def new(request, deliverable_id):
             meeting_item.decision_item = decision_item
             meeting_item.save()
 
+        deliverable.save()
+
         return redirect(reverse('deliverables:meetings:meeting', args=(deliverable.pk, meeting.pk,)))
 
     return render(request, 'deliverables/meetings/new.html', { 'deliverable': deliverable })
@@ -103,6 +105,8 @@ def save_evaluation(request, deliverable_id, meeting_id):
         evaluation.evaluated_at = timezone.now()
         evaluation.measure_value = measure_value
         evaluation.save()
+
+    meeting.deliverable.save()
 
     return HttpResponse('')
 

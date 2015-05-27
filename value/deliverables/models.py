@@ -26,6 +26,14 @@ class Deliverable(models.Model):
     def get_decision_items_fields(self):
         return DecisionItemLookup.get_all_fields()
 
+    def get_status_label_html(self):
+        if self.status == self.ONGOING:
+            return u'<span class="label {0}">{1}</span>'.format("label-success", self.get_status_display().upper())
+        elif self.status == self.FINISHED:
+            return u'<span class="label {0}">{1}</span>'.format("label-danger", self.get_status_display().upper())
+        else:
+            return u'<span class="label {0}">{1}</span>'.format("label-default", self.get_status_display().upper())
+
 
 class DecisionItem(models.Model):
     deliverable = models.ForeignKey(Deliverable)

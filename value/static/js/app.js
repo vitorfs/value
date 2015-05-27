@@ -88,4 +88,9 @@ $(function () {
 
   });
 
+  $(".table-clickable-row tbody tr").click(function (e) {
+    e.stopPropagation();
+    location.href = $(this).attr("data-href");
+  });
+
 });
