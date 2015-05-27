@@ -39,6 +39,15 @@ def items(request):
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
+@require_POST
+def save_ordering(request):
+    setting, created = ApplicationSetting.objects.get_or_create(name=ApplicationSetting.DECISION_ITEMS_COLUMNS_DISPLAY)
+    setting.value = request.POST.get('column_display')
+    setting.save()
+    return HttpResponse('Ordering and column display saved successfully.')
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
 @transaction.atomic
 @require_POST
 def save_import_templates(request):
@@ -86,8 +95,6 @@ def save_custom_fields(request):
             item.column_type = request.POST.get('column_type_{0}'.format(column), 'S')
             item.save()
     return HttpResponse('Custom fields were saved successfully.')
-    #messages.success(request, 'Custom fields were saved successfully.')
-    #return redirect(reverse('settings:items'))
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)

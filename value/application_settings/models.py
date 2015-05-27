@@ -5,6 +5,7 @@ except:
 
 from django.db import models
 
+
 class ApplicationSetting(models.Model):
 
     EXCEL_SHEET_INDEX = 'EXCEL_SHEET_INDEX'
@@ -36,22 +37,36 @@ class ApplicationSetting(models.Model):
     @staticmethod
     def get():
         settings = {}
+
         for k, v in ApplicationSetting.APPLICATION_SETTINGS:
-            settings[k] = ''
+            if k == ApplicationSetting.DECISION_ITEMS_COLUMNS_DISPLAY:
+                settings[k] = ['name', 'description',]
+            else:
+                settings[k] = ''
+
         for setting in ApplicationSetting.objects.all():
 
             if setting.name == ApplicationSetting.EXCEL_IMPORT_TEMPLATE:
                 try:
                     settings[setting.name] = pickle.loads(str(setting.value))
-                except Exception, e:
+                except:
                     settings[setting.name] = {}
 
             elif setting.name == ApplicationSetting.EXCEL_STARTING_ROW_COLUMN or \
                     setting.name == ApplicationSetting.EXCEL_SHEET_INDEX:
                 try:
                     settings[setting.name] = int(setting.value)
-                except Exception, e:
+                except:
                     settings[setting.name] = 0
+
+            elif setting.name == ApplicationSetting.DECISION_ITEMS_COLUMNS_DISPLAY:
+                try:
+                    settings[setting.name] = setting.value.split(',')
+                    if settings[setting.name]:
+                        if not len(settings[setting.name][-1]):
+                            del settings[setting.name][-1]
+                except:
+                    settings[k] = ['name', 'description',]
 
             else:
                 settings[setting.name] = setting.value

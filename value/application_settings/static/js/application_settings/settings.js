@@ -1,28 +1,25 @@
 $(function () {
 
   $("#order-by").sortable({
-    group: "order",
-    store: {
-      get: function (sortable) {
-        var order = localStorage.getItem(sortable.options.group);
-        return order ? order.split('|') : [];
-      },
-      set: function (sortable) {
-        var order = sortable.toArray();
-        localStorage.setItem(sortable.options.group, order.join('|'));
-      }
-    }
+    group: "order"
   });
 
 
   $("#columns").sortable({
-    group: "order",
-    animation: 150
+    group: "order"
   });
 
 
   $("#column-display-order").sortable({
-    draggable: ".sortable"
+    draggable: ".sortable",
+    onEnd: function (evt) {
+      var value = '';
+      $("#column-display-order span").each(function () {
+        value += $(this).attr("data-field-name") + ",";
+        $(this).attr("data-field-order", $(this).index());
+      });
+      $("#id_column_display").val(value);
+    }
   });
 
   $("#plain-text-column-order").sortable({

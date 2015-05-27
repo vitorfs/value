@@ -23,12 +23,13 @@
 
 {% block settings_content %}
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Decision items</h3>
-    </div>
-    <div class="panel-body">
-      <form method="post">
+  <form id="form_ordering" action="{% url 'settings:save_ordering' %}" method="post">
+    {% csrf_token %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Decision items</h3>
+      </div>
+      <div class="panel-body">
         <div class="form-group" style="margin-bottom: 0">
           <label>Define the default ordering for every screen that display decision items</label>
           <div class="row">
@@ -78,28 +79,30 @@
         </div>
         <div class="form-group" style="margin-bottom: 0">
           <label>Define the column display order</label>
+          <input type="hidden" id="id_column_display" name="column_display" value="{{ app_settings.DECISION_ITEMS_COLUMNS_DISPLAY }}">
           <div id="column-display-order">
-            <span class="label label-default sortable">Name</span><span class="label label-default sortable">Description</span>{% for name, field in custom_fields.items %}<span class="label label-default sortable">{{ field.label }}</span>{% endfor %}
+            {% spaceless %}
+              {% for name, field in decision_items_fields.items %}
+                <span class="label label-default sortable" data-field-name="{{ name }}" data-field-order="{{ forloop.counter0 }}">{{ field.label }}</span>
+              {% endfor %}
+            {% endspaceless %}
           </div>
         </div>
-      </form>
+      </div>
+      <div class="panel-footer">
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
     </div>
-    <div class="panel-footer">
-      <button type="submit" class="btn btn-primary">Save changes</button>
-    </div>
-  </div>
+  </form>
 
   <form id="form_import_templates" action="{% url 'settings:save_import_templates' %}" method="post">
-    
     {% csrf_token %}
-
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Import template</h3>
       </div>
       <div class="panel-body">
-        <p>You may import decision items for a given deliverable or meeting from a external file. Supported file types are <strong>xls</strong>, <strong>xlsx</strong>, <strong>csv</strong>, <strong>txt</strong>, <strong>json</strong> and <strong>xml</strong>.</p>
-        
+        <p>You may import decision items for a given deliverable or meeting from a external file. Supported file types are <strong>xls</strong>, <strong>xlsx</strong>, <strong>csv</strong>, <strong>txt</strong>, <strong>json</strong> and <strong>xml</strong>.</p>        
         <div class="panel-group" id="templates" role="tablist" aria-multiselectable="true" style="margin-bottom: 0">
           <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="heading-xls">
@@ -279,10 +282,8 @@
     </div>
   </form>
 
-  <form method="post" action="{% url 'settings:save_custom_fields' %}">
-    
+  <form id="form_custom_fields" method="post" action="{% url 'settings:save_custom_fields' %}">
     {% csrf_token %}
-
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Custom fields</h3>

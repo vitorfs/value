@@ -1,5 +1,9 @@
+from collections import OrderedDict
+
 from django.db import models
 from django.contrib.auth.models import User
+
+from value.application_settings.models import ApplicationSetting
 
 
 class Deliverable(models.Model):
@@ -112,4 +116,10 @@ class DecisionItemLookup(models.Model):
         fields = DecisionItemLookup.get_custom_fields()
         fields[u'name'] = { 'label': u'Name', 'type': DecisionItemLookup.STRING }
         fields[u'description'] = { 'label': u'Description', 'type': DecisionItemLookup.STRING }
-        return fields
+
+        app_settings = ApplicationSetting.get()
+        ordered_fields = OrderedDict()
+        for key in app_settings[ApplicationSetting.DECISION_ITEMS_COLUMNS_DISPLAY]:
+            if key in fields.keys():
+                ordered_fields[key] = fields[key]
+        return ordered_fields

@@ -18,63 +18,72 @@
 
   {% if deliverable.description %}<p>{{ deliverable.description }}</p>{% endif %}
 
-  <div style="margin-bottom: 20px" class="clearfix">
-    <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary">Start new meeting</a>
-  </div>
-
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Ongoing Meetings</h3>
+  {% if deliverable.meeting_set.exists %}
+    <div style="margin-bottom: 20px" class="clearfix">
+      <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary">Start new meeting</a>
     </div>
-    <table class="table table-hover table-clickable-row">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Stakeholders</th>
-          <th>Items</th>
-          <th>Progress</th>
-          <th>
-            <span class="fa fa-calendar"></span>
-          </th>
-          <th>
-            <span class="fa fa-clock-o"></span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for meeting in deliverable.meeting_set.all %}
-          <tr data-href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">
-            <td><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></td>
-            <td>
-              {% for meeting_stakeholder in meeting.meetingstakeholder_set.all %}
-                <img src="{% avatar meeting_stakeholder.stakeholder 20 %}" alt="{{ meeting_stakeholder.stakeholder.profile.get_display_name }}" class="img-circle" data-toggle="tooltip" data-placement="top" title="{{ meeting_stakeholder.stakeholder.profile.get_display_name }}">
-              {% endfor %}
-            </td>
-            <td>{{ meeting.meetingitem_set.count }}</td>
-            <td>
-              {% with progress=meeting.get_progress %}
-                <div class="progress" style="margin-bottom: 0">
-                  <div class="progress-bar{% if progress == 100.0 %} progress-bar-success{% else %} progress-bar-warning{% endif %}" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%;">
-                    {{ progress }}%
-                  </div>
-                </div>
-              {% endwith %}
-            </td>
-            <td>{{ meeting.created_at|date:"D, d M, Y" }}</td>
-            <td>{{ meeting.created_at|date:"P" }}</td>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Ongoing Meetings</h3>
+      </div>
+      <table class="table table-hover table-clickable-row">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Stakeholders</th>
+            <th>Items</th>
+            <th>Progress</th>
+            <th>
+              <span class="fa fa-calendar"></span>
+            </th>
+            <th>
+              <span class="fa fa-clock-o"></span>
+            </th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Past Meetings</h3>
+        </thead>
+        <tbody>
+          {% for meeting in deliverable.meeting_set.all %}
+            <tr data-href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">
+              <td><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></td>
+              <td>
+                {% for meeting_stakeholder in meeting.meetingstakeholder_set.all %}
+                  <img src="{% avatar meeting_stakeholder.stakeholder 20 %}" alt="{{ meeting_stakeholder.stakeholder.profile.get_display_name }}" class="img-circle" data-toggle="tooltip" data-placement="top" title="{{ meeting_stakeholder.stakeholder.profile.get_display_name }}">
+                {% endfor %}
+              </td>
+              <td>{{ meeting.meetingitem_set.count }}</td>
+              <td>
+                {% with progress=meeting.get_progress %}
+                  <div class="progress" style="margin-bottom: 0">
+                    <div class="progress-bar{% if progress == 100.0 %} progress-bar-success{% else %} progress-bar-warning{% endif %}" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%;">
+                      {{ progress }}%
+                    </div>
+                  </div>
+                {% endwith %}
+              </td>
+              <td>{{ meeting.created_at|date:"D, d M, Y" }}</td>
+              <td>{{ meeting.created_at|date:"P" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-    <div class="panel-body">
-      No record
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Past Meetings</h3>
+      </div>
+      <div class="panel-body">
+        No record
+      </div>
     </div>
-  </div>
+  {% else %}
+    <div class="well">
+      <div class="text-center" style="padding: 2em 0;">
+        <span class="fa fa-calendar text-muted" style="font-size: 2.5em"></span>
+        <h4 style="margin: 1em 0;">This deliverable had no meeting yet.</h4>
+        <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary">Start a meeting</a>
+      </div>
+    </div>
+  {% endif %}
 
 {% endblock content %}
