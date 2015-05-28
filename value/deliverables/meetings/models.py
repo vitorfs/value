@@ -7,10 +7,17 @@ from value.measures.models import Measure, MeasureValue
 from value.deliverables.models import Deliverable, DecisionItem
 
 class Meeting(models.Model):
+    ONGOING = u'O'
+    CLOSED = u'C'
+    STATUS = (
+        (ONGOING, u'Ongoing'),
+        (CLOSED, u'Closed'),
+        )
+
     name = models.CharField(max_length=255)
     deliverable = models.ForeignKey(Deliverable)
-    started_at = models.DateTimeField(null=True, blank=True)
-    ended_at = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(max_length=1, choices=STATUS, default=ONGOING)
+    date_time = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, related_name='meeting_creation_user')
     updated_at = models.DateTimeField(auto_now=True)
@@ -18,6 +25,14 @@ class Meeting(models.Model):
     
     def __unicode__(self):
         return self.name
+
+    def get_status_label_html(self):
+        if self.status == self.ONGOING:
+            return u'<span class="label {0}">{1}</span>'.format("label-success", self.get_status_display().upper())
+        elif self.status == self.CLOSED:
+            return u'<span class="label {0}">{1}</span>'.format("label-danger", self.get_status_display().upper())
+        else:
+            return u'<span class="label {0}">{1}</span>'.format("label-default", self.get_status_display().upper())
 
     def get_evaluations(self):
         return Evaluation.get_evaluations_by_meeting(self)
@@ -68,6 +83,7 @@ class Evaluation(models.Model):
     measure = models.ForeignKey(Measure)
     measure_value = models.ForeignKey(MeasureValue, null=True, blank=True)
     evaluated_at = models.DateTimeField(null=True, blank=True)
+    reasoning = models.CharField(max_length=500, null=True, blank=True)
 
     def __unicode__(self):
         mv = 'N/A'

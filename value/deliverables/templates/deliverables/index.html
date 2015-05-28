@@ -28,7 +28,6 @@
           <th>Name</th>
           <th>Manager</th>
           <th>Meetings</th>
-          <th>Status</th>
           <th>Created at</th>
           <th>Updated at</th>
         </tr>
@@ -39,7 +38,6 @@
             <td><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></td>
             <td>{{ deliverable.manager.profile.get_display_name }}</td>
             <td>{{ deliverable.meeting_set.count }}</td>
-            <td>{{ deliverable.get_status_label_html|safe }}</td>
             <td>{{ deliverable.created_at }}</td>
             <td>{{ deliverable.updated_at }}</td>
           </tr>

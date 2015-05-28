@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li class="active">{{ deliverable.name }}</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+  {% include 'deliverables/includes/menu.html' with active='dashboard' deliverable=deliverable %}
+
+  <h2>{{ deliverable.name }}</h2>
+
+  {% if deliverable.description %}<p>{{ deliverable.description }}</p>{% endif %}
+
+  {% if deliverable.meeting_set.exists %}
+    <div style="margin-bottom: 20px" class="clearfix">
+      <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary">Start new meeting</a>
+    </div>
+
+    {% include 'deliverables/includes/meetings_table.html' with meetings=deliverable.get_ongoing_meetings title='Ongoing meetings' %}
+
+    {% include 'deliverables/includes/meetings_table.html' with meetings=deliverable.get_closed_meetings title='Past meetings' %}
+
+  {% else %}
+    <div class="well">
+      <div class="text-center" style="padding: 2em 0;">
+        <span class="fa fa-calendar text-muted" style="font-size: 2.5em"></span>
+        <h4 style="margin: 1em 0;">This deliverable had no meeting yet.</h4>
+        <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary">Start a meeting</a>
+      </div>
+    </div>
+  {% endif %}
+
+{% endblock content %}

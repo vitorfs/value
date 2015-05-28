@@ -112,7 +112,7 @@ def import_decision_items(request):
 @login_required
 def deliverable(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    return render(request, 'deliverables/summary.html', { 'deliverable' : deliverable })
+    return render(request, 'deliverables/deliverable.html', { 'deliverable' : deliverable })
 
 @login_required
 def stakeholders(request, deliverable_id):

@@ -1,9 +1,11 @@
 import json
 
 from django.http import HttpResponse
+from django.views.decorators.http import require_POST
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import messages
 from django.utils import timezone
 
 from value.deliverables.models import Deliverable
@@ -49,6 +51,16 @@ def new(request, deliverable_id):
 def meeting(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     return render(request, 'deliverables/meetings/meeting.html', { 'meeting': meeting })
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+@require_POST
+def close_meeting(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    meeting.status = Meeting.CLOSED
+    meeting.save()
+    messages.success(request, u'The meeting {0} was closed successfully.'.format(meeting.name))
+    return redirect(reverse('deliverables:deliverable', args=(meeting.deliverable.pk,)))
 
 @login_required
 def evaluate(request, deliverable_id, meeting_id):

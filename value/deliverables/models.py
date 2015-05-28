@@ -7,18 +7,10 @@ from value.application_settings.models import ApplicationSetting
 
 
 class Deliverable(models.Model):
-    ONGOING = u'O'
-    FINISHED = u'F'
-    STATUS = (
-        (ONGOING, u'Ongoing'),
-        (FINISHED, u'Finished'),
-        )
-
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=2000, null=True, blank=True)
     stakeholders = models.ManyToManyField(User)
     manager = models.ForeignKey(User, related_name='deliverable_manager_user')
-    status = models.CharField(max_length=1, choices=STATUS, default=ONGOING)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, related_name='deliverable_creation_user')
     updated_at = models.DateTimeField(auto_now=True)
@@ -30,13 +22,11 @@ class Deliverable(models.Model):
     def get_decision_items_fields(self):
         return DecisionItemLookup.get_all_fields()
 
-    def get_status_label_html(self):
-        if self.status == self.ONGOING:
-            return u'<span class="label {0}">{1}</span>'.format("label-success", self.get_status_display().upper())
-        elif self.status == self.FINISHED:
-            return u'<span class="label {0}">{1}</span>'.format("label-danger", self.get_status_display().upper())
-        else:
-            return u'<span class="label {0}">{1}</span>'.format("label-default", self.get_status_display().upper())
+    def get_ongoing_meetings(self):
+        return self.meeting_set.filter(status='O')
+
+    def get_closed_meetings(self):
+        return self.meeting_set.filter(status='C')
 
 
 class DecisionItem(models.Model):
