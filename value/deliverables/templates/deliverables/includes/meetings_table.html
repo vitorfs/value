@@ -26,7 +26,7 @@
           <td><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></td>
           <td>
             {% for meeting_stakeholder in meeting.meetingstakeholder_set.all %}
-              <img src="{% avatar meeting_stakeholder.stakeholder 20 %}" alt="{{ meeting_stakeholder.stakeholder.profile.get_display_name }}" class="img-circle" data-toggle="tooltip" data-placement="top" title="{{ meeting_stakeholder.stakeholder.profile.get_display_name }}">
+              {% avatar_img meeting_stakeholder.stakeholder 20 %}
             {% endfor %}
           </td>
           <td>{{ meeting.meetingitem_set.count }}</td>

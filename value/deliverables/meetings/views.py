@@ -7,12 +7,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 from value.deliverables.models import Deliverable
 from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
 from value.deliverables.meetings.charts import Highcharts
+from value.deliverables.meetings.forms import MeetingForm
 
 
 @login_required
@@ -23,29 +25,30 @@ def index(request, deliverable_id):
 def new(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     if request.method == 'POST':
-        meeting = Meeting()
-        meeting.deliverable = deliverable
-        meeting.name = request.POST.get('name')
-        meeting.created_by = request.user
-        meeting.save()
-
-        for stakeholder in deliverable.stakeholders.all():
-            meeting_stakeholder = MeetingStakeholder()
-            meeting_stakeholder.meeting = meeting
-            meeting_stakeholder.stakeholder = stakeholder
-            meeting_stakeholder.save()
-
-        for decision_item in deliverable.decisionitem_set.all():
-            meeting_item = MeetingItem()
-            meeting_item.meeting = meeting
-            meeting_item.decision_item = decision_item
-            meeting_item.save()
-
-        deliverable.save()
-
-        return redirect(reverse('deliverables:meetings:meeting', args=(deliverable.pk, meeting.pk,)))
-
-    return render(request, 'deliverables/meetings/new.html', { 'deliverable': deliverable })
+        form = MeetingForm(request.POST)
+        if form.is_valid():
+            meeting = Meeting()
+            meeting.deliverable = deliverable
+            meeting.name = request.POST.get('name')
+            meeting.created_by = request.user
+            meeting.save()
+            for stakeholder in deliverable.stakeholders.all():
+                meeting_stakeholder = MeetingStakeholder()
+                meeting_stakeholder.meeting = meeting
+                meeting_stakeholder.stakeholder = stakeholder
+                meeting_stakeholder.save()
+            for decision_item in deliverable.decisionitem_set.all():
+                meeting_item = MeetingItem()
+                meeting_item.meeting = meeting
+                meeting_item.decision_item = decision_item
+                meeting_item.save()
+            deliverable.save()
+            messages.success(request, u'The meeting {0} was created successfully.'.format(meeting.name))
+            return redirect(reverse('deliverables:meetings:meeting', args=(deliverable.pk, meeting.pk,)))
+    else:
+        form = MeetingForm()
+    available_stakeholders = User.objects.exclude(id__in=deliverable.stakeholders.all()).filter(is_active=True).order_by('first_name', 'last_name', 'username')
+    return render(request, 'deliverables/meetings/new.html', { 'deliverable': deliverable, 'form': form, 'available_stakeholders': available_stakeholders })
 
 @login_required
 def meeting(request, deliverable_id, meeting_id):

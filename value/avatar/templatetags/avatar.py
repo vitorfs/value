@@ -69,3 +69,7 @@ def avatar_id(pk, size=128):
     user = User.objects.get(pk=pk)
     return avatar(user, size)
     
+@register.simple_tag
+def avatar_img(user, size=128):
+    src = avatar(user, size)
+    return '<img src="{0}" alt="{1}" class="img-circle" data-toggle="tooltip" data-placement="top" title="{1}">'.format(src, user.profile.get_display_name())

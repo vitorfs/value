@@ -1,23 +1,21 @@
 $(function () {
 
   $("#starting_date").datetimepicker({
-    format: "DD/MM/YYYY HH:mm",
-    defaultDate: moment()
+    format: "DD/MM/YYYY HH:mm"
   });
 
-  $("#ending_date").datetimepicker({
-    format: "DD/MM/YYYY HH:mm",
-    defaultDate: moment().add(1, 'hours')
-  });
-
-  $(".sortable").tablesorter({ headers: { 0: { sorter: false }}});
+  $(".table-sortable").tablesorter({ headers: { 0: { sorter: false }}});
 
   $(".panel").on("show.bs.collapse", function (e) {
-    $(".panel-info", $(this)).fadeOut();
+    if (e.target.id !== "") {
+      $(".panel-info", $(this)).fadeOut();
+    }
   });
 
   $(".panel").on("hide.bs.collapse", function (e) {
-    $(".panel-info", $(this)).fadeIn();
+    if (e.target.id !== "") {
+      $(".panel-info", $(this)).fadeIn();
+    }
   });
 
 });

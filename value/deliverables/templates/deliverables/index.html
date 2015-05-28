@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load staticfiles %}
+{% load staticfiles avatar %}
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
@@ -36,7 +36,9 @@
         {% for deliverable in deliverables %}
           <tr data-href="{% url 'deliverables:deliverable' deliverable.pk %}">
             <td><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></td>
-            <td>{{ deliverable.manager.profile.get_display_name }}</td>
+            <td>
+              {% avatar_img deliverable.manager 20 %}
+            </td>
             <td>{{ deliverable.meeting_set.count }}</td>
             <td>{{ deliverable.created_at }}</td>
             <td>{{ deliverable.updated_at }}</td>

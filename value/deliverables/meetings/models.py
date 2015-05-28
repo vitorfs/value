@@ -15,9 +15,12 @@ class Meeting(models.Model):
         )
 
     name = models.CharField(max_length=255)
+    description = models.CharField(max_length=2000, null=True, blank=True)
+    location = models.CharField(max_length=50, null=True, blank=True)
     deliverable = models.ForeignKey(Deliverable)
     status = models.CharField(max_length=1, choices=STATUS, default=ONGOING)
-    date_time = models.DateTimeField(null=True, blank=True)
+    started_at = models.DateTimeField()
+    ended_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, related_name='meeting_creation_user')
     updated_at = models.DateTimeField(auto_now=True)

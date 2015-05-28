@@ -2,6 +2,12 @@
 
 {% load avatar attr %}
 
+{% block javascript %}
+<script type="text/javascript">
+$(".table-sortable").tablesorter({ headers: { 0: { sorter: false }}});
+</script>
+{% endblock javascript %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
@@ -83,7 +89,7 @@
         </div>
       </div>
       {% with fields=meeting.deliverable.get_decision_items_fields %}
-        <table class="table table-striped table-check-all">
+        <table class="table table-striped table-check-all table-sortable table-bordered">
           <thead>
             <tr>
               <th><input type="checkbox"></th>

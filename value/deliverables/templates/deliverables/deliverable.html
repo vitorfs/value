@@ -20,13 +20,10 @@
 
   {% if deliverable.meeting_set.exists %}
     <div style="margin-bottom: 20px" class="clearfix">
-      <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary">Start new meeting</a>
+      <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary">Start meeting</a>
     </div>
-
     {% include 'deliverables/includes/meetings_table.html' with meetings=deliverable.get_ongoing_meetings title='Ongoing meetings' %}
-
     {% include 'deliverables/includes/meetings_table.html' with meetings=deliverable.get_closed_meetings title='Past meetings' %}
-
   {% else %}
     <div class="well">
       <div class="text-center" style="padding: 2em 0;">
