@@ -54,7 +54,7 @@ $(function () {
     "preventDuplicates": true
   };
 
-  $("input, textarea").attr("autocomplete", "off");
+  //$("input, textarea").attr("autocomplete", "off");
 
   $("table.table-check-all thead tr th input[type='checkbox']").click(function () {
     var is_checked = $(this).is(":checked");

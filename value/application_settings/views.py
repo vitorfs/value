@@ -18,8 +18,8 @@ from value.application_settings.models import ApplicationSetting
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def index(request):
-    admins = User.objects.filter(is_superuser=True)
-    return render(request, 'application_settings/index.html', { 'admins': admins })
+    users = User.objects.filter(is_active=True)
+    return render(request, 'application_settings/index.html', { 'users': users })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)

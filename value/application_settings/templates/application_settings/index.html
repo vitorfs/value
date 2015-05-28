@@ -1,5 +1,16 @@
 {% extends 'application_settings/base.html' %}
 
+{% block javascript %}
+  <script type="text/javascript">
+    $(function () {
+      $("#id_administrators").selectize();
+      $("#id_administrators").on("change", function () {
+        console.log(1);
+      });
+    });
+  </script>
+{% endblock javascript %}
+
 {% block settings_content %}
 
   <div class="panel panel-default">
@@ -16,16 +27,27 @@
       <h3 class="panel-title">Administrators</h3>
     </div>
     <div class="panel-body">
-      <input type="text" class="form-control">
+      <select id="id_administrators" name="administrators">
+        {% for user in users %}
+          {% if not user.is_superuser %}
+            <option value="{{ user.pk }}">{{ user.profile.get_display_name }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
     </div>
     <ul class="list-group">
-      {% for admin in admins %}
-      <li class="list-group-item">
-        <a href="#" class="pull-right"><span class="glyphicon glyphicon-remove-sign"></span></a>
-        {{ admin.profile.get_display_name }}
-      </li>
+      {% for user in users %}
+        {% if user.is_superuser %}
+          <li class="list-group-item">
+            <a href="#" class="pull-right"><span class="glyphicon glyphicon-remove-sign"></span></a>
+            {{ user.profile.get_display_name }}
+          </li>
+        {% endif %}
       {% endfor %}
     </ul>
+    <div class="panel-footer">
+      <button type="submit" class="btn btn-primary">Save changes</button>
+    </div>
   </div>
 
 {% endblock settings_content %}
