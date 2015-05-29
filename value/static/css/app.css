@@ -321,3 +321,11 @@ th.headerSortUp:after {
 .empty-row {
   display: none;
 }
+
+.panel-group-stakeholders.removeable, .panel-group-stakeholders.selectable {
+  cursor: pointer;
+}
+
+.panel-group-stakeholders .panel .panel-body {
+  transition: all 0.15s ease 0s;
+}

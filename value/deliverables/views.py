@@ -117,8 +117,40 @@ def deliverable(request, deliverable_id):
 @login_required
 def stakeholders(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    return render(request, 'deliverables/stakeholders.html', { 'deliverable' : deliverable })
+
+@login_required
+def load_available_stakeholders(request, deliverable_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     available_stakeholders = User.objects.filter(is_active=True).exclude(pk__in=deliverable.stakeholders.all())
-    return render(request, 'deliverables/stakeholders.html', { 'deliverable' : deliverable, 'available_stakeholders' : available_stakeholders })
+    html = render_to_string('deliverables/includes/add_stakeholders.html', { 'available_stakeholders': available_stakeholders })
+    return HttpResponse(html)
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+@require_POST
+def add_stakeholders(request, deliverable_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    user_ids = request.POST.getlist('stakeholders')
+    if user_ids:
+        for user_id in user_ids:
+            stakeholder = User.objects.get(pk=user_id)
+            deliverable.stakeholders.add(stakeholder)
+        deliverable.save()
+        messages.success(request, u'The stakeholders were added successfully.')
+    else:
+        messages.warning(request, u'No stakeholder were selected. Nothing changed.')
+    return redirect(reverse('deliverables:stakeholders', args=(deliverable.pk,)))
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+@require_POST
+def remove_stakeholder(request, deliverable_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    user_id = request.POST.get('user_id')
+    user = User.objects.get(pk=user_id)
+    deliverable.stakeholders.remove(user)
+    return HttpResponse(u'{0} was removed successfully.'.format(user.profile.get_display_name()))
 
 @login_required
 def decision_items(request, deliverable_id):

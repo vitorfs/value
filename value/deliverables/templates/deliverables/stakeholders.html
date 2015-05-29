@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 
-{% load avatar %}
+{% load static avatar %}
+
+{% block javascript %}
+  <script src="{% static 'js/deliverables/deliverables.js' %}"></script>
+{% endblock javascript %}
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
@@ -15,42 +19,46 @@
 
   {% include 'deliverables/includes/menu.html' with active='stakeholders' deliverable=deliverable %}
 
-  <div style="margin-bottom: 20px">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteStakeholder">
-      <span class="glyphicon glyphicon-plus"></span> Add stakeholder
-    </button>
-  </div>
+  {% if deliverable.stakeholders.exists %}
+    <div style="margin-bottom: 20px">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStakeholder">
+        <span class="glyphicon glyphicon-plus"></span> Add stakeholder
+      </button>
+    </div>
+    <form id="formRemoveStakeholder" method="post" action="{% url 'deliverables:remove_stakeholder' deliverable.pk %}">
+      {% csrf_token %}
+      {% include 'includes/users_panel_group.html' with stakeholders=deliverable.stakeholders.all group_actions='removeable' %}
+    </form>
+  {% else %}
+    <div class="well">
+      <div class="text-center" style="padding: 2em 0;">
+        <span class="fa fa-users text-muted" style="font-size: 2.5em"></span>
+        <h4 style="margin: 1em 0;">There is no stakeholder associated to the deliverable.</h4>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStakeholder">
+          <span class="glyphicon glyphicon-plus"></span> Add stakeholder
+        </button>
+      </div>
+    </div>
+  {% endif %}
 
-  <form method="post" action="">
+
+  <form id="formSelectStakeholder" method="post" action="{% url 'deliverables:add_stakeholders' deliverable.pk %}">
     {% csrf_token %}
-    <div class="modal fade" id="inviteStakeholder" tabindex="-1" role="dialog" aria-labelledby="inviteStakeholderTitle" aria-hidden="true">
+    <div class="modal fade" id="addStakeholder" tabindex="-1" role="dialog" aria-labelledby="addStakeholderTitle" aria-hidden="true" data-url="{% url 'deliverables:load_available_stakeholders' deliverable.pk %}">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="inviteStakeholderTitle">Add stakeholder</h4>
+            <h4 class="modal-title" id="addStakeholderTitle">Add stakeholder</h4>
           </div>
-          <div class="modal-body">
-            {% if available_stakeholders %}
-              <div class="alert alert-info alert-dismissible fade in" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                Select the stakeholders to be associated with the deliverable.
-              </div>
-            {% endif %}
-            {% include 'includes/users_panel_group.html' with stakeholders=available_stakeholders group_actions='selectable' %}
-          </div>
+          <div class="modal-body"></div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary"{% if not available_stakeholders %} disabled{% endif %}>Confirm</button>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Confirm</button>
           </div>
         </div>
       </div>
     </div>
-  </form>
-
-  <form method="post" action="">
-    {% csrf_token %}
-    {% include 'includes/users_panel_group.html' with stakeholders=deliverable.stakeholders.all %}
   </form>
 
 {% endblock content %}

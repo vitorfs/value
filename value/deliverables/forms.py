@@ -20,4 +20,5 @@ class DeliverableForm(forms.ModelForm):
 
     class Meta:
         model = Deliverable
-        fields = ['name', 'description', 'stakeholders']
+        fields = ['name', 'description', 'stakeholders',]
+        

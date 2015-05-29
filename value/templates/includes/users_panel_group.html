@@ -1,35 +1,26 @@
 {% load avatar %}
 
-{% if stakeholders %}
-  <div class="panel-group panel-group-stakeholders {{ group_actions }}">
-    {% for stakeholder in stakeholders|dictsort:"first_name" %}
-      {% with display_name=stakeholder.profile.get_display_name %}
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div class="row">
-            <div class="col-md-11">
-              <img src="{% avatar stakeholder 32 %}" alt="{{ display_name }}" class="img-circle" style="margin-right: 10px">
-              {{ display_name }}
-              {% if stakeholder.groups.exists %}
-                <small class="text-muted">({% for group in stakeholder.groups.all %}{{ group.name }}{% if not forloop.last %}, {% endif %}{% endfor %})</small>
-              {% endif %}
-              <input type="checkbox" name="stakeholders" value="{{ stakeholder.pk }}" style="display: none">
-            </div>
-            <div class="col-md-1 text-right">
-              <span class="glyphicon glyphicon-ok text-success" style="line-height: 28px; display: none"></span>
-            </div>
+<div class="panel-group panel-group-stakeholders {{ group_actions }}">
+  {% for stakeholder in stakeholders|dictsort:"first_name" %}
+    {% with display_name=stakeholder.profile.get_display_name %}
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-11">
+            <img src="{% avatar stakeholder 32 %}" alt="{{ display_name }}" class="img-circle" style="margin-right: 10px">
+            {{ display_name }}
+            {% if stakeholder.groups.exists %}
+              <small class="text-muted">({% for group in stakeholder.groups.all %}{{ group.name }}{% if not forloop.last %}, {% endif %}{% endfor %})</small>
+            {% endif %}
+            <input type="checkbox" name="stakeholders" value="{{ stakeholder.pk }}" style="display: none">
+          </div>
+          <div class="col-md-1 text-right panel-action-icon">
+            <span class="glyphicon glyphicon-ok text-success" style="line-height: 28px; display: none"></span>
+            <span class="glyphicon glyphicon-remove text-danger" style="line-height: 28px; display: none"></span>
           </div>
         </div>
       </div>
-      {% endwith %}
-    {% endfor %}
-  </div>
-{% else %}
-  <div class="well">
-    <div class="text-center" style="padding: 2em 0;">
-      <span class="fa fa-users text-muted" style="font-size: 2.5em"></span>
-      <h4 style="margin: 1em 0;">There is no stakeholder available.</h4>
-      <a href="{% url 'users:add' %}" class="btn btn-primary">Create new user</a>
     </div>
-  </div>
-{% endif %}
+    {% endwith %}
+  {% endfor %}
+</div>

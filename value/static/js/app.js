@@ -56,6 +56,35 @@ $(function () {
 
   //$("input, textarea").attr("autocomplete", "off");
 
+  $("main").on("click", ".panel-group-stakeholders.selectable .panel", function () {
+    if ($(this).hasClass("panel-success")) {
+      $(".panel-body", this).removeClass("bg-success");
+      $(this).removeClass("panel-success text-success").addClass("panel-default");
+      $(".panel-body small", this).removeClass("text-success");
+      $(".panel-action-icon .glyphicon-ok", this).hide();
+      $("[name='stakeholders']", this).prop("checked", false);
+    }
+    else {
+      $(".panel-body", this).addClass("bg-success");
+      $(this).removeClass("panel-default").addClass("panel-success text-success");
+      $(".panel-body small", this).addClass("text-success");
+      $(".panel-action-icon .glyphicon-ok", this).show();
+      $("[name='stakeholders']", this).prop("checked", true);
+    }
+  });
+
+  $(".panel-group-stakeholders.removeable .panel").hover(function () {
+    $(this).removeClass("panel-default").addClass("panel-danger");
+    $(".panel-body", this).addClass("bg-danger text-danger");
+    $(".panel-body small", this).addClass("text-danger");
+    $(".panel-action-icon .glyphicon-remove", this).show();
+  }, function () {
+    $(this).removeClass("panel-danger").addClass("panel-default");
+    $(".panel-body", this).removeClass("bg-danger text-danger");
+    $(".panel-body small", this).removeClass("text-danger");
+    $(".panel-action-icon .glyphicon-remove", this).hide();
+  });
+
   $("table.table-check-all thead tr th input[type='checkbox']").click(function () {
     var is_checked = $(this).is(":checked");
     var table = $(this).closest("table");
