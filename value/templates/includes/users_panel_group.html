@@ -1,6 +1,6 @@
 {% load avatar %}
 
-<div class="panel-group panel-group-stakeholders {{ group_actions }}">
+<div class="panel-group panel-group-stakeholders {{ group_actions }}" style="margin-bottom: 0">
   {% for stakeholder in stakeholders|dictsort:"first_name" %}
     {% with display_name=stakeholder.profile.get_display_name %}
     <div class="panel panel-default">

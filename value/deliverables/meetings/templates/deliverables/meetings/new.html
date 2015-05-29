@@ -96,72 +96,42 @@
             </a>
           </h4>
         </div>
-        <div id="collapse-stakeholders" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-stakeholders">
+        <div id="collapse-stakeholders" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-stakeholders">
           <div class="panel-body">
             <div class="alert alert-info alert-dismissible fade in" role="alert">
               <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               Click to remove a stakeholder from the meeting.
             </div>
-            <div class="panel-group">
-              {% for stakeholder in deliverable.stakeholders.all|dictsort:"first_name" %}
-              <div class="panel panel-success">
-                <div class="panel-body bg-success">
-                  <div class="row">
-                    <div class="col-md-11">
-                      <img src="{% avatar stakeholder 32 %}" alt="{{ stakeholder.profile.get_display_name }}" class="img-circle" style="margin-right: 10px">
-                      {{ stakeholder.profile.get_display_name }}
-                      <input type="checkbox" name="stakeholders" value="{{ stakeholder.pk }}" style="display: none" checked>
+
+            <div class="deliverable-stakeholders">
+              {% include 'includes/users_panel_group.html' with stakeholders=deliverable.stakeholders.all group_actions='selectable' %}
+            </div>
+            
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteStakeholder" style="margin-top: 20px">
+              <span class="glyphicon glyphicon-envelope"></span> Invite
+            </button>
+            <div class="modal fade" id="inviteStakeholder" tabindex="-1" role="dialog" aria-labelledby="inviteStakeholderTitle" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="inviteStakeholderTitle">Invite stakeholder</h4>
+                  </div>
+                  <div class="modal-body">
+                    <div class="alert alert-info alert-dismissible fade in" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      Click to add a stakeholder to the meeting.
                     </div>
-                    <div class="col-md-1 text-right">
-                      <span class="glyphicon glyphicon-ok text-success" style="line-height: 28px; display: block"></span>
-                    </div>
+                    {% include 'includes/users_panel_group.html' with stakeholders=available_stakeholders group_actions='selectable' %}
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Confirm</button>
                   </div>
                 </div>
               </div>
-              {% endfor %}
             </div>
 
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteStakeholder">
-  <span class="glyphicon glyphicon-envelope"></span> Invite
-</button>
-<div class="modal fade" id="inviteStakeholder" tabindex="-1" role="dialog" aria-labelledby="inviteStakeholderTitle" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="inviteStakeholderTitle">Invite stakeholder</h4>
-      </div>
-      <div class="modal-body">
-        <div class="alert alert-info alert-dismissible fade in" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          Click to add a stakeholder to the meeting.
-        </div>
-        <div class="panel-group">
-          {% for stakeholder in available_stakeholders %}
-          <div class="panel panel-default">
-            <div class="panel-body">
-              <div class="row">
-                <div class="col-md-11">
-                  <img src="{% avatar stakeholder 32 %}" alt="{{ stakeholder.profile.get_display_name }}" class="img-circle" style="margin-right: 10px">
-                  {{ stakeholder.profile.get_display_name }}
-                  <input type="checkbox" name="stakeholders" value="{{ stakeholder.pk }}" style="display: none" checked>
-                </div>
-                <div class="col-md-1 text-right">
-                  <span class="glyphicon glyphicon-ok text-success" style="line-height: 28px; display: none"></span>
-                </div>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>        
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary">Confirm</button>
-      </div>
-    </div>
-  </div>
-</div>
           </div>
         </div>
       </div>

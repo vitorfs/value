@@ -18,10 +18,6 @@ from value.deliverables.meetings.forms import MeetingForm
 
 
 @login_required
-def index(request, deliverable_id):
-    pass
-
-@login_required
 def new(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     if request.method == 'POST':
@@ -53,7 +49,8 @@ def new(request, deliverable_id):
 @login_required
 def meeting(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    return render(request, 'deliverables/meetings/meeting.html', { 'meeting': meeting })
+    stakeholders = [meeting_stakeholder.stakeholder for meeting_stakeholder in meeting.meetingstakeholder_set.select_related('stakeholder')]
+    return render(request, 'deliverables/meetings/meeting.html', { 'meeting': meeting, 'stakeholders': stakeholders })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)

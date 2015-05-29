@@ -53,24 +53,11 @@ $(".table-sortable").tablesorter({ headers: { 0: { sorter: false }}});
         <h3 class="panel-title">Stakeholders</h3>
       </div>
       <div class="panel-body">
-        <div class="panel-group" style="margin-bottom: 0">
-          {% for stakeholder in meeting.meetingstakeholder_set.all %}
-            <div class="panel panel-default">
-              <div class="panel-body js-stakeholder-selection">
-                <div class="row">
-                  <div class="col-sm-11">
-                    <img src="{% avatar stakeholder.stakeholder 32 %}" alt="{{ stakeholder.stakeholder.profile.get_display_name }}" class="img-circle" style="margin-right: 10px">
-                    {{ stakeholder.stakeholder.profile.get_display_name }}
-                    <input type="checkbox" name="stakeholders" value="{{ stakeholder.stakeholder.pk }}" style="display: none">
-                  </div>
-                  <div class="col-sm-1 text-right">
-                    <span class="glyphicon glyphicon-ok text-success" style="line-height: 28px; display: none"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
+        <div class="alert alert-info alert-dismissible fade in" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          Click to remove a stakeholder from the meeting.
         </div>
+        {% include 'includes/users_panel_group.html' with stakeholders=stakeholders group_actions='removeable' %}
       </div>
     </div>
 

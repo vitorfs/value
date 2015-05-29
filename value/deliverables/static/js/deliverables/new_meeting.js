@@ -1,5 +1,7 @@
 $(function () {
 
+  $(".deliverable-stakeholders .panel-group-stakeholders .panel").click();
+
   $("#starting_date").datetimepicker({
     format: "DD/MM/YYYY HH:mm"
   });
