@@ -26,6 +26,9 @@ class Meeting(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(User, null=True, related_name='meeting_update_user')    
     
+    class Meta:
+        ordering = ('-updated_at',)
+
     def __unicode__(self):
         return self.name
 

@@ -7,7 +7,7 @@ from value.deliverables.models import Deliverable
 class StakeholderPanelGroupMultipleModelChoiceField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
         name = obj.profile.get_display_name()
-        if obj.groups:
+        if obj.groups.exists():
             groups = ''
             for group in obj.groups.all():
                 groups += u'{0}, '.format(group.name)

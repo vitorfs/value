@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models import Q
 
-from value.deliverables.models import Deliverable
+from value.deliverables.models import Deliverable, DecisionItemLookup
 from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
@@ -21,39 +21,54 @@ from value.deliverables.meetings.forms import MeetingForm
 @login_required
 def new(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    decision_items_fields = DecisionItemLookup.get_all_fields()
+    decision_items = deliverable.decisionitem_set.all()
     if request.method == 'POST':
         form = MeetingForm(request.POST)
         stakeholder_ids = request.POST.getlist('stakeholders')
         selected_stakeholders = User.objects.filter(id__in=stakeholder_ids)
         meeting_stakeholders = User.objects.filter(Q(id__in=selected_stakeholders) | Q(id__in=deliverable.stakeholders.all())).filter(is_active=True).distinct()
-        if form.is_valid():
+
+        decision_item_ids = request.POST.getlist('decision_item')
+        selected_decision_items = deliverable.decisionitem_set.filter(id__in=decision_item_ids)
+
+        if form.is_valid() and selected_stakeholders.exists() and selected_decision_items.exists():
             form.instance.deliverable = deliverable
             form.instance.created_by = request.user
             meeting = form.save()
+
             for stakeholder in selected_stakeholders:
                 meeting_stakeholder = MeetingStakeholder()
                 meeting_stakeholder.meeting = meeting
                 meeting_stakeholder.stakeholder = stakeholder
                 meeting_stakeholder.save()
-            for decision_item in deliverable.decisionitem_set.all():
+
+            for decision_item in selected_decision_items:
                 meeting_item = MeetingItem()
                 meeting_item.meeting = meeting
                 meeting_item.decision_item = decision_item
                 meeting_item.save()
+
             deliverable.save()
             messages.success(request, u'The meeting {0} was created successfully.'.format(meeting.name))
             return redirect(reverse('deliverables:meetings:meeting', args=(deliverable.pk, meeting.pk,)))
+        else:
+            messages.error(request, u'Please correct the error below.')
     else:
         form = MeetingForm()
-        meeting_stakeholders = deliverable.stakeholders.filter(is_active=True)
+        meeting_stakeholders = deliverable.stakeholders.filter(is_active=True).order_by('first_name', 'last_name', 'username')
         selected_stakeholders = meeting_stakeholders
+        selected_decision_items = decision_items
     available_stakeholders = User.objects \
             .exclude(id__in=deliverable.stakeholders.all()) \
             .exclude(id__in=selected_stakeholders) \
             .filter(is_active=True) \
             .order_by('first_name', 'last_name', 'username')
     return render(request, 'deliverables/meetings/new.html', { 
-        'deliverable': deliverable, 
+        'deliverable': deliverable,
+        'decision_items_fields': decision_items_fields,
+        'decision_items': decision_items,
+        'selected_decision_items': selected_decision_items,
         'form': form,
         'meeting_stakeholders': meeting_stakeholders,
         'available_stakeholders': available_stakeholders,
