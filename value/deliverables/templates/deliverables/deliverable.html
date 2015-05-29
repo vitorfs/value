@@ -14,13 +14,9 @@
 
   {% include 'deliverables/includes/menu.html' with active='dashboard' deliverable=deliverable %}
 
-  <h2>{{ deliverable.name }}</h2>
-
-  {% if deliverable.description %}<p>{{ deliverable.description }}</p>{% endif %}
-
   {% if deliverable.meeting_set.exists %}
     <div style="margin-bottom: 20px" class="clearfix">
-      <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary">Start meeting</a>
+      <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Start meeting</a>
     </div>
     {% include 'deliverables/includes/meetings_table.html' with meetings=deliverable.get_ongoing_meetings title='Ongoing meetings' %}
     {% include 'deliverables/includes/meetings_table.html' with meetings=deliverable.get_closed_meetings title='Past meetings' %}

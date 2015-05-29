@@ -25,7 +25,7 @@
         <span class="glyphicon glyphicon-plus"></span> Add stakeholder
       </button>
     </div>
-    <form id="formRemoveStakeholder" method="post" action="{% url 'deliverables:remove_stakeholder' deliverable.pk %}">
+    <form id="formRemoveStakeholder" method="post" action="{% url 'deliverables:remove_stakeholder' deliverable.pk %}" style="margin-bottom: 20px">
       {% csrf_token %}
       {% include 'includes/users_panel_group.html' with stakeholders=deliverable.stakeholders.all group_actions='removeable' %}
     </form>

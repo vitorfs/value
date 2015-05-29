@@ -12,8 +12,8 @@
 {% block content %}
 
   {% if user.is_superuser %}
-    <div class="clearfix" style="margin-bottom: 20px">
-      <a class="btn btn-primary pull-right" href="{% url 'deliverables:new' %}"><span class="glyphicon glyphicon-plus"></span> New deliverable</a>
+    <div style="margin-bottom: 20px">
+      <a class="btn btn-primary" href="{% url 'deliverables:new' %}"><span class="glyphicon glyphicon-plus"></span> New deliverable</a>
     </div>
 
   {% endif %}
