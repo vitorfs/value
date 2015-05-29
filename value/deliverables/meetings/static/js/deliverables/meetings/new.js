@@ -23,7 +23,6 @@ $(function () {
 
     }
     else if (target === "collapse-stakeholders") {
-      console.log(1);
       $("#heading-stakeholders .panel-info").html("");
       $("#collapse-stakeholders .panel-group-stakeholders .panel.panel-success .img-circle").each(function () {
         $("#heading-stakeholders .panel-info").append('<img src="' + $(this).attr("src").replace("32", "20") + '" alt="' + $(this).attr("alt") + '" class="img-circle" style="margin-left: 5px;">');
