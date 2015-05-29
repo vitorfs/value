@@ -1,7 +1,5 @@
 $(function () {
 
-  $(".deliverable-stakeholders .panel-group-stakeholders .panel").click();
-
   $("#starting_date").datetimepicker({
     format: "DD/MM/YYYY HH:mm"
   });
@@ -18,6 +16,15 @@ $(function () {
     if (e.target.id !== "") {
       $(".panel-info", $(this)).fadeIn();
     }
+  });
+
+  $(".js-add-invited-stakeholders").click(function () {
+
+    $("#inviteStakeholder .panel-group-stakeholders .panel.panel-success").each(function () {
+      $(this).appendTo(".deliverable-stakeholders .panel-group-stakeholders");
+      $("#inviteStakeholder").modal("hide");
+    });
+
   });
 
 });

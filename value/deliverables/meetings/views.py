@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 from value.deliverables.models import Deliverable
 from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
@@ -22,13 +23,14 @@ def new(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     if request.method == 'POST':
         form = MeetingForm(request.POST)
+        stakeholder_ids = request.POST.getlist('stakeholders')
+        selected_stakeholders = User.objects.filter(id__in=stakeholder_ids)
+        meeting_stakeholders = User.objects.filter(Q(id__in=selected_stakeholders) | Q(id__in=deliverable.stakeholders.all())).filter(is_active=True).distinct()
         if form.is_valid():
-            meeting = Meeting()
-            meeting.deliverable = deliverable
-            meeting.name = request.POST.get('name')
-            meeting.created_by = request.user
-            meeting.save()
-            for stakeholder in deliverable.stakeholders.all():
+            form.instance.deliverable = deliverable
+            form.instance.created_by = request.user
+            meeting = form.save()
+            for stakeholder in selected_stakeholders:
                 meeting_stakeholder = MeetingStakeholder()
                 meeting_stakeholder.meeting = meeting
                 meeting_stakeholder.stakeholder = stakeholder
@@ -43,8 +45,20 @@ def new(request, deliverable_id):
             return redirect(reverse('deliverables:meetings:meeting', args=(deliverable.pk, meeting.pk,)))
     else:
         form = MeetingForm()
-    available_stakeholders = User.objects.exclude(id__in=deliverable.stakeholders.all()).filter(is_active=True).order_by('first_name', 'last_name', 'username')
-    return render(request, 'deliverables/meetings/new.html', { 'deliverable': deliverable, 'form': form, 'available_stakeholders': available_stakeholders })
+        meeting_stakeholders = deliverable.stakeholders.filter(is_active=True)
+        selected_stakeholders = meeting_stakeholders
+    available_stakeholders = User.objects \
+            .exclude(id__in=deliverable.stakeholders.all()) \
+            .exclude(id__in=selected_stakeholders) \
+            .filter(is_active=True) \
+            .order_by('first_name', 'last_name', 'username')
+    return render(request, 'deliverables/meetings/new.html', { 
+        'deliverable': deliverable, 
+        'form': form,
+        'meeting_stakeholders': meeting_stakeholders,
+        'available_stakeholders': available_stakeholders,
+        'selected_stakeholders': selected_stakeholders
+        })
 
 @login_required
 def meeting(request, deliverable_id, meeting_id):

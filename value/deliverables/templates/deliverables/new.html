@@ -67,17 +67,17 @@
               </ul>
             </div>
           </div>
-          <div class="panel-group" id="stakeholders" style="margin-bottom: 0">
+          <div class="panel-group panel-group-stakeholders selectable" id="stakeholders" style="margin-bottom: 0">
             {% for checkbox in form.stakeholders %}
               <div class="panel {% if checkbox.is_checked %}panel-success{% else %}panel-default{% endif %}">
-                <div class="panel-body js-stakeholder-selection{% if checkbox.is_checked %} bg-success{% endif %}">
+                <div class="panel-body{% if checkbox.is_checked %} bg-success text-success{% endif %}">
                   <div class="row">
                     <div class="col-md-11">
                       <img src="{% avatar_id checkbox.choice_value 32 %}" alt="{{ checkbox.choice_label }}" class="img-circle" style="margin-right: 10px">
-                      {{ checkbox.choice_label }}
+                      {{ checkbox.choice_label|safe }}
                       <input type="checkbox" name="{{ checkbox.name }}" value="{{ checkbox.choice_value }}" style="display: none"{% if checkbox.is_checked %} checked="checked"{% endif %}>
                     </div>
-                    <div class="col-md-1 text-right">
+                    <div class="col-md-1 text-right panel-action-icon">
                       <span class="glyphicon glyphicon-ok text-success" style="line-height: 28px;{% if not checkbox.is_checked %} display: none{% endif %}"></span>
                     </div>
                   </div>

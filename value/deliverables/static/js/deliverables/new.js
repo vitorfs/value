@@ -1,36 +1,18 @@
 $(function () {
 
-  $(".js-stakeholder-selection").click(function () {
-
-    if ($(this).hasClass("bg-success")) {
-      $(this).removeClass("bg-success");
-      $(this).closest(".panel").addClass("panel-default").removeClass("panel-success");
-      $(".glyphicon-ok", this).hide();
-      $("[name='stakeholders']", this).prop("checked", false);
-    }
-
-    else {
-      $(this).addClass("bg-success");
-      $(this).closest(".panel").removeClass("panel-default").addClass("panel-success");
-      $(".glyphicon-ok", this).show();
-      $("[name='stakeholders']", this).prop("checked", true);
-    }
-
-  });
-
   $(".js-stakeholders-select-all").click(function () {
-    $(".js-stakeholder-selection").each(function () {
-      $(this).addClass("bg-success");
-      $(".glyphicon-ok", this).show();
-      $("[name='stakeholders']", this).prop("checked", true);
+    $(".panel-group-stakeholders .panel").each(function () {
+      if ($(this).hasClass("panel-default")) {
+        $(this).click();
+      }
     });
   });
 
   $(".js-stakeholders-select-none").click(function () {
-    $(".js-stakeholder-selection").each(function () {
-      $(this).removeClass("bg-success");
-      $(".glyphicon-ok", this).hide();
-      $("[name='stakeholders']", this).prop("checked", false);
+    $(".panel-group-stakeholders .panel").each(function () {
+      if ($(this).hasClass("panel-success")) {
+        $(this).click();
+      }
     });
   });
 
