@@ -15,23 +15,42 @@
 
   {% include 'deliverables/includes/menu.html' with active='stakeholders' deliverable=deliverable %}
 
-  <div class="panel-group">
-    {% for stakeholder in deliverable.stakeholders.all %}
-      <div class="panel panel-default">
-        <div class="panel-body js-stakeholder-selection">
-          <div class="row">
-            <div class="col-md-11">
-              <img src="{% avatar stakeholder 32 %}" alt="{{ stakeholder.profile.get_display_name }}" class="img-circle" style="margin-right: 10px">
-              {{ stakeholder.profile.get_display_name }}
-              <input type="checkbox" name="stakeholders" value="{{ stakeholder.pk }}" style="display: none">
-            </div>
-            <div class="col-md-1 text-right">
-              <span class="glyphicon glyphicon-ok text-success" style="line-height: 28px; display: none"></span>
-            </div>
+  <div style="margin-bottom: 20px">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteStakeholder">
+      <span class="glyphicon glyphicon-plus"></span> Add stakeholder
+    </button>
+  </div>
+
+  <form method="post" action="">
+    {% csrf_token %}
+    <div class="modal fade" id="inviteStakeholder" tabindex="-1" role="dialog" aria-labelledby="inviteStakeholderTitle" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="inviteStakeholderTitle">Add stakeholder</h4>
+          </div>
+          <div class="modal-body">
+            {% if available_stakeholders %}
+              <div class="alert alert-info alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                Select the stakeholders to be associated with the deliverable.
+              </div>
+            {% endif %}
+            {% include 'includes/users_panel_group.html' with stakeholders=available_stakeholders group_actions='selectable' %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary"{% if not available_stakeholders %} disabled{% endif %}>Confirm</button>
           </div>
         </div>
       </div>
-    {% endfor %}
-  </div>
+    </div>
+  </form>
+
+  <form method="post" action="">
+    {% csrf_token %}
+    {% include 'includes/users_panel_group.html' with stakeholders=deliverable.stakeholders.all %}
+  </form>
 
 {% endblock content %}

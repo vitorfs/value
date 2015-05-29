@@ -117,8 +117,8 @@ def deliverable(request, deliverable_id):
 @login_required
 def stakeholders(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    users = User.objects.filter(is_active=True).exclude(pk=request.user.pk)
-    return render(request, 'deliverables/stakeholders.html', { 'deliverable' : deliverable, 'users' : users })
+    available_stakeholders = User.objects.filter(is_active=True).exclude(pk__in=deliverable.stakeholders.all())
+    return render(request, 'deliverables/stakeholders.html', { 'deliverable' : deliverable, 'available_stakeholders' : available_stakeholders })
 
 @login_required
 def decision_items(request, deliverable_id):
