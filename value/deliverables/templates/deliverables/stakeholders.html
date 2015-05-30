@@ -20,6 +20,10 @@
   {% include 'deliverables/includes/menu.html' with active='stakeholders' deliverable=deliverable %}
 
   {% if deliverable.stakeholders.exists %}
+    <div class="alert alert-info alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      Click on the stakeholder panel to remove. Please note, removing a stakeholder from the deliverable will delete all associated evaluations.
+    </div>
     <div style="margin-bottom: 20px">
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStakeholder">
         <span class="glyphicon glyphicon-plus"></span> Add stakeholder
