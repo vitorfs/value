@@ -16,24 +16,6 @@ $(function () {
     });
   });
 
-  $.fn.updateFormsetIndex = function () {
-    var table = $(this);
-    var tableRows = $("tbody tr:not(.empty-row)", this);
-    var totalForms = $(tableRows).length;
-    $("#id_decision_item-TOTAL_FORMS").val(totalForms);
-
-    $(tableRows).each(function () {
-      var rowIndex = $(this).index();
-      $("td input", this).each(function () {
-        var name = $(this).attr("name");
-        $(this).attr("name", name.replace(/-(.*?)-/, "-" + rowIndex + "-"));
-        var id = $(this).attr("id");
-        $(this).attr("id", id.replace(/-(.*?)-/, "-" + rowIndex + "-"));
-      });
-    });
-
-  };
-
   $("main").on("click", "table tbody tr td a.js-remove-row", function (e) {
     $(this).closest("tr").fadeOut(200, function () {
       $(this).remove();

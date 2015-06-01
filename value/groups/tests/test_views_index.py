@@ -19,4 +19,4 @@ class IndexTest(TestCase):
         self.assertTemplateUsed(self.resp, 'groups/index.html')
 
     def test_html(self):
-        self.assertContains(self.resp, '<table class="table table-bordered table-striped table-check-all">')
+        self.assertContains(self.resp, 'Select group to change')

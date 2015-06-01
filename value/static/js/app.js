@@ -20,6 +20,24 @@ $.fn.loading = function () {
   }
 };
 
+$.fn.updateFormsetIndex = function () {
+  var table = $(this);
+  var tableRows = $("tbody tr:not(.empty-row)", this);
+  var totalForms = $(tableRows).length;
+  $("[id$='TOTAL_FORMS']").val(totalForms);
+
+  $(tableRows).each(function () {
+    var rowIndex = $(this).index();
+    $("td input", this).each(function () {
+      var name = $(this).attr("name");
+      $(this).attr("name", name.replace(/-(.*?)-/, "-" + rowIndex + "-"));
+      var id = $(this).attr("id");
+      $(this).attr("id", id.replace(/-(.*?)-/, "-" + rowIndex + "-"));
+    });
+  });
+
+};
+
 var colorLuminance = function (hex, lum) {
   hex = String(hex).replace(/[^0-9a-f]/gi, '');
   if (hex.length < 6) {

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block stylesheet %}
+  <link href="{% static 'css/bootstrap-colorselector.css' %}" rel="stylesheet">
+{% endblock stylesheet %}
+
+{% block javascript %}
+  <script src="{% static 'js/bootstrap-colorselector.js' %}"></script>
+  <script src="{% static 'js/measures/measure.js' %}"></script>
+{% endblock javascript %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'measures:index' %}">Measures</a></li>
+    <li class="active">Add measure</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+  <h1 class="lead" style="margin-bottom: 0">Add measure</h1>
+  <form method="post" class="form-horizontal" role="form">
+    {% csrf_token %}
+    {% include 'includes/form_horizontal.html' with form=form %}
+    <hr>
+    {% include 'measures/includes/measure_values_formset.html' with formset=formset %}
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="{% url 'measures:index' %}" class="btn btn-default">Cancel</a>
+      </div>
+    </div>
+  </form>
+{% endblock content %}

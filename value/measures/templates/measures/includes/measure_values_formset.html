@@ -1,0 +1,58 @@
+<div class="form-group">
+  <label class="col-sm-2 control-label">Values</label>
+  <div class="col-sm-10">
+    {{ formset.management_form }}
+    <table class="table table-condensed table-bordered table-striped" id="table-measure-values" style="margin-bottom: 0">
+      <thead>
+        <tr>
+          <th class="text-center" style="width: 35px"><span class="glyphicon glyphicon-sort"></span></th>
+          <th>Description</th>
+          <th style="width: 60px">Color</th>
+          <th style="width: 60px">Delete?</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td colspan="4">
+            <a href="#" class="js-add-value">
+              <span class="glyphicon glyphicon-plus-sign"></span> Add another value
+            </a>
+          </td>
+        </tr>
+      </tfoot>
+      <tbody>
+        {% for form in formset.forms %}
+          <tr>
+            <td class="text-center" style="vertical-align: middle">
+              <a href="#" class="js-order-increase"><span class="glyphicon glyphicon-triangle-top"></span></a>
+              <a href="#" class="js-order-decrease"><span class="glyphicon glyphicon-triangle-bottom"></span></a>
+              <input type="hidden" value="{{ form.order.value|default_if_none:'' }}" id="{{ form.order.id_for_label }}" name="{{ form.order.html_name }}">
+            </td>
+            <td style="vertical-align: middle">
+              {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+              {% endfor %}
+              <input type="text" class="form-control" value="{{ form.description.value|default_if_none:'' }}" id="{{ form.description.id_for_label }}" name="{{ form.description.html_name }}" maxlength="{{ form.description.field.max_length }}">
+            </td>
+            <td class="text-center" style="vertical-align: middle">
+              <select class="color-selector" name="{{ form.color.html_name }}" id="{{ form.color.id_for_label }}">
+                {% for color, name in form.instance.COLORS %}
+                  <option value="{{ color }}" data-color="{{ color }}"{% if color == form.color.value %} selected="selected"{% endif %}>{{ name }}</option>
+                {% endfor  %}
+              </select>
+            </td>
+            <td class="text-center" style="vertical-align: middle">
+              {% if form.instance.pk %}
+                {{ form.DELETE }}
+              {% else %}
+                <a href="#" class="js-remove-value">
+                  <span class="glyphicon glyphicon-remove-sign"></span>
+                </a>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -3,7 +3,8 @@ $(function () {
   $(".color-selector").colorselector();
 
   var manage_value_order = function () {
-    $("table tbody tr").each(function () {
+    $("#table-measure-values").updateFormsetIndex();
+    $("#table-measure-values tbody tr").each(function () {
       $("td:eq(0) input", this).val($(this).index());
     });
   };
@@ -66,26 +67,23 @@ $(function () {
       "</tr>"
     ];
 
-    var count = parseInt($("#id_measurevalue_set-TOTAL_FORMS").val());
-    var html = template.join("\n").replace(/{value}/g, count);
-    $("table tbody").append(html);
-    $("#id_measurevalue_set-" + count + "-color").colorselector();
-    count = count + 1;
-    $("#id_measurevalue_set-TOTAL_FORMS").val(count);
+    var html = template.join("\n");
+    $("#table-measure-values tbody").append(html);
+    $("#table-measure-values tbody tr:last td .color-selector").colorselector();
     manage_value_order();
     return false;
   });
 
-  $("table tbody").on("click", ".js-remove-value", function () {
+  $("#table-measure-values tbody").on("click", ".js-remove-value", function () {
     $(this).closest("tr").remove();
     manage_value_order();
     return false;
   });
 
-  $("table tbody").on("click", ".js-order-increase", function () {
+  $("#table-measure-values tbody").on("click", ".js-order-increase", function () {
     var i = $(this).closest("tr").index();
     if (i > 0) {
-      var sibling = $("table tbody tr:eq(" + (i - 1) + ")");
+      var sibling = $("#table-measure-values tbody tr:eq(" + (i - 1) + ")");
       var row = $(this).closest("tr").detach();
       $(sibling).before(row);
     }
@@ -93,12 +91,12 @@ $(function () {
     return false;
   });
 
-  $("table tbody").on("click", ".js-order-decrease", function () {
+  $("#table-measure-values tbody").on("click", ".js-order-decrease", function () {
     var container = $(this).closest("tbody");
     var rows = $("tr", container).length - 1;
     var i = $(this).closest("tr").index();
     if (i < rows) {
-      var sibling = $("table tbody tr:eq(" + (i + 1) + ")");
+      var sibling = $("#table-measure-values tbody tr:eq(" + (i + 1) + ")");
       var row = $(this).closest("tr").detach();
       $(sibling).after(row);      
     }

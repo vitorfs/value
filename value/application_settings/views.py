@@ -15,6 +15,7 @@ from django.http import HttpResponse
 from value.deliverables.models import DecisionItemLookup
 from value.application_settings.models import ApplicationSetting
 
+
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def index(request):

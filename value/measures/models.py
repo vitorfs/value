@@ -12,14 +12,9 @@ class Measure(models.Model):
     def __unicode__(self):
         return self.name
 
-    def get_values(self):
-        values = MeasureValue.objects.filter(measure=self)
-        return values
-
     def get_values_as_string(self):
-        values = self.get_values()
         string_values = []
-        for value in values:
+        for value in self.measurevalue_set.all():
             string_values.append(value.description)
         return u', '.join(string_values)
 
