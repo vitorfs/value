@@ -1,3 +1,24 @@
 .evaluable {
-  cursor: pointer;
+  transition: all 0.2s ease 0s;
+}
+
+.table-evaluate tbody tr td:nth-child(1) {
+  cursor: default;
+}
+
+.evaluable:hover {
+  background-color: #ddd;
+}
+
+.table-evaluate tbody tr td .fa-comment {
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.table-evaluate tbody tr td a.no-comment {
+  color: #ddd;
+}
+
+.table-evaluate tbody tr td a.no-comment:hover {
+  color: #bbb;
 }

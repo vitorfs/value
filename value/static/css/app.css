@@ -53,7 +53,7 @@ h3.page-header {
   margin-top: 10px;
 }
 
-.table-hover tbody tr td, .panel-collapsable .panel-heading {
+.table-hover tbody tr td {
   cursor: hand;
   cursor: pointer;
 }

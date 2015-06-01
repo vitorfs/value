@@ -28,7 +28,7 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values):
                 and evaluation.measure.pk == evaluation.factor.measure.pk:
             is_evaluated = True
 
-    html = '<tr{0}><td>{1}</td>'.format(selected(is_evaluated), factor.name)
+    html = '<tr{0}><td>{1}<a href="javascript:void(0);" class="js-reasoning no-comment" data-toggle="modal" data-target="#reasoning-modal"><span class="fa fa-comment pull-right"></span></a></td>'.format(selected(is_evaluated), factor.name)
 
     for measure_value in measure_values:
         is_checked = False

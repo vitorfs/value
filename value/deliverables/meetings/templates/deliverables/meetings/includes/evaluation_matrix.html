@@ -1,0 +1,27 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      {% for factor in factors %}
+        <th>{{ factor.name }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for meeting_item in meeting_items %}
+      <tr>
+        <td>{{ meeting_item.decision_item.name }}</td>
+        {% for factor in factors %}
+          <td>
+            <select>
+              <option>Select...</option>
+              {% for measure_value in measure_values %}
+                <option value="{{ measure_value.pk }}">{{ measure_value.description }}</option>
+              {% endfor %}
+            </select>
+          </td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
