@@ -10,9 +10,9 @@
   background-color: #ddd;
 }
 
-.table-evaluate tbody tr td .fa-comment {
-  margin-right: 10px;
-  font-size: 16px;
+.btn-reasoning {
+  line-height: 1.42857;
+  padding: 0 10px;
 }
 
 .table-evaluate tbody tr td a.no-comment {
@@ -21,4 +21,13 @@
 
 .table-evaluate tbody tr td a.no-comment:hover {
   color: #bbb;
+}
+
+.popover {
+  min-width: 300px;
+  z-index: 1020;
+}
+
+.popover .arrow {
+  top: 25px!important;
 }

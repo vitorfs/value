@@ -80,7 +80,6 @@ class MeetingStakeholder(models.Model):
     def __unicode__(self):
         return '{0} {1}'.format(self.meeting.name, self.stakeholder.username)
 
-
 class Evaluation(models.Model):
     meeting = models.ForeignKey(Meeting)
     meeting_item = models.ForeignKey(MeetingItem)

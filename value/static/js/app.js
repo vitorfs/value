@@ -55,8 +55,6 @@ var colorLuminance = function (hex, lum) {
 
 $(function () {
 
-  $("[data-toggle='popover']").popover();
-
   $(".menu-link").bigSlide({
     side: 'right',
     push: '.wrapper, footer',
@@ -64,8 +62,6 @@ $(function () {
   });
 
   $("[data-toggle='tooltip']").tooltip();
-
-  $("[data-toggle='popover']").popover();
 
   toastr.options = {
     "closeButton": true,

@@ -22,13 +22,28 @@ def selected(is_evaluated):
 def evaluation_options(evaluations, meeting_item, factor, measure_values):
 
     is_evaluated = False
+    reasoning = ''
     for evaluation in evaluations:
         if meeting_item.pk == evaluation.meeting_item.pk \
                 and factor.pk == evaluation.factor.pk \
                 and evaluation.measure.pk == evaluation.factor.measure.pk:
             is_evaluated = True
+            reasoning = evaluation.reasoning
 
-    html = '<tr{0}><td>{1}<a href="javascript:void(0);" class="js-reasoning no-comment" data-toggle="modal" data-target="#reasoning-modal"><span class="fa fa-comment pull-right"></span></a></td>'.format(selected(is_evaluated), factor.name)
+    html = '''<tr{0}>
+<td>{1}<a href="javascript:void(0);" 
+ class="btn-reasoning js-reasoning no-comment pull-right"
+ data-toggle="popover" 
+ data-placement="right" 
+ data-content="" 
+ title="" 
+ data-trigger="click" 
+ data-reasoning="{2}">
+<span class="fa fa-comment"></span>
+</a></td>'''.format(
+        selected(is_evaluated), 
+        factor.name,
+        reasoning)
 
     for measure_value in measure_values:
         is_checked = False
@@ -40,27 +55,24 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values):
                         and evaluation.measure.pk == factor.measure.pk \
                         and evaluation.measure_value.pk == measure_value.pk:
                     is_checked = True
-        html += '''<td class="text-center evaluable" 
-data-color="{0}" 
-data-deliverable-id="{1}"
-data-meeting-id="{2}" 
-data-meeting-item-id="{3}"
-data-factor-id="{4}" 
-data-measure-id="{5}" 
-data-measure-value-id="{6}"
-{7}>
-{8}
-</td>'''.format(
-    measure_value.color, 
-    meeting_item.meeting.deliverable.pk,
-    meeting_item.meeting.pk, 
-    meeting_item.pk, 
-    factor.pk, 
-    factor.measure.pk, 
-    measure_value.pk, 
-    background(is_checked, measure_value.color), 
-    checksign(is_checked)
-    )
+        html += '''<td class="text-center evaluable"
+ data-color="{0}"
+ data-deliverable-id="{1}"
+ data-meeting-id="{2}"
+ data-meeting-item-id="{3}"
+ data-factor-id="{4}"
+ data-measure-id="{5}"
+ data-measure-value-id="{6}"
+ {7}>{8}</td>'''.format(
+                measure_value.color, 
+                meeting_item.meeting.deliverable.pk,
+                meeting_item.meeting.pk, 
+                meeting_item.pk, 
+                factor.pk, 
+                factor.measure.pk, 
+                measure_value.pk, 
+                background(is_checked, measure_value.color), 
+                checksign(is_checked))
 
     html += '</tr>'
 

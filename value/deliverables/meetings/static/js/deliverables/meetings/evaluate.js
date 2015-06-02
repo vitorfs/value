@@ -1,5 +1,24 @@
 $(function () {
 
+  $(".js-reasoning").popover({
+    html: true,
+    content: function () {
+      return '<textarea class="form-control evaluation-reasoning" rows="1" style="resize: none;">' + $(this).attr("data-reasoning") + '</textarea>';
+    }
+  });
+
+  $(".js-reasoning").on("shown.bs.popover", function () {
+    var popover = $(this).siblings(".popover");
+    $("textarea", popover).expanding();
+    if ($("textarea", popover).text().length === 0) {
+      $("textarea", popover).focus();
+    }
+  });
+
+  $("main").on("blur", ".evaluation-reasoning", function () {
+    console.log(1);
+  });
+
   $(".btn-toggle").click(function () {
     var container = $(this).closest(".panel-heading");
     var target = $(container).attr("data-target");

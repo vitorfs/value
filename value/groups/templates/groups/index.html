@@ -14,13 +14,10 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-
   <p class="lead">Select group to change</p>
-
   <form method="post">
     {% csrf_token %}
     <input type="hidden" name="action" id="id_action">
-
     <div class="row" style="margin-bottom: 20px">
       <div class="col-xs-6">
         <div class="btn-group">
@@ -36,7 +33,6 @@
         <a href="{% url 'groups:add' %}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> Add group</a>
       </div>
     </div>
-
     <table class="table table-bordered table-striped table-check-all">
       <thead>
         <tr>
@@ -57,7 +53,5 @@
         {% endfor %}
       </tbody>
     </table>
-
   </form>
-
 {% endblock content %}
