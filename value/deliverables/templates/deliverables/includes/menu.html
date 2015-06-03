@@ -9,17 +9,34 @@
       Meetings <span class="caret"></span>
     </a>
     <ul role="menu" class="dropdown-menu dropdown-menu-right">
-      {% with meetings=deliverable.meeting_set.all %}
-        {% if meetings %}
-          {% for meeting in meetings %}
-            <li><a href="{% url 'deliverables:meetings:meeting' deliverable.pk meeting.pk %}"><span class="fa fa-square-o"></span> {{ meeting.name }}</a></li>
+      {% if deliverable.meeting_set.exists %}
+        {% if deliverable.get_ongoing_meetings.exists %}
+          <li role="presentation" class="dropdown-header">Ongoing meetings</li>
+          {% for ongoing_meeting in deliverable.get_ongoing_meetings.all %}
+            <li>
+              <a href="{% url 'deliverables:meetings:meeting' ongoing_meeting.deliverable.pk ongoing_meeting.pk %}">
+                <span class="glyphicon glyphicon-unchecked"></span>
+                {{ ongoing_meeting.name }}
+              </a>
+            </li>
           {% endfor %}
-          <li class="divider"></li>
-          <li><a href="{% url 'deliverables:meetings:new' deliverable.pk %}"><span class="fa fa-plus"></span> New meeting</a></li>
-        {% else %}
-          <li><a href="{% url 'deliverables:meetings:new' deliverable.pk %}"><span class="fa fa-plus"></span> Start a meeting</a></li>
         {% endif %}
-      {% endwith %}
+        {% if deliverable.get_closed_meetings.exists %}
+          <li role="presentation" class="dropdown-header">Past meetings</li>
+          {% for closed_meeting in deliverable.get_closed_meetings.all %}
+            <li>
+              <a href="{% url 'deliverables:meetings:meeting' closed_meeting.deliverable.pk closed_meeting.pk %}">
+                <span class="glyphicon glyphicon-unchecked"></span>
+                {{ closed_meeting.name }}
+              </a>
+            </li>
+          {% endfor %}
+        {% endif %}
+        <li class="divider"></li>
+        <li><a href="{% url 'deliverables:meetings:new' deliverable.pk %}"><span class="glyphicon glyphicon-plus"></span> New meeting</a></li>
+      {% else %}
+        <li><a href="{% url 'deliverables:meetings:new' deliverable.pk %}"><span class="glyphicon glyphicon-plus"></span> Start a meeting</a></li>
+      {% endif %}
     </ul>
   </li>
 </ul>

@@ -2,6 +2,8 @@ from collections import OrderedDict
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 from value.application_settings.models import ApplicationSetting
 from value.factors.models import Factor
@@ -118,3 +120,16 @@ class DecisionItemLookup(models.Model):
             if key in fields.keys():
                 ordered_fields[key] = fields[key]
         return ordered_fields
+
+class Rationale(models.Model):
+    reasoning = models.TextField(max_length=2000, null=True, blank=True)
+    user = models.ForeignKey(User)
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return self.reasoning
+        

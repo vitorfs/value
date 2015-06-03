@@ -93,7 +93,7 @@ class Evaluation(models.Model):
     reasoning = models.CharField(max_length=500, null=True, blank=True)
 
     class Meta:
-        unique_together = ('meeting', 'meeting_item', 'user', 'factor', 'measure')
+        unique_together = (('meeting', 'meeting_item', 'user', 'factor', 'measure'),)
 
     def __unicode__(self):
         mv = 'N/A'

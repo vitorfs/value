@@ -7,33 +7,49 @@
       Meetings <span class="caret"></span>
     </a>
     <ul role="menu" class="dropdown-menu dropdown-menu-right">
-      {% with meetings=meeting.deliverable.meeting_set.all %}
-        {% for m in meetings %}
-          <li{% if m.pk == meeting.pk %} class="active"{% endif %}>
-            <a href="{% url 'deliverables:meetings:meeting' m.deliverable.pk m.pk %}">
-              {% if m.pk == meeting.pk %}
-                <span class="fa fa-check-square-o"></span>
+      {% if meeting.deliverable.get_ongoing_meetings.exists %}
+        <li role="presentation" class="dropdown-header">Ongoing meetings</li>
+        {% for ongoing_meeting in meeting.deliverable.get_ongoing_meetings.all %}
+          <li{% if ongoing_meeting.pk == meeting.pk %} class="active"{% endif %}>
+            <a href="{% url 'deliverables:meetings:meeting' ongoing_meeting.deliverable.pk ongoing_meeting.pk %}">
+              {% if ongoing_meeting.pk == meeting.pk %}
+                <span class="glyphicon glyphicon-check"></span>
               {% else %}
-                <span class="fa fa-square-o"></span>
+                <span class="glyphicon glyphicon-unchecked"></span>
               {% endif %}
-              {{ m.name }}
+              {{ ongoing_meeting.name }}
             </a>
           </li>
         {% endfor %}
-        <li class="divider"></li>
-        <li>
-          <a href="{% url 'deliverables:meetings:new' meeting.deliverable.pk %}">
-            <span class="fa fa-plus"></span>
-            New meeting
-          </a>
-        </li>
-        <li>
-          <a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">
-            <span class="fa fa-rotate-left"></span>
-            Return to {{ meeting.deliverable.name }}
-          </a>
-        </li>
-      {% endwith %}
+      {% endif %}
+      {% if meeting.deliverable.get_closed_meetings.exists %}
+        <li role="presentation" class="dropdown-header">Past meetings</li>
+        {% for closed_meeting in meeting.deliverable.get_closed_meetings.all %}
+          <li{% if closed_meeting.pk == meeting.pk %} class="active"{% endif %}>
+            <a href="{% url 'deliverables:meetings:meeting' closed_meeting.deliverable.pk closed_meeting.pk %}">
+              {% if closed_meeting.pk == meeting.pk %}
+                <span class="glyphicon glyphicon-check"></span>
+              {% else %}
+                <span class="glyphicon glyphicon-unchecked"></span>
+              {% endif %}
+              {{ closed_meeting.name }}
+            </a>
+          </li>
+        {% endfor %}
+      {% endif %}
+      <li class="divider"></li>
+      <li>
+        <a href="{% url 'deliverables:meetings:new' meeting.deliverable.pk %}">
+          <span class="glyphicon glyphicon-plus"></span>
+          New meeting
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">
+          <span class="fa fa-rotate-left"></span>
+          Return to {{ meeting.deliverable.name }}
+        </a>
+      </li>
     </ul>
   </li>
 </ul>

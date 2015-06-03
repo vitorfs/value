@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 
-{% load staticfiles %}
-{% load attr %}
+{% load staticfiles attr %}
 
 {% block javascript %}
-
+  <script type="text/javascript">
+    $(function () {
+      $(".table-sortable").tablesorter({ headers: { 0: { sorter: false }}});
+    });
+  </script>
 {% endblock javascript %}
 
 {% block breadcrumb %}
@@ -20,48 +23,52 @@
 
   {% include 'deliverables/includes/menu.html' with active='decision_items' deliverable=deliverable %}
 
-  <div style="margin-bottom: 20px">
-    <div class="btn-group">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-        <span class="glyphicon glyphicon-check"></span> Actions <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu">
-        <li><a href="javascript:void(0);" class="js-delete-selected">Delete selected items</a></li>
-      </ul>
+  <div class="row" style="margin-bottom: 20px;">
+    <div class="col-xs-6">
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          <span class="glyphicon glyphicon-check"></span> Actions <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="javascript:void(0);" class="js-delete-selected">Delete selected items</a></li>
+        </ul>
+      </div>
     </div>
-    <a href="#" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add item</a>
-    {% include 'deliverables/includes/import_decision_items.html' %}
+    <div class="col-xs-6 text-right">
+      <a href="#" class="btn btn-primary"><span class="fa fa-cloud-upload"></span> Import</a>
+      <a href="#" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add item</a>
+    </div>
   </div>
 
   {% with fields=deliverable.get_decision_items_fields %}
-  <table class="table table-bordered table-striped table-check-all">
-    <thead>
-      <tr>
-        <th><input type="checkbox"></th>
-        {% for name, field in fields.items %}
-        <th>{{ field.label }}</th>
-        {% endfor %}
-      </tr>
-    </thead>
-    <tbody>
-      {% for item in deliverable.decisionitem_set.all %}
-      <tr data-edit-url="">
-        <td><input type="checkbox"></td>
-        {% for name, field in fields.items %}
-          {% if forloop.first %}
-            <td><a href="#">{{ item|attr:name }}</a></td>
-          {% else %}
-            <td>{{ item|attr:name }}</td>
-          {% endif %}
-        {% endfor %}
-      </tr>
-      {% empty %}
+    <table class="table table-condensed table-hover table-sortable table-bordered table-striped table-check-all">
+      <thead>
         <tr>
-          <td colspan="{{ fields.items|length|add:'1' }}">No data</td>
+          <th><input type="checkbox"></th>
+          {% for name, field in fields.items %}
+          <th>{{ field.label }}</th>
+          {% endfor %}
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {% for item in deliverable.decisionitem_set.all %}
+        <tr data-edit-url="">
+          <td><input type="checkbox"></td>
+          {% for name, field in fields.items %}
+            {% if forloop.first %}
+              <td><a href="#">{{ item|attr:name }}</a></td>
+            {% else %}
+              <td>{{ item|attr:name }}</td>
+            {% endif %}
+          {% endfor %}
+        </tr>
+        {% empty %}
+          <tr>
+            <td colspan="{{ fields.items|length|add:'1' }}">No data</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   {% endwith %}
 
 {% endblock content %}
