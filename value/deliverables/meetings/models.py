@@ -90,6 +90,9 @@ class Evaluation(models.Model):
     evaluated_at = models.DateTimeField(null=True, blank=True)
     reasoning = models.CharField(max_length=500, null=True, blank=True)
 
+    class Meta:
+        unique_together = ('meeting', 'meeting_item', 'user', 'factor', 'measure')
+
     def __unicode__(self):
         mv = 'N/A'
         if self.measure_value:

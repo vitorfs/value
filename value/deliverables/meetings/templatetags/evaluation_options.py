@@ -10,7 +10,7 @@ def checksign(is_checked):
 
 def background(is_checked, color):
     if is_checked:
-        return 'style="background-color: ' + color + '"'
+        return ' style="background-color: ' + color + '"'
     return ''
 
 def selected(is_evaluated):
@@ -28,20 +28,23 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values):
                 and factor.pk == evaluation.factor.pk \
                 and evaluation.measure.pk == evaluation.factor.measure.pk:
             is_evaluated = True
-            reasoning = evaluation.reasoning
+            if evaluation.reasoning:
+                reasoning = evaluation.reasoning
 
-    html = '''<tr{0}>
-<td>{1}<a href="javascript:void(0);" 
- class="btn-reasoning js-reasoning no-comment pull-right"
+    html = '''<tr{0}
+ data-factor-id="{1}"
+ data-measure-id="{2}">
+<td>{3}<a href="javascript:void(0);" 
+ class="btn-reasoning js-reasoning no-comment pull-right" 
  data-toggle="popover" 
  data-placement="right" 
  data-content="" 
- title="" 
- data-trigger="click" 
- data-reasoning="{2}">
+ data-reasoning="{4}">
 <span class="fa fa-comment"></span>
 </a></td>'''.format(
-        selected(is_evaluated), 
+        selected(is_evaluated),
+        factor.pk, 
+        factor.measure.pk, 
         factor.name,
         reasoning)
 
@@ -55,21 +58,8 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values):
                         and evaluation.measure.pk == factor.measure.pk \
                         and evaluation.measure_value.pk == measure_value.pk:
                     is_checked = True
-        html += '''<td class="text-center evaluable"
- data-color="{0}"
- data-deliverable-id="{1}"
- data-meeting-id="{2}"
- data-meeting-item-id="{3}"
- data-factor-id="{4}"
- data-measure-id="{5}"
- data-measure-value-id="{6}"
- {7}>{8}</td>'''.format(
+        html += '''<td class="text-center evaluable" data-color="{0}" data-measure-value-id="{1}"{2}>{3}</td>'''.format(
                 measure_value.color, 
-                meeting_item.meeting.deliverable.pk,
-                meeting_item.meeting.pk, 
-                meeting_item.pk, 
-                factor.pk, 
-                factor.measure.pk, 
                 measure_value.pk, 
                 background(is_checked, measure_value.color), 
                 checksign(is_checked))

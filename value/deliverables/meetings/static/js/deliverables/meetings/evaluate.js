@@ -130,11 +130,14 @@ $(function () {
       $(".measure-percent[data-measure-id='" + key + "']", panel).closest(".progress-bar").css("width", percent + "%");
     }
 
-    var url = "/deliverables/" + $(this).attr("data-deliverable-id") + "/meetings/" + $(this).attr("data-meeting-id") + "/evaluate/save/";
+    var url = $(this).closest("form").attr("action");
     var csrf = $("[name='csrfmiddlewaretoken']").val();
-    var meeting_item_id = $(this).attr("data-meeting-item-id");
-    var factor_id = $(this).attr("data-factor-id");
-    var measure_id = $(this).attr("data-measure-id");
+
+    var meeting_item_id = $(this).closest("table").attr("data-meeting-item-id");
+
+    var factor_id = $(this).closest("tr").attr("data-factor-id");
+    var measure_id = $(this).closest("tr").attr("data-measure-id");
+    
     var measure_value_id = $(this).attr("data-measure-value-id");
 
     $.ajax({

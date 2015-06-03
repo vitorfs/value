@@ -68,8 +68,6 @@ $(function () {
     "preventDuplicates": true
   };
 
-  //$("input, textarea").attr("autocomplete", "off");
-
   $("main").on("click", ".panel-group-stakeholders.selectable .panel", function () {
     if ($(this).hasClass("panel-success")) {
       $(".panel-body", this).removeClass("text-success bg-success");
