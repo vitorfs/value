@@ -38,7 +38,7 @@ class Deliverable(models.Model):
 class DecisionItem(models.Model):
     deliverable = models.ForeignKey(Deliverable)
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=2000, null=True, blank=True)
+    description = models.TextField(max_length=2000, null=True, blank=True)
     final_decision = models.NullBooleanField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, related_name='decision_item_creation_user')

@@ -5,7 +5,11 @@
 {% block javascript %}
   <script type="text/javascript">
     $(function () {
-      $(".table-sortable").tablesorter({ headers: { 0: { sorter: false }}});
+      $("#table-decision-items").tablesorter({ headers: { 0: { sorter: false }}});
+      $("#table-decision-items tbody tr td:not(:first-child)").click(function (e) {
+        e.stopPropagation();
+        location.href = $(this).closest("tr").attr("data-href");
+      });
     });
   </script>
 {% endblock javascript %}
@@ -19,10 +23,11 @@
   </ol>
 {% endblock breadcrumb %}
 
-{% block content %}
-
+{% block tabs %}
   {% include 'deliverables/includes/menu.html' with active='decision_items' deliverable=deliverable %}
+{% endblock tabs %}
 
+{% block content %}
   <div class="row" style="margin-bottom: 20px;">
     <div class="col-xs-6">
       <div class="btn-group">
@@ -41,7 +46,7 @@
   </div>
 
   {% with fields=deliverable.get_decision_items_fields %}
-    <table class="table table-condensed table-hover table-sortable table-bordered table-striped table-check-all">
+    <table class="table table-condensed table-hover table-bordered table-striped table-check-all" id="table-decision-items">
       <thead>
         <tr>
           <th><input type="checkbox"></th>
@@ -52,11 +57,11 @@
       </thead>
       <tbody>
         {% for item in deliverable.decisionitem_set.all %}
-        <tr data-edit-url="">
+        <tr data-href="{% url 'deliverables:edit_decision_item' deliverable.pk item.pk %}">
           <td><input type="checkbox"></td>
           {% for name, field in fields.items %}
             {% if forloop.first %}
-              <td><a href="#">{{ item|attr:name }}</a></td>
+              <td><a href="{% url 'deliverables:edit_decision_item' deliverable.pk item.pk %}">{{ item|attr:name }}</a></td>
             {% else %}
               <td>{{ item|attr:name }}</td>
             {% endif %}
@@ -70,5 +75,4 @@
       </tbody>
     </table>
   {% endwith %}
-
 {% endblock content %}

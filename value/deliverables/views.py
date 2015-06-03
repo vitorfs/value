@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.views.decorators.http import require_POST
 from django.template.loader import render_to_string
-from django.forms.models import modelformset_factory
+from django.forms.models import modelform_factory, modelformset_factory
 from django.db import transaction
 
 from value.deliverables.models import Deliverable, DecisionItem, DecisionItemLookup
@@ -20,7 +20,7 @@ from value.application_settings.models import ApplicationSetting
 @login_required
 def index(request):
     deliverables = Deliverable.objects.all().order_by('-updated_at')
-    return render(request, 'deliverables/index.html', { 'deliverables' : deliverables })
+    return render(request, 'deliverables/index.html', { 'deliverables': deliverables })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
@@ -54,12 +54,12 @@ def new(request):
         form = DeliverableForm()
         formset = DecisionItemFormSet(prefix='decision_item', queryset=DecisionItem.objects.none())
     return render(request, 'deliverables/new.html', { 
-        'fields': fields,
-        'form': form,
-        'formset': formset
-        })
+            'fields': fields,
+            'form': form,
+            'formset': formset
+            })
 
-def excel_column_map():
+def _excel_column_map():
     column_map = {}
     i = 0
     for c in ascii_uppercase:
@@ -83,7 +83,7 @@ def import_decision_items(request):
     html = ''
     if form.is_valid():
         app_settings = ApplicationSetting.get()
-        column_map = excel_column_map()
+        column_map = _excel_column_map()
         f = request.FILES['file']
         filename = f.name
         wb = xlrd.open_workbook(filename=None, file_contents=f.read())
@@ -102,22 +102,22 @@ def import_decision_items(request):
         DecisionItemFormSet = modelformset_factory(DecisionItem, fields=fields.keys(), extra=len(decision_items))
         formset = DecisionItemFormSet(prefix='decision_item', queryset=DecisionItem.objects.none(), initial=decision_items)
         html = render_to_string('deliverables/includes/decision_items_import_table.html', {
-            'decision_items': decision_items,
-            'fields': fields,
-            'formset': formset,
-            'filename': filename
-            })
+                'decision_items': decision_items,
+                'fields': fields,
+                'formset': formset,
+                'filename': filename
+                })
     return HttpResponse(html)
 
 @login_required
 def deliverable(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    return render(request, 'deliverables/deliverable.html', { 'deliverable' : deliverable })
+    return render(request, 'deliverables/deliverable.html', { 'deliverable': deliverable })
 
 @login_required
 def stakeholders(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    return render(request, 'deliverables/stakeholders.html', { 'deliverable' : deliverable })
+    return render(request, 'deliverables/stakeholders.html', { 'deliverable': deliverable })
 
 @login_required
 def load_available_stakeholders(request, deliverable_id):
@@ -155,4 +155,29 @@ def remove_stakeholder(request, deliverable_id):
 @login_required
 def decision_items(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    return render(request, 'deliverables/decision_items.html', { 'deliverable' : deliverable })
+    return render(request, 'deliverables/decision_items.html', { 'deliverable': deliverable })
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+def edit_decision_item(request, deliverable_id, decision_item_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    decision_item = get_object_or_404(DecisionItem, pk=decision_item_id)
+    fields = DecisionItemLookup.get_all_fields()
+    DecisionItemForm = modelform_factory(DecisionItem, fields=fields.keys())
+
+    if request.method == 'POST':
+        form = DecisionItemForm(request.POST, instance=decision_item)
+        if form.is_valid():
+            decision_item = form.save()
+            messages.success(request, u'The decision item {0} was saved successfully.'.format(decision_item.name))
+            return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
+        else:
+            messages.error(request, u'Please correct the error below.')
+    else:
+        form = DecisionItemForm(instance=decision_item)
+
+    return render(request, 'deliverables/decision_items/edit.html', { 
+            'deliverable': deliverable,
+            'fields': fields,
+            'form': form
+            })
