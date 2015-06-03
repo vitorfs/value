@@ -18,6 +18,8 @@ class Meeting(models.Model):
     description = models.CharField(max_length=2000, null=True, blank=True)
     location = models.CharField(max_length=50, null=True, blank=True)
     deliverable = models.ForeignKey(Deliverable)
+    stakeholders = models.ManyToManyField(User)
+    decision_items = models.ManyToManyField(DecisionItem)
     status = models.CharField(max_length=1, choices=STATUS, default=ONGOING)
     started_at = models.DateTimeField()
     ended_at = models.DateTimeField(null=True, blank=True)

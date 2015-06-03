@@ -4,12 +4,16 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from value.application_settings.models import ApplicationSetting
+from value.factors.models import Factor
+from value.measures.models import Measure
 
 
 class Deliverable(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=2000, null=True, blank=True)
     stakeholders = models.ManyToManyField(User)
+    measure = models.ForeignKey(Measure)
+    factors = models.ManyToManyField(Factor)
     manager = models.ForeignKey(User, related_name='deliverable_manager_user')
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, related_name='deliverable_creation_user')
@@ -38,6 +42,7 @@ class DecisionItem(models.Model):
     created_by = models.ForeignKey(User, related_name='decision_item_creation_user')
     updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(User, null=True, related_name='decision_item_update_user')
+    ranking = models.FloatField(default=0.0)
     column_1 = models.CharField(max_length=255, null=True, blank=True)
     column_2 = models.CharField(max_length=255, null=True, blank=True)
     column_3 = models.CharField(max_length=255, null=True, blank=True)
