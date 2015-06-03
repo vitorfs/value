@@ -12,6 +12,8 @@ urlpatterns = patterns('value.deliverables.views',
     url(r'^(?P<deliverable_id>\d+)/stakeholders/remove/$', 'remove_stakeholder', name='remove_stakeholder'),
 
     url(r'^(?P<deliverable_id>\d+)/decision-items/$', 'decision_items', name='decision_items'),
+    url(r'^(?P<deliverable_id>\d+)/decision-items/add/$', 'add_decision_item', name='add_decision_item'),
     url(r'^(?P<deliverable_id>\d+)/decision-items/(?P<decision_item_id>\d+)/$', 'edit_decision_item', name='edit_decision_item'),
+    url(r'^(?P<deliverable_id>\d+)/decision-items/(?P<decision_item_id>\d+)/delete/$', 'delete_decision_item', name='delete_decision_item'),
     url(r'(?P<deliverable_id>\d+)/meetings/', include('value.deliverables.meetings.urls', namespace='meetings')),
 )

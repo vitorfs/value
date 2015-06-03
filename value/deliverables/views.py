@@ -13,6 +13,7 @@ from django.forms.models import modelform_factory, modelformset_factory
 from django.db import transaction
 
 from value.deliverables.models import Deliverable, DecisionItem, DecisionItemLookup
+from value.deliverables.meetings.models import Evaluation
 from value.deliverables.forms import UploadFileForm, DeliverableForm
 from value.application_settings.models import ApplicationSetting
 
@@ -159,15 +160,37 @@ def decision_items(request, deliverable_id):
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
+def add_decision_item(request, deliverable_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    fields = DecisionItemLookup.get_all_fields()
+    DecisionItemForm = modelform_factory(DecisionItem, fields=fields.keys())
+    if request.method == 'POST':
+        form = DecisionItemForm(request.POST, instance=DecisionItem(deliverable=deliverable, created_by=request.user))
+        if form.is_valid():
+            decision_item = form.save()
+            messages.success(request, u'The decision item {0} was added successfully.'.format(decision_item.name))
+            return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
+        else:
+            messages.error(request, u'Please correct the error below.')
+    else:
+        form = DecisionItemForm()
+    return render(request, 'deliverables/decision_items/add.html', { 
+            'deliverable': deliverable,
+            'fields': fields,
+            'form': form
+            })
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
 def edit_decision_item(request, deliverable_id, decision_item_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     decision_item = get_object_or_404(DecisionItem, pk=decision_item_id)
     fields = DecisionItemLookup.get_all_fields()
     DecisionItemForm = modelform_factory(DecisionItem, fields=fields.keys())
-
     if request.method == 'POST':
         form = DecisionItemForm(request.POST, instance=decision_item)
         if form.is_valid():
+            form.instance.updated_by = request.user
             decision_item = form.save()
             messages.success(request, u'The decision item {0} was saved successfully.'.format(decision_item.name))
             return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
@@ -175,9 +198,25 @@ def edit_decision_item(request, deliverable_id, decision_item_id):
             messages.error(request, u'Please correct the error below.')
     else:
         form = DecisionItemForm(instance=decision_item)
-
     return render(request, 'deliverables/decision_items/edit.html', { 
             'deliverable': deliverable,
             'fields': fields,
             'form': form
             })
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+def delete_decision_item(request, deliverable_id, decision_item_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    decision_item = get_object_or_404(DecisionItem, pk=decision_item_id)
+    if request.method == 'POST':
+        decision_item.delete()
+        messages.success(request, u'The decision item {0} was deleted successfully.'.format(decision_item.name))
+        return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
+    else:
+        related_evaluations = Evaluation.objects.filter(meeting_item__decision_item=decision_item).order_by('meeting')
+        return render(request, 'deliverables/decision_items/delete.html', { 
+                'deliverable': deliverable,
+                'decision_item': decision_item,
+                'related_evaluations': related_evaluations
+                })

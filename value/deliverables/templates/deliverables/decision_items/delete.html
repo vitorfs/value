@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% load staticfiles attr fieldtype %}
+
+{% block javascript %}
+
+{% endblock javascript %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></li>
+    <li><a href="{% url 'deliverables:decision_items' deliverable.pk %}">Decision Items</a></li>
+    <li><a href="{% url 'deliverables:edit_decision_item' deliverable.pk decision_item.pk %}">{{ decision_item.name }}</a></li>
+    <li class="active">Delete</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block tabs %}
+  {% include 'deliverables/includes/menu.html' with active='decision_items' deliverable=deliverable %}
+{% endblock tabs %}
+
+{% block content %}
+  <h1 class="lead">Are you sure you want to delete the decision item <strong>{{ decision_item.name }}</strong>? All the related items will be removed.</h1>
+  {% if related_evaluations.exists %}
+    <h4>Summary:</h4>
+    {% regroup related_evaluations by meeting as meeting_evaluations %}
+    <ul>
+      {% for meeting in meeting_evaluations %}
+        <li>{{ meeting.grouper }}
+          <ul>
+            <li>{{ meeting.list|length }} evaluations</li>
+          </ul>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <form class="form-horizontal" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <div class="col-sm-12">
+        <button type="submit" class="btn btn-primary">Confirm</button>
+        <a href="{% url 'deliverables:edit_decision_item' deliverable.pk decision_item.pk %}" class="btn btn-default">Cancel</a>
+      </div>
+    </div>
+  </form>
+{% endblock content %}

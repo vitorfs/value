@@ -11,7 +11,6 @@
 
 {% block content %}
   <h1 class="lead">Are you sure you want to delete the factor {{ factor.name }}?</h1>
-
   <form method="post" class="form-horizontal">
     {% csrf_token %}
     <div class="form-group">

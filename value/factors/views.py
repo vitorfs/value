@@ -9,7 +9,7 @@ from value.factors.forms import FactorForm
 @user_passes_test(lambda user: user.is_superuser)
 def factors(request):
     factors = Factor.objects.all().order_by('name')
-    return render(request, 'factors/factors.html', { 'factors' : factors })
+    return render(request, 'factors/factors.html', { 'factors': factors })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
@@ -26,7 +26,7 @@ def add(request):
     else:
         factor = Factor()
         form = FactorForm(instance=factor)
-    return render(request, 'factors/factor.html', { 'form' : form })
+    return render(request, 'factors/factor.html', { 'form': form })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
@@ -43,7 +43,7 @@ def factor(request, factor_id):
             messages.error(request, u'Please correct the error below.')
     else:
         form = FactorForm(instance=factor)
-    return render(request, 'factors/factor.html', { 'form' : form })
+    return render(request, 'factors/factor.html', { 'form': form })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
@@ -53,4 +53,4 @@ def delete(request, factor_id):
         factor.delete()
         messages.success(request, u'The factor {0} was deleted successfully.'.format(factor.name))
         return redirect(reverse('factors:factors'))
-    return render(request, 'factors/delete.html', { 'factor' : factor })
+    return render(request, 'factors/delete.html', { 'factor': factor })
