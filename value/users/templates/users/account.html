@@ -8,7 +8,6 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-
   <div class="row">
     <div class="col-lg-2 col-md-3 col-sm-4">
       <div class="panel panel-default panel-menu">
@@ -28,15 +27,14 @@
           <form method="post" class="form-horizontal" role="form">
             {% csrf_token %}
             {% include 'includes/form_horizontal.html' with form=form %}
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 0;">
               <div class="col-md-offset-2 col-md-10 col-sm-offset-4 col-sm-8">
                 <button type="submit" class="btn btn-primary">Save</button>
               </div>
             </div>
-          </form>          
+          </form>
         </div>
       </div>
     </div>
   </div>
-
 {% endblock content %}
