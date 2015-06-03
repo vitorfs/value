@@ -270,7 +270,10 @@ th.headerSortUp:after {
   border-right: 0;
   border-color: #444;
   color: #f1f1f1;
-  transition: all 0.2s ease 0s;
+  -webkit-transition: all 0.2s ease 0s;
+     -moz-transition: all 0.2s ease 0s;
+       -o-transition: all 0.2s ease 0s;
+          transition: all 0.2s ease 0s;
   padding-top: 13px;
   padding-bottom: 13px;
   font-size: 16px;
@@ -294,7 +297,10 @@ th.headerSortUp:after {
 }
 
 .context-menu .calendar .table-calendar tbody tr td {
-  transition: all 0.2s ease 0s;
+  -webkit-transition: all 0.2s ease 0s;
+     -moz-transition: all 0.2s ease 0s;
+       -o-transition: all 0.2s ease 0s;
+          transition: all 0.2s ease 0s;
 }
 
 .context-menu .calendar .table-calendar tbody tr td:hover {
@@ -307,7 +313,10 @@ th.headerSortUp:after {
 
 .context-menu .calendar h4 a {
   color: #fff;
-  transition: all 0.2s ease 0s;
+  -webkit-transition: all 0.2s ease 0s;
+     -moz-transition: all 0.2s ease 0s;
+       -o-transition: all 0.2s ease 0s;
+          transition: all 0.2s ease 0s;
 }
 
 .context-menu .calendar h4 a:hover {
@@ -327,5 +336,8 @@ th.headerSortUp:after {
 }
 
 .panel-group-stakeholders .panel .panel-body {
-  transition: all 0.15s ease 0s;
+  -webkit-transition: all 0.15s ease 0s;
+     -moz-transition: all 0.15s ease 0s;
+       -o-transition: all 0.15s ease 0s;
+          transition: all 0.15s ease 0s;
 }
