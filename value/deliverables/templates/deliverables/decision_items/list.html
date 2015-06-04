@@ -3,6 +3,7 @@
 {% load staticfiles attr %}
 
 {% block javascript %}
+  <script src="{% static 'js/deliverables/import_decision_items.js' %}"></script>
   <script src="{% static 'js/deliverables/decision_items.js' %}"></script>
 {% endblock javascript %}
 
@@ -34,9 +35,13 @@
           </ul>
         </div>
       </div>
-      <div class="col-xs-6 text-right">
-        <a href="#" class="btn btn-primary"><span class="fa fa-cloud-upload"></span> Import</a>
-        <a href="{% url 'deliverables:add_decision_item' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add item</a>
+      <div class="col-xs-6">
+        <div class="pull-right">
+          <span id="import-decision-items-container" data-save-import-url="{% url 'deliverables:save_imported_decision_items' deliverable.pk %}" data-csrf-token="{{ csrf_token }}">
+            {% include 'deliverables/includes/import_decision_items.html' %}
+          </span>
+          <a href="{% url 'deliverables:add_decision_item' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add item</a>
+        </div>
       </div>
     </div>
     {% with fields=deliverable.get_decision_items_fields %}

@@ -1,7 +1,7 @@
 import xlrd
 from string import ascii_uppercase
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -164,6 +164,7 @@ def process_decision_items_list_actions(request, deliverable_id):
         decision_items = DecisionItem.objects.filter(pk__in=decision_items_ids)
         if 'confirm_action' in request.POST:
             decision_items.delete()
+            deliverable.save()
             messages.success(request, 'The selected decision items were deleted successfully.')
         else:
             return render(request, 'deliverables/decision_items/delete_list.html', { 
@@ -182,6 +183,28 @@ def decision_items(request, deliverable_id):
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
+@require_POST
+def save_imported_decision_items(request, deliverable_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    fields = DecisionItemLookup.get_all_fields()
+    DecisionItemFormSet = modelformset_factory(DecisionItem, fields=fields.keys())
+    formset = DecisionItemFormSet(request.POST, prefix='decision_item')
+    if formset.is_valid():
+        for form in formset:
+            form.instance.deliverable = deliverable
+            form.instance.created_by = request.user
+        formset.save()
+        deliverable.save()
+        return HttpResponse('Sucessfull.')
+    else:
+        html = render_to_string('deliverables/includes/decision_items_import_table.html', {
+                'fields': fields,
+                'formset': formset
+                })
+        return HttpResponseBadRequest(html)
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
 def add_decision_item(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     fields = DecisionItemLookup.get_all_fields()
@@ -190,6 +213,7 @@ def add_decision_item(request, deliverable_id):
         form = DecisionItemForm(request.POST, instance=DecisionItem(deliverable=deliverable, created_by=request.user))
         if form.is_valid():
             decision_item = form.save()
+            deliverable.save()
             messages.success(request, u'The decision item {0} was added successfully.'.format(decision_item.name))
             return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
         else:
@@ -214,6 +238,7 @@ def edit_decision_item(request, deliverable_id, decision_item_id):
         if form.is_valid():
             form.instance.updated_by = request.user
             decision_item = form.save()
+            deliverable.save()
             messages.success(request, u'The decision item {0} was saved successfully.'.format(decision_item.name))
             return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
         else:
@@ -233,6 +258,7 @@ def delete_decision_item(request, deliverable_id, decision_item_id):
     decision_item = get_object_or_404(DecisionItem, pk=decision_item_id)
     if request.method == 'POST':
         decision_item.delete()
+        deliverable.save()
         messages.success(request, u'The decision item {0} was deleted successfully.'.format(decision_item.name))
         return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
     else:

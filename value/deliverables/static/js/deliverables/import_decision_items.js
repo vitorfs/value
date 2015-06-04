@@ -41,14 +41,4 @@ $(function () {
     $("#import-modal .modal-body").html("");
   });
 
-  $(".js-confirm-import").click(function () {
-    var rows = $("#decision-items-import-table tbody tr").clone();
-    $("#import-modal").one('hidden.bs.modal', function(e) {
-      page_loading();
-      $(rows).insertBefore("#decision-items-formset tbody tr.empty-row");
-      $("#decision-items-formset").updateFormsetIndex();
-      page_loading();
-    }).modal("hide");
-  });
-
 });

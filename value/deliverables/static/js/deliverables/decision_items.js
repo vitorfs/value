@@ -25,4 +25,33 @@ $(function () {
     }
   });
 
+  $(".js-confirm-import").click(function () {
+    var data = $("#import-decision-items-container :input").serialize();
+    var url = $("#import-decision-items-container").attr("data-save-import-url");
+    data += "&csrfmiddlewaretoken=" + $("#import-decision-items-container").attr("data-csrf-token");
+    $.ajax({
+      url: url,
+      data: data,
+      type: 'post',
+      cache: false,
+      beforeSend: function (jqXHR, settings) {
+        page_loading();
+      },
+      success: function (data, textStatus, jqXHR) {
+        toastr.success(data);
+        $("#import-modal").modal("hide");
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR);
+        console.log(textStatus);
+        console.log(errorThrown);
+        $("#import-modal .modal-body").html(jqXHR.responseText);
+        toastr.error("An error ocurred while trying to save your data.");
+      },
+      complete: function (jqXHR, textStatus) {
+        page_loading();
+      }
+    });
+  });
+
 });
