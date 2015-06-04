@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></li>
+    <li><a href="{% url 'deliverables:decision_items' deliverable.pk %}">Decision Items</a></li>
+    <li class="active">Delete decision items</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block tabs %}
+  {% include 'deliverables/includes/menu.html' with active='decision_items' deliverable=deliverable %}
+{% endblock tabs %}
+
+{% block content %}
+  <h1 class="lead">Are you sure you want to delete the selected decision items? All of the following objects and their related items will be deleted:</h1>
+  <ul style="margin-bottom: 20px">
+    {% for decision_item in decision_items %}
+      <li><a href="{% url 'deliverables:edit_decision_item' deliverable.pk decision_item.pk %}">{{ decision_item.name }}</a></li>
+    {% endfor %}
+  </ul>
+  <form method="post" class="form-horizontal">
+    {% csrf_token %}
+    {% for decision_item in decision_items %}
+      <input type="hidden" name="decision_item_id" value="{{ decision_item.pk }}">
+    {% endfor %}
+    <input type="hidden" name="action" value="{{ action }}">
+    <input type="hidden" name="confirm_action" value="yes">
+    <div class="form-group">
+      <div class="col-sm-12">
+        <button type="submit" class="btn btn-primary">Confirm</button>
+        <a href="{% url 'deliverables:decision_items' deliverable.pk %}" class="btn btn-default">Cancel</a>
+      </div>
+    </div>
+  </form>
+{% endblock content %}

@@ -25,11 +25,11 @@ def process_list_actions(request):
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def index(request):
-    if request.method == 'GET':
-        groups = Group.objects.all().order_by('name')
-        return render(request, 'groups/index.html', { 'groups': groups })
-    else:
+    if request.method == 'POST':
         return process_list_actions(request)
+    groups = Group.objects.all().order_by('name')
+    return render(request, 'groups/index.html', { 'groups': groups })
+        
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)

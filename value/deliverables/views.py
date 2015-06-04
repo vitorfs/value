@@ -154,7 +154,29 @@ def remove_stakeholder(request, deliverable_id):
     return HttpResponse(u'{0} was removed successfully.'.format(user.profile.get_display_name()))
 
 @login_required
+@user_passes_test(lambda user: user.is_superuser)
+@require_POST
+def process_decision_items_list_actions(request, deliverable_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    action = request.POST.get('action')
+    if action == 'delete_selected':
+        decision_items_ids = request.POST.getlist('decision_item_id')
+        decision_items = DecisionItem.objects.filter(pk__in=decision_items_ids)
+        if 'confirm_action' in request.POST:
+            decision_items.delete()
+            messages.success(request, 'The selected decision items were deleted successfully.')
+        else:
+            return render(request, 'deliverables/decision_items/delete_list.html', { 
+                    'deliverable': deliverable, 
+                    'decision_items': decision_items, 
+                    'action': action 
+                    })
+    return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
+
+@login_required
 def decision_items(request, deliverable_id):
+    if request.method == 'POST':
+        return process_decision_items_list_actions(request, deliverable_id)
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     return render(request, 'deliverables/decision_items/list.html', { 'deliverable': deliverable })
 
