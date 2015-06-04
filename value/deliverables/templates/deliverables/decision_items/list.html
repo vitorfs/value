@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% load staticfiles attr %}
+
+{% block javascript %}
+  <script src="{% static 'js/deliverables/decision_items.js' %}"></script>
+{% endblock javascript %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></li>
+    <li class="active">Decision Items</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block tabs %}
+  {% include 'deliverables/includes/menu.html' with active='decision_items' deliverable=deliverable %}
+{% endblock tabs %}
+
+{% block content %}
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="action" id="id_action">
+    <div class="row" style="margin-bottom: 20px;">
+      <div class="col-xs-6">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <span class="glyphicon glyphicon-check"></span> Actions <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="javascript:void(0);" class="js-delete-selected">Delete selected items</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-xs-6 text-right">
+        <a href="#" class="btn btn-primary"><span class="fa fa-cloud-upload"></span> Import</a>
+        <a href="{% url 'deliverables:add_decision_item' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add item</a>
+      </div>
+    </div>
+    {% with fields=deliverable.get_decision_items_fields %}
+      <table class="table table-condensed table-hover table-bordered table-striped table-check-all" id="table-decision-items">
+        <thead>
+          <tr>
+            <th><input type="checkbox"></th>
+            {% for name, field in fields.items %}
+            <th>{{ field.label }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in deliverable.decisionitem_set.all %}
+          <tr data-href="{% url 'deliverables:edit_decision_item' deliverable.pk item.pk %}">
+            <td><input type="checkbox" name="decision_item_id" value="{{ item.pk }}"></td>
+            {% for name, field in fields.items %}
+              {% if forloop.first %}
+                <td><a href="{% url 'deliverables:edit_decision_item' deliverable.pk item.pk %}">{{ item|attr:name }}</a></td>
+              {% else %}
+                <td>{{ item|attr:name }}</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+          {% empty %}
+            <tr>
+              <td colspan="{{ fields.items|length|add:'1' }}">No data</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endwith %}
+  </form>
+{% endblock content %}

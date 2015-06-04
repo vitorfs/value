@@ -156,7 +156,7 @@ def remove_stakeholder(request, deliverable_id):
 @login_required
 def decision_items(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    return render(request, 'deliverables/decision_items.html', { 'deliverable': deliverable })
+    return render(request, 'deliverables/decision_items/list.html', { 'deliverable': deliverable })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
