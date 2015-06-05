@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import xlrd
 from string import ascii_uppercase
 
@@ -12,6 +14,8 @@ from django.template.loader import render_to_string
 from django.forms.models import modelform_factory, modelformset_factory
 from django.db import transaction
 
+from value.core.exceptions import MeasureImproperlyConfigured
+from value.measures.models import Measure
 from value.deliverables.models import Deliverable, DecisionItem, DecisionItemLookup
 from value.deliverables.meetings.models import Evaluation
 from value.deliverables.forms import UploadFileForm, DeliverableForm
@@ -30,11 +34,21 @@ def new(request):
     fields = DecisionItemLookup.get_all_fields()
     DecisionItemFormSet = modelformset_factory(DecisionItem, fields=fields.keys())
 
+    try:
+        measure = Measure.get()
+    except MeasureImproperlyConfigured, e:
+        measure_exception = u'{0} {1}'.format(e.message, u'Please configure it properly on Management » Measures.')
+        messages.warning(request, measure_exception)
+
     if request.method == 'POST':
         form = DeliverableForm(request.POST)
         formset = DecisionItemFormSet(request.POST, prefix='decision_item')
 
+        if not measure:
+            form.add_error(None, measure_exception)
+
         if form.is_valid() and formset.is_valid():
+            form.instance.measure = measure
             form.instance.manager = request.user
             form.instance.created_by = request.user
             deliverable = form.save()

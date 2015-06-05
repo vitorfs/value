@@ -1,7 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from value.core.exceptions import MeasureImproperlyConfigured
+
+
 class Measure(models.Model):
+    """
+    Measures used in the decision-making process. There should be only one
+    active (is_active = True) measure object within the context of the
+    application.
+    """
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -12,7 +20,36 @@ class Measure(models.Model):
     def __unicode__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        """
+        Override base save method to ensure there is only one active measure
+        in the context of the application.
+        """
+        if self.is_active:
+            Measure.objects.all().update(is_active=False)
+        super(Measure, self).save(*args, **kwargs)
+
+    @staticmethod
+    def get():
+        """
+        Return the active measure only if it is properly configured.
+        Otherwise return a MeasureImproperlyConfigured exception.
+        """
+        measures = Measure.objects.filter(is_active=True)
+        measure = None
+        if not measures:
+            raise MeasureImproperlyConfigured('There is no active measure in the application.')
+        else:
+            measure = measures[0]
+            if measure.measurevalue_set.count() < 2:
+                raise MeasureImproperlyConfigured('The current active measure has less than two measure values.')
+        return measure
+
     def get_values_as_string(self):
+        """
+        Parse all MeasureValue objects into a string formatted shape.
+        The output should look like 'Positive, Neutral, Negative'.
+        """
         string_values = []
         for value in self.measurevalue_set.all():
             string_values.append(value.description)
