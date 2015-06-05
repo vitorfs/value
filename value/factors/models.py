@@ -15,6 +15,9 @@ class Factor(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(User, null=True, related_name='factor_update_user')
 
+    class Meta:
+        ordering = ('name',)
+
     def __unicode__(self):
         return self.name
 
