@@ -53,7 +53,38 @@ var colorLuminance = function (hex, lum) {
   return rgb;
 };
 
+var initializeCheckAll = function () {
+  $("table.table-check-all thead tr th input[type='checkbox']").click(function () {
+    var is_checked = $(this).is(":checked");
+    var table = $(this).closest("table");
+    if (is_checked) {
+      $("tbody tr td input[type='checkbox']", table).prop("checked", true);
+    }
+    else {
+      $("tbody tr td input[type='checkbox']", table).prop("checked", false);
+    }
+  });
+
+  $("table.table-check-all").on("click", "input[type='checkbox']", function () {
+    var table = $(this).closest("table");
+    var all_checked_flag = true;
+    var checked_count = 0;
+    $("tbody tr td input[type='checkbox']", table).each(function () {
+      if ($(this).is(":checked")) {
+        checked_count = checked_count + 1;
+      }
+      else {
+        all_checked_flag = false;
+      }
+    });
+    $("tfoot tr td span.count", table).text(checked_count);
+    $("thead tr th input[type='checkbox']", table).prop("checked", all_checked_flag);
+  });
+};
+
 $(function () {
+
+  initializeCheckAll();
 
   $(".menu-link").bigSlide({
     side: 'right',
@@ -95,33 +126,6 @@ $(function () {
     $(".panel-body", this).removeClass("bg-danger text-danger");
     $(".panel-body small", this).removeClass("text-danger");
     $(".panel-action-icon .glyphicon-remove", this).hide();
-  });
-
-  $("table.table-check-all thead tr th input[type='checkbox']").click(function () {
-    var is_checked = $(this).is(":checked");
-    var table = $(this).closest("table");
-    if (is_checked) {
-      $("tbody tr td input[type='checkbox']", table).prop("checked", true);
-    }
-    else {
-      $("tbody tr td input[type='checkbox']", table).prop("checked", false);
-    }
-  });
-
-  $("table.table-check-all").on("click", "input[type='checkbox']", function () {
-    var table = $(this).closest("table");
-    var all_checked_flag = true;
-    var checked_count = 0;
-    $("tbody tr td input[type='checkbox']", table).each(function () {
-      if ($(this).is(":checked")) {
-        checked_count = checked_count + 1;
-      }
-      else {
-        all_checked_flag = false;
-      }
-    });
-    $("tfoot tr td span.count", table).text(checked_count);
-    $("thead tr th input[type='checkbox']", table).prop("checked", all_checked_flag);
   });
 
   $(".table-clickable-row tbody tr").click(function (e) {

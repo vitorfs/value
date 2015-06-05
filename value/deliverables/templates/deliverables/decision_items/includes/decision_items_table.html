@@ -1,0 +1,38 @@
+{% load attr %}
+{% with fields=deliverable.get_decision_items_fields %}
+  <table class="table table-condensed table-hover table-bordered table-striped table-check-all" id="decision-items-table">
+    <thead>
+      <tr>
+        <th><input type="checkbox"></th>
+        {% for name, field in fields.items %}
+        <th>{{ field.label }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td colspan="{{ fields.items|length|add:'1' }}">
+          Selected: <span class="count">0</span> of {{ deliverable.decisionitem_set.count }} decision items
+        </td>
+      </tr>
+    </tfoot>
+    <tbody>
+      {% for item in deliverable.decisionitem_set.all %}
+      <tr data-href="{% url 'deliverables:edit_decision_item' deliverable.pk item.pk %}">
+        <td><input type="checkbox" name="decision_item_id" value="{{ item.pk }}"></td>
+        {% for name, field in fields.items %}
+          {% if forloop.first %}
+            <td><a href="{% url 'deliverables:edit_decision_item' deliverable.pk item.pk %}">{{ item|attr:name }}</a></td>
+          {% else %}
+            <td>{{ item|attr:name }}</td>
+          {% endif %}
+        {% endfor %}
+      </tr>
+      {% empty %}
+        <tr>
+          <td colspan="{{ fields.items|length|add:'1' }}">No data</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endwith %}

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load staticfiles attr %}
+{% load staticfiles %}
 
 {% block javascript %}
   <script src="{% static 'js/deliverables/import_decision_items.js' %}"></script>
@@ -44,35 +44,6 @@
         </div>
       </div>
     </div>
-    {% with fields=deliverable.get_decision_items_fields %}
-      <table class="table table-condensed table-hover table-bordered table-striped table-check-all" id="table-decision-items">
-        <thead>
-          <tr>
-            <th><input type="checkbox"></th>
-            {% for name, field in fields.items %}
-            <th>{{ field.label }}</th>
-            {% endfor %}
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in deliverable.decisionitem_set.all %}
-          <tr data-href="{% url 'deliverables:edit_decision_item' deliverable.pk item.pk %}">
-            <td><input type="checkbox" name="decision_item_id" value="{{ item.pk }}"></td>
-            {% for name, field in fields.items %}
-              {% if forloop.first %}
-                <td><a href="{% url 'deliverables:edit_decision_item' deliverable.pk item.pk %}">{{ item|attr:name }}</a></td>
-              {% else %}
-                <td>{{ item|attr:name }}</td>
-              {% endif %}
-            {% endfor %}
-          </tr>
-          {% empty %}
-            <tr>
-              <td colspan="{{ fields.items|length|add:'1' }}">No data</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% endwith %}
+    {% include 'deliverables/decision_items/includes/decision_items_table.html' with deliverable=deliverable %}
   </form>
 {% endblock content %}

@@ -195,7 +195,10 @@ def save_imported_decision_items(request, deliverable_id):
             form.instance.created_by = request.user
         formset.save()
         deliverable.save()
-        return HttpResponse('Sucessfull.')
+        html = render_to_string('deliverables/decision_items/includes/decision_items_table.html', { 
+                'deliverable': deliverable 
+                })
+        return HttpResponse(html)
     else:
         html = render_to_string('deliverables/includes/decision_items_import_table.html', {
                 'fields': fields,
