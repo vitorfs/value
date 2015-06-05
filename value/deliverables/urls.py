@@ -5,6 +5,7 @@ urlpatterns = patterns('value.deliverables.views',
     url(r'^new/$', 'new', name='new'),
     url(r'^import-decision-items/$', 'import_decision_items', name='import_decision_items'),
     url(r'^(?P<deliverable_id>\d+)/$', 'deliverable', name='deliverable'),
+    url(r'^(?P<deliverable_id>\d+)/delete/$', 'delete', name='delete'),
     
     url(r'^(?P<deliverable_id>\d+)/stakeholders/$', 'stakeholders', name='stakeholders'),
     url(r'^(?P<deliverable_id>\d+)/stakeholders/load-available/$', 'load_available_stakeholders', name='load_available_stakeholders'),

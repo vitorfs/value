@@ -323,3 +323,14 @@ def settings(request, deliverable_id):
             'deliverable': deliverable,
             'form': form
             })
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+@transaction.atomic
+@require_POST
+def delete(request, deliverable_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    deliverable.delete()
+    messages.success(request, u'The deliverable {0} was completly deleted successfully.'.format(deliverable.name))
+    return redirect(reverse('deliverables:index'))
+    
