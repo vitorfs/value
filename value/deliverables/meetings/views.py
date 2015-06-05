@@ -94,7 +94,7 @@ def close_meeting(request, deliverable_id, meeting_id):
 @login_required
 def evaluate(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    factors = Factor.get_factors().select_related('measure')
+    factors = Factor.list().select_related('measure')
 
     measure_values = factors[0].measure.measurevalue_set.all()
 

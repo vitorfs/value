@@ -16,5 +16,5 @@ class Factor(models.Model):
         return self.name
 
     @staticmethod
-    def get_factors():
+    def list():
         return Factor.objects.filter(is_active=True).exclude(measure=None).order_by('measure__name', 'name',)

@@ -48,7 +48,7 @@ class Meeting(models.Model):
     def get_progress(self):
         stakeholders_count = self.meetingstakeholder_set.count()
         meeting_items_count = self.meetingitem_set.count()
-        factors_count = Factor.get_factors().count()
+        factors_count = Factor.list().count()
 
         max_evaluations = stakeholders_count * meeting_items_count * factors_count
         total_evaluations = self.get_evaluations().count()
