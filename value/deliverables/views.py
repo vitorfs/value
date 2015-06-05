@@ -14,11 +14,12 @@ from django.template.loader import render_to_string
 from django.forms.models import modelform_factory, modelformset_factory
 from django.db import transaction
 
-from value.core.exceptions import MeasureImproperlyConfigured
+from value.core.exceptions import MeasureImproperlyConfigured, FactorsImproperlyConfigured
 from value.measures.models import Measure
+from value.factors.models import Factor
 from value.deliverables.models import Deliverable, DecisionItem, DecisionItemLookup
 from value.deliverables.meetings.models import Evaluation
-from value.deliverables.forms import UploadFileForm, DeliverableForm
+from value.deliverables.forms import UploadFileForm, DeliverableForm, DeliverableBasicDataForm
 from value.application_settings.models import ApplicationSetting
 
 
@@ -34,11 +35,19 @@ def new(request):
     fields = DecisionItemLookup.get_all_fields()
     DecisionItemFormSet = modelformset_factory(DecisionItem, fields=fields.keys())
 
+    measure = None
     try:
         measure = Measure.get()
     except MeasureImproperlyConfigured, e:
         measure_exception = u'{0} {1}'.format(e.message, u'Please configure it properly on Management » Measures.')
         messages.warning(request, measure_exception)
+
+    factors = None
+    try:
+        factors = Factor.list()
+    except FactorsImproperlyConfigured, e:
+        factors_exception = u'{0} {1}'.format(e.message, u'Please configure it properly on Management » Factors.')
+        messages.warning(request, factors_exception)
 
     if request.method == 'POST':
         form = DeliverableForm(request.POST)
@@ -47,11 +56,15 @@ def new(request):
         if not measure:
             form.add_error(None, measure_exception)
 
+        if not factors:
+            form.add_error(None, factors_exception)
+
         if form.is_valid() and formset.is_valid():
             form.instance.measure = measure
             form.instance.manager = request.user
             form.instance.created_by = request.user
             deliverable = form.save()
+            deliverable.factors = factors
 
             for form in formset:
                 form.instance.deliverable = deliverable
@@ -189,6 +202,7 @@ def process_decision_items_list_actions(request, deliverable_id):
     return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
 
 @login_required
+@user_passes_test(lambda user: user.is_superuser)
 def decision_items(request, deliverable_id):
     if request.method == 'POST':
         return process_decision_items_list_actions(request, deliverable_id)
@@ -285,3 +299,27 @@ def delete_decision_item(request, deliverable_id, decision_item_id):
                 'decision_item': decision_item,
                 'related_evaluations': related_evaluations
                 })
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+def historical_dashboard(request, deliverable_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    return render(request, 'deliverables/historical_dashboard.html', { 'deliverable': deliverable })
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+def settings(request, deliverable_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    if request.method == 'POST':
+        form = DeliverableBasicDataForm(request.POST, instance=deliverable)
+        if form.is_valid():
+            form.save()
+            messages.success(request, u'The deliverable {0} was saved successfully.'.format(deliverable.name))
+            # redirect after post to avoid form re-submition
+            return redirect(reverse('deliverables:settings', args=(deliverable.pk,)))
+    else:
+        form = DeliverableBasicDataForm(instance=deliverable)
+    return render(request, 'deliverables/settings.html', { 
+            'deliverable': deliverable,
+            'form': form
+            })

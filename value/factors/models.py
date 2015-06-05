@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 from value.measures.models import Measure
+from value.core.exceptions import FactorsImproperlyConfigured
+
 
 class Factor(models.Model):
     name = models.CharField(max_length=255)
@@ -17,4 +20,7 @@ class Factor(models.Model):
 
     @staticmethod
     def list():
-        return Factor.objects.filter(is_active=True).exclude(measure=None).order_by('measure__name', 'name',)
+        factors = Factor.objects.filter(is_active=True).exclude(measure=None).order_by('measure__name', 'name',)
+        if not factors:
+            raise FactorsImproperlyConfigured('There is no active factor in the application.')
+        return factors

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></li>
+    <li class="active">Settings</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block tabs %}
+  {% include 'deliverables/includes/menu.html' with active='settings' deliverable=deliverable %}
+{% endblock tabs %}
+
+{% block content %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Basic data</h3>
+      </div>
+      <div class="panel-body">
+        {% include 'includes/form_vertical.html' with form=form %}
+      </div>
+      <div class="panel-footer">
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="panel panel-danger">
+    <div class="panel-heading">
+      <h3 class="panel-title">Danger zone</h3>
+    </div>
+    <ul class="list-group">
+      <li class="list-group-item">
+        <button type="button" class="btn btn-danger pull-right">Transfer</button>
+        <p><strong>Transfer ownership</strong></p>
+        <p style="margin-bottom: 0;">Transfer this deliverable to another user.</p>
+      </li>
+      <li class="list-group-item">
+        <button type="button" class="btn btn-danger pull-right">Delete</button>
+        <p><strong>Delete this deliverable</strong></p>
+        <p style="margin-bottom: 0;">Once you delete a deliverable, there is no going back. Please be certain.</p>
+      </li>
+    </ul>
+  </div>
+{% endblock content %}
