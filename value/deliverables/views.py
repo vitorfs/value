@@ -13,6 +13,7 @@ from django.views.decorators.http import require_POST
 from django.template.loader import render_to_string
 from django.forms.models import modelform_factory, modelformset_factory
 from django.db import transaction
+from django.db.models.functions import Lower
 
 from value.core.exceptions import MeasureImproperlyConfigured, FactorsImproperlyConfigured
 from value.measures.models import Measure
@@ -310,6 +311,7 @@ def historical_dashboard(request, deliverable_id):
 @user_passes_test(lambda user: user.is_superuser)
 def settings(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    users = User.objects.exclude(pk=request.user.id).order_by(Lower('first_name').asc(), Lower('last_name').asc(), Lower('username').asc())
     if request.method == 'POST':
         form = DeliverableBasicDataForm(request.POST, instance=deliverable)
         if form.is_valid():
@@ -321,7 +323,8 @@ def settings(request, deliverable_id):
         form = DeliverableBasicDataForm(instance=deliverable)
     return render(request, 'deliverables/settings.html', { 
             'deliverable': deliverable,
-            'form': form
+            'form': form,
+            'users': users
             })
 
 @login_required
@@ -333,4 +336,20 @@ def delete(request, deliverable_id):
     deliverable.delete()
     messages.success(request, u'The deliverable {0} was completly deleted successfully.'.format(deliverable.name))
     return redirect(reverse('deliverables:index'))
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+@require_POST
+def transfer(request, deliverable_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    try:
+        user_id = request.POST.get('user')
+        user = User.objects.get(pk=user_id)
+        deliverable.manager = user
+        deliverable.save()
+        messages.success(request, u'The deliverable {0} was successfully transferred to {1}.'.format(deliverable.name, user.profile.get_display_name()))
+        return redirect(reverse('deliverables:index'))
+    except:
+        messages.error(request, 'Something went wrong. Nothing changed.')
+    return redirect(reverse('deliverables:settings', args=(deliverable.pk,)))
     
