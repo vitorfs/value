@@ -6,6 +6,13 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 PROJECT_DIR = Path(__file__).parent
 
 
+ADMINS = (
+    ('Vitor Freitas', 'vitor.freitas@oulu.fi'),
+)
+
+MANAGERS = ADMINS
+
+
 SECRET_KEY = 'n7bnts*dpi00c41faj4@@hr0z2f4&zbe35(^2%b43$l&%h15br'
 
 DEBUG = True
@@ -93,3 +100,10 @@ LOGOUT_URL = '/signout/'
 LOGIN_REDIRECT_URL = '/'
 
 TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.request',)
+
+EMAIL_HOST = 'smtp.mandrillapp.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'value'
+EMAIL_HOST_PASSWORD = 'WK8zEZIB5HOpGvJ38334bA'
+EMAIL_SUBJECT_PREFIX = '[VALUE Tool Report] '
+DEFAULT_FROM_EMAIL = 'VALUE Project Team <noreply@valueproject.fi>'
