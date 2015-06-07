@@ -25,6 +25,8 @@ TEMPLATE_DEBUG = DEBUG
 
 if DEBUG:
     MESSAGE_LEVEL = message_constants.DEBUG
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    EMAIL_FILE_PATH = PROJECT_DIR.parent.parent.child('maildumps')
 
 ALLOWED_HOSTS = ['127.0.0.1',]
 
@@ -93,21 +95,25 @@ STATICFILES_DIRS = (
 MEDIA_ROOT = PROJECT_DIR.parent.parent.child('media')
 MEDIA_URL = '/media/'
 
+
 TEMPLATE_DIRS = (
     PROJECT_DIR.child('templates'),
 )
 
+TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.request',)
+
 
 LOGIN_URL = '/signin/'
 LOGOUT_URL = '/signout/'
-
 LOGIN_REDIRECT_URL = '/'
 
-TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.request',)
 
 EMAIL_HOST = 'smtp.mandrillapp.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'value'
 EMAIL_HOST_PASSWORD = 'WK8zEZIB5HOpGvJ38334bA'
-EMAIL_SUBJECT_PREFIX = '[VALUE Tool Report] '
+
 DEFAULT_FROM_EMAIL = 'VALUE Project Team <noreply@valueproject.fi>'
+
+EMAIL_SUBJECT_PREFIX = '[VALUE Tool Report] '
+SERVER_EMAIL = 'application@valueproject.fi'
