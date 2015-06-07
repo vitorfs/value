@@ -6,6 +6,10 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 PROJECT_DIR = Path(__file__).parent
 
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_COOKIE_SECURE = True
+
+
 ADMINS = (
     ('Vitor Freitas', 'vitor.freitas@oulu.fi'),
 )
