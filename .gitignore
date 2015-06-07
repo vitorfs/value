@@ -54,9 +54,6 @@ docs/_build/
 target/
 
 .DS_Store
-
 *.sqlite3
+.env
 
-staticfiles
-
-todo.txt

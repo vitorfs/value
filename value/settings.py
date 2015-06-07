@@ -1,3 +1,4 @@
+from decouple import config
 from unipath import Path
 import dj_database_url
 from django.contrib.messages import constants as message_constants
@@ -7,7 +8,8 @@ PROJECT_DIR = Path(__file__).parent
 
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-CSRF_COOKIE_SECURE = True
+
+CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=True, cast=bool)
 
 
 ADMINS = (
@@ -17,16 +19,18 @@ ADMINS = (
 MANAGERS = ADMINS
 
 
-SECRET_KEY = 'n7bnts*dpi00c41faj4@@hr0z2f4&zbe35(^2%b43$l&%h15br'
+SECRET_KEY = config('SECRET_KEY')
 
-DEBUG = True
-
+DEBUG = config('DEBUG', default=False, cast=bool)
 TEMPLATE_DEBUG = DEBUG
 
-if DEBUG:
-    MESSAGE_LEVEL = message_constants.DEBUG
-    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-    EMAIL_FILE_PATH = PROJECT_DIR.parent.parent.child('maildumps')
+
+MESSAGE_LEVEL = config('MESSAGE_LEVEL', default=message_constants.INFO, cast=int)
+
+
+EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
+EMAIL_FILE_PATH = PROJECT_DIR.parent.parent.child('maildumps')
+
 
 ALLOWED_HOSTS = ['127.0.0.1',]
 
@@ -70,7 +74,8 @@ WSGI_APPLICATION = 'value.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-      default = 'postgres://u_value:123@localhost:5432/value')
+        default = config('DATABASE_URL')
+    )
 }
 
 
@@ -108,10 +113,11 @@ LOGOUT_URL = '/signout/'
 LOGIN_REDIRECT_URL = '/'
 
 
-EMAIL_HOST = 'smtp.mandrillapp.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'value'
-EMAIL_HOST_PASSWORD = 'WK8zEZIB5HOpGvJ38334bA'
+EMAIL_HOST = config('EMAIL_HOST', default='localhost')
+EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=False, cast=bool)
 
 DEFAULT_FROM_EMAIL = 'VALUE Project Team <noreply@valueproject.fi>'
 
