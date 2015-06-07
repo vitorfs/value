@@ -41,11 +41,11 @@
   <body>
     {% block body %}
 
-      <nav id="menu" class="context-menu" role="navigation">
+      {% comment %}<nav id="menu" class="context-menu" role="navigation">
         {% include 'includes/context_menu.html' %}
         {% block contextmenu %}
         {% endblock contextmenu %}
-      </nav>
+      </nav>{% endcomment %}
       
       <div class="wrapper">
         {% include 'includes/header.html' %}
