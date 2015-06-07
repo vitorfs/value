@@ -44,11 +44,11 @@ footer {
     opacity: 0;
     z-index: 0;
   -webkit-backface-visibility: hidden;
-    -webkit-animation: imageAnimation 48s linear infinite 0s;
-    -moz-animation: imageAnimation 48s linear infinite 0s;
-    -o-animation: imageAnimation 48s linear infinite 0s;
-    -ms-animation: imageAnimation 48s linear infinite 0s;
-    animation: imageAnimation 48s linear infinite 0s; 
+    -webkit-animation: imageAnimation 42s linear infinite 0s;
+    -moz-animation: imageAnimation 42s linear infinite 0s;
+    -o-animation: imageAnimation 42s linear infinite 0s;
+    -ms-animation: imageAnimation 42s linear infinite 0s;
+    animation: imageAnimation 42s linear infinite 0s; 
 }
 .cb-slideshow li:nth-child(1) span { 
     background-image: url(../img/1.jpg) 
@@ -108,14 +108,6 @@ footer {
     -o-animation-delay: 42s;
     -ms-animation-delay: 42s;
     animation-delay: 42s; 
-}
-.cb-slideshow li:nth-child(9) span { 
-    background-image: url(../img/9.jpg);
-    -webkit-animation-delay: 48s;
-    -moz-animation-delay: 48s;
-    -o-animation-delay: 48s;
-    -ms-animation-delay: 48s;
-    animation-delay: 48s; 
 }
 @-webkit-keyframes imageAnimation { 
     0% { opacity: 0;
