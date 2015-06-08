@@ -1,16 +1,9 @@
 $(function () {
 
-  $("#order-by").sortable({
-    group: "order"
-  });
+  Sortable.create($("#order-by")[0], { group: "order" });
+  Sortable.create($("#columns")[0], { group: "order" });
 
-
-  $("#columns").sortable({
-    group: "order"
-  });
-
-
-  $("#column-display-order").sortable({
+  Sortable.create($("#column-display-order")[0], { 
     draggable: ".sortable",
     onEnd: function (evt) {
       var value = '';
@@ -22,9 +15,7 @@ $(function () {
     }
   });
 
-  $("#plain-text-column-order").sortable({
-    draggable: ".sortable"
-  });
+  Sortable.create($("#plain-text-column-order")[0], { draggable: ".sortable" });
 
   $("#id_orientation").change(function () {
     $("#id_orientation option").each(function () {

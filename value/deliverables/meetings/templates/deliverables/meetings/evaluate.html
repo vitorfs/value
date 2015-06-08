@@ -10,6 +10,11 @@
   <script src="{% static 'js/deliverables/meetings/evaluate.js' %}"></script>
 {% endblock javascript %}
 
+{% block mustache %}
+<script id="reasoning-template" type="x-tmpl-mustache"><textarea class="form-control evaluation-reasoning" rows="1" style="resize: none;">{{ reasoning }}</textarea>
+</script>
+{% endblock mustache %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
@@ -21,9 +26,7 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-
   {% include 'deliverables/meetings/includes/menu.html' with active='evaluate' meeting=meeting %}
-
   <div class="row" style="margin-bottom: 20px">
     <div class="col-md-3">
       <form role="form">
@@ -67,7 +70,6 @@
       </div>
     </div>
   </div>
-
   <div class="row">
     <div class="col-md-12">
       <div class="panel-group panel-group-evaluation" role="tablist" aria-multiselectable="true">
@@ -75,5 +77,4 @@
       </div>
     </div>
   </div>
-
 {% endblock content %}

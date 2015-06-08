@@ -86,11 +86,13 @@ $(function () {
 
   initializeCheckAll();
 
+  /*
   $(".menu-link").bigSlide({
     side: 'right',
     push: '.wrapper, footer',
     menuWidth: '18.6em'
   });
+  */
 
   $("[data-toggle='tooltip']").tooltip();
 

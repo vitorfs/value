@@ -3,7 +3,12 @@ $(function () {
   $(".js-reasoning").popover({
     html: true,
     content: function () {
-      return '<textarea class="form-control evaluation-reasoning" rows="1" style="resize: none;">' + $(this).attr("data-reasoning") + '</textarea>';
+      var reasoning = $(this).attr("data-reasoning");
+      var template = $('#reasoning-template').html();
+      console.log(template);
+      var rendered = Mustache.render(template, { reasoning: reasoning });
+      console.log(rendered);
+      return rendered;
     }
   });
 
