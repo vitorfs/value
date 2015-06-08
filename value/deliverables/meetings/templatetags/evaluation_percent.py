@@ -6,7 +6,7 @@ register = template.Library()
 def evaluation_percent(evaluations, meeting_item, factors, measure_value):
     count = 0
     for evaluation in evaluations:
-        if evaluation.meeting_item.pk == meeting_item.pk and evaluation.measure.pk == evaluation.factor.measure.pk and evaluation.measure_value.pk == measure_value.pk:
+        if evaluation.meeting_item == meeting_item and evaluation.measure == evaluation.factor.measure and evaluation.measure_value == measure_value:
             count = count + 1
 
     f = len(factors)

@@ -10,10 +10,22 @@
   <script src="{% static 'js/deliverables/meetings/evaluate.js' %}"></script>
 {% endblock javascript %}
 
-{% block mustache %}
-<script id="reasoning-template" type="x-tmpl-mustache"><textarea class="form-control evaluation-reasoning" rows="1" style="resize: none;">{{ reasoning }}</textarea>
+{% block mustache %}{% verbatim %}
+<script id="reasoning-template" type="x-tmpl-mustache">
+  <div class="form-group">
+    <textarea class="form-control evaluation-reasoning" rows="6" style="resize: none;">{{ reasoning }}</textarea>
+  </div>
+  <div class="row">
+    <div class="col-xs-6">
+      <!--button type="button" class="btn btn-sm btn-default"><span class="fa fa-paperclip"></span> Attach files</button-->
+    </div>
+    <div class="col-xs-6 text-right">
+      <button type="button" class="btn btn-sm btn-default" onclick="$(this).closest('.popover').popover('hide');">Cancel</button>
+      <button type="button" class="btn btn-sm btn-primary js-save-rationale">Save</button>
+    </div>
+  </div>
 </script>
-{% endblock mustache %}
+{% endverbatim %}{% endblock mustache %}
 
 {% block breadcrumb %}
   <ol class="breadcrumb">

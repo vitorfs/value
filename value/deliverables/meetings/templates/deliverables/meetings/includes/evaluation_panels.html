@@ -2,6 +2,7 @@
 
 <form method="post" action="{% url 'deliverables:meetings:save_evaluation' meeting.deliverable.pk meeting.pk %}">
   {% csrf_token %}
+  <input type="hidden" id="save-rationale-url" value="{% url 'deliverables:meetings:save_rationale' meeting.deliverable.pk meeting.pk %}">
   {% for meeting_item in meeting_items %}
     <div class="panel {% panel_class evaluations=evaluations meeting_item=meeting_item factors=factors %}">
       <div class="panel-heading" data-target="#collapse-{{ meeting_item.pk }}">

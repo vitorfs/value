@@ -24,10 +24,10 @@
 }
 
 .popover {
-  min-width: 300px;
+  min-width: 500px;
   z-index: 1020;
 }
 
 .popover .arrow {
-  top: 25px!important;
+  /*top: 25px!important;*/
 }

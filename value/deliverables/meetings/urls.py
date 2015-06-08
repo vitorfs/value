@@ -6,6 +6,7 @@ urlpatterns = patterns('value.deliverables.meetings.views',
     url(r'^(?P<meeting_id>\d+)/close/$', 'close_meeting', name='close_meeting'),
     url(r'^(?P<meeting_id>\d+)/evaluate/$', 'evaluate', name='evaluate'),
     url(r'^(?P<meeting_id>\d+)/evaluate/save/$', 'save_evaluation', name='save_evaluation'),
+    url(r'^(?P<meeting_id>\d+)/evaluate/rationale/$', 'save_rationale', name='save_rationale'),
 
     url(r'^(?P<meeting_id>\d+)/dashboard/$', 'dashboard', name='dashboard'),
     url(r'^(?P<meeting_id>\d+)/dashboard/factors-usage/$', 'dashboard_factors_usage_chart', name='dashboard_factors_usage_chart'),

@@ -1,28 +1,68 @@
 $(function () {
 
+  $(".panel-group-evaluation").on("click", ".js-save-rationale", function () {
+    var container = $(this).closest(".popover");
+    var btn = $(this);
+
+    var url = $("#save-rationale-url").val();
+    var csrf = $("[name='csrfmiddlewaretoken']").val();
+    var meeting_item_id = $(this).closest("table").attr("data-meeting-item-id");
+    var factor_id = $(this).closest("tr").attr("data-factor-id");
+    var measure_id = $(this).closest("tr").attr("data-measure-id");
+    var rationale = $(".evaluation-reasoning", container).val();
+
+    $.ajax({
+      url: url,
+      type: 'post',
+      cache: false,
+      data: {
+        'csrfmiddlewaretoken': csrf,
+        'meeting_item_id': meeting_item_id,
+        'factor_id': factor_id,
+        'measure_id': measure_id,
+        'rationale': rationale
+      },
+      beforeSend: function (jqXHR, settings) {
+        $(btn).prop("disabled", true);
+        $(btn).text("Saving…");
+      },
+      success: function (data, textStatus, jqXHR) {
+        toastr.success("Rationale saved successfully!");
+        $(container).siblings(".js-reasoning").removeClass("no-comment");
+        $(container).siblings(".js-reasoning").attr("data-reasoning", rationale);
+        $(container).popover("hide");
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        toastr.error("An error ocurred while trying to save your data.");
+      },
+      complete: function (jqXHR, textStatus) {
+        $(btn).prop("disabled", false);
+        $(btn).text("Save");
+      }
+    });
+
+  });
+
   $(".js-reasoning").popover({
     html: true,
     content: function () {
       var reasoning = $(this).attr("data-reasoning");
       var template = $('#reasoning-template').html();
-      console.log(template);
       var rendered = Mustache.render(template, { reasoning: reasoning });
-      console.log(rendered);
       return rendered;
     }
   });
 
   $(".js-reasoning").on("shown.bs.popover", function () {
     var popover = $(this).siblings(".popover");
-    $("textarea", popover).expanding();
     if ($("textarea", popover).text().length === 0) {
       $("textarea", popover).focus();
     }
   });
 
-  $("main").on("blur", ".evaluation-reasoning", function () {
-    console.log(1);
-  });
+  /*$("main").on("blur", ".evaluation-reasoning", function () {
+    
+  });*/
 
   $(".btn-toggle").click(function () {
     var container = $(this).closest(".panel-heading");
@@ -143,7 +183,7 @@ $(function () {
     var factor_id = $(this).closest("tr").attr("data-factor-id");
     var measure_id = $(this).closest("tr").attr("data-measure-id");
     
-    var measure_value_id = $(this).attr("data-measure-value-id");
+    var measure_value_id = do_evaluate ? $(this).attr("data-measure-value-id") : "";
 
     $.ajax({
       url: url,

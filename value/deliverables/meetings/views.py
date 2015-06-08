@@ -1,8 +1,9 @@
 import json
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
@@ -124,33 +125,67 @@ def evaluate(request, deliverable_id, meeting_id):
         })
 
 @login_required
+@require_POST
 def save_evaluation(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
 
     meeting_item_id = request.POST.get('meeting_item_id')
-    meeting_item = get_object_or_404(MeetingItem, pk=meeting_item_id)
-
     factor_id = request.POST.get('factor_id')
-    factor = get_object_or_404(Factor, pk=factor_id)
-
     measure_id = request.POST.get('measure_id')
-    measure = get_object_or_404(Measure, pk=measure_id)
-
     measure_value_id = request.POST.get('measure_value_id')
-    measure_value = get_object_or_404(MeasureValue, pk=measure_value_id)
 
-    evaluation, created = Evaluation.objects.get_or_create(meeting=meeting, meeting_item=meeting_item, user=request.user, factor=factor, measure=measure)
+    meeting_item = MeetingItem.objects.get(pk=meeting_item_id)
+    factor = Factor.objects.get(pk=factor_id)
+    measure = Measure.objects.get(pk=measure_id)
 
-    if evaluation.measure_value == measure_value and not created:
-        evaluation.delete()
+    if measure_value_id:
+        measure_value = MeasureValue.objects.get(pk=measure_value_id)
     else:
-        evaluation.evaluated_at = timezone.now()
-        evaluation.measure_value = measure_value
-        evaluation.save()
+        measure_value = None
+
+    Evaluation.objects.update_or_create(
+            meeting=meeting, 
+            meeting_item=meeting_item, 
+            user=request.user, 
+            factor=factor, 
+            measure=measure,
+            defaults={ 'evaluated_at': timezone.now(), 'measure_value': measure_value }
+    )
 
     meeting.deliverable.save()
 
-    return HttpResponse('')
+    return HttpResponse()
+
+@login_required
+@require_POST
+def save_rationale(request, deliverable_id, meeting_id):
+    try:
+        meeting = Meeting.objects.get(pk=meeting_id, deliverable__id=deliverable_id)
+
+        rationale = request.POST.get('rationale')
+
+        meeting_item_id = request.POST.get('meeting_item_id')
+        factor_id = request.POST.get('factor_id')
+        measure_id = request.POST.get('measure_id')
+
+        meeting_item = MeetingItem.objects.get(pk=meeting_item_id)
+        factor = Factor.objects.get(pk=factor_id)
+        measure = Measure.objects.get(pk=measure_id)
+
+        Evaluation.objects.update_or_create(
+                meeting=meeting, 
+                user=request.user, 
+                meeting_item=meeting_item, 
+                factor=factor, 
+                measure=measure,
+                defaults={ 'reasoning': rationale }
+        )
+
+        meeting.deliverable.save()
+
+        return HttpResponse()
+    except ObjectDoesNotExist:
+        return HttpResponseBadRequest()
 
 @login_required
 def dashboard(request, deliverable_id, meeting_id):

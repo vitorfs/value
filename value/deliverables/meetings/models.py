@@ -102,7 +102,7 @@ class Evaluation(models.Model):
         return '{0} {1} {2} {3} {4} {5}'.format(self.meeting.name, self.meeting_item.decision_item.name, self.user.username, self.factor.name, self.measure.name, mv)
 
     @staticmethod
-    def get_evaluations_by_meeting(meeting):
+    def _list(meeting):
         qs = Evaluation.objects.filter(
             meeting=meeting, 
             factor__is_active=True, 
@@ -112,6 +112,9 @@ class Evaluation(models.Model):
         return qs
 
     @staticmethod
+    def get_evaluations_by_meeting(meeting):
+        return Evaluation._list(meeting).exclude(measure_value=None)
+
+    @staticmethod
     def get_user_evaluations_by_meeting(user, meeting):
-        qs = Evaluation.get_evaluations_by_meeting(meeting).filter(user=user)
-        return qs
+        return Evaluation._list(meeting).filter(user=user)
