@@ -12,8 +12,22 @@
 
 {% block mustache %}{% verbatim %}
 <script id="rationale-template" type="x-tmpl-mustache">
-  <div class="form-group">
-    <textarea class="form-control evaluation-rationale" rows="6" style="resize: none;">{{ rationale }}</textarea>
+  <div role="tabpanel">
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#rationale_{{ id }}" aria-controls="rationale_{{ id }}" role="tab" data-toggle="tab">Rationale</a></li>
+      <li role="presentation"><a href="#attachments_{{ id }}" aria-controls="attachments_{{ id }}" role="tab" data-toggle="tab">Attachments</a></li>
+    </ul>
+    <div class="tab-content" style="margin-top: 15px;">
+      <div role="tabpanel" class="tab-pane fade in active" id="rationale_{{ id }}">
+        <div class="form-group">
+          <textarea class="form-control evaluation-rationale" style="resize: none; height: 150px;" maxlength="2000">{{ rationale }}</textarea>
+          <span class="help-block"></span>
+        </div>      
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="attachments_{{ id }}" style="height: 165px;">
+
+      </div>
+    </div>
   </div>
   <div class="row">
     <div class="col-xs-6">

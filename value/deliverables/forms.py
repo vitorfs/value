@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from value.deliverables.models import Deliverable
+from value.deliverables.models import Deliverable, Rationale
 
 
 class StakeholderPanelGroupMultipleModelChoiceField(forms.ModelMultipleChoiceField):
@@ -41,3 +41,7 @@ class DeliverableBasicDataForm(forms.ModelForm):
         model = Deliverable
         fields = ['name', 'description',]
         
+class RationaleForm(forms.ModelForm):
+    class Meta:
+        model = Rationale
+        fields = ['text',]

@@ -22,7 +22,7 @@ $(function () {
         'meeting_item_id': meeting_item_id,
         'factor_id': factor_id,
         'measure_id': measure_id,
-        'rationale': rationale
+        'text': rationale
       },
       beforeSend: function (jqXHR, settings) {
         $(btn).prop("disabled", true);
@@ -40,7 +40,7 @@ $(function () {
         $(container).popover("hide");
       },
       error: function (jqXHR, textStatus, errorThrown) {
-        toastr.error("An error ocurred while trying to save your data.");
+        toastr.error(jqXHR.responseText);
       },
       complete: function (jqXHR, textStatus) {
         $(btn).prop("disabled", false);
@@ -54,8 +54,15 @@ $(function () {
     html: true,
     content: function () {
       var rationale = $(this).attr("data-rationale");
+      var id ='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+          var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+          return v.toString(16);
+      });
       var template = $('#rationale-template').html();
-      var rendered = Mustache.render(template, { rationale: rationale });
+      var rendered = Mustache.render(template, { 
+        'rationale': rationale,
+        'id': id
+      });
       return rendered;
     }
   });

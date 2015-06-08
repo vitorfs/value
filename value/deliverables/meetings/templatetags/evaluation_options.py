@@ -37,7 +37,7 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values):
  data-factor-id="{1}"
  data-measure-id="{2}">
 <td>{3}<a href="javascript:void(0);" 
- class="js-rationale {4} pull-right" 
+ class="btn-rationale js-rationale {4} pull-right" 
  data-toggle="popover" 
  data-placement="right" 
  title="Add a rationale for {3}"

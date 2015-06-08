@@ -11,10 +11,11 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models import Q
 
-from value.deliverables.models import Deliverable, DecisionItemLookup, Rationale
-from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
+from value.deliverables.models import Deliverable, DecisionItemLookup, Rationale
+from value.deliverables.forms import RationaleForm
+from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
 from value.deliverables.meetings.charts import Highcharts
 from value.deliverables.meetings.forms import MeetingForm
 
@@ -162,8 +163,6 @@ def save_rationale(request, deliverable_id, meeting_id):
     try:
         meeting = Meeting.objects.get(pk=meeting_id, deliverable__id=deliverable_id)
 
-        rationale_text = request.POST.get('rationale', '').strip()
-
         meeting_item_id = request.POST.get('meeting_item_id')
         factor_id = request.POST.get('factor_id')
         measure_id = request.POST.get('measure_id')
@@ -181,18 +180,21 @@ def save_rationale(request, deliverable_id, meeting_id):
         )
         
         if evaluation.rationale:
-            evaluation.rationale.text = rationale_text
-            evaluation.rationale.save()
+            form = RationaleForm(request.POST, instance=evaluation.rationale)
         else:
-            rationale = Rationale(user=request.user, text=rationale_text)
-            rationale.save()
-            evaluation.rationale = rationale
-        evaluation.save()
-        meeting.deliverable.save()
+            form = RationaleForm(request.POST)
+            form.instance.user = request.user
 
-        return HttpResponse()
+        if form.is_valid():
+            evaluation.rationale = form.save()
+            evaluation.save()
+            meeting.deliverable.save()
+            return HttpResponse()
+        else:
+            return HttpResponseBadRequest(form['text'].errors.as_text())
+
     except ObjectDoesNotExist:
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest('An error ocurred while trying to save your data.')
 
 @login_required
 def dashboard(request, deliverable_id, meeting_id):
