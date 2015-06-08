@@ -22,27 +22,27 @@ def selected(is_evaluated):
 def evaluation_options(evaluations, meeting_item, factor, measure_values):
 
     is_evaluated = False
-    reasoning = ''
+    rationale_text = ''
     no_comment = 'no-comment'
     for evaluation in evaluations:
         if meeting_item.pk == evaluation.meeting_item.pk \
                 and factor.pk == evaluation.factor.pk \
                 and evaluation.measure.pk == evaluation.factor.measure.pk:
             is_evaluated = True
-            if evaluation.reasoning:
-                reasoning = evaluation.reasoning
+            if evaluation.rationale and evaluation.rationale.text != '':
+                rationale_text = evaluation.rationale.text
                 no_comment = ''
 
     html = '''<tr{0}
  data-factor-id="{1}"
  data-measure-id="{2}">
 <td>{3}<a href="javascript:void(0);" 
- class="btn-reasoning js-reasoning {4} pull-right" 
+ class="js-rationale {4} pull-right" 
  data-toggle="popover" 
  data-placement="right" 
  title="Add a rationale for {3}"
  data-content="" 
- data-reasoning="{5}">
+ data-rationale="{5}">
 <span class="fa fa-comment"></span>
 </a></td>'''.format(
         selected(is_evaluated),
@@ -50,7 +50,7 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values):
         factor.measure.pk, 
         factor.name,
         no_comment,
-        reasoning)
+        rationale_text)
 
     for measure_value in measure_values:
         is_checked = False

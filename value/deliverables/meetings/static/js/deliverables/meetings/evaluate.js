@@ -9,7 +9,9 @@ $(function () {
     var meeting_item_id = $(this).closest("table").attr("data-meeting-item-id");
     var factor_id = $(this).closest("tr").attr("data-factor-id");
     var measure_id = $(this).closest("tr").attr("data-measure-id");
-    var rationale = $(".evaluation-reasoning", container).val();
+    var rationale = $(".evaluation-rationale", container).val();
+
+    rationale = rationale.trim();
 
     $.ajax({
       url: url,
@@ -28,8 +30,13 @@ $(function () {
       },
       success: function (data, textStatus, jqXHR) {
         toastr.success("Rationale saved successfully!");
-        $(container).siblings(".js-reasoning").removeClass("no-comment");
-        $(container).siblings(".js-reasoning").attr("data-reasoning", rationale);
+        $(container).siblings(".js-rationale").attr("data-rationale", rationale);
+        if (rationale.length > 0) {
+          $(container).siblings(".js-rationale").removeClass("no-comment");
+        }
+        else {
+          $(container).siblings(".js-rationale").addClass("no-comment"); 
+        }
         $(container).popover("hide");
       },
       error: function (jqXHR, textStatus, errorThrown) {
@@ -43,26 +50,22 @@ $(function () {
 
   });
 
-  $(".js-reasoning").popover({
+  $(".js-rationale").popover({
     html: true,
     content: function () {
-      var reasoning = $(this).attr("data-reasoning");
-      var template = $('#reasoning-template').html();
-      var rendered = Mustache.render(template, { reasoning: reasoning });
+      var rationale = $(this).attr("data-rationale");
+      var template = $('#rationale-template').html();
+      var rendered = Mustache.render(template, { rationale: rationale });
       return rendered;
     }
   });
 
-  $(".js-reasoning").on("shown.bs.popover", function () {
+  $(".js-rationale").on("shown.bs.popover", function () {
     var popover = $(this).siblings(".popover");
     if ($("textarea", popover).text().length === 0) {
       $("textarea", popover).focus();
     }
   });
-
-  /*$("main").on("blur", ".evaluation-reasoning", function () {
-    
-  });*/
 
   $(".btn-toggle").click(function () {
     var container = $(this).closest(".panel-heading");

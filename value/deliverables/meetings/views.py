@@ -11,7 +11,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models import Q
 
-from value.deliverables.models import Deliverable, DecisionItemLookup
+from value.deliverables.models import Deliverable, DecisionItemLookup, Rationale
 from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
@@ -107,7 +107,7 @@ def evaluate(request, deliverable_id, meeting_id):
         relative_col_size = 'auto'
 
     evaluations = Evaluation.get_user_evaluations_by_meeting(user=request.user, meeting=meeting) \
-            .select_related('meeting', 'meeting_item', 'user', 'factor', 'factor__measure', 'measure', 'measure_value')
+            .select_related('meeting', 'meeting_item', 'user', 'factor', 'factor__measure', 'measure', 'measure_value', 'rationale')
     meeting_items = meeting.meetingitem_set.select_related('decision_item').all()
     total_items = meeting_items.count()
     search_query = request.GET.get('search')
@@ -162,7 +162,7 @@ def save_rationale(request, deliverable_id, meeting_id):
     try:
         meeting = Meeting.objects.get(pk=meeting_id, deliverable__id=deliverable_id)
 
-        rationale = request.POST.get('rationale')
+        rationale_text = request.POST.get('rationale', '').strip()
 
         meeting_item_id = request.POST.get('meeting_item_id')
         factor_id = request.POST.get('factor_id')
@@ -172,15 +172,22 @@ def save_rationale(request, deliverable_id, meeting_id):
         factor = Factor.objects.get(pk=factor_id)
         measure = Measure.objects.get(pk=measure_id)
 
-        Evaluation.objects.update_or_create(
+        evaluation, created = Evaluation.objects.get_or_create(
                 meeting=meeting, 
                 user=request.user, 
                 meeting_item=meeting_item, 
                 factor=factor, 
-                measure=measure,
-                defaults={ 'reasoning': rationale }
+                measure=measure
         )
-
+        
+        if evaluation.rationale:
+            evaluation.rationale.text = rationale_text
+            evaluation.rationale.save()
+        else:
+            rationale = Rationale(user=request.user, text=rationale_text)
+            rationale.save()
+            evaluation.rationale = rationale
+        evaluation.save()
         meeting.deliverable.save()
 
         return HttpResponse()

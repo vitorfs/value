@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
-from value.deliverables.models import Deliverable, DecisionItem
+from value.deliverables.models import Deliverable, DecisionItem, Rationale
+
 
 class Meeting(models.Model):
     ONGOING = u'O'
@@ -61,14 +62,14 @@ class Meeting(models.Model):
         return percentage
 
 
-
 class MeetingItem(models.Model):
     meeting = models.ForeignKey(Meeting)
     decision_item = models.ForeignKey(DecisionItem)
     meeting_decision = models.NullBooleanField(null=True, blank=True)
+    rationales = models.ManyToManyField(Rationale)
 
     def __unicode__(self):
-        return '{0} {1}'.format(self.meeting.name, self.decision_item.name)
+        return '{0} - {1}'.format(self.meeting.name, self.decision_item.name)
 
 
 class MeetingStakeholder(models.Model):
@@ -80,7 +81,8 @@ class MeetingStakeholder(models.Model):
         ordering = ('stakeholder__first_name', 'stakeholder__last_name', 'stakeholder__username',)
 
     def __unicode__(self):
-        return '{0} {1}'.format(self.meeting.name, self.stakeholder.username)
+        return '{0} - {1}'.format(self.meeting.name, self.stakeholder.username)
+
 
 class Evaluation(models.Model):
     meeting = models.ForeignKey(Meeting)
@@ -90,16 +92,13 @@ class Evaluation(models.Model):
     measure = models.ForeignKey(Measure)
     measure_value = models.ForeignKey(MeasureValue, null=True, blank=True)
     evaluated_at = models.DateTimeField(null=True, blank=True)
-    reasoning = models.CharField(max_length=500, null=True, blank=True)
+    rationale = models.OneToOneField(Rationale, null=True)
 
     class Meta:
         unique_together = (('meeting', 'meeting_item', 'user', 'factor', 'measure'),)
 
     def __unicode__(self):
-        mv = 'N/A'
-        if self.measure_value:
-            mv = self.measure_value.description
-        return '{0} {1} {2} {3} {4} {5}'.format(self.meeting.name, self.meeting_item.decision_item.name, self.user.username, self.factor.name, self.measure.name, mv)
+        return '{0} - {1}'.format(self.meeting.name, self.meeting_item.decision_item.name)
 
     @staticmethod
     def _list(meeting):

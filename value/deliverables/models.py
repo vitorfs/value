@@ -122,14 +122,10 @@ class DecisionItemLookup(models.Model):
         return ordered_fields
 
 class Rationale(models.Model):
-    reasoning = models.TextField(max_length=2000, null=True, blank=True)
+    text = models.TextField(max_length=2000, null=True, blank=True)
     user = models.ForeignKey(User)
-    content_type = models.ForeignKey(ContentType)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey('content_type', 'object_id')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return self.reasoning
-        
+        return self.text

@@ -11,13 +11,14 @@
 {% endblock javascript %}
 
 {% block mustache %}{% verbatim %}
-<script id="reasoning-template" type="x-tmpl-mustache">
+<script id="rationale-template" type="x-tmpl-mustache">
   <div class="form-group">
-    <textarea class="form-control evaluation-reasoning" rows="6" style="resize: none;">{{ reasoning }}</textarea>
+    <textarea class="form-control evaluation-rationale" rows="6" style="resize: none;">{{ rationale }}</textarea>
   </div>
   <div class="row">
     <div class="col-xs-6">
       <!--button type="button" class="btn btn-sm btn-default"><span class="fa fa-paperclip"></span> Attach files</button-->
+      <!--button type="button" class="btn btn-sm btn-danger">Delete</button-->
     </div>
     <div class="col-xs-6 text-right">
       <button type="button" class="btn btn-sm btn-default" onclick="$(this).closest('.popover').popover('hide');">Cancel</button>
