@@ -1,5 +1,5 @@
-from django.db import models
-from django.db.models import F
+from django.db import models, transaction
+from django.db.models import F, Count
 from django.contrib.auth.models import User
 
 from value.factors.models import Factor
@@ -76,6 +76,11 @@ class Meeting(models.Model):
 
         return percentage
 
+    def calculate_all_rankings(self):
+        with transaction.atomic():
+            for item in self.meetingitem_set.all():
+                item.calculate_ranking()
+
 
 class MeetingItem(models.Model):
     meeting = models.ForeignKey(Meeting)
@@ -85,6 +90,31 @@ class MeetingItem(models.Model):
 
     def __unicode__(self):
         return '{0} ({1})'.format(self.decision_item.name, self.meeting.name)
+
+    def calculate_ranking(self):
+        item_evaluations = Evaluation.get_evaluations_by_meeting(self.meeting) \
+                .filter(meeting_item=self)
+
+        measure = self.meeting.deliverable.measure
+        stakeholders_count = self.meeting.meetingstakeholder_set.count()
+        factors_count = Factor.list().count()
+        max_evaluations = stakeholders_count * factors_count
+
+        rankings = item_evaluations.values('measure_value__id').annotate(votes=Count('measure_value'))
+
+        with transaction.atomic():
+
+            for measure_value in measure.measurevalue_set.all():
+                Ranking.objects.get_or_create(meeting_item=self, measure_value=measure_value)
+
+            for ranking in rankings:
+                votes = int(ranking['votes'])
+                if max_evaluations != 0:
+                    percentage = round((votes / float(max_evaluations)) * 100.0, 2)
+                else:
+                    percentage = 0.0
+                Ranking.objects.filter(meeting_item=self, measure_value__id=ranking['measure_value__id']).update(raw_votes=votes, percentage_votes=percentage)
+
 
 class Ranking(models.Model):
     """
@@ -97,6 +127,10 @@ class Ranking(models.Model):
     measure_value = models.ForeignKey(MeasureValue)
     raw_votes = models.IntegerField(default=0)
     percentage_votes = models.FloatField(default=0.0)
+
+    class Meta:
+        unique_together = (('meeting_item', 'measure_value',),)
+        ordering = ('meeting_item__decision_item__description', 'measure_value__order')
 
     def __unicode__(self):
         return '{0} ({1}): {2}%'.format(self.meeting_item.decision_item.name, self.measure_value.description, self.percentage_votes)
