@@ -3,7 +3,9 @@
 <table class="table table-hover table-clickable-row">
   <thead>
     <tr>
-      <th>Name</th>
+      <th>Meeting</th>
+      <th>Deliverable</th>
+      <th>Manager</th>
       <th>Stakeholders</th>
       <th>Items</th>
       <th>Progress</th>
@@ -23,6 +25,8 @@
     {% for meeting in meetings %}
       <tr data-href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">
         <td><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></td>
+        <td>{{ meeting.deliverable.name }}</td>
+        <td>{% avatar_img meeting.deliverable.manager 20 %}</td>
         <td>
           {% for meeting_stakeholder in meeting.meetingstakeholder_set.all %}
             {% avatar_img meeting_stakeholder.stakeholder 20 %}

@@ -80,7 +80,6 @@ def new(request, deliverable_id):
 @login_required
 def meeting(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    meeting.calculate_all_rankings()
     stakeholders = [meeting_stakeholder.stakeholder for meeting_stakeholder in meeting.meetingstakeholder_set.select_related('stakeholder')]
     return render(request, 'deliverables/meetings/meeting.html', { 'meeting': meeting, 'stakeholders': stakeholders })
 
@@ -154,6 +153,7 @@ def save_evaluation(request, deliverable_id, meeting_id):
             defaults={ 'evaluated_at': timezone.now(), 'measure_value': measure_value }
     )
 
+    meeting_item.calculate_ranking()
     meeting.deliverable.save()
 
     return HttpResponse()

@@ -97,6 +97,7 @@
                 {% for name, field in fields.items %}
                 <th>{{ field.label }}</th>
                 {% endfor %}
+                <th>Evaluations</th>
               </tr>
             </thead>
             <tbody>
@@ -108,6 +109,15 @@
                 {% for name, field in fields.items %}
                   <td>{{ item.decision_item|attr:name }}</td>
                 {% endfor %}
+                <td>
+                  <div class="progress" style="margin-bottom: 0">
+                    {% for ranking in item.ranking_set.all %}
+                      <div class="progress-bar" style="width: {{ ranking.percentage_votes }}%; background-color: {{ ranking.measure_value.color }}">
+                        <span class="measure-percent" data-measure-id="{{ ranking.measure_value.pk }}">{{ ranking.percentage_votes }}</span>%
+                      </div>
+                    {% endfor %}
+                  </div>
+                </td>
               </tr>
               {% empty %}
                 <tr>

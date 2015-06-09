@@ -46,7 +46,7 @@ class Meeting(models.Model):
         if self.status == self.ONGOING:
             return u'<span class="label {0}">{1}</span>'.format("label-success", self.get_status_display().upper())
         elif self.status == self.CLOSED:
-            return u'<span class="label {0}">{1}</span>'.format("label-warning", self.get_status_display().upper())
+            return u'<span class="label {0}">{1}</span>'.format("label-danger", self.get_status_display().upper())
         else:
             return u'<span class="label {0}">{1}</span>'.format("label-default", self.get_status_display().upper())
 
