@@ -1,53 +1,81 @@
 {% extends 'application_settings/base.html' %}
 
+{% load avatar staticfiles %}
+
 {% block javascript %}
+  <script src="{% static 'js/application_settings/settings.js' %}"></script>
   <script type="text/javascript">
     $(function () {
-      $("#id_administrators").selectize();
-      $("#id_administrators").on("change", function () {
-        
-      });
+      var options = [
+      {% for stakeholder in users %}
+        { 
+          name: "{{ stakeholder.profile.get_display_name }}", 
+          pk: {{ stakeholder.pk }}, 
+          img: "{% avatar stakeholder 20 %}" 
+        }{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+      ];
+      $("#id_administrators").selectizeUsers(options, {{ users.count }});
     });
   </script>
 {% endblock javascript %}
 
 {% block settings_content %}
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">General</h3>
+  <form method="post" class="form-horizontal">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">General</h3>
+      </div>
+      <div class="panel-body">
+        <div class="form-group">
+          <label class="control-label col-sm-2">Value Ranking</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control">
+            <span class="help-block">The value ranking is based on the active measure.</span>
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
     </div>
-    <div class="panel-body">
-      
-    </div>
-  </div>
+  </form>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Administrators</h3>
-    </div>
-    <div class="panel-body">
-      <select id="id_administrators" name="administrators">
-        {% for user in users %}
-          {% if not user.is_superuser %}
-            <option value="{{ user.pk }}">{{ user.profile.get_display_name }}</option>
-          {% endif %}
-        {% endfor %}
-      </select>
-    </div>
-    <ul class="list-group">
-      {% for user in users %}
-        {% if user.is_superuser %}
-          <li class="list-group-item">
-            <a href="#" class="pull-right"><span class="glyphicon glyphicon-remove-sign"></span></a>
-            {{ user.profile.get_display_name }}
-          </li>
-        {% endif %}
-      {% endfor %}
-    </ul>
-    <div class="panel-footer">
-      <button type="submit" class="btn btn-primary">Save changes</button>
-    </div>
+  <form method="post" action="{% url 'settings:admins' %}">
+    {% csrf_token %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Administrators</h3>
+      </div>
+      <div class="panel-body">
+        <p>Select the users you want to grant administrator permissions.</p>
+        <select id="id_administrators" name="grant_user"></select>
+      </div>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th style="width: 150px;">Revoke access?</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in admins %}
+            <tr>
+              <td>{{ user.profile.get_display_name }}</td>
+              <td>{{ user.email }}</td>
+              <td class="text-center">
+                <input type="checkbox" name="revoke_user" value="{{ user.pk }}" autocomplete="off">
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="panel-footer">
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+    </form>
   </div>
 
 {% endblock settings_content %}

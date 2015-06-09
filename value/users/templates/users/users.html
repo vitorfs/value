@@ -18,7 +18,6 @@
         <th>Username</th>
         <th>First name</th>
         <th>Last name</th>
-        <th>Superuser</th>
         <th>Active</th>
         <th></th>
       </tr>
@@ -29,13 +28,6 @@
           <td><a href="{% url 'users:user' user.pk %}">{{ user.username }}</a></td>
           <td>{{ user.first_name }}</td>
           <td>{{ user.last_name }}</td>
-          <td>
-            {% if user.is_superuser %}
-              <span class="glyphicon glyphicon-ok-sign text-success"></span>
-            {% else %}
-              <span class="glyphicon glyphicon-remove-sign text-danger"></span>
-            {% endif %}
-          </td>
           <td>
             {% if user.is_active %}
               <span class="glyphicon glyphicon-ok-sign text-success"></span>

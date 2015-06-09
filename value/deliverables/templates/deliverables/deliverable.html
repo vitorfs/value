@@ -39,14 +39,14 @@
       <h2>Meetings</h2>
     </div>
     {% if has_meetings %}
-      <div class="panel panel-default">
+      <div class="panel panel-success">
         <div class="panel-heading">
           <h3 class="panel-title">Ongoing meetings</h3>
         </div>
         {% include 'deliverables/includes/meetings_table.html' with meetings=deliverable.get_ongoing_meetings %}
       </div>
       {% if deliverable.get_closed_meetings.exists %}
-        <div class="panel panel-default">
+        <div class="panel panel-warning">
           <div class="panel-heading">
             <h3 class="panel-title">Past meetings</h3>
           </div>

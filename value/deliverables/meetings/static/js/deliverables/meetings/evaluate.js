@@ -54,10 +54,7 @@ $(function () {
     html: true,
     content: function () {
       var rationale = $(this).attr("data-rationale");
-      var id ='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-          var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-          return v.toString(16);
-      });
+      var id = uuid();
       var template = $('#rationale-template').html();
       var rendered = Mustache.render(template, { 
         'rationale': rationale,
@@ -83,7 +80,7 @@ $(function () {
     else {
       $(target).slideDown(400, function () {
         if (!$(container).hasClass("loaded")) {
-          // async load
+          // :TODO async load
         }
       });
     }

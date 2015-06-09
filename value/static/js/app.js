@@ -8,6 +8,14 @@ var page_loading = function () {
   $(".page-loading").toggle();
 };
 
+var uuid = function () {
+  var _uuid ='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+      return v.toString(16);
+  });
+  return _uuid;
+};
+
 $.fn.loading = function () {
   if ($(this).hasClass("loading")) {
     $(this).find(".block-spinner").remove();
@@ -34,6 +42,28 @@ $.fn.updateFormsetIndex = function () {
       var id = $(this).attr("id");
       $(this).attr("id", id.replace(/-(.*?)-/, "-" + rowIndex + "-"));
     });
+  });
+
+};
+
+$.fn.selectizeUsers = function (options, maxItems) {
+
+  maxItems = typeof maxItems !== 'undefined' ? maxItems : 1;
+
+  $(this).selectize({
+    maxItems: maxItems,
+    valueField: 'pk',
+    labelField: 'name',
+    searchField: ['name'],
+    options: options,
+    render: {
+      item: function (item, escape) {
+        return "<div>" + item.name + "</div>"
+      },
+      option: function (item, escape) {
+        return "<div><img src='" + item.img + "' alt='" + item.name + "' class='img-circle' style='margin-right: 10px;'><span style='line-height: 20px;'>" + item.name + "</span></div>";
+      }
+    }
   });
 
 };

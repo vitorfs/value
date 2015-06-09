@@ -19,8 +19,21 @@ from value.application_settings.models import ApplicationSetting
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def index(request):
-    users = User.objects.filter(is_active=True)
-    return render(request, 'application_settings/index.html', { 'users': users })
+    admins = User.objects.filter(is_superuser=True).order_by('first_name')
+    users = User.objects.filter(is_active=True, is_superuser=False).order_by('first_name')
+    return render(request, 'application_settings/index.html', { 
+            'admins': admins, 
+            'users': users })
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+@require_POST
+def admins(request):
+    grant_ids = request.POST.getlist('grant_user')
+    revoke_ids = request.POST.getlist('revoke_user')
+    User.objects.filter(id__in=grant_ids).update(is_superuser=True)
+    User.objects.filter(id__in=revoke_ids).update(is_superuser=False)
+    return HttpResponse('Administrators settings saved successfully!')
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)

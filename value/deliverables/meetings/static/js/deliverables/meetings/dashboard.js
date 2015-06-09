@@ -107,20 +107,22 @@ $(function () {
     var title = $(".panel-title", container).text();
     var chart = $(".panel-body", container).highcharts();
 
-    $("body").prepend("<div class='chart-window'></div>");
+    var chartId = uuid();
 
-    $(".chart-window").highcharts(chart.options);
+    $("body").prepend("<div id='" + chartId + "' class='chart-window'></div>");
 
-    var window_chart = $(".chart-window").highcharts();
+    $("#" + chartId).highcharts(chart.options);
 
-    interact('.chart-window')
+    var windowChart = $("#" + chartId).highcharts();
+
+    interact('#' + chartId)
       .draggable({
-        inertia: true,
+        inertia: true,/*
         restrict: {
-          restriction: "parent",
+          drag: 'html',
           endOnly: true,
           elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-        },
+        },*/
         onmove: function (event) {
           var target = event.target,
               x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
@@ -152,7 +154,7 @@ $(function () {
         target.setAttribute('data-x', x);
         target.setAttribute('data-y', y);
 
-        window_chart.reflow();
+        windowChart.reflow();
 
     });
   });
