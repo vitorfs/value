@@ -9,7 +9,7 @@ from value.deliverables.models import Deliverable, DecisionItem, Rationale
 
 class Meeting(models.Model):
     """
-    Wraps all the information about a given meeting. The value-based decison-making process
+    Wraps all the information about a given meeting. The value-based decision-making process
     used in the tool occur per meeting. A meeting is associated with a deliverable, which
     can have many meeting. A meeting has a collection of stakeholders and a collection of
     decision items, defined by the classes MeetingItem and MeetingStakeholder.
@@ -54,6 +54,14 @@ class Meeting(models.Model):
         return Evaluation.get_evaluations_by_meeting(self)
 
     def get_progress(self):
+        """
+        Returns the relative progress of a meeting, based on the count of the meeting's stakeholders,
+        decision items and the deliverable's factors.
+        The maximum number of possible evaluations is the product of multiplying 
+        TotalEvaluations = MeetingStakeholders * MeetingItems * DeliverableFactors
+        The total value is divided by the current number of evaluations, which can't be greater
+        then TotalEvaluations.
+        """
         stakeholders_count = self.meetingstakeholder_set.count()
         meeting_items_count = self.meetingitem_set.count()
         factors_count = Factor.list().count()
@@ -76,7 +84,22 @@ class MeetingItem(models.Model):
     rationales = models.ManyToManyField(Rationale)
 
     def __unicode__(self):
-        return '{0} - {1}'.format(self.meeting.name, self.decision_item.name)
+        return '{0} ({1})'.format(self.decision_item.name, self.meeting.name)
+
+class Ranking(models.Model):
+    """
+    The ranking class is a convenience class, and also to reduce the detabase overhead.
+    All the data stored by the Ranking class is calculated based on the Evaluation data.
+    Saves for each MeetingItem, separeted by MeasureValue, the total number of votes and
+    also the calculated percentage.
+    """
+    meeting_item = models.ForeignKey(MeetingItem)
+    measure_value = models.ForeignKey(MeasureValue)
+    raw_votes = models.IntegerField(default=0)
+    percentage_votes = models.FloatField(default=0.0)
+
+    def __unicode__(self):
+        return '{0} ({1}): {2}%'.format(self.meeting_item.decision_item.name, self.measure_value.description, self.percentage_votes)
 
 
 class MeetingStakeholder(models.Model):
