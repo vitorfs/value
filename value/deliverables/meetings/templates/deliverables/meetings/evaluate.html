@@ -10,37 +10,68 @@
   <script src="{% static 'js/deliverables/meetings/evaluate.js' %}"></script>
 {% endblock javascript %}
 
-{% block mustache %}{% verbatim %}
-<script id="rationale-template" type="x-tmpl-mustache">
-  <div role="tabpanel">
-    <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#rationale_{{ id }}" aria-controls="rationale_{{ id }}" role="tab" data-toggle="tab">Rationale</a></li>
-      <li role="presentation"><a href="#attachments_{{ id }}" aria-controls="attachments_{{ id }}" role="tab" data-toggle="tab">Attachments</a></li>
-    </ul>
-    <div class="tab-content" style="margin-top: 15px;">
-      <div role="tabpanel" class="tab-pane fade in active" id="rationale_{{ id }}">
-        <div class="form-group">
-          <textarea class="form-control evaluation-rationale" style="resize: none; height: 150px;" maxlength="2000">{{ rationale }}</textarea>
-          <span class="help-block"></span>
-        </div>      
-      </div>
-      <div role="tabpanel" class="tab-pane fade" id="attachments_{{ id }}" style="height: 165px;">
+{% block mustache %}
+  {% if meeting.is_closed %}
+    {% verbatim %}
+    <script id="rationale-template" type="x-tmpl-mustache">
+      <div role="tabpanel">
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#rationale_{{ id }}" aria-controls="rationale_{{ id }}" role="tab" data-toggle="tab">Rationale</a></li>
+          <li role="presentation"><a href="#attachments_{{ id }}" aria-controls="attachments_{{ id }}" role="tab" data-toggle="tab">Attachments</a></li>
+        </ul>
+        <div class="tab-content" style="margin-top: 15px;">
+          <div role="tabpanel" class="tab-pane fade in active" id="rationale_{{ id }}">
+            <div class="form-group">
+              <textarea class="form-control evaluation-rationale" style="resize: none; height: 150px;" maxlength="2000" readonly>{{ rationale }}</textarea>
+              <span class="help-block"></span>
+            </div>      
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="attachments_{{ id }}" style="height: 165px;">
 
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-6">
-      <!--button type="button" class="btn btn-sm btn-default"><span class="fa fa-paperclip"></span> Attach files</button-->
-      <!--button type="button" class="btn btn-sm btn-danger">Delete</button-->
-    </div>
-    <div class="col-xs-6 text-right">
-      <button type="button" class="btn btn-sm btn-default" onclick="$(this).closest('.popover').popover('hide');">Cancel</button>
-      <button type="button" class="btn btn-sm btn-primary js-save-rationale">Save</button>
-    </div>
-  </div>
-</script>
-{% endverbatim %}{% endblock mustache %}
+      <div class="row">
+        <div class="col-xs-12 text-right">
+          <button type="button" class="btn btn-sm btn-default" onclick="$(this).closest('.popover').popover('hide');">Close</button>
+        </div>
+      </div>
+    </script>
+    {% endverbatim %}
+  {% else %}
+    {% verbatim %}
+    <script id="rationale-template" type="x-tmpl-mustache">
+      <div role="tabpanel">
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#rationale_{{ id }}" aria-controls="rationale_{{ id }}" role="tab" data-toggle="tab">Rationale</a></li>
+          <li role="presentation"><a href="#attachments_{{ id }}" aria-controls="attachments_{{ id }}" role="tab" data-toggle="tab">Attachments</a></li>
+        </ul>
+        <div class="tab-content" style="margin-top: 15px;">
+          <div role="tabpanel" class="tab-pane fade in active" id="rationale_{{ id }}">
+            <div class="form-group">
+              <textarea class="form-control evaluation-rationale" style="resize: none; height: 150px;" maxlength="2000">{{ rationale }}</textarea>
+              <span class="help-block"></span>
+            </div>      
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="attachments_{{ id }}" style="height: 165px;">
+
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <!--button type="button" class="btn btn-sm btn-default"><span class="fa fa-paperclip"></span> Attach files</button-->
+          <!--button type="button" class="btn btn-sm btn-danger">Delete</button-->
+        </div>
+        <div class="col-xs-6 text-right">
+          <button type="button" class="btn btn-sm btn-default" onclick="$(this).closest('.popover').popover('hide');">Cancel</button>
+          <button type="button" class="btn btn-sm btn-primary js-save-rationale">Save</button>
+        </div>
+      </div>
+    </script>
+    {% endverbatim %}
+  {% endif %}
+{% endblock mustache %}
 
 {% block breadcrumb %}
   <ol class="breadcrumb">

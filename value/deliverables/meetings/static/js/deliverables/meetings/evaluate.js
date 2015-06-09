@@ -66,7 +66,7 @@ $(function () {
 
   $(".js-rationale").on("shown.bs.popover", function () {
     var popover = $(this).siblings(".popover");
-    if ($("textarea", popover).text().length === 0) {
+    if ($("textarea", popover).text().length === 0 && !$("textarea", popover).prop("readonly")) {
       $("textarea", popover).focus();
     }
   });

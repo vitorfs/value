@@ -21,6 +21,12 @@ def selected(is_evaluated):
 @register.simple_tag
 def evaluation_options(evaluations, meeting_item, factor, measure_values):
 
+    
+    if meeting_item.meeting.is_closed():
+        can_evaluate = 'not-evaluable'
+    else:
+        can_evaluate = 'evaluable'
+
     is_evaluated = False
     rationale_text = ''
     no_comment = 'no-comment'
@@ -62,7 +68,8 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values):
                         and evaluation.measure.pk == factor.measure.pk \
                         and evaluation.measure_value.pk == measure_value.pk:
                     is_checked = True
-        html += '''<td class="text-center evaluable" data-color="{0}" data-measure-value-id="{1}"{2}>{3}</td>'''.format(
+        html += '''<td class="text-center {0}" data-color="{1}" data-measure-value-id="{2}"{3}>{4}</td>'''.format(
+                can_evaluate,
                 measure_value.color, 
                 measure_value.pk, 
                 background(is_checked, measure_value.color), 

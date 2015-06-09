@@ -1,3 +1,7 @@
+.not-evaluable {
+  cursor: not-allowed!important;
+}
+
 .evaluable {
   transition: all 0.2s ease 0s;
 }
