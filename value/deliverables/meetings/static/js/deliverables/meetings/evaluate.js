@@ -1,3 +1,11 @@
+var simulate = function () {
+  // :TODO Remove from prodution server
+  $(".table-evaluate tbody tr").each(function () {
+    var i = Math.floor(Math.random() * 4) + 1;
+    $("td:eq(" + i + ")", this).click();
+  });
+};
+
 $(function () {
 
   $(".panel-group-evaluation").on("click", ".js-save-rationale", function () {

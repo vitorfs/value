@@ -8,6 +8,12 @@ from value.deliverables.models import Deliverable, DecisionItem, Rationale
 
 
 class Meeting(models.Model):
+    """
+    Wraps all the information about a given meeting. The value-based decison-making process
+    used in the tool occur per meeting. A meeting is associated with a deliverable, which
+    can have many meeting. A meeting has a collection of stakeholders and a collection of
+    decision items, defined by the classes MeetingItem and MeetingStakeholder.
+    """
     ONGOING = u'O'
     CLOSED = u'C'
     STATUS = (
@@ -19,8 +25,6 @@ class Meeting(models.Model):
     description = models.CharField(max_length=2000, null=True, blank=True)
     location = models.CharField(max_length=50, null=True, blank=True)
     deliverable = models.ForeignKey(Deliverable)
-    stakeholders = models.ManyToManyField(User)
-    decision_items = models.ManyToManyField(DecisionItem)
     status = models.CharField(max_length=1, choices=STATUS, default=ONGOING)
     started_at = models.DateTimeField()
     ended_at = models.DateTimeField(null=True, blank=True)

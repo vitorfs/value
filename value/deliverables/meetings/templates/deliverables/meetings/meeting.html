@@ -4,7 +4,7 @@
 
 {% block javascript %}
 <script type="text/javascript">
-  if ($(".table-sortable").hasClass(".table-check-all")) {
+  if ($(".table-sortable").hasClass("table-check-all")) {
     $(".table-sortable").tablesorter({ headers: { 0: { sorter: false }}});
   }
   else {
@@ -23,9 +23,7 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-
   {% include 'deliverables/meetings/includes/menu.html' with meeting=meeting active='meeting_summary' %}  
-
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Details</h3>
