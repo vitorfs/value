@@ -91,8 +91,20 @@ def close_meeting(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     meeting.status = Meeting.CLOSED
     meeting.save()
+    meeting.deliverable.save()
     messages.success(request, u'The meeting {0} was closed successfully.'.format(meeting.name))
-    return redirect(reverse('deliverables:deliverable', args=(meeting.deliverable.pk,)))
+    return redirect(reverse('deliverables:meetings:meeting', args=(meeting.deliverable.pk, meeting.pk)))
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+@require_POST
+def open_meeting(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    meeting.status = Meeting.ONGOING
+    meeting.save()
+    meeting.deliverable.save()
+    messages.success(request, u'The meeting {0} was opened successfully.'.format(meeting.name))
+    return redirect(reverse('deliverables:meetings:meeting', args=(meeting.deliverable.pk, meeting.pk)))
 
 @login_required
 def evaluate(request, deliverable_id, meeting_id):
