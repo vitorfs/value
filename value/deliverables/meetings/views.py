@@ -1,4 +1,4 @@
-from svglib.svglib import SvgRenderer
+from value.utils.svglib import SvgRenderer
 from reportlab.graphics import renderPDF
 import xml.dom.minidom
 import json
