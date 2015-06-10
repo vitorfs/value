@@ -9,7 +9,7 @@ from value.deliverables.meetings.models import Meeting
 class MeetingForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={ 'class': 'form-control' }), max_length=255)
     started_at = forms.DateTimeField(
-        widget=forms.TextInput(attrs={ 'class': 'form-control' }), 
+        widget=forms.DateTimeInput(format='%d/%m/%Y %H:%M', attrs={ 'class': 'form-control' }), 
         label='Starting at', 
         input_formats=['%d/%m/%Y %H:%M',],
         initial=datetime.datetime.now().strftime('%d/%m/%Y %H:%M')

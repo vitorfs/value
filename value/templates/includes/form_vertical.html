@@ -18,7 +18,14 @@
       <span class="help-block">{{ field.help_text }}</span>
     {% else %}
       <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
-      {{ field }}
+      {% if field|fieldtype == 'DateTimeInput' %}
+        <div class="input-group date" id="{{ field.id_for_label }}_datetime">
+          {{ field }}
+          <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+        </div>
+      {% else %}
+        {{ field }}
+      {% endif %}
       {% for error in field.errors %}
         <p class="help-block">{{ error }}</p>
       {% endfor %}

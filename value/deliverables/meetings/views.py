@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.db import transaction
 
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
@@ -115,11 +116,11 @@ def evaluate(request, deliverable_id, meeting_id):
     if search_query:
         meeting_items = meeting_items.filter(decision_item__name__icontains=search_query)
     return render(request, 'deliverables/meetings/evaluate.html', { 
-        'meeting' : meeting, 
-        'factors' : factors,
+        'meeting': meeting, 
+        'factors': factors,
         'measure_values': measure_values,
         'relative_col_size': relative_col_size,
-        'evaluations' : evaluations,
+        'evaluations': evaluations,
         'total_items': total_items,
         'meeting_items': meeting_items,
         'search_query': search_query
@@ -207,8 +208,8 @@ def dashboard(request, deliverable_id, meeting_id):
     charts.append({ 'chart_id': 'stakeholders_input', 'chart_title': 'Stakeholders Input', 'chart_uri': reverse('deliverables:meetings:dashboard_stakeholders_input_chart', args=(deliverable_id, meeting_id,)) })
 
     return render(request, 'deliverables/meetings/dashboard/dashboard.html', { 
-        'meeting' : meeting,
-        'charts' : charts,
+        'meeting': meeting,
+        'charts': charts,
         'chart_menu_active': 'overview'
         })
 
@@ -233,11 +234,11 @@ def features(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     charts = meeting.meetingitem_set.all()
     return render(request, 'deliverables/meetings/dashboard/features.html', { 
-        'meeting' : meeting,
-        'charts' : charts,
+        'meeting': meeting,
+        'charts': charts,
         'chart_uri': 'features',
-        'chart_menu_active' : 'features',
-        'chart_page_title' : 'Features Selection'
+        'chart_menu_active': 'features',
+        'chart_page_title': 'Features Selection'
         })
 
 @login_required
@@ -254,11 +255,11 @@ def features_acceptance(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     charts = meeting.meetingitem_set.all()
     return render(request, 'deliverables/meetings/dashboard/features_acceptance.html', { 
-        'meeting' : meeting,
-        'charts' : charts,
+        'meeting': meeting,
+        'charts': charts,
         'chart_uri': 'features-acceptance',
-        'chart_menu_active' : 'features_acceptance',
-        'chart_page_title' : 'Features Acceptance'
+        'chart_menu_active': 'features_acceptance',
+        'chart_page_title': 'Features Acceptance'
         })
 
 @login_required
@@ -292,8 +293,8 @@ def decision_items_overview(request, deliverable_id, meeting_id):
         return HttpResponse(dump, content_type='application/json')
     else:
         return render(request, 'deliverables/meetings/dashboard/decision_items_overview.html', { 
-            'meeting' : meeting, 
-            'dump' : dump,
+            'meeting': meeting, 
+            'dump': dump,
             'chart_uri': 'decision-items-overview',
             'chart_menu_active': 'decision_items_overview',
             'chart_page_title': 'Decision Items Overview'
@@ -306,8 +307,8 @@ def features_comparison(request, deliverable_id, meeting_id):
     measure = evaluations[0].measure
     charts = measure.measurevalue_set.all()
     return render(request, 'deliverables/meetings/dashboard/measure_values_charts.html', { 
-        'meeting' : meeting, 
-        'charts' : charts,
+        'meeting': meeting, 
+        'charts': charts,
         'chart_uri': 'features-comparison',
         'chart_menu_active': 'features_comparison',
         'chart_page_title': 'Features Comparison'
@@ -325,9 +326,37 @@ def features_comparison_chart(request, deliverable_id, meeting_id, measure_value
         return HttpResponse(dump, content_type='application/json')
     else:
         return render(request, 'deliverables/meetings/dashboard/generic_chart.html', { 
-            'meeting' : meeting, 
-            'dump' : dump,
+            'meeting': meeting, 
+            'dump': dump,
             'chart_uri': 'features-comparison',
             'chart_menu_active': 'features_comparison',
             'chart_page_title': 'Features Comparison'
             })
+
+@login_required
+def settings(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    if request.method == 'POST':
+        form = MeetingForm(request.POST, instance=meeting)
+        if form.is_valid():
+            form.save()
+            meeting.deliverable.save()
+            messages.success(request, u'The meeting details was saved successfully!')
+        else:
+            messages.error(request, u'Please correct the error below.')
+    else:
+        form = MeetingForm(instance=meeting)
+    return render(request, 'deliverables/meetings/settings.html', {
+            'meeting': meeting,
+            'form': form
+            })
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+@transaction.atomic
+@require_POST
+def delete(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    meeting.delete()
+    messages.success(request, u'The meeeting {0} was completly deleted successfully.'.format(meeting.name))
+    return redirect(reverse('deliverables:deliverable', args=(meeting.deliverable.pk,)))

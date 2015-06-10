@@ -4,12 +4,7 @@
 
 {% block javascript %}
 <script type="text/javascript">
-  if ($(".table-sortable").hasClass("table-check-all")) {
-    $(".table-sortable").tablesorter({ headers: { 0: { sorter: false }}});
-  }
-  else {
-    $(".table-sortable").tablesorter();
-  }
+  $(".table-sortable").tablesorter({ headers: { 0: { sorter: false }}});
 </script>
 {% endblock javascript %}
 
@@ -26,18 +21,25 @@
   {% include 'deliverables/meetings/includes/menu.html' with meeting=meeting active='meeting_summary' %}  
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Details</h3>
+        <h3 class="panel-title">Meeting details</h3>
       </div>
       <div class="panel-body">
         <div class="row">
           <div class="col-sm-6">
-            <h3 style="margin-top: 0">{{ meeting.name }}</h3>
+            <h4 style="margin-top: 0">
+              {{ meeting.name }} 
+              <small><span class="fa fa-calendar" style="margin-left: 10px;"></span> {{ meeting.started_at }}{% if meeting.location %}, <span class="fa fa-map-marker" style="margin-left: 10px;"></span> {{ meeting.location }}{% endif %}</small>
+            </h4>
+            {% if meeting.description %}
+              <p>{{ meeting.description }}</p>
+            {% else %}
+              <em class="text-muted">No description</em>
+            {% endif %}
           </div>
           <div class="col-sm-6 text-right">
             {% if not meeting.is_closed %}
             <form method="post" action="{% url 'deliverables:meetings:close_meeting' meeting.deliverable.pk meeting.pk %}">
               {% csrf_token %}
-              <a href="#" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
               <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-ban-circle"></span> Close</button>
             </form>
             {% endif %}
@@ -88,27 +90,25 @@
         {% endif %}
       
         {% with fields=meeting.deliverable.get_decision_items_fields %}
-          <table class="table table-striped{% if not meeting.is_closed %} table-check-all{% endif %} table-sortable table-bordered" style="margin-bottom: 0;">
+          <table class="table table-striped table-check-all table-sortable table-bordered" style="margin-bottom: 0;">
             <thead>
               <tr>
-                {% if not meeting.is_closed %}
                 <th><input type="checkbox"></th>
-                {% endif %}
                 {% for name, field in fields.items %}
                 <th>{{ field.label }}</th>
                 {% endfor %}
-                <th>Evaluations</th>
+                <th>Value Ranking</th>
+                <th>Summary</th>
               </tr>
             </thead>
             <tbody>
               {% for item in meeting.meetingitem_set.all %}
               <tr data-edit-url="">
-                {% if not meeting.is_closed %}
                 <td><input type="checkbox"></td>
-                {% endif %}
                 {% for name, field in fields.items %}
                   <td>{{ item.decision_item|attr:name }}</td>
                 {% endfor %}
+                <td>{{ item.value_ranking }}</td>
                 <td>
                   <div class="progress" style="margin-bottom: 0">
                     {% for ranking in item.ranking_set.all %}
@@ -121,7 +121,7 @@
               </tr>
               {% empty %}
                 <tr>
-                  <td colspan="4">No data</td>
+                  <td colspan="{{ fields.items|length|add:'3' }}">No data</td>
                 </tr>
               {% endfor %}
             </tbody>
