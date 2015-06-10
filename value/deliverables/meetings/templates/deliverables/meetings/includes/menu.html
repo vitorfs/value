@@ -1,8 +1,11 @@
+{% with manager=meeting.deliverable.manager %}
 <ul class="nav nav-tabs" style="margin-bottom: 20px">
   <li role="presentation"{% if active == 'meeting_summary' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}"><span class="fa fa-book"></span> Summary</a></li>
   <li role="presentation"{% if active == 'evaluate' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:evaluate' meeting.deliverable.pk meeting.pk %}"><span class="fa fa-gavel"></span> Evaluate</a></li>
   <li role="presentation"{% if active == 'dashboard' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:dashboard' meeting.deliverable.pk meeting.pk %}"><span class="fa fa-bar-chart"></span> Dashboard</a></li>
-  <li role="presentation"{% if active == 'settings' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:settings' meeting.deliverable.pk meeting.pk %}"><span class="fa fa-wrench"></span> Settings</a></li>
+  {% if user == manager %}
+    <li role="presentation"{% if active == 'settings' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:settings' meeting.deliverable.pk meeting.pk %}"><span class="fa fa-wrench"></span> Settings</a></li>
+  {% endif %}
   <li class="dropdown pull-right" role="presentation">
     <a aria-expanded="false" role="button" href="#" data-toggle="dropdown" class="dropdown-toggle">
       <span class="fa fa-laptop"></span> Meetings <span class="caret"></span>
@@ -38,19 +41,22 @@
           </li>
         {% endfor %}
       {% endif %}
-      <li class="divider"></li>
-      <li>
-        <a href="{% url 'deliverables:meetings:new' meeting.deliverable.pk %}">
-          <span class="glyphicon glyphicon-plus"></span>
-          New meeting
-        </a>
-      </li>
-      <li>
-        <a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">
-          <span class="fa fa-rotate-left"></span>
-          Return to {{ meeting.deliverable.name }}
-        </a>
-      </li>
+      {% if user == manager %}
+        <li class="divider"></li>
+        <li>
+          <a href="{% url 'deliverables:meetings:new' meeting.deliverable.pk %}">
+            <span class="glyphicon glyphicon-plus"></span>
+            New meeting
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">
+            <span class="fa fa-rotate-left"></span>
+            Return to {{ meeting.deliverable.name }}
+          </a>
+        </li>
+      {% endif %}
     </ul>
   </li>
 </ul>
+{% endwith %}

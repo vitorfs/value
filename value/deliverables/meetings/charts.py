@@ -179,6 +179,7 @@ class Highcharts(object):
             'yAxis': { 'min': 0, 'title': { 'text': 'Number of votes' } },
             'legend': { 'reversed': True },
             'plotOptions': { 'series': { 'stacking': stacking }},
+            'exporting': { 'enabled': False },
             'series': series
         }
 

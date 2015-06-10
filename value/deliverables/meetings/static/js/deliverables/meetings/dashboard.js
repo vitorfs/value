@@ -25,6 +25,7 @@ $.fn.loadchart = function (callback) {
       }
     },
     success: function (data) {
+      data["exporting"] = { enabled: false };
       $(chart_container).highcharts(data);
       $(container).addClass("loaded");
     },
@@ -38,6 +39,13 @@ $.fn.loadchart = function (callback) {
 };
 
 $(function () {
+
+  $(".btn-chart-download").click(function () {
+    var panel = $(this).closest(".panel");
+    var chart = $(".panel-body", panel).highcharts(), svg = chart.getSVG();
+    $("#id_svg").val(svg);
+    $("#chart-download").submit();
+  });
 
   $(".btn-chart-expand").click(function () {
 
@@ -67,12 +75,12 @@ $(function () {
 
     if ($(target).is(":visible")) {
       $(".btn-chart-toggle .glyphicon", container).removeClass("glyphicon-minus").addClass("glyphicon-plus");
-      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .dropdown-toggle", container).prop("disabled", true);
+      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .btn-chart-download, .dropdown-toggle", container).prop("disabled", true);
       $(target).slideUp();
     }
     else {
       $(".btn-chart-toggle .glyphicon", container).addClass("glyphicon-minus").removeClass("glyphicon-plus");
-      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .dropdown-toggle", container).prop("disabled", false);
+      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .btn-chart-download, .dropdown-toggle", container).prop("disabled", false);
       $(target).slideDown(400, function () {
         if (!$(container).hasClass("loaded")) {
           $(container).loadchart();

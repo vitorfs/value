@@ -1,6 +1,10 @@
+from svglib.svglib import SvgRenderer
+from reportlab.graphics import renderPDF
+import xml.dom.minidom
 import json
 
 from django.http import HttpResponse, HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
@@ -296,7 +300,7 @@ def features_acceptance_chart(request, deliverable_id, meeting_id, meeting_item_
 @login_required
 def decision_items_overview(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    chart_type = request.GET.get('chart')
+    chart_type = request.GET.get('chart', 'stacked_bars')
     chart = Highcharts()
     options = chart.decision_items_overview(meeting, chart_type)
     dump = json.dumps(options)
@@ -372,3 +376,21 @@ def delete(request, deliverable_id, meeting_id):
     meeting.delete()
     messages.success(request, u'The meeeting {0} was completly deleted successfully.'.format(meeting.name))
     return redirect(reverse('deliverables:deliverable', args=(meeting.deliverable.pk,)))
+
+@login_required
+def download(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    response = HttpResponse(content_type='application/pdf')
+    try:
+        svg = request.POST.get('svg')
+        doc = xml.dom.minidom.parseString(svg.encode('utf-8'))
+        svg = doc.documentElement
+        svgRenderer = SvgRenderer()
+        svgRenderer.render(svg)
+        drawing = svgRenderer.finish()
+        pdf = renderPDF.drawToString(drawing)
+        response.write(pdf)     
+    except:
+        pass
+    response['Content-Disposition']= 'attachment; filename=dashboard.pdf'
+    return response

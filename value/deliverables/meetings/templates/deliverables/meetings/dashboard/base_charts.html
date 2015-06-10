@@ -51,4 +51,9 @@
     </div>
   </div>
 
+  <form id="chart-download" method="post" action="{% url 'deliverables:meetings:download' meeting.deliverable.pk meeting.pk %}">
+    {% csrf_token %}
+    <input type="hidden" name="svg" id="id_svg">
+  </form>
+
 {% endblock content %}
