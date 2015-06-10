@@ -7,6 +7,13 @@ var simulate = function () {
 };
 
 $(function () {
+  
+  var factorsCount = $(".panel-group-evaluation .panel:eq(0) .table-evaluate tbody tr").length;
+  $(".panel-group-evaluation .panel .table-evaluate tbody").each(function () {
+    if ($("tr.selected", this).length === factorsCount) {
+      $(this).closest(".panel").attr("class", "panel panel-success");
+    }
+  });
 
   $(".panel-group-evaluation").on("click", ".js-save-rationale", function () {
     var container = $(this).closest(".popover");

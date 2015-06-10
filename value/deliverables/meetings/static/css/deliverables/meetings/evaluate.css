@@ -2,7 +2,7 @@
   cursor: not-allowed!important;
 }
 
-.evaluable {
+.evaluable, .panel {
   transition: all 0.2s ease 0s;
 }
 

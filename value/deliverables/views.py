@@ -26,7 +26,7 @@ from value.application_settings.models import ApplicationSetting
 
 @login_required
 def index(request):
-    deliverables = Deliverable.objects.all().order_by('-updated_at')
+    deliverables = Deliverable.objects.filter(manager=request.user).order_by('-updated_at')
     return render(request, 'deliverables/index.html', { 'deliverables': deliverables })
 
 @login_required
