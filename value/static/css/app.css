@@ -341,3 +341,7 @@ th.headerSortUp:after {
        -o-transition: all 0.15s ease 0s;
           transition: all 0.15s ease 0s;
 }
+
+.panel-group form > .panel {
+  margin-bottom: 5px;
+}

@@ -6,11 +6,6 @@
   <link href="{% static 'css/deliverables/meetings/dashboard.css' %}" rel="stylesheet">
 {% endblock stylesheet %}
 
-{% block javascript %}
-  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
-  <script src="{% static 'js/deliverables/meetings/dashboard.js' %}"></script>
-{% endblock javascript %}
-
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
@@ -31,9 +26,7 @@
       {% include 'deliverables/meetings/dashboard/includes/menu.html' with active=chart_menu_active meeting=meeting %}
     </div>
     <div class="col-lg-10 col-md-9 col-sm-8">
-      {% block charts %}
-
-      {% endblock charts %}
+      {% block charts %}{% endblock %}
     </div>
   </div>
 

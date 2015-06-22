@@ -1,6 +1,6 @@
 from django.db import models, transaction
 from django.db.models import F, Count, Min
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
@@ -80,6 +80,23 @@ class Meeting(models.Model):
         with transaction.atomic():
             for item in self.meetingitem_set.all():
                 item.calculate_ranking()
+
+    def get_stakeholder_groups(self):
+        groups = Group.objects.all().order_by('name')
+        grouped_stakeholders = { 'No group': [] }
+        for group in groups:
+            grouped_stakeholders[group.name] = []
+        for meeting_stakeholder in self.meetingstakeholder_set.all().order_by('stakeholder__first_name'):
+            groups = meeting_stakeholder.stakeholder.groups.all()
+            if not groups.exists():
+                grouped_stakeholders['No group'].append(meeting_stakeholder.stakeholder)
+            else:
+                for group in groups:
+                    grouped_stakeholders[group.name].append(meeting_stakeholder.stakeholder)
+        for name, stakeholders in grouped_stakeholders.items():
+            if not any(stakeholders):
+                del grouped_stakeholders[name]
+        return grouped_stakeholders
 
 
 class MeetingItem(models.Model):

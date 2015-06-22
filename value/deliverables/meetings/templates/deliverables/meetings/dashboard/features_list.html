@@ -1,0 +1,40 @@
+{% extends 'deliverables/meetings/dashboard/base_charts.html' %}
+
+{% load staticfiles %}
+
+{% block javascript %}
+  <script src="{% static 'js/interact-1.2.4.min.js' %}"></script>
+  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
+  <script src="{% static 'js/highcharts/highcharts-more.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/data.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/treemap.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/drilldown.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/exporting.js' %}"></script>
+  <script src="{% static 'js/deliverables/meetings/dashboard.js' %}"></script>
+  <script>
+    $(function () {
+      $(".charts .panel-heading:eq(0)").loadchart();
+    });
+  </script>
+{% endblock javascript %}
+
+{% block mustache %}
+  {% verbatim %}
+    <script id="modal-template-chart" type="x-tmpl-mustache">
+      <div class="panel panel-default panel-modal" id="{{ id }}">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{ title }}</h3>
+        </div>
+        <div class="panel-body"></div>
+      </div>
+    </script>
+  {% endverbatim %}
+{% endblock mustache %}
+
+{% block charts %}
+  <div class="panel-group charts">
+    {% for chart in charts %}
+      {% include 'deliverables/meetings/dashboard/features_chart.html' with opened=forloop.first %}
+    {% endfor %}
+  </div>
+{% endblock charts %}

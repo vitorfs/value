@@ -7,6 +7,7 @@ from django.views.decorators.http import require_POST
 
 from value.groups.forms import GroupForm
 
+
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 @require_POST
@@ -29,7 +30,6 @@ def index(request):
         return process_list_actions(request)
     groups = Group.objects.all().order_by('name')
     return render(request, 'groups/index.html', { 'groups': groups })
-        
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)

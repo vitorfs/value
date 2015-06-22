@@ -1,9 +1,0 @@
-{% extends 'deliverables/meetings/dashboard/meeting_items_charts.html' %}
-
-{% block toolbar %}
-  {% if not forloop.first %}
-  {% include 'deliverables/meetings/dashboard/includes/stacked_charts_toolbar.html' with disable=True %}
-  {% else %}
-  {% include 'deliverables/meetings/dashboard/includes/stacked_charts_toolbar.html' %}
-  {% endif %}
-{% endblock toolbar %}

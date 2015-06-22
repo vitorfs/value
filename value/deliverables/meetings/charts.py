@@ -215,11 +215,11 @@ class Highcharts(object):
         return self._base_stacked_chart(categories, series, chart)
 
 
-    def features_selection_stacked_chart(self, meeting_id, meeting_item_id, chart):
+    def features_selection_stacked_chart(self, meeting_id, meeting_item_id, chart, stakeholder_ids):
         
         meeting = Meeting.objects.get(pk=meeting_id)
         meeting_item = MeetingItem.objects.get(pk=meeting_item_id)
-        evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(meeting_item=meeting_item)
+        evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
 
         if evaluations:
 

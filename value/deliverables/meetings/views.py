@@ -249,7 +249,7 @@ def dashboard_stakeholders_input_chart(request, deliverable_id, meeting_id):
 def features(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     charts = meeting.meetingitem_set.all()
-    return render(request, 'deliverables/meetings/dashboard/features.html', { 
+    return render(request, 'deliverables/meetings/dashboard/features_list.html', { 
         'meeting': meeting,
         'charts': charts,
         'chart_uri': 'features',
@@ -259,12 +259,28 @@ def features(request, deliverable_id, meeting_id):
 
 @login_required
 def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
-    chart_type = request.GET.get('chart')
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    meeting_item = meeting.meetingitem_set.get(pk=meeting_item_id)
+    chart_type = request.GET.get('chart-type')
+    stakeholder_ids = request.GET.getlist('stakeholder')
+    try:
+        stakeholder_ids = list(map(int, stakeholder_ids))
+    except:
+        pass
     chart = Highcharts()
-    options = chart.features_selection_stacked_chart(meeting_id, meeting_item_id, chart_type)
+    options = chart.features_selection_stacked_chart(meeting_id, meeting_item_id, chart_type, stakeholder_ids)
     dump = json.dumps(options)
-    return HttpResponse(dump, content_type='application/json')
-
+    if 'application/json' in request.META.get('HTTP_ACCEPT'):
+        return HttpResponse(dump, content_type='application/json')
+    else:
+        return render(request, 'deliverables/meetings/dashboard/features_popup.html', { 
+            'meeting': meeting,
+            'chart': meeting_item,
+            'chart_uri': 'features',
+            'chart_type': chart_type,
+            'stakeholder_ids': stakeholder_ids,
+            'dump': dump
+            })
 
 @login_required
 def features_acceptance(request, deliverable_id, meeting_id):
@@ -394,3 +410,8 @@ def download(request, deliverable_id, meeting_id):
         pass
     response['Content-Disposition']= 'attachment; filename=dashboard.pdf'
     return response
+
+@login_required
+def remove_stakeholder(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    pass

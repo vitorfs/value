@@ -2,20 +2,18 @@ $.fn.loadchart = function (callback) {
 
   callback = callback || function () {};
 
+  var form = $(this).closest(".chart-form");
   var url = $(this).attr("data-uri");
-  var chart_type = $(".js-chart-type li.active a", this).attr("data-chart");
-  if (chart_type) {
-    url += "?chart=" + chart_type;
-  }
 
   var container = $(this);
   var chart_container = $(this).closest(".panel").find(".panel-body");
 
   var display_loading = ! $(container).hasClass("loaded");
-  display_loading=true;
+  display_loading = true;
 
   $.ajax({
-    url: url,
+    url: $(form).attr("action"),
+    data: $(form).serialize(),
     type: 'GET',
     dataType: 'json',
     cache: false,
@@ -39,6 +37,23 @@ $.fn.loadchart = function (callback) {
 };
 
 $(function () {
+
+  $(".js-select-stakeholder").click(function (e) {
+    e.preventDefault();
+    var checkbox = $("input[type='checkbox'][name='stakeholder']", this);
+    var icon = $(".glyphicon", this);
+    $(icon).removeClass();
+    var stakeholderIsSelected = $(checkbox).is(":checked");
+    if (stakeholderIsSelected) {
+      $(checkbox).prop("checked", false);
+      $(icon).addClass("glyphicon glyphicon-unchecked");
+    }
+    else {
+      $(checkbox).prop("checked", true);
+      $(icon).addClass("glyphicon glyphicon-check");
+    }
+    return false;
+  });
 
   $(".btn-chart-download").click(function () {
     var panel = $(this).closest(".panel");
@@ -101,36 +116,53 @@ $(function () {
   });
 
   $(".js-chart-type a").click(function () {
-    if (!$(this).closest("li").hasClass("active")) {
+    var item = $(this).closest("li");
+    if (!$(item).hasClass("active")) {
       var ul = $(this).closest("ul");
       $("li", ul).removeClass("active");
-      $(this).closest("li").addClass("active");
+      $("input[type='radio']", ul).prop("checked", false);
+      $(item).addClass("active");
+      $("input[type='radio']", item).prop("checked", true);
       $(this).closest(".panel-heading").loadchart();
     }
   });
 
   $(".btn-chart-modal").click(function () {
 
-    var container = $(this).closest(".panel");
+    var form = $(this).closest("form");
+
+    var url = $(form).attr("action");
+    var data = $(form).serialize();
+    url += "?" + data;
+    var name = uuid();
+    var win = window.open(url, name, 'height=500,width=800,resizable=yes,scrollbars=yes');
+
+    /*var container = $(this).closest(".panel");
     var title = $(".panel-title", container).text();
     var chart = $(".panel-body", container).highcharts();
 
-    var chartId = uuid();
 
-    $("body").prepend("<div id='" + chartId + "' class='chart-window'></div>");
+    var id = uuid();
+    var template = $("#modal-template-chart").html();
+    var rendered = Mustache.render(template, { 
+      'id': id,
+      'title': 'Test'
+    });
 
-    $("#" + chartId).highcharts(chart.options);
+    $("body").prepend(rendered);
 
-    var windowChart = $("#" + chartId).highcharts();
+    var detachedChartCssSelector = "#" + id + " .panel-body";
+    var detachedChartContainer = $(detachedChartCssSelector);
 
-    interact('#' + chartId)
+    //var chartId = uuid();
+    //$("body").prepend("<div id='" + chartId + "' class='chart-window'></div>");
+
+    $(detachedChartContainer).highcharts(chart.options);
+    //var windowChart = $(detachedChartContainer).highcharts();
+
+    interact("#" + id)
       .draggable({
-        inertia: true,/*
-        restrict: {
-          drag: 'html',
-          endOnly: true,
-          elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-        },*/
+        inertia: true,
         onmove: function (event) {
           var target = event.target,
               x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
@@ -162,8 +194,8 @@ $(function () {
         target.setAttribute('data-x', x);
         target.setAttribute('data-y', y);
 
-        windowChart.reflow();
+        //windowChart.reflow();
 
-    });
+    });*/
   });
 });

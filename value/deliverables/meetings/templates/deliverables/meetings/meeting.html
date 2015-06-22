@@ -97,7 +97,11 @@
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             Click to remove a stakeholder from the meeting.
           </div>
-          {% include 'includes/users_panel_group.html' with stakeholders=stakeholders group_actions='removeable' %}
+          {% if user == meeting.deliverable.manager %}
+            {% include 'includes/users_panel_group.html' with stakeholders=stakeholders group_actions='removeable' %}
+          {% else %}
+            {% include 'includes/users_panel_group.html' with stakeholders=stakeholders %}
+          {% endif %}
         {% endif %}
       </div>
     </div>
@@ -160,5 +164,25 @@
 
       </div>
     </div>
+
+    <form method="post" action="{% url 'deliverables:meetings:remove_stakeholder' meeting.deliverable.pk meeting.pk %}">
+      <div class="modal fade">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+              
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
 
 {% endblock content %}
