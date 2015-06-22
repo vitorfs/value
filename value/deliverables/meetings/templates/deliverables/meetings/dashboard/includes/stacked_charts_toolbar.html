@@ -5,28 +5,28 @@
   </button>
   <ul class="dropdown-menu dropdown-menu-right js-chart-type" role="menu">
     <li role="presentation" class="dropdown-header">Chart type</li>
-    <li role="presentation" class="active">
-      <a role="menuitem" tabindex="-1" href="javascript:void(0);" data-chart="stacked_bars">
+    <li role="presentation"{% if chart_type == 'stacked_bars' %} class="active"{% endif %}>
+      <a role="menuitem" tabindex="-1" href="javascript:void(0);">
         <span class="glyphicon glyphicon-align-left"></span> Stacked Bars
-        <input type="radio" class="hide" name="chart-type" value="stacked_bars" checked>
+        <input type="radio" class="hide" name="chart-type" value="stacked_bars"{% if chart_type == 'stacked_bars' %} checked{% endif %}>
       </a>
     </li>
-    <li role="presentation">
-      <a role="menuitem" tabindex="-1" href="javascript:void(0);" data-chart="basic_bars">
+    <li role="presentation"{% if chart_type == 'basic_bars' %} class="active"{% endif %}>
+      <a role="menuitem" tabindex="-1" href="javascript:void(0);">
         <span class="glyphicon glyphicon-align-left"></span> Basic Bars
-        <input type="radio" class="hide" name="chart-type" value="basic_bars">
+        <input type="radio" class="hide" name="chart-type" value="basic_bars"{% if chart_type == 'basic_bars' %} checked{% endif %}>
       </a>
     </li>
-    <li role="presentation">
-      <a role="menuitem" tabindex="-1" href="javascript:void(0);" data-chart="stacked_columns">
+    <li role="presentation"{% if chart_type == 'stacked_columns' %} class="active"{% endif %}>
+      <a role="menuitem" tabindex="-1" href="javascript:void(0);">
         <span class="glyphicon glyphicon-signal"></span> Stacked Columns
-        <input type="radio" class="hide" name="chart-type" value="stacked_columns">
+        <input type="radio" class="hide" name="chart-type" value="stacked_columns"{% if chart_type == 'stacked_columns' %} checked{% endif %}>
       </a>
     </li>
-    <li role="presentation">
-      <a role="menuitem" tabindex="-1" href="javascript:void(0);" data-chart="basic_columns">
+    <li role="presentation"{% if chart_type == 'basic_columns' %} class="active"{% endif %}>
+      <a role="menuitem" tabindex="-1" href="javascript:void(0);">
         <span class="glyphicon glyphicon-signal"></span> Basic Columns
-        <input type="radio" class="hide" name="chart-type" value="basic_columns">
+        <input type="radio" class="hide" name="chart-type" value="basic_columns"{% if chart_type == 'basic_columns' %} checked{% endif %}>
       </a>
     </li>
   </ul>

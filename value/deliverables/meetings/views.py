@@ -249,9 +249,12 @@ def dashboard_stakeholders_input_chart(request, deliverable_id, meeting_id):
 def features(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     charts = meeting.meetingitem_set.all()
+    stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
     return render(request, 'deliverables/meetings/dashboard/features_list.html', { 
         'meeting': meeting,
         'charts': charts,
+        'stakeholder_ids': stakeholder_ids,
+        'chart_type': 'stacked_bars',
         'chart_uri': 'features',
         'chart_menu_active': 'features',
         'chart_page_title': 'Features Selection'
