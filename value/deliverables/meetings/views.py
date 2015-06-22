@@ -352,17 +352,29 @@ def features_acceptance_chart(request, deliverable_id, meeting_id, meeting_item_
 @login_required
 def decision_items_overview(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    chart_type = request.GET.get('chart', 'stacked_bars')
+    chart_type = request.GET.get('chart-type', 'stacked_bars')
     chart = Highcharts()
-    options = chart.decision_items_overview(meeting, chart_type)
+    if 'stakeholder' in request.GET:
+        stakeholder_ids = request.GET.getlist('stakeholder')
+        try:
+            stakeholder_ids = list(map(int, stakeholder_ids))
+        except:
+            pass
+    else:
+        stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
+    options = chart.decision_items_overview(meeting, chart_type, stakeholder_ids)
     dump = json.dumps(options)
-
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        return render(request, 'deliverables/meetings/dashboard/decision_items_overview.html', { 
+        template_name = 'deliverables/meetings/dashboard/decision_items_overview.html'
+        if 'popup' in request.GET:
+            template_name = 'deliverables/meetings/dashboard/decision_items_overview_popup.html'
+        return render(request, template_name, { 
             'meeting': meeting, 
             'dump': dump,
+            'stakeholder_ids': stakeholder_ids,
+            'chart_type': 'stacked_bars',
             'chart_uri': 'decision-items-overview',
             'chart_menu_active': 'decision_items_overview',
             'chart_page_title': 'Decision Items Overview'
@@ -371,12 +383,14 @@ def decision_items_overview(request, deliverable_id, meeting_id):
 @login_required
 def features_comparison(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    evaluations = Evaluation.get_evaluations_by_meeting(meeting)
+    stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
+    evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(user_id__in=stakeholder_ids)
     measure = evaluations[0].measure
     charts = measure.measurevalue_set.all()
-    return render(request, 'deliverables/meetings/dashboard/measure_values_charts.html', { 
+    return render(request, 'deliverables/meetings/dashboard/decision_items_comparison_list.html', { 
         'meeting': meeting, 
         'charts': charts,
+        'stakeholder_ids': stakeholder_ids,
         'chart_uri': 'features-comparison',
         'chart_menu_active': 'features_comparison',
         'chart_page_title': 'Features Comparison'
@@ -386,16 +400,23 @@ def features_comparison(request, deliverable_id, meeting_id):
 def features_comparison_chart(request, deliverable_id, meeting_id, measure_value_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     measure_value = MeasureValue.objects.get(pk=measure_value_id)
+    stakeholder_ids = request.GET.getlist('stakeholder')
+    try:
+        stakeholder_ids = list(map(int, stakeholder_ids))
+    except:
+        pass
     chart = Highcharts()
-    options = chart.feature_comparison_bar_chart(meeting, measure_value)
+    options = chart.feature_comparison_bar_chart(meeting, measure_value, stakeholder_ids)
     dump = json.dumps(options)
-
+    chart_data = MeasureValue.objects.get(id=measure_value_id)
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        return render(request, 'deliverables/meetings/dashboard/generic_chart.html', { 
+        return render(request, 'deliverables/meetings/dashboard/decision_items_comparison_popup.html', { 
             'meeting': meeting, 
             'dump': dump,
+            'chart': chart_data,
+            'stakeholder_ids': stakeholder_ids,
             'chart_uri': 'features-comparison',
             'chart_menu_active': 'features_comparison',
             'chart_page_title': 'Features Comparison'

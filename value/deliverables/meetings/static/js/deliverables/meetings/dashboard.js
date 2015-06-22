@@ -127,74 +127,12 @@ $(function () {
   });
 
   $(".btn-chart-modal").click(function () {
-
     var form = $(this).closest("form");
-
     var url = $(form).attr("action");
     var data = $(form).serialize();
     url += "?" + data;
+    url += "&popup=1";
     var name = uuid();
     var win = window.open(url, name, 'height=500,width=800,resizable=yes,scrollbars=yes');
-
-    /*var container = $(this).closest(".panel");
-    var title = $(".panel-title", container).text();
-    var chart = $(".panel-body", container).highcharts();
-
-
-    var id = uuid();
-    var template = $("#modal-template-chart").html();
-    var rendered = Mustache.render(template, { 
-      'id': id,
-      'title': 'Test'
-    });
-
-    $("body").prepend(rendered);
-
-    var detachedChartCssSelector = "#" + id + " .panel-body";
-    var detachedChartContainer = $(detachedChartCssSelector);
-
-    //var chartId = uuid();
-    //$("body").prepend("<div id='" + chartId + "' class='chart-window'></div>");
-
-    $(detachedChartContainer).highcharts(chart.options);
-    //var windowChart = $(detachedChartContainer).highcharts();
-
-    interact("#" + id)
-      .draggable({
-        inertia: true,
-        onmove: function (event) {
-          var target = event.target,
-              x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-              y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-          target.style.webkitTransform =
-          target.style.transform =
-            'translate(' + x + 'px, ' + y + 'px)';
-
-          target.setAttribute('data-x', x);
-          target.setAttribute('data-y', y);
-        }
-      }).resizable({
-        edges: { left: true, right: true, bottom: true, top: true }
-      }).on('resizemove', function (event) {
-        var target = event.target,
-            x = (parseFloat(target.getAttribute('data-x')) || 0),
-            y = (parseFloat(target.getAttribute('data-y')) || 0);
-
-        target.style.width  = event.rect.width + 'px';
-        target.style.height = event.rect.height + 'px';
-
-        x += event.deltaRect.left;
-        y += event.deltaRect.top;
-
-        target.style.webkitTransform = target.style.transform =
-            'translate(' + x + 'px,' + y + 'px)';
-
-        target.setAttribute('data-x', x);
-        target.setAttribute('data-y', y);
-
-        //windowChart.reflow();
-
-    });*/
   });
 });

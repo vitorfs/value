@@ -10,11 +10,12 @@ class Highcharts(object):
 
     label_style = { 'fontSize': '13px', 'fontFamily': '"Helvetica Neue", Helvetica, Arial, sans-serif' }
 
-    def feature_comparison_bar_chart(self, meeting, measure_value):
+    def feature_comparison_bar_chart(self, meeting, measure_value, stakeholder_ids):
+        stakeholder_ids = list(set(stakeholder_ids))
         evaluations = Evaluation.get_evaluations_by_meeting(meeting)
-        filtered_evaluations = evaluations.filter(measure_value=measure_value)
+        filtered_evaluations = evaluations.filter(measure_value=measure_value, user_id__in=stakeholder_ids)
 
-        stakeholders_count = meeting.meetingstakeholder_set.count()
+        stakeholders_count = len(stakeholder_ids)
         factors_count = Factor.list().count()
         max_votes = stakeholders_count * factors_count
 
@@ -42,6 +43,7 @@ class Highcharts(object):
             'yAxis': { 'min': 0, 'title': { 'text': measure_value.description + ' ' + measure_value.measure.name }},
             'legend': { 'enabled': False },
             'tooltip': { 'pointFormat': measure_value.description + ' ' + measure_value.measure.name + ': <strong>{point.y}%</strong>' },
+            'exporting': { 'enabled': False },
             'series': [{
                 'name': measure_value.description + ' Votes',
                 'data': data,
@@ -188,10 +190,11 @@ class Highcharts(object):
         return options
 
 
-    def decision_items_overview(self, meeting, chart):
-        evaluations = Evaluation.get_evaluations_by_meeting(meeting)
+    def decision_items_overview(self, meeting, chart, stakeholder_ids):
+        stakeholder_ids = list(set(stakeholder_ids))
+        evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(user_id__in=stakeholder_ids)
         measure = evaluations[0].measure
-        stakeholders_count = meeting.meetingstakeholder_set.count()
+        stakeholders_count = len(stakeholder_ids)
         factors_count = Factor.list().count()
         max_votes = stakeholders_count * factors_count
 
@@ -272,6 +275,7 @@ class Highcharts(object):
                 }],
                 'data': data
             }],
+            'exporting': { 'enabled': False },
             'title': { 'text': '' }
         }
         return options
@@ -348,6 +352,7 @@ class Highcharts(object):
                 'title': { 'text': '' },
                 'subtitle': { 'text': 'Stakeholders opinion. Click the slices to view value factors.' },
                 'plotOptions': { 'series': { 'dataLabels': { 'enabled': True, 'format': '{point.name}: {point.y} votes' } } },
+                'exporting': { 'enabled': False },
                 'tooltip': {
                     'headerFormat': '<span style="font-size:11px">{series.name}</span><br>',
                     'pointFormat': '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
@@ -367,6 +372,7 @@ class Highcharts(object):
         options = {
             'chart': { 'type': 'bubble', 'zoomType': 'xy' },
             'title': { 'text': '' },
+            'exporting': { 'enabled': False },
             'series': [{
                 'name': 'Test',
                 'data': [[97, 36, 79], [94, 74, 60], [68, 76, 58], [64, 87, 56], [68, 27, 73], [74, 99, 42], [7, 93, 87], [51, 69, 40], [38, 23, 33], [57, 86, 31]]
