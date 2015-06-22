@@ -2,9 +2,8 @@ $.fn.loadchart = function (callback) {
 
   callback = callback || function () {};
 
-  var form = $(this).closest(".chart-form");
-  var url = $(this).attr("data-uri");
-
+  var form = $(this).closest("form");
+  
   var container = $(this);
   var chart_container = $(this).closest(".panel").find(".panel-body");
 

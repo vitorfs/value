@@ -1,0 +1,17 @@
+<form action="{{ chart.chart_uri }}">
+  <div class="panel panel-default panel-chart">
+    <div class="panel-heading" data-target="#collapse-{{ chart.chart_id }}" data-item-id="{{ chart.chart_id }}">
+      <div class="btn-group btn-group-xs pull-right chart-options" role="group" aria-label="Chart Options">
+        {% include 'deliverables/meetings/dashboard/includes/toggle_toolbar.html' with opened=True %}
+        {% include 'deliverables/meetings/dashboard/includes/expand_toolbar.html' with opened=True %}
+        {% include 'deliverables/meetings/dashboard/includes/modal_toolbar.html' with opened=True %}
+        {% include 'deliverables/meetings/dashboard/includes/reload_toolbar.html' with opened=True %}
+        {% include 'deliverables/meetings/dashboard/includes/download_toolbar.html' with opened=True %}
+      </div>
+      <p class="panel-title"><a href="javascript:void(0)" class="btn-chart-toggle">{{ chart.chart_title }}</a></p>
+    </div>
+    <div id="collapse-{{ chart.chart_id }}" class="panel-collapse collapse" style="display: block;">
+      <div class="panel-body"></div>
+    </div>
+  </div>
+</form>

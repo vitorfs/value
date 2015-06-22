@@ -94,6 +94,7 @@ class Highcharts(object):
             'yAxis': { 'min': 0, 'max': 100, 'title': { 'text': 'Stakeholder Meeting Input' }},
             'legend': { 'enabled': False },
             'tooltip': { 'pointFormat': 'Usage percentage: <strong>{point.y}%</strong>' },
+            'exporting': { 'enabled': False },
             'series': [{
                 'name': 'Stakeholder Meeting Input',
                 'data': data,
@@ -142,6 +143,7 @@ class Highcharts(object):
             'yAxis': { 'min': 0, 'max': 100, 'title': { 'text': 'Factors usage percentage' }},
             'legend': { 'enabled': False },
             'tooltip': { 'pointFormat': 'Usage percentage: <strong>{point.y}%</strong>' },
+            'exporting': { 'enabled': False },
             'series': [{
                 'name': 'Factors usage percentage',
                 'data': data,
@@ -274,10 +276,10 @@ class Highcharts(object):
         }
         return options
 
-    def features_acceptance_simple_treemap(self, instance_id, item_id):
+    def features_acceptance_simple_treemap(self, instance_id, item_id, stakeholder_ids):
         instance = Meeting.objects.get(pk=instance_id)
         item = MeetingItem.objects.get(pk=item_id)
-        evaluations = Evaluation.get_evaluations_by_meeting(instance).filter(meeting_item=item)
+        evaluations = Evaluation.get_evaluations_by_meeting(instance).filter(meeting_item=item, user_id__in=stakeholder_ids)
 
         vqs = evaluations.values('measure_value__description', 'measure_value__color').annotate(value=Count('measure_value__description')).order_by()
         data = [kv for kv in vqs]
@@ -287,10 +289,10 @@ class Highcharts(object):
 
         return self._base_treemap(data)
 
-    def features_acceptance_detailed_treemap(self, instance_id, item_id):
+    def features_acceptance_detailed_treemap(self, instance_id, item_id, stakeholder_ids):
         instance = Meeting.objects.get(pk=instance_id)
         item = MeetingItem.objects.get(pk=item_id)
-        evaluations = Evaluation.get_evaluations_by_meeting(instance).filter(meeting_item=item)
+        evaluations = Evaluation.get_evaluations_by_meeting(instance).filter(meeting_item=item, user_id__in=stakeholder_ids)
 
         vqs = evaluations.order_by('measure_value__description', 'measure_value__id', 'measure_value__color').distinct('measure_value__description', 'measure_value__id', 'measure_value__color').values('measure_value__description', 'measure_value__id', 'measure_value__color')
         groups = [kv for kv in vqs]
@@ -310,10 +312,10 @@ class Highcharts(object):
 
         return self._base_treemap(data)
 
-    def features_acceptance_pie_chart_drilldown(self, instance_id, item_id):
+    def features_acceptance_pie_chart_drilldown(self, instance_id, item_id, stakeholder_ids):
         instance = Meeting.objects.get(pk=instance_id)
         item = MeetingItem.objects.get(pk=item_id)
-        evaluations = Evaluation.get_evaluations_by_meeting(instance).filter(meeting_item=item)
+        evaluations = Evaluation.get_evaluations_by_meeting(instance).filter(meeting_item=item, user_id__in=stakeholder_ids)
 
         vqs = evaluations.values('measure_value__description', 'measure_value__color').annotate(y=Count('measure_value__description')).order_by('y')
         series = [kv for kv in vqs]
@@ -361,7 +363,7 @@ class Highcharts(object):
             }
         return options
 
-    def features_acceptance_bubbles(self, meeting_id, meeting_item_id):
+    def features_acceptance_bubbles(self, meeting_id, meeting_item_id, stakeholder_ids):
         options = {
             'chart': { 'type': 'bubble', 'zoomType': 'xy' },
             'title': { 'text': '' },

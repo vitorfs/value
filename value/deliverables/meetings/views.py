@@ -220,10 +220,10 @@ def dashboard(request, deliverable_id, meeting_id):
     chart = Highcharts()
     
     charts = []
-    charts.append({ 'chart_id': 'factors_usage',  'chart_title': 'Factors Usage', 'chart_uri': reverse('deliverables:meetings:dashboard_factors_usage_chart', args=(deliverable_id, meeting_id,)) })
+    charts.append({ 'chart_id': 'factors_usage', 'chart_title': 'Factors Usage', 'chart_uri': reverse('deliverables:meetings:dashboard_factors_usage_chart', args=(deliverable_id, meeting_id,)) })
     charts.append({ 'chart_id': 'stakeholders_input', 'chart_title': 'Stakeholders Input', 'chart_uri': reverse('deliverables:meetings:dashboard_stakeholders_input_chart', args=(deliverable_id, meeting_id,)) })
 
-    return render(request, 'deliverables/meetings/dashboard/dashboard.html', { 
+    return render(request, 'deliverables/meetings/dashboard/dashboard_list.html', { 
         'meeting': meeting,
         'charts': charts,
         'chart_menu_active': 'overview'
@@ -235,7 +235,15 @@ def dashboard_factors_usage_chart(request, deliverable_id, meeting_id):
     chart = Highcharts()
     options = chart.factors_usage_bar_chart(meeting)
     dump = json.dumps(options)
-    return HttpResponse(dump, content_type='application/json')
+    chart_data = { 'chart_id': 'factors_usage', 'chart_title': 'Factors Usage', 'chart_uri': reverse('deliverables:meetings:dashboard_factors_usage_chart', args=(deliverable_id, meeting_id,)) }
+    if 'application/json' in request.META.get('HTTP_ACCEPT'):
+        return HttpResponse(dump, content_type='application/json')
+    else:
+        return render(request, 'deliverables/meetings/dashboard/dashboard_popup.html', { 
+            'meeting': meeting,
+            'chart': chart_data,
+            'dump': dump
+            })
 
 @login_required
 def dashboard_stakeholders_input_chart(request, deliverable_id, meeting_id):
@@ -243,7 +251,15 @@ def dashboard_stakeholders_input_chart(request, deliverable_id, meeting_id):
     chart = Highcharts()
     options = chart.stakeholders_input_bar_chart(meeting)
     dump = json.dumps(options)
-    return HttpResponse(dump, content_type='application/json')
+    chart_data = { 'chart_id': 'stakeholders_input', 'chart_title': 'Stakeholders Input', 'chart_uri': reverse('deliverables:meetings:dashboard_stakeholders_input_chart', args=(deliverable_id, meeting_id,)) }
+    if 'application/json' in request.META.get('HTTP_ACCEPT'):
+        return HttpResponse(dump, content_type='application/json')
+    else:
+        return render(request, 'deliverables/meetings/dashboard/dashboard_popup.html', { 
+            'meeting': meeting,
+            'chart': chart_data,
+            'dump': dump
+            })
 
 @login_required
 def features(request, deliverable_id, meeting_id):
@@ -289,9 +305,12 @@ def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
 def features_acceptance(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     charts = meeting.meetingitem_set.all()
-    return render(request, 'deliverables/meetings/dashboard/features_acceptance.html', { 
+    stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
+    return render(request, 'deliverables/meetings/dashboard/features_acceptance_list.html', { 
         'meeting': meeting,
         'charts': charts,
+        'stakeholder_ids': stakeholder_ids,
+        'chart_type': 'simple',
         'chart_uri': 'features-acceptance',
         'chart_menu_active': 'features_acceptance',
         'chart_page_title': 'Features Acceptance'
@@ -299,22 +318,36 @@ def features_acceptance(request, deliverable_id, meeting_id):
 
 @login_required
 def features_acceptance_chart(request, deliverable_id, meeting_id, meeting_item_id):
-    chart_type = request.GET.get('chart', 'simple')
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    meeting_item = meeting.meetingitem_set.get(pk=meeting_item_id)
+    chart_type = request.GET.get('chart-type', 'simple')
+    stakeholder_ids = request.GET.getlist('stakeholder')
+    try:
+        stakeholder_ids = list(map(int, stakeholder_ids))
+    except:
+        pass
     chart = Highcharts()
-
     options = {}
-
     if chart_type == 'simple': 
-        options = chart.features_acceptance_simple_treemap(meeting_id, meeting_item_id)
+        options = chart.features_acceptance_simple_treemap(meeting_id, meeting_item_id, stakeholder_ids)
     elif chart_type == 'detailed':
-        options = chart.features_acceptance_detailed_treemap(meeting_id, meeting_item_id)
+        options = chart.features_acceptance_detailed_treemap(meeting_id, meeting_item_id, stakeholder_ids)
     elif chart_type == 'bubble':
-        options = chart.features_acceptance_bubbles(meeting_id, meeting_item_id)
+        options = chart.features_acceptance_bubbles(meeting_id, meeting_item_id, stakeholder_ids)
     else:
-        options = chart.features_acceptance_pie_chart_drilldown(meeting_id, meeting_item_id)
-
+        options = chart.features_acceptance_pie_chart_drilldown(meeting_id, meeting_item_id, stakeholder_ids)
     dump = json.dumps(options)
-    return HttpResponse(dump, content_type='application/json')
+    if 'application/json' in request.META.get('HTTP_ACCEPT'):
+        return HttpResponse(dump, content_type='application/json')
+    else:
+        return render(request, 'deliverables/meetings/dashboard/features_acceptance_popup.html', { 
+            'meeting': meeting,
+            'chart': meeting_item,
+            'chart_uri': 'features-acceptance',
+            'chart_type': chart_type,
+            'stakeholder_ids': stakeholder_ids,
+            'dump': dump
+            })
 
 @login_required
 def decision_items_overview(request, deliverable_id, meeting_id):
