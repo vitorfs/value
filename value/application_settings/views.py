@@ -30,11 +30,15 @@ def index(request):
 @require_POST
 def admins(request):
     grant_ids = request.POST.getlist('grant_user')
-    revoke_ids = request.POST.getlist('revoke_user')
-    if grant_ids:
+    grant_ids = filter(None, grant_ids)
+    if any(grant_ids):
         User.objects.filter(id__in=grant_ids).update(is_superuser=True)
-    if revoke_ids:
+
+    revoke_ids = request.POST.getlist('revoke_user')
+    revoke_ids = filter(None, revoke_ids)
+    if any(revoke_ids):
         User.objects.filter(id__in=revoke_ids).update(is_superuser=False)
+        
     return HttpResponse('Administrators settings saved successfully!')
 
 @login_required
