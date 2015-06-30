@@ -3,7 +3,6 @@
 {% load avatar staticfiles %}
 
 {% block javascript %}
-  <script src="{% static 'js/application_settings/settings.js' %}"></script>
   <script type="text/javascript">
     $(function () {
       var options = [
@@ -21,7 +20,8 @@
 {% endblock javascript %}
 
 {% block settings_content %}
-
+  
+  {% comment %}
   <form method="post" class="form-horizontal">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -41,6 +41,7 @@
       </div>
     </div>
   </form>
+  {% endcomment %}
 
   <form method="post" action="{% url 'settings:admins' %}">
     {% csrf_token %}

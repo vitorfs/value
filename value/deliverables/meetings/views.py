@@ -28,7 +28,7 @@ from value.deliverables.meetings.forms import MeetingForm
 @login_required
 def new(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    decision_items_fields = DecisionItemLookup.get_all_fields()
+    decision_items_fields = DecisionItemLookup.get_visible_fields()
     decision_items = deliverable.decisionitem_set.all()
     if request.method == 'POST':
         form = MeetingForm(request.POST)

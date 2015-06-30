@@ -11,6 +11,14 @@ def custom_field_attr(fields, column, attr):
         return ''
 
 @register.simple_tag
+def custom_field_display(fields, column):
+    column_key = 'column_{0}'.format(column)
+    if column_key in fields.keys():
+        if fields[column_key]['display']:
+            return 'checked'
+    return ''
+
+@register.simple_tag
 def custom_field_is_active(fields, column):
     if 'column_{0}'.format(column) in fields.keys():
         return 'checked'

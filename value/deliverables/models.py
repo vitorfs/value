@@ -26,7 +26,7 @@ class Deliverable(models.Model):
         return self.name
 
     def get_decision_items_fields(self):
-        return DecisionItemLookup.get_all_fields()
+        return DecisionItemLookup.get_visible_fields()
 
     def get_ongoing_meetings(self):
         return self.meeting_set.filter(status='O')
@@ -96,24 +96,48 @@ class DecisionItemLookup(models.Model):
     column_name = models.CharField(max_length=255, primary_key=True)
     column_label = models.CharField(max_length=255, null=True, blank=True)
     column_type = models.CharField(max_length=1, choices=COLUMN_TYPES, default=STRING)
+    column_display = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.column_name
+
+    @staticmethod
+    def get_base_fields():
+        base_fields = {}
+        base_fields[u'name'] = { 
+                'label': u'Name', 
+                'type': DecisionItemLookup.STRING, 
+                'display': True }
+        base_fields[u'description'] = { 
+                'label': u'Description', 
+                'type': DecisionItemLookup.STRING, 
+                'display': True }
+        return base_fields
 
     @staticmethod
     def get_custom_fields():
         fields = {}
         qs = DecisionItemLookup.objects.all()
         for result in qs:
-            fields[result.column_name] = { 'label': result.column_label, 'type': result.column_type }
+            fields[result.column_name] = { 'label': result.column_label, 'type': result.column_type, 'display': result.column_display }
         return fields
 
     @staticmethod
     def get_all_fields():
-        fields = DecisionItemLookup.get_custom_fields()
-        fields[u'name'] = { 'label': u'Name', 'type': DecisionItemLookup.STRING }
-        fields[u'description'] = { 'label': u'Description', 'type': DecisionItemLookup.STRING }
+        fields = dict(DecisionItemLookup.get_custom_fields().items() + DecisionItemLookup.get_base_fields().items())
+        app_settings = ApplicationSetting.get()
+        ordered_fields = OrderedDict()
+        for key in app_settings[ApplicationSetting.DECISION_ITEMS_COLUMNS_DISPLAY]:
+            if key in fields.keys():
+                ordered_fields[key] = fields[key]
+        for key in fields:
+            if key not in ordered_fields.keys():
+                ordered_fields[key] = fields[key]
+        return ordered_fields
 
+    @staticmethod
+    def get_visible_fields():
+        fields = dict(DecisionItemLookup.get_custom_fields().items() + DecisionItemLookup.get_base_fields().items())
         app_settings = ApplicationSetting.get()
         ordered_fields = OrderedDict()
         for key in app_settings[ApplicationSetting.DECISION_ITEMS_COLUMNS_DISPLAY]:

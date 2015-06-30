@@ -345,3 +345,12 @@ th.headerSortUp:after {
 .panel-group form > .panel {
   margin-bottom: 5px;
 }
+
+.btn-details {
+  font-size: 14px;
+  color: #337ab7!important;
+}
+
+.btn-details:hover {
+  color: #23527c!important;
+}

@@ -33,7 +33,7 @@ def index(request):
 @user_passes_test(lambda user: user.is_superuser)
 @transaction.atomic
 def new(request):
-    fields = DecisionItemLookup.get_all_fields()
+    fields = DecisionItemLookup.get_visible_fields()
     DecisionItemFormSet = modelformset_factory(DecisionItem, fields=fields.keys())
 
     measure = None
@@ -88,7 +88,7 @@ def new(request):
             'formset': formset
             })
 
-def _excel_column_map():
+def excel_column_map():
     column_map = {}
     i = 0
     for c in ascii_uppercase:
@@ -112,7 +112,7 @@ def import_decision_items(request):
     html = ''
     if form.is_valid():
         app_settings = ApplicationSetting.get()
-        column_map = _excel_column_map()
+        column_map = excel_column_map()
         f = request.FILES['file']
         filename = f.name
         wb = xlrd.open_workbook(filename=None, file_contents=f.read())
@@ -127,7 +127,7 @@ def import_decision_items(request):
                     except:
                         pass
                 decision_items.append(decision_item)
-        fields = DecisionItemLookup.get_all_fields()
+        fields = DecisionItemLookup.get_visible_fields()
         DecisionItemFormSet = modelformset_factory(DecisionItem, fields=fields.keys(), extra=len(decision_items))
         formset = DecisionItemFormSet(prefix='decision_item', queryset=DecisionItem.objects.none(), initial=decision_items)
         html = render_to_string('deliverables/includes/decision_items_import_table.html', {
@@ -300,6 +300,12 @@ def delete_decision_item(request, deliverable_id, decision_item_id):
                 'decision_item': decision_item,
                 'related_evaluations': related_evaluations
                 })
+
+@login_required
+def details_decision_item(request, deliverable_id, decision_item_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    decision_item = get_object_or_404(DecisionItem, pk=decision_item_id)
+    return render(request, 'deliverables/decision_items/includes/decision_item_details.html', { 'deliverable': deliverable, 'item': decision_item })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)

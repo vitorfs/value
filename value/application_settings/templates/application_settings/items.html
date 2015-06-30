@@ -9,37 +9,6 @@
 {% block javascript %}
   <script src="{% static 'js/prism.js' %}"></script>
   <script src="{% static 'js/application_settings/settings.js' %}"></script>
-  <script>
-    $(function () {
-
-      Sortable.create($("#order-by")[0], { group: "order" });
-      Sortable.create($("#columns")[0], { group: "order" });
-
-      Sortable.create($("#column-display-order")[0], { 
-        draggable: ".sortable",
-        onEnd: function (evt) {
-          var value = '';
-          $("#column-display-order span").each(function () {
-            value += $(this).attr("data-field-name") + ",";
-            $(this).attr("data-field-order", $(this).index());
-          });
-          $("#id_column_display").val(value);
-        }
-      });
-
-      Sortable.create($("#plain-text-column-order")[0], { draggable: ".sortable" });
-
-      $("#id_orientation").change(function () {
-        $("#id_orientation option").each(function () {
-          var value = $(this).val();
-          $(".entry_per_" + value).hide();
-        });
-        var value = $(this).val();
-        $(".entry_per_" + value).show();
-      });
-
-    });
-  </script>
 {% endblock javascript %}
 
 {% block breadcrumb %}
@@ -59,6 +28,7 @@
         <h3 class="panel-title">Decision items</h3>
       </div>
       <div class="panel-body">
+        {% comment %}
         <div class="form-group" style="margin-bottom: 0">
           <label>Define the default ordering for every screen that display decision items</label>
           <div class="row">
@@ -106,6 +76,7 @@
             </div>
           </div>
         </div>
+        {% endcomment %}
         <div class="form-group" style="margin-bottom: 0">
           <label>Define the column display order</label>
           <input type="hidden" id="id_column_display" name="column_display" value="{{ app_settings.DECISION_ITEMS_COLUMNS_DISPLAY }}">
@@ -167,10 +138,11 @@
                             <th>Field</th>
                             <th class="entry_per_row"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'column' %} style="display: none"{% endif %}>Column</th>
                             <th class="entry_per_column"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'row' %} style="display: none"{% endif %}>Row</th>
+                            <th>Import?</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {% for name, field in decision_items_fields.items %}
+                          {% for name, field in import_template_fields.items %}
                             <tr>
                               <td>{{ field.label }}</td>
                               <td class="entry_per_row"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'column' %} style="display: none"{% endif %}>
@@ -178,6 +150,10 @@
                               </td>
                               <td class="entry_per_column"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'row' %} style="display: none"{% endif %}>
                                 {% excel_rows name forloop.counter app_settings %}
+                              </td>
+                              <td>
+                                <input type="checkbox" class="js-import-check" name="active_{{ name }}" value="active" {% excel_is_checked name app_settings %}>
+                              </td>
                             </tr>
                           {% endfor %}
                         </tbody>
@@ -194,6 +170,7 @@
               </div>
             </div>
           </div>
+{% comment %}
           <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="heading-csv">
               <h4 class="panel-title">
@@ -301,7 +278,7 @@
               </div>
             </div>
           </div>
-
+{% endcomment %}
         </div>
 
       </div>
@@ -326,6 +303,7 @@
             <th>Column</th>
             <th>Label</th>
             <th>Data type</th>
+            <th>Display</th>
             <th>Active</th>
           </tr>
         </thead>
@@ -339,6 +317,7 @@
               </select>
             </td>
             <td style="vertical-align: middle"><input type="checkbox" checked disabled></td>
+            <td style="vertical-align: middle"><input type="checkbox" checked disabled></td>
           </tr>
           <tr>
             <td style="vertical-align: middle">description</td>
@@ -349,6 +328,7 @@
               </select>
             </td>
             <td style="vertical-align: middle"><input type="checkbox" checked disabled></td>
+            <td style="vertical-align: middle"><input type="checkbox" checked disabled></td>
           </tr>
           {% for column_index in custom_fields_range %}
           <tr>
@@ -356,14 +336,17 @@
               column_{{ column_index }}
             </td>
             <td>
-              <input type="text" class="form-control" name="column_label_{{ column_index }}" maxlength="255" value="{% custom_field_attr custom_fields column_index 'label' %}">
+              <input type="text" class="form-control js-control-disable" name="column_label_{{ column_index }}" maxlength="255" value="{% custom_field_attr custom_fields column_index 'label' %}">
             </td>
             <td>
-              <select class="form-control" name="column_type_{{ column_index }}">
+              <select class="form-control js-control-disable" name="column_type_{{ column_index }}">
                 {% for type in column_types %}
                   <option value="{{ type.0 }}" {% custom_field_selected custom_fields column_index type %}>{{ type.1 }}</option>
                 {% endfor %}
               </select>
+            </td>
+            <td style="vertical-align: middle">
+              <input type="checkbox" name="column_display_{{ column_index }}" class="js-control-disable" {% custom_field_display custom_fields column_index %}>
             </td>
             <td style="vertical-align: middle">
               <input type="checkbox" name="column_is_active_{{ column_index }}" {% custom_field_is_active custom_fields column_index %}>
