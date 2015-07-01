@@ -32,7 +32,7 @@ EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.
 EMAIL_FILE_PATH = PROJECT_DIR.parent.parent.child('maildumps')
 
 
-ALLOWED_HOSTS = ['127.0.0.1',]
+ALLOWED_HOSTS = ['127.0.0.1', 'valueproject.fi',]
 
 
 INSTALLED_APPS = (
@@ -41,7 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     #'debug_toolbar',
 
     'value.core',
