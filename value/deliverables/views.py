@@ -305,7 +305,12 @@ def delete_decision_item(request, deliverable_id, decision_item_id):
 def details_decision_item(request, deliverable_id, decision_item_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     decision_item = get_object_or_404(DecisionItem, pk=decision_item_id)
-    return render(request, 'deliverables/decision_items/includes/decision_item_details.html', { 'deliverable': deliverable, 'item': decision_item })
+    fields = DecisionItemLookup.get_all_fields()
+    return render(request, 'deliverables/decision_items/includes/decision_item_details.html', { 
+            'deliverable': deliverable, 
+            'item': decision_item,
+            'fields': fields
+            })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)

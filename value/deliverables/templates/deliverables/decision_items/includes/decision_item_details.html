@@ -1,10 +1,8 @@
 {% load attr %}
 
-{% with fields=deliverable.get_decision_items_fields %}
-  {% for name, field in fields.items %}
-    <div class="form-group">
-      <label class="control-label">{{ field.label }}</label>
-      <input type="text" class="form-control" value="{{ item|attr:name }}" readonly>
-    </div>
-  {% endfor %}
-{% endwith %}
+{% for name, field in fields.items %}
+  <div class="form-group">
+    <label class="control-label">{{ field.label }}</label>
+    <input type="text" class="form-control" value="{{ item|attr:name }}" readonly>
+  </div>
+{% endfor %}
