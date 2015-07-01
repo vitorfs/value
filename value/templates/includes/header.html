@@ -44,9 +44,11 @@
             </div>
           </form>{% endcomment %}
           <ul class="nav navbar-nav navbar-right">
+            {% comment %}
             <li{% if '/help/' in request.path %} class="active"{% endif %}>
               <a href="{% url 'help:index' %}"><span class="glyphicon glyphicon-question-sign"></span></a>
             </li>
+            {% endcomment %}
             {% if user.is_superuser %}
               <li{% if request.path|startswith:'/settings/' %} class="active"{% endif %}>
                 <a href="{% url 'settings:index' %}"><span class="glyphicon glyphicon-cog"></span></a>

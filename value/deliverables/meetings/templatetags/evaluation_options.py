@@ -1,4 +1,5 @@
 from django import template
+from django.utils.html import escape
 
 register = template.Library()
 
@@ -42,7 +43,9 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values):
     html = '''<tr{0}
  data-factor-id="{1}"
  data-measure-id="{2}">
-<td>{3}<a href="javascript:void(0);" 
+<td>
+ <a href="javascript:void(0)" class="js-factor-description" data-content="{6}" data-container="#factor-description-container" data-trigger="focus">{3}</a>
+ <a href="javascript:void(0);" 
  class="btn-rationale js-rationale {4} pull-right" 
  data-toggle="popover" 
  data-placement="right" 
@@ -54,9 +57,10 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values):
         selected(is_evaluated),
         factor.pk, 
         factor.measure.pk, 
-        factor.name,
+        escape(factor.name),
         no_comment,
-        rationale_text)
+        escape(rationale_text),
+        escape(factor.description))
 
     for measure_value in measure_values:
         is_checked = False

@@ -8,6 +8,8 @@ var simulate = function () {
 
 $(function () {
 
+  $(".js-factor-description").popover();
+
   $(".js-decision-item-details").click(function () {
     $.ajax({
       url: $(this).attr("data-remote-url"),

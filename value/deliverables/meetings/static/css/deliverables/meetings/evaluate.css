@@ -35,3 +35,7 @@
 .popover .arrow {
   /*top: 25px!important;*/
 }
+
+#factor-description-container .popover {
+  min-width: 50px;
+}
