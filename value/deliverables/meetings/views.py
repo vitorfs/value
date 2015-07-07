@@ -481,6 +481,7 @@ def download(request, deliverable_id, meeting_id):
     return response
 
 @login_required
+@require_POST
 def remove_stakeholder(request, deliverable_id, meeting_id):
     meeting = Meeting.objects.get(pk=meeting_id, deliverable__id=deliverable_id)
     stakeholder_id = request.POST.get('stakeholder')
@@ -493,4 +494,21 @@ def remove_stakeholder(request, deliverable_id, meeting_id):
         messages.success(request, u'{0} was successfully removed from the meeting!'.format(user.profile.get_display_name()))
     else:
         messages.warning(request, 'You cannot remove yourself from the meeting.')
+    return redirect(reverse('deliverables:meetings:meeting', args=(deliverable_id, meeting_id)))
+
+@login_required
+@require_POST
+@transaction.atomic
+def add_stakeholders(request, deliverable_id, meeting_id):
+    meeting = Meeting.objects.get(pk=meeting_id, deliverable__id=deliverable_id)
+    stakeholder_ids = request.POST.getlist('stakeholders')
+    if any(stakeholder_ids):
+        for stakeholder_id in stakeholder_ids:
+            user = User.objects.get(pk=stakeholder_id)
+            meeting_stakeholder = MeetingStakeholder(stakeholder=user, meeting=meeting)
+            meeting_stakeholder.save()
+        meeting.calculate_all_rankings()
+        messages.success(request, u'Stakeholders sucessfully added to the meeting!')
+    else:
+        messages.warning(request, u'Select at least one stakeholder to add.')
     return redirect(reverse('deliverables:meetings:meeting', args=(deliverable_id, meeting_id)))
