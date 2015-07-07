@@ -21,6 +21,10 @@
   </head>
   <body>
     {% block content %}{% endblock %}
+    <form id="chart-download" method="post" action="{% url 'deliverables:meetings:download' meeting.deliverable.pk meeting.pk %}">
+      {% csrf_token %}
+      <input type="hidden" name="svg" id="id_svg">
+    </form>
     {% block mustache %}{% endblock %}
     <script src="{% static 'js/modernizr.custom.33893.js' %}"></script>
     <script src="{% static 'js/mustache.min.js' %}"></script>

@@ -138,8 +138,9 @@ $(function () {
 
   $(".select-all-stakeholders").click(function (e) {
     e.stopPropagation();
+    var container = $(this).closest(".js-stakeholders");
     var group_name = $(this).closest("li").attr("data-target-group-name");
-    $("[data-group-name='" + group_name + "']").each(function () {
+    $("[data-group-name='" + group_name + "']", container).each(function () {
       var stakeholder = $(this);
       if (!$("[name='stakeholder']", this).is(":checked")) {
         $(stakeholder).click();
@@ -149,8 +150,9 @@ $(function () {
 
   $(".select-none-stakeholders").click(function (e) {
     e.stopPropagation();
+    var container = $(this).closest(".js-stakeholders");
     var group_name = $(this).closest("li").attr("data-target-group-name");
-    $("[data-group-name='" + group_name + "']").each(function () {
+    $("[data-group-name='" + group_name + "']", container).each(function () {
       var stakeholder = $(this);
       if ($("[name='stakeholder']", this).is(":checked")) {
         $(stakeholder).click();

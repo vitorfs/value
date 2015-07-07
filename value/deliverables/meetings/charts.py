@@ -1,10 +1,19 @@
 import operator
 
 from django.db.models import Count
+from django.contrib.auth.models import User
 
 from value.factors.models import Factor
 from value.deliverables.meetings.models import Meeting, MeetingItem, Evaluation
 
+def get_stakeholders_group_names(stakeholder_ids):
+    stakeholders = User.objects.filter(id__in=stakeholder_ids)
+    groups = set()
+    for stakeholder in stakeholders:
+        for group in stakeholder.groups.all():
+            groups.add(group.name)
+    groups_text = u', '.join(groups)
+    return groups_text
 
 class Highcharts(object):
 
@@ -30,9 +39,11 @@ class Highcharts(object):
                 percentage = 0.0
             data.append([result['meeting_item__decision_item__name'], percentage])
 
+        groups_text = get_stakeholders_group_names(stakeholder_ids)
         options = {
             'chart': { 'type': 'column' },
-            'title': { 'text': None },
+            'title': { 'text': u'Features Comparison: {0} {1}'.format(measure_value.description, measure_value.measure.name) },
+            'subtitle': { 'text': u'{0} opinion'.format(groups_text) },
             'xAxis': {
                 'type': 'category',
                 'labels': {
@@ -88,7 +99,8 @@ class Highcharts(object):
 
         options = {
             'chart': { 'type': 'bar' },
-            'title': { 'text': None },
+            'title': { 'text': 'Stakeholder\'s Input' },
+            'subtitle': { 'text': '100% means the stakeholder evaluated all the meeting\'s decision items.' },
             'xAxis': {
                 'type': 'category',
                 'labels': { 'style': self.label_style }
@@ -137,7 +149,8 @@ class Highcharts(object):
 
         options = {
             'chart': { 'type': 'column' },
-            'title': { 'text': None },
+            'title': { 'text': 'Overall Value Factors Usage' },
+            'subtitle': { 'text': 'Which factors are being used to evaluate the decision items.' },
             'xAxis': {
                 'type': 'category',
                 'labels': { 'style': self.label_style }
@@ -217,7 +230,11 @@ class Highcharts(object):
                 serie_data.append(percentage)
             series.append({ 'name': measure_value.description, 'data': serie_data, 'color': measure_value.color })
 
-        return self._base_stacked_chart(categories, series, chart)
+        options = self._base_stacked_chart(categories, series, chart)
+        groups_text = get_stakeholders_group_names(stakeholder_ids)
+        options['title'] = { 'text': u'Decision Items Overview' }
+        options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
+        return options
 
 
     def features_selection_stacked_chart(self, meeting_id, meeting_item_id, chart, stakeholder_ids):
@@ -253,7 +270,11 @@ class Highcharts(object):
                     serie_data.append(factor[1][value.description])
                 series.append({ 'name': value.description, 'data': serie_data, 'color': value.color })
 
-            return self._base_stacked_chart(categories, series, chart)
+            options = self._base_stacked_chart(categories, series, chart)
+            groups_text = get_stakeholders_group_names(stakeholder_ids)
+            options['title'] = { 'text': u'{0} Value Factors Comparison'.format(meeting_item.decision_item.name) }
+            options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
+            return options
 
         return {}
 
@@ -291,7 +312,12 @@ class Highcharts(object):
             d['name'] = d.pop('measure_value__description')
             d['color'] = d.pop('measure_value__color')
 
-        return self._base_treemap(data)
+        options = self._base_treemap(data)
+        options['title'] = { 'text': u'{0} Acceptance'.format(item.decision_item.name) }
+        groups_text = get_stakeholders_group_names(stakeholder_ids)
+        options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
+
+        return options
 
     def features_acceptance_detailed_treemap(self, instance_id, item_id, stakeholder_ids):
         instance = Meeting.objects.get(pk=instance_id)
@@ -314,7 +340,12 @@ class Highcharts(object):
 
         data = groups + data
 
-        return self._base_treemap(data)
+        options = self._base_treemap(data)
+        options['title'] = { 'text': u'{0} Acceptance'.format(item.decision_item.name) }
+        groups_text = get_stakeholders_group_names(stakeholder_ids)
+        options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
+        
+        return options
 
     def features_acceptance_pie_chart_drilldown(self, instance_id, item_id, stakeholder_ids):
         instance = Meeting.objects.get(pk=instance_id)
@@ -347,10 +378,11 @@ class Highcharts(object):
 
             drilldownSeries.append(drilldown)
 
+        groups_text = get_stakeholders_group_names(stakeholder_ids)
         options = {
                 'chart': { 'type': 'pie' },
-                'title': { 'text': '' },
-                'subtitle': { 'text': 'Stakeholders opinion. Click the slices to view value factors.' },
+                'title': { 'text': u'{0} Acceptance'.format(item.decision_item.name) },
+                'subtitle': { 'text': u'{0} opinion. Click the slices to view value factors.'.format(groups_text) },
                 'plotOptions': { 'series': { 'dataLabels': { 'enabled': True, 'format': '{point.name}: {point.y} votes' } } },
                 'exporting': { 'enabled': False },
                 'tooltip': {
