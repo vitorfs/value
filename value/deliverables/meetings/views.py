@@ -18,7 +18,7 @@ from django.db import transaction
 
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
-from value.deliverables.models import Deliverable, DecisionItemLookup, Rationale
+from value.deliverables.models import Deliverable, DecisionItemLookup, Rationale, DecisionItem
 from value.deliverables.forms import RationaleForm
 from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
 from value.deliverables.meetings.charts import Highcharts
@@ -94,10 +94,13 @@ def meeting(request, deliverable_id, meeting_id):
             .exclude(id__in=meeting.meetingstakeholder_set.values('stakeholder__id')) \
             .filter(is_active=True) \
             .order_by('first_name', 'last_name', 'username')
+    decision_items_in_use = meeting.meetingitem_set.values('decision_item__id')
+    available_decision_items = meeting.deliverable.decisionitem_set.exclude(id__in=decision_items_in_use)
     return render(request, 'deliverables/meetings/meeting.html', { 
             'meeting': meeting, 
             'stakeholders': stakeholders,
-            'available_stakeholders': available_stakeholders
+            'available_stakeholders': available_stakeholders,
+            'available_decision_items': available_decision_items
         })
 
 @login_required
@@ -511,4 +514,35 @@ def add_stakeholders(request, deliverable_id, meeting_id):
         messages.success(request, u'Stakeholders sucessfully added to the meeting!')
     else:
         messages.warning(request, u'Select at least one stakeholder to add.')
+    return redirect(reverse('deliverables:meetings:meeting', args=(deliverable_id, meeting_id)))
+
+@login_required
+@require_POST
+@transaction.atomic
+def remove_decision_items(request, deliverable_id, meeting_id):
+    meeting = Meeting.objects.get(pk=meeting_id, deliverable__id=deliverable_id)
+    meeting_items_ids = request.POST.getlist('meeting_items')
+    if any(meeting_items_ids):
+        meeting.meetingitem_set.filter(id__in=meeting_items_ids).delete()
+        meeting.calculate_all_rankings()
+        messages.success(request, u'Decision items sucessfully removed from the meeting!')
+    else:
+        messages.warning(request, u'Select at least one decision item to remove.')
+    return redirect(reverse('deliverables:meetings:meeting', args=(deliverable_id, meeting_id)))
+
+@login_required
+@require_POST
+@transaction.atomic
+def add_decision_items(request, deliverable_id, meeting_id):
+    meeting = Meeting.objects.get(pk=meeting_id, deliverable__id=deliverable_id)
+    decision_items_ids = request.POST.getlist('decision_items')
+    if any(decision_items_ids):
+        for decision_item_id in decision_items_ids:
+            decision_item = DecisionItem.objects.get(pk=decision_item_id)
+            meeting_item = MeetingItem(meeting=meeting, decision_item=decision_item)
+            meeting_item.save()
+        meeting.calculate_all_rankings()
+        messages.success(request, u'Decision items sucessfully added to the meeting!')
+    else:
+        messages.warning(request, u'Select at least one decision item to add.')
     return redirect(reverse('deliverables:meetings:meeting', args=(deliverable_id, meeting_id)))
