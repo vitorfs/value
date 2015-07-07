@@ -115,6 +115,11 @@
             {% include 'includes/users_panel_group.html' with stakeholders=stakeholders %}
           {% endif %}
         {% endif %}
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteStakeholder" style="margin-top: 20px">
+          <span class="glyphicon glyphicon-envelope"></span> Invite
+        </button>
+
       </div>
     </div>
 
@@ -174,6 +179,39 @@
           </table>
         {% endwith %}
 
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="inviteStakeholder" tabindex="-1" role="dialog" aria-labelledby="inviteStakeholderTitle" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="inviteStakeholderTitle">Invite stakeholder</h4>
+          </div>
+          <div class="modal-body">
+            {% if available_stakeholders %}
+              <div class="alert alert-info alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                Click to add a stakeholder to the meeting.
+              </div>
+              {% include 'includes/users_panel_group.html' with stakeholders=available_stakeholders group_actions='selectable' %}
+            {% else %}
+              <div class="well" style="margin-bottom: 0">
+                <div class="text-center" style="padding: 2em 0;">
+                  <span class="fa fa-users text-muted" style="font-size: 2.5em"></span>
+                  <h4 style="margin: 1em 0;">There is no stakeholder available.</h4>
+                  <a href="{% url 'users:add' %}" class="btn btn-primary">Create new user</a>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary js-add-invited-stakeholders"><span class="glyphicon glyphicon-ok"></span> Confirm</button>
+          </div>
+        </div>
       </div>
     </div>
 

@@ -90,7 +90,15 @@ def new(request, deliverable_id):
 def meeting(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     stakeholders = [meeting_stakeholder.stakeholder for meeting_stakeholder in meeting.meetingstakeholder_set.select_related('stakeholder')]
-    return render(request, 'deliverables/meetings/meeting.html', { 'meeting': meeting, 'stakeholders': stakeholders })
+    available_stakeholders = User.objects \
+            .exclude(id__in=meeting.meetingstakeholder_set.values('stakeholder__id')) \
+            .filter(is_active=True) \
+            .order_by('first_name', 'last_name', 'username')
+    return render(request, 'deliverables/meetings/meeting.html', { 
+            'meeting': meeting, 
+            'stakeholders': stakeholders,
+            'available_stakeholders': available_stakeholders
+        })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
