@@ -3,12 +3,21 @@
     <span class="fa fa-users"></span>
     <span class="caret"></span>
   </button>
-  <ul class="dropdown-menu dropdown-menu-right js-stakeholders" role="menu">
+  <ul class="dropdown-menu dropdown-menu-right js-stakeholders" role="menu" style="width: 200px;">
     {% for group_name, stakeholders in meeting.get_stakeholder_groups.iteritems %}
-      <li role="presentation" class="dropdown-header">{{ group_name }}</li>
+      <li role="presentation" class="dropdown-header" data-target-group-name="{{ group_name }}">
+        <div class="row">
+          <div class="col-xs-6">
+            {{ group_name }}
+          </div>
+          <div class="col-xs-6 text-right">
+            <a href="javascript:void(0);" class="select-all-stakeholders">All</a> / <a href="javascript:void(0);" class="select-none-stakeholders">None</a>
+          </div>
+        </div>
+      </li>
       {% for stakeholder in stakeholders %}
         <li role="presentation">
-          <a role="menuitem" tabindex="-1" href="javascript:void(0);" class="js-select-stakeholder">
+          <a role="menuitem" tabindex="-1" href="javascript:void(0);" class="js-select-stakeholder" data-group-name="{{ group_name }}">
             {% if stakeholder.pk in stakeholder_ids %}
               <input type="checkbox" name="stakeholder" value="{{ stakeholder.pk }}" checked style="display: none;">
               <span class="glyphicon glyphicon-check"></span> 

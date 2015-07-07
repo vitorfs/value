@@ -135,4 +135,27 @@ $(function () {
     var name = uuid();
     var win = window.open(url, name, 'height=500,width=800,resizable=yes,scrollbars=yes');
   });
+
+  $(".select-all-stakeholders").click(function (e) {
+    e.stopPropagation();
+    var group_name = $(this).closest("li").attr("data-target-group-name");
+    $("[data-group-name='" + group_name + "']").each(function () {
+      var stakeholder = $(this);
+      if (!$("[name='stakeholder']", this).is(":checked")) {
+        $(stakeholder).click();
+      }
+    });
+  });
+
+  $(".select-none-stakeholders").click(function (e) {
+    e.stopPropagation();
+    var group_name = $(this).closest("li").attr("data-target-group-name");
+    $("[data-group-name='" + group_name + "']").each(function () {
+      var stakeholder = $(this);
+      if ($("[name='stakeholder']", this).is(":checked")) {
+        $(stakeholder).click();
+      }
+    });
+  });
+
 });
