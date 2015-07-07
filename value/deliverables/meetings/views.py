@@ -465,10 +465,20 @@ def download(request, deliverable_id, meeting_id):
         response.write(pdf)     
     except:
         pass
-    response['Content-Disposition']= 'attachment; filename=dashboard.pdf'
+    response['Content-Disposition'] = 'attachment; filename=dashboard.pdf'
     return response
 
 @login_required
 def remove_stakeholder(request, deliverable_id, meeting_id):
-    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    pass
+    meeting = Meeting.objects.get(pk=meeting_id, deliverable__id=deliverable_id)
+    stakeholder_id = request.POST.get('stakeholder')
+    user = User.objects.get(pk=stakeholder_id)
+    if user != request.user:
+        meeting_stakeholder = MeetingStakeholder.objects.get(stakeholder=user, meeting=meeting)
+        meeting_stakeholder.delete()
+        Evaluation.get_user_evaluations_by_meeting(user, meeting).delete()
+        meeting.calculate_all_rankings()
+        messages.success(request, u'{0} was successfully removed from the meeting!'.format(user.profile.get_display_name()))
+    else:
+        messages.warning(request, 'You cannot remove yourself from the meeting.')
+    return redirect(reverse('deliverables:meetings:meeting', args=(deliverable_id, meeting_id)))

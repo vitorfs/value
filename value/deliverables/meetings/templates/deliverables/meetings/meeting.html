@@ -4,7 +4,18 @@
 
 {% block javascript %}
 <script type="text/javascript">
-  $(".table-sortable").tablesorter({ headers: { 0: { sorter: false }}});
+  $(function () {
+    $(".table-sortable").tablesorter({ headers: { 0: { sorter: false }}});
+
+    $(".panel-group-stakeholders.removeable .panel").click(function () {
+      var stakeholder_id = $(this).attr("data-stakeholder-id");
+      var stakeholder_name = $(this).attr("data-stakeholder-name");
+      $("#remove-stakeholder-id").val(stakeholder_id);
+      $("#remove-stakeholder .remove-stakeholder-name").text(stakeholder_name);
+      $("#remove-stakeholder").modal("show");
+    });
+
+  });
 </script>
 {% endblock javascript %}
 
@@ -166,19 +177,20 @@
     </div>
 
     <form method="post" action="{% url 'deliverables:meetings:remove_stakeholder' meeting.deliverable.pk meeting.pk %}">
-      <div class="modal fade">
-        <div class="modal-dialog">
+      {% csrf_token %}
+      <input type="hidden" name="stakeholder" id="remove-stakeholder-id">
+      <div class="modal fade" id="remove-stakeholder">
+        <div class="modal-dialog modal-sm">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title"></h4>
+              <h4 class="modal-title">Are you sure?</h4>
             </div>
             <div class="modal-body">
-              
+              <p>Removing the stakeholder <strong class="remove-stakeholder-name"></strong> from the meeting will also remove all related evaluations.</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
+              <button type="submit" id="confirm-deletion" class="btn btn-danger btn-block">Remove <span class="remove-stakeholder-name"></span></button>
             </div>
           </div>
         </div>

@@ -4,7 +4,7 @@
   {% for stakeholder in stakeholders|dictsort:"first_name" %}
     {% with display_name=stakeholder.profile.get_display_name %}
       {% if stakeholder in selected_stakeholders %}
-        <div class="panel panel-success">
+        <div class="panel panel-success" data-stakeholder-id="{{ stakeholder.pk }}" data-stakeholder-name="{{ display_name }}">
           <div class="panel-body bg-success text-success">
             <div class="row">
               <div class="col-md-11">
@@ -23,7 +23,7 @@
           </div>
         </div>
       {% else %}
-        <div class="panel panel-default">
+        <div class="panel panel-default" data-stakeholder-id="{{ stakeholder.pk }}" data-stakeholder-name="{{ display_name }}">
           <div class="panel-body">
             <div class="row">
               <div class="col-md-11">
