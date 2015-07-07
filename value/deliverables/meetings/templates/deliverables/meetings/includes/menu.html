@@ -1,3 +1,5 @@
+<h2 style="margin-bottom: 20px;"><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a> <span style="font-weight: 300;">/</span> <a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></h2>
+
 {% with manager=meeting.deliverable.manager %}
 <ul class="nav nav-tabs" style="margin-bottom: 20px">
   <li role="presentation"{% if active == 'meeting_summary' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}"><span class="fa fa-book"></span> Summary</a></li>

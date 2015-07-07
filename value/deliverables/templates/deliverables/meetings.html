@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></li>
+    <li class="active">Meetings</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+  {% include 'deliverables/includes/menu.html' with active='meetings' deliverable=deliverable %}
+
+  {% with has_meetings=deliverable.meeting_set.exists %}
+    
+    {% if has_meetings %}
+      <div style="margin-bottom: 20px;" class="clearfix">
+        <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> New meeting</a>
+      </div>
+    {% endif %}
+
+    {% if has_meetings %}
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <h3 class="panel-title">Ongoing meeting</h3>
+        </div>
+        {% include 'deliverables/includes/meetings_table.html' with meetings=deliverable.get_ongoing_meetings %}
+      </div>
+      {% if deliverable.get_closed_meetings.exists %}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Past meetings</h3>
+          </div>
+          {% include 'deliverables/includes/meetings_table.html' with meetings=deliverable.get_closed_meetings %}
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="well">
+        <div class="text-center" style="padding: 2em 0;">
+          <span class="fa fa-calendar text-muted" style="font-size: 2.5em"></span>
+          <h4 style="margin: 1em 0;">This deliverable had no meeting yet.</h4>
+          <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Start a meeting</a>
+        </div>
+      </div>
+    {% endif %}
+  {% endwith %}
+
+{% endblock content %}

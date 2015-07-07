@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('value.deliverables.meetings.views',
+    url(r'^$', 'index', name='index'),
     url(r'^new/$', 'new', name='new'),
     url(r'^(?P<meeting_id>\d+)/$', 'meeting', name='meeting'),
     url(r'^(?P<meeting_id>\d+)/close/$', 'close_meeting', name='close_meeting'),

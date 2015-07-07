@@ -24,6 +24,7 @@
     <li><a href="{% url 'home' %}">Home</a></li>
     <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
     <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a></li>
+    <li><a href="{% url 'deliverables:meetings:index' meeting.deliverable.pk %}">Meetings</a></li>
     <li class="active">{{ meeting.name }}</li>
   </ol>
 {% endblock breadcrumb %}
