@@ -23,10 +23,13 @@
                   <span class="fa fa-gears"></span> Management <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" role="menu">
-                  <li{% if '/factors/' in request.path %} class="active"{% endif %}><a href="{% url 'factors:factors' %}">Factors</a></li>
-                  <li{% if '/measures/' in request.path %} class="active"{% endif %}><a href="{% url 'measures:index' %}">Measures</a></li>
-                  <li{% if '/users/' in request.path %} class="active"{% endif %}><a href="{% url 'users:users' %}">Users</a></li>
-                  <li{% if '/groups/' in request.path %} class="active"{% endif %}><a href="{% url 'groups:index' %}">Groups</a></li>
+                  <li class="dropdown-header">Value Management</li>
+                  <li><a href="{% url 'measures:index' %}">Measures</a></li>
+                  <li><a href="{% url 'factors:factors' %}">Factors</a></li>
+                  <li class="divider"></li>
+                  <li class="dropdown-header">User Management</li>
+                  <li><a href="{% url 'users:users' %}">Users</a></li>
+                  <li><a href="{% url 'groups:index'  %}">Groups</a></li>
                 </ul>
               </li>
             {% endif %}

@@ -1,6 +1,8 @@
 from django import forms
-from value.factors.models import Factor
+
+from value.factors.models import Factor, Group
 from value.measures.models import Measure
+
 
 class FactorForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class' : 'form-control'}), max_length=255)
@@ -15,3 +17,10 @@ class FactorForm(forms.ModelForm):
     class Meta:
         model = Factor
         fields = ['name', 'description', 'measure', 'is_active',]
+
+class GroupForm(forms.ModelForm):
+    name = forms.CharField(widget=forms.TextInput(attrs={'class' : 'form-control'}), max_length=255)
+
+    class Meta:
+        model = Group
+        fields = ['name',]

@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 
-{% load staticfiles %}
-
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
@@ -10,9 +8,16 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-  <a href="{% url 'factors:add' %}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> Add factor</a>
 
-  <p class="lead">Select factor to change</p>
+  <div class="row">
+    <div class="col-sm-6">
+      <p class="lead">Select factor to change</p>
+    </div>
+    <div class="col-sm-6 text-right">
+      <a href="{% url 'factors:groups' %}" class="btn btn-primary"><span class="glyphicon glyphicon-cog"></span> Manage groups</a>
+      <a href="{% url 'factors:add' %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add factor</a>
+    </div>
+  </div>
 
   <table class="table table-striped">
     <thead>
@@ -20,6 +25,7 @@
         <th>Name</th>
         <th>Description</th>
         <th>Measure</th>
+        <th>Group</th>
         <th>Active</th>
         <th></th>
       </tr>
@@ -30,6 +36,7 @@
         <td><a href="{% url 'factors:factor' factor.pk %}">{{ factor.name }}</a></td>
         <td>{{ factor.description }}</td>
         <td>{{ factor.measure.name }}</td>
+        <td>{{ factor.group.name }}</td>
         <td>
           {% if factor.is_active %}
             <span class="glyphicon glyphicon-ok-sign text-success"></span>
@@ -50,3 +57,4 @@
     </tbody>
   </table>
 {% endblock content %}
+
