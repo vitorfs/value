@@ -56,4 +56,4 @@ target/
 .DS_Store
 *.sqlite3
 .env
-
+*.swp

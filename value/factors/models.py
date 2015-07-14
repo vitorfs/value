@@ -5,6 +5,12 @@ from value.measures.models import Measure
 from value.core.exceptions import FactorsImproperlyConfigured
 
 
+class Group(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.name
+
 class Factor(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=2000, null=True, blank=True)
@@ -14,6 +20,7 @@ class Factor(models.Model):
     created_by = models.ForeignKey(User, related_name='factor_creation_user')
     updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(User, null=True, related_name='factor_update_user')
+    group = models.ForeignKey(Group, null=True)
 
     class Meta:
         ordering = ('name',)
@@ -27,3 +34,4 @@ class Factor(models.Model):
         if not factors:
             raise FactorsImproperlyConfigured('There is no active factor in the application.')
         return factors
+
