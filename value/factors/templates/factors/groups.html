@@ -13,6 +13,21 @@
         $("#delete-group").modal("show");
       });
 
+      var updateSelection = function (evt) {
+        var factor_id = $(this).attr("data-factor-id");
+        console.log(factor_id);
+      };
+
+      $("#available-factors").sortable({
+        group: "factors"
+      });
+
+      $(".factors-group").sortable({
+        group: "factors",
+        onAdd: updateSelection,
+        onRemove: updateSelection
+      });
+
     });
   </script>
 {% endblock javascript %}
@@ -39,13 +54,13 @@
   {% if groups.exists %}
     <div class="row">
       <div class="col-sm-4 col-md-3">
-        <div class="panel panel-default">
+        <div class="panel panel-info">
           <div class="panel-heading">
             <h3 class="panel-title">Available Factors</h3>
           </div>
-          <ul class="list-group">
+          <ul class="list-group sortable" id="available-factors" style="min-height: 38px;">
             {% for factor in factors %}
-              <li class="list-group-item">{{ factor.name }}</li>
+              <li class="list-group-item" data-factor-id="{{ factor.pk }}">{{ factor.name }}</li>
             {% endfor %}
           </ul>
         </div>
@@ -63,9 +78,9 @@
                   {{ group.name }}
                 </h3>
               </div>
-              <div class="panel-body">
-                
-              </div>
+              <ul class="list-group factors-group sortable" data-group-id="{{ group.pk }}" style="min-height: 38px;">
+
+              </ul>
             </div>
           </div>
           {% endfor %}
