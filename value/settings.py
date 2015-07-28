@@ -34,8 +34,6 @@ EMAIL_FILE_PATH = PROJECT_DIR.parent.parent.child('maildumps')
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
-print ALLOWED_HOSTS
-
 
 INSTALLED_APPS = (
     'django.contrib.auth',
