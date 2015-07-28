@@ -208,8 +208,8 @@ $(function () {
     $(".measure-percent", panel).closest(".progress-bar").css("width", "0%");
     for (var key in measure_value_percent) {
       var percent = (measure_value_percent[key] / rows_count) * 100;
-      percent = percent.toFixed(2);
-      $(".measure-percent[data-measure-id='" + key + "']", panel).text(percent);
+      var display_percent = percent.toFixed(2);
+      $(".measure-percent[data-measure-id='" + key + "']", panel).text(display_percent);
       $(".measure-percent[data-measure-id='" + key + "']", panel).closest(".progress-bar").css("width", percent + "%");
     }
 

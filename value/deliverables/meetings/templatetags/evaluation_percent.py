@@ -12,5 +12,10 @@ def evaluation_percent(evaluations, meeting_item, factors, measure_value):
     f = len(factors)
     if f > 0:
         percent = (count / float(f)) * 100.0
-        return '{0:.2f}'.format(percent)
-    return '0'
+        return percent
+    return 0
+
+@register.simple_tag
+def evaluation_percent_display(evaluations, meeting_item, factors, measure_value):
+    percent = evaluation_percent(evaluations, meeting_item, factors, measure_value)
+    return '{0:.2f}'.format(percent)

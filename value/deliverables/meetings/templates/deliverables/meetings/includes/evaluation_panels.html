@@ -23,7 +23,7 @@
                 <div class="progress" style="margin-bottom: 0">
                   {% for measure_value in measure_values %}
                     <div class="progress-bar" style="width: {% evaluation_percent evaluations=evaluations meeting_item=meeting_item factors=factors measure_value=measure_value %}%; background-color: {{ measure_value.color }}">
-                      <span class="measure-percent" data-measure-id="{{ measure_value.pk }}">{% evaluation_percent evaluations=evaluations meeting_item=meeting_item factors=factors measure_value=measure_value %}</span>%
+                      <span class="measure-percent" data-measure-id="{{ measure_value.pk }}">{% evaluation_percent_display evaluations=evaluations meeting_item=meeting_item factors=factors measure_value=measure_value %}</span>%
                     </div>
                   {% endfor %}
                 </div>

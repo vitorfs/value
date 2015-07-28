@@ -1,4 +1,3 @@
-from value.utils.svglib import SvgRenderer
 from reportlab.graphics import renderPDF
 import xml.dom.minidom
 import json
@@ -16,6 +15,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.db import transaction
 
+from value.utils.svglib import SvgRenderer
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
 from value.deliverables.models import Deliverable, DecisionItemLookup, Rationale, DecisionItem

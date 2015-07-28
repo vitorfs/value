@@ -35,7 +35,8 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values, counte
         if meeting_item.pk == evaluation.meeting_item.pk \
                 and factor.pk == evaluation.factor.pk \
                 and evaluation.measure.pk == evaluation.factor.measure.pk:
-            is_evaluated = True
+            if evaluation.measure_value != None:
+                is_evaluated = True
             if evaluation.rationale and evaluation.rationale.text != '':
                 rationale_text = evaluation.rationale.text
                 no_comment = ''
