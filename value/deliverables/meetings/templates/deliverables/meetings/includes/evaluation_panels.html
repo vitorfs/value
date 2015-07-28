@@ -1,4 +1,4 @@
-{% load evaluation_percent evaluation_options panel_class %}
+{% load evaluation_percent evaluation_options %}
 
 <form method="post" action="{% url 'deliverables:meetings:save_evaluation' meeting.deliverable.pk meeting.pk %}">
   {% csrf_token %}
@@ -9,7 +9,7 @@
         <table style="width: 100%">
           <body>
             <tr>
-              <td style="width: 25%">
+              <td style="width: 30%">
                 <p class="panel-title">
                   <a href="javascript:void(0);" class="btn-toggle">{{ meeting_item.decision_item.name }}</a>
                   <span data-toggle="tooltip" title="Click to view details" data-container="body">
@@ -36,15 +36,20 @@
         <table class="table table-hover table-evaluate" data-meeting-item-id="{{ meeting_item.pk }}">
           <thead>
             <tr>
-              <th style="width: 25%">Value Factors</th>
+              <th style="width: 10%">Group</th>
+              <th style="width: 20%">Factor</th>
               {% for measure_value in measure_values %}
                 <th class="text-center" style="width: {{ relative_col_size }}">{{ measure_value.description }}</th>
               {% endfor %}
             </tr>
           </thead>
           <tbody>
-            {% for factor in factors %}
-              {% evaluation_options evaluations=evaluations meeting_item=meeting_item factor=factor measure_values=measure_values %}
+            {% regroup factors by group as group_list %}
+
+            {% for group in group_list %}
+              {% for factor in group.list %}
+                {% evaluation_options evaluations=evaluations meeting_item=meeting_item factor=factor measure_values=measure_values counter=forloop.counter rowspan=group.list|length %}
+              {% endfor %}
             {% endfor %}
           </tbody>
         </table>

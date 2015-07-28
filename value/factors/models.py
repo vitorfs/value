@@ -23,14 +23,14 @@ class Factor(models.Model):
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
 
     class Meta:
-        ordering = ('name',)
+        ordering = ('group', 'name',)
 
     def __unicode__(self):
         return self.name
 
     @staticmethod
     def list():
-        factors = Factor.objects.filter(is_active=True).exclude(measure=None).order_by('measure__name', 'name',)
+        factors = Factor.objects.filter(is_active=True).exclude(measure=None)
         if not factors:
             raise FactorsImproperlyConfigured('There is no active factor in the application.')
         return factors

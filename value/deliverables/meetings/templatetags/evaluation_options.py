@@ -20,7 +20,7 @@ def selected(is_evaluated):
     return ''
 
 @register.simple_tag
-def evaluation_options(evaluations, meeting_item, factor, measure_values):
+def evaluation_options(evaluations, meeting_item, factor, measure_values, counter, rowspan):
 
     
     if meeting_item.meeting.is_closed():
@@ -40,27 +40,31 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values):
                 rationale_text = evaluation.rationale.text
                 no_comment = ''
 
-    html = '''<tr{0}
- data-factor-id="{1}"
- data-measure-id="{2}">
-<td>
- <a href="javascript:void(0)" class="js-factor-description" data-content="{6}" data-container="#factor-description-container" data-trigger="focus">{3}</a>
+    html = '<tr{0} data-factor-id="{1}" data-measure-id="{2}">'.format(
+            selected(is_evaluated), 
+            factor.pk, 
+            factor.measure.pk
+        )
+
+    if counter == 1:
+        html += '<td rowspan="{0}" style="vertical-align: middle; font-weight: bold; border-right: 1px solid #dddddd; background-color: #fff!important;">{1}</td>'.format(rowspan, factor.group)
+
+    html += '''<td>
+ <a href="javascript:void(0)" class="js-factor-description" data-content="{3}" data-container="#factor-description-container" data-trigger="focus">{0}</a>
  <a href="javascript:void(0);" 
- class="btn-rationale js-rationale {4} pull-right" 
+ class="btn-rationale js-rationale {1} pull-right" 
  data-toggle="popover" 
  data-placement="right" 
- title="Add a rationale for {3}"
+ title="Add a rationale for {0}"
  data-content="" 
- data-rationale="{5}">
+ data-rationale="{2}">
 <span class="fa fa-comment"></span>
 </a></td>'''.format(
-        selected(is_evaluated),
-        factor.pk, 
-        factor.measure.pk, 
         escape(factor.name),
         no_comment,
         escape(rationale_text),
-        escape(factor.description))
+        escape(factor.description)
+    )
 
     for measure_value in measure_values:
         is_checked = False

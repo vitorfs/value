@@ -134,7 +134,7 @@ def evaluate(request, deliverable_id, meeting_id):
 
     count = measure_values.count()
     if count > 0:
-        size = 75.0/count
+        size = 70.0/count
         relative_col_size = '{0}%'.format(size)
     else:
         relative_col_size = 'auto'
