@@ -1,35 +1,9 @@
 {% extends 'base.html' %}
 
+{% load staticfiles %}
+
 {% block javascript %}
-  <script>
-    $(function () {
-
-      $(".js-confirm-group-deletion").click(function () {
-
-        var group_id = $(this).attr("data-group-id");
-        var group_name = $(this).attr("data-group-name");
-        $("#form-delete-group [name='group_id']").val(group_id)
-        $("#form-delete-group .group-name").text(group_name);
-        $("#delete-group").modal("show");
-      });
-
-      var updateSelection = function (evt) {
-        var factor_id = $(this).attr("data-factor-id");
-        console.log(factor_id);
-      };
-
-      $("#available-factors").sortable({
-        group: "factors"
-      });
-
-      $(".factors-group").sortable({
-        group: "factors",
-        onAdd: updateSelection,
-        onRemove: updateSelection
-      });
-
-    });
-  </script>
+  <script type="text/javascript" src="{% static 'js/factors/groups.js' %}"></script>
 {% endblock javascript %}
 
 {% block breadcrumb %}
@@ -58,8 +32,8 @@
           <div class="panel-heading">
             <h3 class="panel-title">Available Factors</h3>
           </div>
-          <ul class="list-group sortable" id="available-factors" style="min-height: 38px;">
-            {% for factor in factors %}
+          <ul class="list-group sortable" id="available-factors" data-group-id="" style="min-height: 38px;">
+            {% for factor in available_factors %}
               <li class="list-group-item" data-factor-id="{{ factor.pk }}">{{ factor.name }}</li>
             {% endfor %}
           </ul>
@@ -79,7 +53,9 @@
                 </h3>
               </div>
               <ul class="list-group factors-group sortable" data-group-id="{{ group.pk }}" style="min-height: 38px;">
-
+                {% for factor in group.factor_set.all %}
+                  <li class="list-group-item" data-factor-id="{{ factor.pk }}">{{ factor.name }}</li>
+                {% endfor %}
               </ul>
             </div>
           </div>
@@ -97,7 +73,7 @@
     </div>
   {% endif %}
 
-  <form method="post" action="{% url 'factors:add_group' %}">
+  <form method="post" action="{% url 'factors:add_group' %}" id="form-add-factor">
     {% csrf_token %}
     <div class="modal fade" id="new-group">
       <div class="modal-dialog modal-sm">
@@ -118,9 +94,15 @@
     </div>
   </form>
 
-  <form method="post" action="" id="form-delete-group">
+  <form method="post" action="{% url 'factors:add_factor_group' %}" id="form-add-factor-group">
     {% csrf_token %}
-    <input type="hidden" name="group_id">
+    <input type="hidden" id="id_group" name="group">
+    <input type="hidden" id="id_factor" name="factor">
+  </form>
+
+  <form method="post" action="{% url 'factors:delete_group' %}" id="form-delete-group">
+    {% csrf_token %}
+    <input type="hidden" name="group">
     <div class="modal fade" id="delete-group">
       <div class="modal-dialog modal-sm">
         <div class="modal-content">

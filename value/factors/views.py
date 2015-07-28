@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
+from django.http import HttpResponse
 
 from value.factors.models import Factor, Group
 from value.factors.forms import FactorForm, GroupForm
@@ -61,17 +62,17 @@ def delete(request, factor_id):
 @user_passes_test(lambda user: user.is_superuser)
 def groups(request):
     groups = Group.objects.all()
-    factors = Factor.list()
+    available_factors = Factor.list().filter(group=None)
     form = GroupForm()
     return render(request, 'factors/groups.html', { 
             'groups': groups,
-            'factors': factors,
+            'available_factors': available_factors,
             'form': form 
         })
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
 @require_POST
+@user_passes_test(lambda user: user.is_superuser)
 def add_group(request):
     form = GroupForm(request.POST)
     if form.is_valid():
@@ -79,4 +80,32 @@ def add_group(request):
         messages.success(request, u'Group {0} successfully added!'.format(group.name))
     else:
         messages.error(request, u'Name is a required field!')
+    return redirect(reverse('factors:groups'))
+
+@login_required
+@require_POST
+@user_passes_test(lambda user: user.is_superuser)
+def add_factor_group(request):
+    factor_id = request.POST.get('factor')
+    group_id = request.POST.get('group', None)
+
+    factor = Factor.objects.get(pk=factor_id)
+    group = None
+    if group_id:
+        group = Group.objects.get(pk=group_id)
+    factor.group = group
+    factor.save()
+    return HttpResponse()
+
+@login_required
+@require_POST
+@user_passes_test(lambda user: user.is_superuser)
+def delete_group(request):
+    try:
+        group_id = request.POST.get('group')
+        group = Group.objects.get(pk=group_id)
+        group.delete()
+        messages.success(request, u'The group {0} was deleted successfully.'.format(group.name))
+    except Group.DoesNotExist:
+        pass
     return redirect(reverse('factors:groups'))

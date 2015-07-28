@@ -20,7 +20,7 @@ class Factor(models.Model):
     created_by = models.ForeignKey(User, related_name='factor_creation_user')
     updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(User, null=True, related_name='factor_update_user')
-    group = models.ForeignKey(Group, null=True)
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('name',)
