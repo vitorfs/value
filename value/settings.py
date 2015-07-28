@@ -1,4 +1,4 @@
-from decouple import config
+from decouple import config, Csv
 from unipath import Path
 import dj_database_url
 from django.contrib.messages import constants as message_constants
@@ -32,7 +32,9 @@ EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.
 EMAIL_FILE_PATH = PROJECT_DIR.parent.parent.child('maildumps')
 
 
-ALLOWED_HOSTS = ['127.0.0.1', 'valueproject.fi',]
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+
+print ALLOWED_HOSTS
 
 
 INSTALLED_APPS = (
