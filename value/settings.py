@@ -118,7 +118,7 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=False, cast=bool)
 
-DEFAULT_FROM_EMAIL = 'VALUE Project Team <noreply@valueproject.fi>'
+DEFAULT_FROM_EMAIL = 'VALUE Project Team <no-reply@valueproject.fi>'
 
 EMAIL_SUBJECT_PREFIX = '[VALUE Tool Report] '
 SERVER_EMAIL = 'application@valueproject.fi'
