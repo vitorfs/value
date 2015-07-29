@@ -142,7 +142,7 @@ class Highcharts(object):
                 percentage = round((votes / float(max_votes)) * 100.0, 2)
             else:
                 percentage = 0.0
-            data.append([factor.name, percentage])
+            data.append([u'{0} ({1})'.format(factor.name, factor.group.name), percentage])
 
         data = sorted(data, key=operator.itemgetter(1))
         data.reverse()
@@ -248,12 +248,14 @@ class Highcharts(object):
             data = {}
 
             for evaluation in evaluations:
-                data[evaluation.factor.name] = {}
+                label = u'<strong style="text-decoration: underline;">{0}:</strong> {1}'.format(evaluation.factor.group.name, evaluation.factor.name)
+                data[label] = {}
                 for value in evaluation.factor.measure.measurevalue_set.all():
-                    data[evaluation.factor.name][value.description] = 0
+                    data[label][value.description] = 0
 
             for evaluation in evaluations:
-                data[evaluation.factor.name][evaluation.measure_value.description] = data[evaluation.factor.name][evaluation.measure_value.description] + 1
+                label = u'<strong style="text-decoration: underline;">{0}:</strong> {1}'.format(evaluation.factor.group.name, evaluation.factor.name)
+                data[label][evaluation.measure_value.description] = data[label][evaluation.measure_value.description] + 1
 
             sorted_data = sorted(data.items(), key=operator.itemgetter(0))
 
