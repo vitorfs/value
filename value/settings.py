@@ -123,3 +123,5 @@ DEFAULT_FROM_EMAIL = 'VALUE Project Team <noreply@valueproject.fi>'
 
 EMAIL_SUBJECT_PREFIX = '[VALUE Tool Report] '
 SERVER_EMAIL = 'application@valueproject.fi'
+
+ENVIRONMENT_NAME = config('ENVIRONMENT_NAME', default='')

@@ -1,1 +1,1 @@
-Version rc-1.0.0
+Version rc-1.1.0

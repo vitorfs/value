@@ -1,7 +1,12 @@
+{% load environment %}
+
 <footer>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-xs-6 col-xs-offset-3">
+      <div class="col-xs-3">
+        <small class="text-muted">{% environment %}</small>
+      </div>
+      <div class="col-xs-6">
         <a href="http://www.oulu.fi/" target="_blank">University of Oulu</a>
         <span class="text-muted" style="margin: 0 10px">·</span>
         <a href="http://www.fidipro.fi/" target="_blank">FiDiPro</a>
