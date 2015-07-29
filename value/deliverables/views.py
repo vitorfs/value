@@ -76,7 +76,7 @@ def new(request):
 
             messages.success(request, u'The deliverable {0} was added successfully.'.format(deliverable.name))
 
-            return redirect(reverse('deliverables:deliverable', args=(deliverable.pk)))
+            return redirect(reverse('deliverables:deliverable', args=(deliverable.pk,)))
         else:
             messages.error(request, u'Please correct the error below.')
     else:
