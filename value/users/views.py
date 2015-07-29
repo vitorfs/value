@@ -31,7 +31,7 @@ def add(request):
 
 @login_required
 def user(request, user_id):
-    Form = modelform_factory(User, form=UserChangeForm, exclude=('date_joined',))
+    Form = modelform_factory(User, form=UserChangeForm, exclude=('date_joined', 'is_superuser', 'is_staff',))
     user = get_object_or_404(User, pk=user_id)
     if request.method == 'POST':
         form = Form(request.POST, instance=user)
