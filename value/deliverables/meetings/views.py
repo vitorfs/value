@@ -88,6 +88,7 @@ def new(request, deliverable_id):
 
 @login_required
 def meeting(request, deliverable_id, meeting_id):
+    return redirect(reverse('deliverables:meetings:evaluate', args=(deliverable_id, meeting_id)))
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     stakeholders = [meeting_stakeholder.stakeholder for meeting_stakeholder in meeting.meetingstakeholder_set.select_related('stakeholder')]
     available_stakeholders = User.objects \
@@ -450,20 +451,33 @@ def settings(request, deliverable_id, meeting_id):
             messages.error(request, u'Please correct the error below.')
     else:
         form = MeetingForm(instance=meeting)
-    return render(request, 'deliverables/meetings/settings.html', {
+    return render(request, 'deliverables/meetings/settings/details.html', {
             'meeting': meeting,
             'form': form
             })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
-@transaction.atomic
-@require_POST
+def decision_items(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    return render(request, 'deliverables/meetings/settings/items.html', { 'meeting': meeting })
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+def stakeholders(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    return render(request, 'deliverables/meetings/settings/items.html', { 'meeting': meeting })
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
 def delete(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    meeting.delete()
-    messages.success(request, u'The meeeting {0} was completly deleted successfully.'.format(meeting.name))
-    return redirect(reverse('deliverables:deliverable', args=(meeting.deliverable.pk,)))
+    if request.method == 'POST':
+        meeting.delete()
+        messages.success(request, u'The meeeting {0} was completly deleted successfully.'.format(meeting.name))
+        return redirect(reverse('deliverables:deliverable', args=(meeting.deliverable.pk,)))
+    else:
+        return render(request, 'deliverables/meetings/settings/delete.html', { 'meeting': meeting })
 
 @login_required
 def download(request, deliverable_id, meeting_id):

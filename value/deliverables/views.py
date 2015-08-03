@@ -141,7 +141,7 @@ def import_decision_items(request):
 @login_required
 def deliverable(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    return render(request, 'deliverables/deliverable.html', { 'deliverable': deliverable })
+    return render(request, 'deliverables/meetings.html', { 'deliverable': deliverable })
 
 @login_required
 def stakeholders(request, deliverable_id):
@@ -311,12 +311,6 @@ def details_decision_item(request, deliverable_id, decision_item_id):
             'item': decision_item,
             'fields': fields
             })
-
-@login_required
-@user_passes_test(lambda user: user.is_superuser)
-def historical_dashboard(request, deliverable_id):
-    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    return render(request, 'deliverables/historical_dashboard.html', { 'deliverable': deliverable })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)

@@ -1,64 +1,10 @@
 <h2 style="margin-bottom: 20px;"><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a> <span style="font-weight: 300;">/</span> <a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></h2>
 
-{% with manager=meeting.deliverable.manager %}
 <ul class="nav nav-tabs" style="margin-bottom: 20px">
-  <li role="presentation"{% if active == 'meeting_summary' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}"><span class="fa fa-book"></span> Summary</a></li>
   <li role="presentation"{% if active == 'evaluate' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:evaluate' meeting.deliverable.pk meeting.pk %}"><span class="fa fa-gavel"></span> Evaluate</a></li>
   <li role="presentation"{% if active == 'dashboard' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:dashboard' meeting.deliverable.pk meeting.pk %}"><span class="fa fa-bar-chart"></span> Dashboard</a></li>
-  {% if user == manager %}
+  <li role="presentation"{% if active == 'meeting_summary' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}"><span class="fa fa-book"></span> Summary</a></li>
+  {% if user == meeting.deliverable.manager %}
     <li role="presentation"{% if active == 'settings' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:settings' meeting.deliverable.pk meeting.pk %}"><span class="fa fa-wrench"></span> Settings</a></li>
   {% endif %}
-  <li class="dropdown pull-right" role="presentation">
-    <a aria-expanded="false" role="button" href="#" data-toggle="dropdown" class="dropdown-toggle">
-      <span class="fa fa-laptop"></span> Meetings <span class="caret"></span>
-    </a>
-    <ul role="menu" class="dropdown-menu dropdown-menu-right">
-      {% if meeting.deliverable.get_ongoing_meetings.exists %}
-        <li role="presentation" class="dropdown-header">Ongoing meetings</li>
-        {% for ongoing_meeting in meeting.deliverable.get_ongoing_meetings.all %}
-          <li{% if ongoing_meeting.pk == meeting.pk %} class="active"{% endif %}>
-            <a href="{% url 'deliverables:meetings:meeting' ongoing_meeting.deliverable.pk ongoing_meeting.pk %}">
-              {% if ongoing_meeting.pk == meeting.pk %}
-                <span class="glyphicon glyphicon-check"></span>
-              {% else %}
-                <span class="glyphicon glyphicon-unchecked"></span>
-              {% endif %}
-              {{ ongoing_meeting.name }}
-            </a>
-          </li>
-        {% endfor %}
-      {% endif %}
-      {% if meeting.deliverable.get_closed_meetings.exists %}
-        <li role="presentation" class="dropdown-header">Past meetings</li>
-        {% for closed_meeting in meeting.deliverable.get_closed_meetings.all %}
-          <li{% if closed_meeting.pk == meeting.pk %} class="active"{% endif %}>
-            <a href="{% url 'deliverables:meetings:meeting' closed_meeting.deliverable.pk closed_meeting.pk %}">
-              {% if closed_meeting.pk == meeting.pk %}
-                <span class="glyphicon glyphicon-check"></span>
-              {% else %}
-                <span class="glyphicon glyphicon-unchecked"></span>
-              {% endif %}
-              {{ closed_meeting.name }}
-            </a>
-          </li>
-        {% endfor %}
-      {% endif %}
-      {% if user == manager %}
-        <li class="divider"></li>
-        <li>
-          <a href="{% url 'deliverables:meetings:new' meeting.deliverable.pk %}">
-            <span class="glyphicon glyphicon-plus"></span>
-            New meeting
-          </a>
-        </li>
-        <li>
-          <a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">
-            <span class="fa fa-rotate-left"></span>
-            Return to {{ meeting.deliverable.name }}
-          </a>
-        </li>
-      {% endif %}
-    </ul>
-  </li>
 </ul>
-{% endwith %}

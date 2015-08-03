@@ -19,8 +19,6 @@ urlpatterns = patterns('value.deliverables.views',
     url(r'^(?P<deliverable_id>\d+)/decision-items/(?P<decision_item_id>\d+)/$', 'edit_decision_item', name='edit_decision_item'),
     url(r'^(?P<deliverable_id>\d+)/decision-items/(?P<decision_item_id>\d+)/delete/$', 'delete_decision_item', name='delete_decision_item'),
     url(r'^(?P<deliverable_id>\d+)/decision-items/(?P<decision_item_id>\d+)/details/$', 'details_decision_item', name='details_decision_item'),
-    
-    url(r'^(?P<deliverable_id>\d+)/dashboard/$', 'historical_dashboard', name='historical_dashboard'),
 
     url(r'^(?P<deliverable_id>\d+)/settings/$', 'settings', name='settings'),
 

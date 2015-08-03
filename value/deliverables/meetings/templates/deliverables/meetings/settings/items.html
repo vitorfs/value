@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a></li>
+    <li><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
+    <li class="active">Settings</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block tabs %}
+  {% include 'deliverables/meetings/includes/menu.html' with meeting=meeting active='settings' %}  
+{% endblock tabs %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-2 col-md-3 col-sm-4">
+      {% include 'deliverables/meetings/settings/includes/menu.html' with meeting=meeting active='items' %}
+    </div>
+    <div class="col-lg-10 col-md-9 col-sm-8">
+
+    </div>
+  </div>
+{% endblock content %}
