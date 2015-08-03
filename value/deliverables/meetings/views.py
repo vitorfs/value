@@ -90,17 +90,10 @@ def new(request, deliverable_id):
 def meeting(request, deliverable_id, meeting_id):
     return redirect(reverse('deliverables:meetings:evaluate', args=(deliverable_id, meeting_id)))
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    stakeholders = [meeting_stakeholder.stakeholder for meeting_stakeholder in meeting.meetingstakeholder_set.select_related('stakeholder')]
-    available_stakeholders = User.objects \
-            .exclude(id__in=meeting.meetingstakeholder_set.values('stakeholder__id')) \
-            .filter(is_active=True) \
-            .order_by('first_name', 'last_name', 'username')
     decision_items_in_use = meeting.meetingitem_set.values('decision_item__id')
     available_decision_items = meeting.deliverable.decisionitem_set.exclude(id__in=decision_items_in_use)
     return render(request, 'deliverables/meetings/meeting.html', { 
             'meeting': meeting, 
-            'stakeholders': stakeholders,
-            'available_stakeholders': available_stakeholders,
             'available_decision_items': available_decision_items
         })
 
@@ -466,7 +459,16 @@ def decision_items(request, deliverable_id, meeting_id):
 @user_passes_test(lambda user: user.is_superuser)
 def stakeholders(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    return render(request, 'deliverables/meetings/settings/items.html', { 'meeting': meeting })
+    stakeholders = [meeting_stakeholder.stakeholder for meeting_stakeholder in meeting.meetingstakeholder_set.select_related('stakeholder')]
+    available_stakeholders = User.objects \
+            .exclude(id__in=meeting.meetingstakeholder_set.values('stakeholder__id')) \
+            .filter(is_active=True) \
+            .order_by('first_name', 'last_name', 'username')
+    return render(request, 'deliverables/meetings/settings/stakeholders.html', { 
+            'meeting': meeting,
+            'stakeholders': stakeholders,
+            'available_stakeholders': available_stakeholders,
+        })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
@@ -511,7 +513,7 @@ def remove_stakeholder(request, deliverable_id, meeting_id):
         messages.success(request, u'{0} was successfully removed from the meeting!'.format(user.profile.get_display_name()))
     else:
         messages.warning(request, 'You cannot remove yourself from the meeting.')
-    return redirect(reverse('deliverables:meetings:meeting', args=(deliverable_id, meeting_id)))
+    return redirect(reverse('deliverables:meetings:stakeholders', args=(deliverable_id, meeting_id)))
 
 @login_required
 @require_POST
@@ -528,7 +530,7 @@ def add_stakeholders(request, deliverable_id, meeting_id):
         messages.success(request, u'Stakeholders sucessfully added to the meeting!')
     else:
         messages.warning(request, u'Select at least one stakeholder to add.')
-    return redirect(reverse('deliverables:meetings:meeting', args=(deliverable_id, meeting_id)))
+    return redirect(reverse('deliverables:meetings:stakeholders', args=(deliverable_id, meeting_id)))
 
 @login_required
 @require_POST
