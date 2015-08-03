@@ -1,4 +1,4 @@
-<h2 style="margin-bottom: 20px;"><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></h2>
+<h2 style="margin-bottom: 20px; font-weight: 300;"><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></h2>
 
 <ul class="nav nav-tabs" style="margin-bottom: 20px">
   <li role="presentation"{% if active == 'meetings' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:index' deliverable.pk %}"><span class="fa fa-laptop"></span> Meetings</a></li>

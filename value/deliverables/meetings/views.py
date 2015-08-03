@@ -89,13 +89,6 @@ def new(request, deliverable_id):
 @login_required
 def meeting(request, deliverable_id, meeting_id):
     return redirect(reverse('deliverables:meetings:evaluate', args=(deliverable_id, meeting_id)))
-    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    decision_items_in_use = meeting.meetingitem_set.values('decision_item__id')
-    available_decision_items = meeting.deliverable.decisionitem_set.exclude(id__in=decision_items_in_use)
-    return render(request, 'deliverables/meetings/meeting.html', { 
-            'meeting': meeting, 
-            'available_decision_items': available_decision_items
-        })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
@@ -453,7 +446,12 @@ def settings(request, deliverable_id, meeting_id):
 @user_passes_test(lambda user: user.is_superuser)
 def decision_items(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    return render(request, 'deliverables/meetings/settings/items.html', { 'meeting': meeting })
+    decision_items_in_use = meeting.meetingitem_set.values('decision_item__id')
+    available_decision_items = meeting.deliverable.decisionitem_set.exclude(id__in=decision_items_in_use)
+    return render(request, 'deliverables/meetings/settings/items.html', { 
+            'meeting': meeting, 
+            'available_decision_items': available_decision_items
+        })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
@@ -544,7 +542,7 @@ def remove_decision_items(request, deliverable_id, meeting_id):
         messages.success(request, u'Decision items sucessfully removed from the meeting!')
     else:
         messages.warning(request, u'Select at least one decision item to remove.')
-    return redirect(reverse('deliverables:meetings:meeting', args=(deliverable_id, meeting_id)))
+    return redirect(reverse('deliverables:meetings:decision_items', args=(deliverable_id, meeting_id)))
 
 @login_required
 @require_POST
@@ -561,4 +559,4 @@ def add_decision_items(request, deliverable_id, meeting_id):
         messages.success(request, u'Decision items sucessfully added to the meeting!')
     else:
         messages.warning(request, u'Select at least one decision item to add.')
-    return redirect(reverse('deliverables:meetings:meeting', args=(deliverable_id, meeting_id)))
+    return redirect(reverse('deliverables:meetings:decision_items', args=(deliverable_id, meeting_id)))

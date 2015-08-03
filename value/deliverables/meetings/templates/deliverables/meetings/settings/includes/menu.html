@@ -1,7 +1,7 @@
 <div class="panel panel-default panel-menu">
   <div class="panel-heading">Meeting settings</div>
   <div class="list-group">
-    <a href="{% url 'deliverables:meetings:settings' meeting.deliverable.pk meeting.pk %}" class="list-group-item{% if active = 'details' %} active{% endif %}">Details</a>
+    <a href="{% url 'deliverables:meetings:settings' meeting.deliverable.pk meeting.pk %}" class="list-group-item{% if active = 'details' %} active{% endif %}">Meeting details</a>
     <a href="{% url 'deliverables:meetings:decision_items' meeting.deliverable.pk meeting.pk %}" class="list-group-item{% if active = 'items' %} active{% endif %}">Decision items</a>
     <a href="{% url 'deliverables:meetings:stakeholders' meeting.deliverable.pk meeting.pk %}" class="list-group-item{% if active = 'stakeholders' %} active{% endif %}">Stakeholders</a>
     <a href="{% url 'deliverables:meetings:delete' meeting.deliverable.pk meeting.pk %}" class="list-group-item{% if active = 'delete' %} active{% endif %}">Delete meeting</a>

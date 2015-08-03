@@ -101,7 +101,29 @@
     {% endwith %}
     </div>
 
-
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Stakeholders</h3>
+      </div>
+      <div class="panel-body">
+        {% if meeting.is_closed %}
+          {% include 'includes/users_panel_group.html' with stakeholders=stakeholders %}
+        {% else %}
+          <div class="alert alert-info alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            Click to remove a stakeholder from the meeting.
+          </div>
+          {% if user == meeting.deliverable.manager %}
+            {% include 'includes/users_panel_group.html' with stakeholders=stakeholders group_actions='removeable' %}
+          {% else %}
+            {% include 'includes/users_panel_group.html' with stakeholders=stakeholders %}
+          {% endif %}
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteStakeholder" style="margin-top: 20px">
+            <span class="glyphicon glyphicon-envelope"></span> Invite
+          </button>
+        {% endif %}
+      </div>
+    </div>
 
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -172,6 +194,41 @@
       </div>
     </div>
 
+    <form method="post" action="{% url 'deliverables:meetings:add_stakeholders' meeting.deliverable.pk meeting.pk %}">
+      {% csrf_token %}
+      <div class="modal fade" id="inviteStakeholder" tabindex="-1" role="dialog" aria-labelledby="inviteStakeholderTitle" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="inviteStakeholderTitle">Invite stakeholder</h4>
+            </div>
+            <div class="modal-body">
+              {% if available_stakeholders %}
+                <div class="alert alert-info alert-dismissible fade in" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  Click to add a stakeholder to the meeting.
+                </div>
+                {% include 'includes/users_panel_group.html' with stakeholders=available_stakeholders group_actions='selectable' %}
+              {% else %}
+                <div class="well" style="margin-bottom: 0">
+                  <div class="text-center" style="padding: 2em 0;">
+                    <span class="fa fa-users text-muted" style="font-size: 2.5em"></span>
+                    <h4 style="margin: 1em 0;">There is no stakeholder available.</h4>
+                    <a href="{% url 'users:add' %}" class="btn btn-primary">Create new user</a>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Confirm</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
     <form method="post" action="{% url 'deliverables:meetings:add_decision_items' meeting.deliverable.pk meeting.pk %}">
       {% csrf_token %}
       <div class="modal fade" id="add-decision-items" tabindex="-1" role="dialog" aria-labelledby="add-decision-items-title" aria-hidden="true">
@@ -230,6 +287,25 @@
       </div>
     </form>
 
-
+    <form method="post" action="{% url 'deliverables:meetings:remove_stakeholder' meeting.deliverable.pk meeting.pk %}">
+      {% csrf_token %}
+      <input type="hidden" name="stakeholder" id="remove-stakeholder-id">
+      <div class="modal fade" id="remove-stakeholder">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">Are you sure?</h4>
+            </div>
+            <div class="modal-body">
+              <p>Removing the stakeholder <strong class="remove-stakeholder-name"></strong> from the meeting will also remove all related evaluations.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" id="confirm-deletion" class="btn btn-danger btn-block">Remove <span class="remove-stakeholder-name"></span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
 
 {% endblock content %}
