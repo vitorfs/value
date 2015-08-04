@@ -115,6 +115,7 @@ def open_meeting(request, deliverable_id, meeting_id):
 @login_required
 def evaluate(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    
     factors = Factor.list().select_related('measure')
 
     measure_values = factors[0].measure.measurevalue_set.all()
@@ -459,6 +460,20 @@ def factors_groups_chart(request, deliverable_id, meeting_id, meeting_item_id):
             'chart': meeting_item,
             'chart_uri': 'features',
             'stakeholder_ids': stakeholder_ids,
+            'dump': dump
+            })
+
+@login_required
+def value_ranking(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    chart = Highcharts()
+    options = chart.value_ranking(meeting)
+    dump = json.dumps(options)
+    return render(request, 'deliverables/meetings/dashboard/decision_items_overview.html', { 
+            'meeting': meeting,
+            'chart_page_title': 'Value Ranking',
+            'chart_menu_active': 'value_ranking',
+            'chart_uri': 'value-ranking',
             'dump': dump
             })
 

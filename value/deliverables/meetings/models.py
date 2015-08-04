@@ -125,8 +125,6 @@ class MeetingItem(models.Model):
 
         with transaction.atomic():
 
-            measure_value_ranking = measure.measurevalue_set.all().order_by('order')[0]
-
             for measure_value in measure.measurevalue_set.all():
                 Ranking.objects.get_or_create(meeting_item=self, measure_value=measure_value)
 
@@ -136,10 +134,13 @@ class MeetingItem(models.Model):
                     percentage = round((votes / float(max_evaluations)) * 100.0, 2)
                 else:
                     percentage = 0.0
-                if measure_value_ranking.id == ranking['measure_value__id']:
-                    self.value_ranking = percentage
-                    self.save()
                 Ranking.objects.filter(meeting_item=self, measure_value__id=ranking['measure_value__id']).update(raw_votes=votes, percentage_votes=percentage)
+
+            rankings = Ranking.objects.filter(meeting_item=self).order_by('measure_value__order')
+            highest = rankings.first()
+            lowest = rankings.last()
+            self.value_ranking = highest.percentage_votes - lowest.percentage_votes
+            self.save()
 
 
 class Ranking(models.Model):

@@ -5,4 +5,5 @@
   <li role="presentation"{% if active == 'features_acceptance' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:features_acceptance' meeting.deliverable.pk meeting.pk %}">Decision Items Acceptance</a></li>
   <li role="presentation"{% if active == 'decision_items_overview' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:decision_items_overview' meeting.deliverable.pk meeting.pk %}">Decision Items Overview</a></li>
   <li role="presentation"{% if active == 'features_comparison' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:features_comparison' meeting.deliverable.pk meeting.pk %}">Decision Items Comparison</a></li>
+  <li role="presentation"{% if active == 'value_ranking' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:value_ranking' meeting.deliverable.pk meeting.pk %}">Value Ranking</a></li>
 </ul>
