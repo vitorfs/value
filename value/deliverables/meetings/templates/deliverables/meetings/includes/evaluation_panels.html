@@ -9,7 +9,7 @@
         <table style="width: 100%">
           <body>
             <tr>
-              <td style="width: 30%">
+              <td style="width: 25%">
                 <p class="panel-title">
                   <a href="javascript:void(0);" class="btn-toggle">{{ meeting_item.decision_item.name }}</a>
                   <span data-toggle="tooltip" title="Click to view details" data-container="body">
@@ -36,8 +36,7 @@
         <table class="table table-hover table-evaluate" data-meeting-item-id="{{ meeting_item.pk }}">
           <thead>
             <tr>
-              <th style="width: 10%">Group</th>
-              <th style="width: 20%">Factor</th>
+              <th style="width: 25%">Factor</th>
               {% for measure_value in measure_values %}
                 <th class="text-center" style="width: {{ relative_col_size }}">{{ measure_value.description }}</th>
               {% endfor %}
@@ -48,7 +47,7 @@
 
             {% for group in group_list %}
               {% for factor in group.list %}
-                {% evaluation_options evaluations=evaluations meeting_item=meeting_item factor=factor measure_values=measure_values counter=forloop.counter rowspan=group.list|length %}
+                {% evaluation_options evaluations=evaluations meeting_item=meeting_item factor=factor measure_values=measure_values %}
               {% endfor %}
             {% endfor %}
           </tbody>

@@ -22,6 +22,9 @@ urlpatterns = patterns('value.deliverables.meetings.views',
     url(r'^(?P<meeting_id>\d+)/dashboard/features/$', 'features', name='features'),
     url(r'^(?P<meeting_id>\d+)/dashboard/features/(?P<meeting_item_id>\d+)/$', 'features_chart', name='features_chart'),
 
+    url(r'^(?P<meeting_id>\d+)/dashboard/factors-groups-comparison/$', 'factors_groups', name='factors_groups'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/factors-groups-comparison/(?P<meeting_item_id>\d+)/$', 'factors_groups_chart', name='factors_groups_chart'),
+
     url(r'^(?P<meeting_id>\d+)/dashboard/features-acceptance/$', 'features_acceptance', name='features_acceptance'),
     url(r'^(?P<meeting_id>\d+)/dashboard/features-acceptance/(?P<meeting_item_id>\d+)/$', 'features_acceptance_chart', name='features_acceptance_chart'),
 

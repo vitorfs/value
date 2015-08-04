@@ -1,7 +1,7 @@
 var simulate = function () {
   // :TODO Remove from prodution server
   $(".table-evaluate tbody tr").each(function () {
-    var i = Math.floor(Math.random() * 4) + 1;
+    var i = Math.floor(Math.random() * 3) + 1;
     $("td:eq(" + i + ")", this).click();
   });
 };

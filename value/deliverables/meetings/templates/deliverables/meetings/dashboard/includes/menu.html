@@ -1,6 +1,7 @@
 <ul class="nav nav-pills nav-stacked">
   <li role="presentation"{% if active == 'overview' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:dashboard' meeting.deliverable.pk meeting.pk %}">Overview</a></li>
   <li role="presentation"{% if active == 'features' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">Factors Comparison</a></li>
+  <li role="presentation"{% if active == 'factors_groups' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:factors_groups' meeting.deliverable.pk meeting.pk %}">Factors Groups Comparison</a></li>
   <li role="presentation"{% if active == 'features_acceptance' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:features_acceptance' meeting.deliverable.pk meeting.pk %}">Decision Items Acceptance</a></li>
   <li role="presentation"{% if active == 'decision_items_overview' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:decision_items_overview' meeting.deliverable.pk meeting.pk %}">Decision Items Overview</a></li>
   <li role="presentation"{% if active == 'features_comparison' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:features_comparison' meeting.deliverable.pk meeting.pk %}">Decision Items Comparison</a></li>

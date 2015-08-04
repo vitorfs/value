@@ -20,7 +20,7 @@ def selected(is_evaluated):
     return ''
 
 @register.simple_tag
-def evaluation_options(evaluations, meeting_item, factor, measure_values, counter, rowspan):
+def evaluation_options(evaluations, meeting_item, factor, measure_values):
 
     
     if meeting_item.meeting.is_closed():
@@ -47,8 +47,9 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values, counte
             factor.measure.pk
         )
 
-    if counter == 1:
-        html += '<td rowspan="{0}" style="vertical-align: middle; font-weight: bold; border-right: 1px solid #dddddd; background-color: #fff!important;">{1}</td>'.format(rowspan, factor.group)
+    factor_name = factor.name
+    if factor.group:
+        factor_name = u'<strong>{0}</strong>: {1}'.format(escape(factor.group.name), escape(factor.name))
 
     html += '''<td>
  <a href="javascript:void(0)" class="js-factor-description" data-content="{3}" data-container="#factor-description-container" data-trigger="focus">{0}</a>
@@ -61,7 +62,7 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values, counte
  data-rationale="{2}">
 <span class="fa fa-comment"></span>
 </a></td>'''.format(
-        escape(factor.name),
+        factor_name,
         no_comment,
         escape(rationale_text),
         escape(factor.description)

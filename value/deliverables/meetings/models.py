@@ -107,7 +107,7 @@ class MeetingItem(models.Model):
     value_ranking = models.FloatField(default=0.0)
 
     class Meta:
-        ordering = ('-value_ranking',)
+        ordering = ('decision_item__name',)
 
     def __unicode__(self):
         return '{0} ({1})'.format(self.decision_item.name, self.meeting.name)

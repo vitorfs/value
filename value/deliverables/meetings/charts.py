@@ -1,10 +1,15 @@
 import operator
+import pprint
 
-from django.db.models import Count
 from django.contrib.auth.models import User
+from django.db.models import Count
+from django.utils.html import escape
 
 from value.factors.models import Factor
 from value.deliverables.meetings.models import Meeting, MeetingItem, Evaluation
+
+
+pp = pprint.PrettyPrinter(indent=4, depth=6)
 
 def get_stakeholders_group_names(stakeholder_ids):
     stakeholders = User.objects.filter(id__in=stakeholder_ids)
@@ -13,7 +18,7 @@ def get_stakeholders_group_names(stakeholder_ids):
         for group in stakeholder.groups.all():
             groups.add(group.name)
     groups_text = u', '.join(groups)
-    return groups_text
+    return escape(groups_text)
 
 class Highcharts(object):
 
@@ -392,7 +397,7 @@ class Highcharts(object):
         groups_text = get_stakeholders_group_names(stakeholder_ids)
         options = {
                 'chart': { 'type': 'pie' },
-                'title': { 'text': u'{0} Acceptance'.format(item.decision_item.name) },
+                'title': { 'text': u'{0} Acceptance'.format(escape(item.decision_item.name)) },
                 'subtitle': { 'text': u'{0} opinion. Click the slices to view value factors.'.format(groups_text) },
                 'plotOptions': { 'series': { 'dataLabels': { 'enabled': True, 'format': '{point.name}: {point.y} votes' } } },
                 'exporting': { 'enabled': False },
@@ -426,5 +431,48 @@ class Highcharts(object):
             }]
         }
 
+        return options
+
+    def factors_groups(self, meeting_item, stakeholder_ids):
+        evaluations = Evaluation.get_evaluations_by_meeting(meeting_item.meeting) \
+                .filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
+
+        categories = evaluations.values_list('factor__group__name', flat=True).distinct().order_by('factor__group__name')
+
+        measure = meeting_item.meeting.deliverable.measure
+        series = []
+        for measure_value in measure.measurevalue_set.all():
+            serie = { 
+                    'name': measure_value.description, 
+                    'color': measure_value.color, 
+                    'pointPlacement': 'on', 
+                    'data': [] 
+                }
+            for category in categories:
+                count = evaluations.filter(factor__group__name=category, measure_value=measure_value).count()
+                serie['data'].append(count)
+            series.append(serie)
+
+        categories = [category if category else 'No group' for category in categories]
+
+        options = {
+            'chart': { 'polar': True, 'type': 'line' },
+            'title': { 'text': escape(meeting_item.decision_item.name) },
+            'xAxis': {
+                'categories': list(categories),
+                'tickmarkPlacement': 'on',
+                'lineWidth': 0
+            },
+            'yAxis': {
+                'gridLineInterpolation': 'polygon',
+                'min': 0
+            },
+            'tooltip': {
+                'shared': True,
+                'pointFormat': '<span style="color:{series.color}">{series.name}: <b>{point.y} votes</b><br/>'
+            },
+            'exporting': { 'enabled': False },
+            'series': series
+        }
         return options
 

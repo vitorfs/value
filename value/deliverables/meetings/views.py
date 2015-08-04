@@ -275,7 +275,7 @@ def features(request, deliverable_id, meeting_id):
         'chart_type': 'stacked_bars',
         'chart_uri': 'features',
         'chart_menu_active': 'features',
-        'chart_page_title': 'Features Selection'
+        'chart_page_title': 'Factors Comparison'
         })
 
 @login_required
@@ -422,6 +422,44 @@ def features_comparison_chart(request, deliverable_id, meeting_id, measure_value
             'chart_uri': 'features-comparison',
             'chart_menu_active': 'features_comparison',
             'chart_page_title': 'Features Comparison'
+            })
+
+@login_required
+def factors_groups(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    charts = meeting.meetingitem_set.all()
+    stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
+    return render(request, 'deliverables/meetings/dashboard/factors_groups_list.html', { 
+            'meeting': meeting,
+            'charts': charts,
+            'stakeholder_ids': stakeholder_ids,
+            'chart_type': 'stacked_bars',
+            'chart_uri': 'factors-groups-comparison',
+            'chart_menu_active': 'factors_groups',
+            'chart_page_title': 'Factors Groups Comparison'
+            })
+
+@login_required
+def factors_groups_chart(request, deliverable_id, meeting_id, meeting_item_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    meeting_item = meeting.meetingitem_set.get(pk=meeting_item_id)
+    stakeholder_ids = request.GET.getlist('stakeholder')
+    try:
+        stakeholder_ids = list(map(int, stakeholder_ids))
+    except:
+        pass
+    chart = Highcharts()
+    options = chart.factors_groups(meeting_item, stakeholder_ids)
+    dump = json.dumps(options)
+    if 'application/json' in request.META.get('HTTP_ACCEPT'):
+        return HttpResponse(dump, content_type='application/json')
+    else:
+        return render(request, 'deliverables/meetings/dashboard/factors_groups_popup.html', { 
+            'meeting': meeting,
+            'chart': meeting_item,
+            'chart_uri': 'features',
+            'stakeholder_ids': stakeholder_ids,
+            'dump': dump
             })
 
 @login_required

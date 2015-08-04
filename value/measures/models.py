@@ -103,7 +103,7 @@ class MeasureValue(models.Model):
     color = models.CharField(max_length=7, null=True, blank=True, choices=COLORS, default=PRIMARY_BLUE)
 
     class Meta:
-        ordering = ("order",)
+        ordering = ('order',)
 
     def __unicode__(self):
         return self.description
