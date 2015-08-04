@@ -477,28 +477,24 @@ class Highcharts(object):
         return options
 
     def value_ranking(self, meeting):
+        categories = meeting.meetingitem_set.all().values_list('decision_item__name', flat=True).order_by('-value_ranking')
+        data = meeting.meetingitem_set.all().values_list('value_ranking', flat=True).order_by('-value_ranking')
+
         options = {
-            'chart': {
-                'type': 'column'
+            'chart': { 'type': 'column' },
+            'title': { 'text': 'Value Ranking' },
+            'exporting': False,
+            'xAxis': { 
+                'categories': list(categories)
             },
-            'title': {
-                'text': 'Column chart with negative values'
-            },
-            'xAxis': {
-                'categories': ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
-            },
-            'credits': {
-                'enabled': False
+            'yAxis': {
+                'max': 100,
+                'min': -100
             },
             'series': [{
-                'name': 'John',
-                'data': [5, 3, 4, 7, 2]
-            }, {
-                'name': 'Jane',
-                'data': [2, -2, -3, 2, 1]
-            }, {
-                'name': 'Joe',
-                'data': [3, 4, 4, -2, 5]
+                'name': 'Ranking',
+                'data': list(data),
+                'color': '#337AB7'
             }]
         }
         return options
