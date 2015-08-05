@@ -15,13 +15,14 @@ from django.forms.models import modelform_factory, modelformset_factory
 from django.db import transaction
 from django.db.models.functions import Lower
 
+from value.application_settings.models import ApplicationSetting
 from value.core.exceptions import MeasureImproperlyConfigured, FactorsImproperlyConfigured
-from value.measures.models import Measure
-from value.factors.models import Factor
 from value.deliverables.models import Deliverable, DecisionItem, DecisionItemLookup
 from value.deliverables.meetings.models import Evaluation
 from value.deliverables.forms import UploadFileForm, DeliverableForm, DeliverableBasicDataForm
-from value.application_settings.models import ApplicationSetting
+from value.deliverables.decorators import user_is_manager
+from value.factors.models import Factor
+from value.measures.models import Measure
 
 
 @login_required
@@ -172,7 +173,7 @@ def add_stakeholders(request, deliverable_id):
     return redirect(reverse('deliverables:stakeholders', args=(deliverable.pk,)))
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
+@user_is_manager
 @require_POST
 def remove_stakeholder(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)

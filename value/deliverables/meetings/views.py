@@ -24,6 +24,7 @@ from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStak
 from value.deliverables.meetings.charts import Highcharts
 from value.deliverables.meetings.forms import MeetingForm
 
+
 @login_required
 def index(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
