@@ -1,0 +1,32 @@
+{% extends 'deliverables/meetings/dashboard/base_charts.html' %}
+
+{% load staticfiles %}
+
+{% block javascript %}
+  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/exporting.js' %}"></script>
+  <script src="{% static 'js/deliverables/meetings/dashboard.js' %}"></script>
+  <script type="text/javascript">
+    $(function () {
+        $("#chart-container").highcharts({{ dump|safe }});
+    });
+  </script>
+{% endblock javascript %}
+
+{% block charts %}
+<form action="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}dashboard/{{ chart_uri }}/">
+  <div class="panel panel-default panel-chart">
+    <div class="panel-heading" data-meeting-id="{{ meeting.id }}">
+      <div class="btn-group btn-group-xs pull-right chart-options" role="group" aria-label="Chart Options">
+        {% include 'deliverables/meetings/dashboard/includes/expand_toolbar.html' with opened=True %}
+        {% include 'deliverables/meetings/dashboard/includes/modal_toolbar.html' with opened=True %}
+        {% include 'deliverables/meetings/dashboard/includes/reload_toolbar.html' with opened=True %}
+        {% include 'deliverables/meetings/dashboard/includes/download_toolbar.html' with opened=True %}
+      </div>
+      <p class="panel-title">{{ chart_page_title }}</p>
+    </div>
+    <div id="chart-container" class="panel-body">
+    </div>
+  </div>
+</form>
+{% endblock charts %}

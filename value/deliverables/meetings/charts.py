@@ -483,18 +483,17 @@ class Highcharts(object):
         options = {
             'chart': { 'type': 'column' },
             'title': { 'text': 'Value Ranking' },
-            'exporting': False,
+            'exporting': { 'enabled': False },
             'xAxis': { 
                 'categories': list(categories)
-            },
-            'yAxis': {
-                'max': 100,
-                'min': -100
             },
             'series': [{
                 'name': 'Ranking',
                 'data': list(data),
-                'color': '#337AB7'
+                'color': '#337AB7',
+                'dataLabels': {
+                    'enabled': True
+                }
             }]
         }
         return options

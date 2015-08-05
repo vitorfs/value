@@ -469,7 +469,7 @@ def value_ranking(request, deliverable_id, meeting_id):
     chart = Highcharts()
     options = chart.value_ranking(meeting)
     dump = json.dumps(options)
-    return render(request, 'deliverables/meetings/dashboard/decision_items_overview.html', { 
+    return render(request, 'deliverables/meetings/dashboard/value_ranking.html', { 
             'meeting': meeting,
             'chart_page_title': 'Value Ranking',
             'chart_menu_active': 'value_ranking',
