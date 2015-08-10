@@ -9,6 +9,5 @@ python-decouple==2.3
 pytz==2015.4
 reportlab==3.2.0
 sqlparse==0.1.15
-svglib==0.6.3
 wsgiref==0.1.2
 xlrd==0.9.3
