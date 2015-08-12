@@ -14,6 +14,6 @@ The base project dependencies:
 * jQuery 2.1.3
 * Bootstrap 3.3.4
 
-The complete list of Python dependencies can be found at [requirements.pip](https://github.com/UniOULU-TOL/value/blob/master/requirements.pip)
+The complete list of Python dependencies can be found at [requirements.txt](https://github.com/UniOULU-TOL/value/blob/master/requirements.txt)
 
 ## Running locally
