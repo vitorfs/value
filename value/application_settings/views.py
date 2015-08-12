@@ -48,14 +48,12 @@ def items(request):
     custom_fields = DecisionItemLookup.get_custom_fields()
     column_types = DecisionItemLookup.COLUMN_TYPES
     decision_items_fields = DecisionItemLookup.get_visible_fields()
-    import_template_fields = DecisionItemLookup.get_all_fields()
     app_settings = ApplicationSetting.get()
     return render(request, 'application_settings/items.html', { 
         'custom_fields_range': custom_fields_range,
         'custom_fields': custom_fields,
         'column_types': column_types,
         'decision_items_fields': decision_items_fields,
-        'import_template_fields': import_template_fields,
         'app_settings': app_settings
         })
 
@@ -70,38 +68,6 @@ def save_ordering(request):
         messages.success(request, u'Ordering and column display saved successfully.')
     except:
         messages.error(request, u'An error ocurred while trying to save your data.')
-    return redirect(reverse('settings:items'))
-
-@login_required
-@user_passes_test(lambda user: user.is_superuser)
-@transaction.atomic
-@require_POST
-def save_import_templates(request):
-    orientation, created = ApplicationSetting.objects.get_or_create(name=ApplicationSetting.EXCEL_ENTRY_ORIENTATION)
-    orientation.value = request.POST.get('orientation')
-    orientation.save()
-
-    starting_row_column, created = ApplicationSetting.objects.get_or_create(name=ApplicationSetting.EXCEL_STARTING_ROW_COLUMN)
-    starting_row_column.value = request.POST.get('starting_row_column')
-    starting_row_column.save()
-
-    decision_items_fields = DecisionItemLookup.get_all_fields()
-    template = {}
-    input_name = 'column'
-    if orientation.value == 'column':
-        input_name = 'row'
-    for name, field in decision_items_fields.items():
-        if request.POST.get('active_{0}'.format(name)):
-            template[name] = request.POST.get('{0}_{1}'.format(input_name, name))
-    import_template, created = ApplicationSetting.objects.get_or_create(name=ApplicationSetting.EXCEL_IMPORT_TEMPLATE)
-    import_template.value = pickle.dumps(template)
-    import_template.save()
-
-    excel_sheet_index, created = ApplicationSetting.objects.get_or_create(name=ApplicationSetting.EXCEL_SHEET_INDEX)
-    excel_sheet_index.value = request.POST.get('excel_sheet_index')
-    excel_sheet_index.save()
-
-    messages.success(request, u'Import templates saved successfully.')
     return redirect(reverse('settings:items'))
 
 @login_required
@@ -139,4 +105,41 @@ def save_custom_fields(request):
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def import_template(request):
-    return render(request, 'application_settings/import.html')
+    import_template_fields = DecisionItemLookup.get_all_fields()
+    app_settings = ApplicationSetting.get()
+    return render(request, 'application_settings/import.html', { 
+        'import_template_fields': import_template_fields,
+        'app_settings': app_settings
+        })
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+@transaction.atomic
+@require_POST
+def save_import_templates(request):
+    orientation, created = ApplicationSetting.objects.get_or_create(name=ApplicationSetting.EXCEL_ENTRY_ORIENTATION)
+    orientation.value = request.POST.get('orientation')
+    orientation.save()
+
+    starting_row_column, created = ApplicationSetting.objects.get_or_create(name=ApplicationSetting.EXCEL_STARTING_ROW_COLUMN)
+    starting_row_column.value = request.POST.get('starting_row_column')
+    starting_row_column.save()
+
+    decision_items_fields = DecisionItemLookup.get_all_fields()
+    template = {}
+    input_name = 'column'
+    if orientation.value == 'column':
+        input_name = 'row'
+    for name, field in decision_items_fields.items():
+        if request.POST.get('active_{0}'.format(name)):
+            template[name] = request.POST.get('{0}_{1}'.format(input_name, name))
+    import_template, created = ApplicationSetting.objects.get_or_create(name=ApplicationSetting.EXCEL_IMPORT_TEMPLATE)
+    import_template.value = pickle.dumps(template)
+    import_template.save()
+
+    excel_sheet_index, created = ApplicationSetting.objects.get_or_create(name=ApplicationSetting.EXCEL_SHEET_INDEX)
+    excel_sheet_index.value = request.POST.get('excel_sheet_index')
+    excel_sheet_index.save()
+
+    messages.success(request, u'Import templates saved successfully.')
+    return redirect(reverse('settings:import'))

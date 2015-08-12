@@ -2,12 +2,7 @@
 
 {% load staticfiles customfields excelhelpers %}
 
-{% block stylesheet %}
-  <link href="{% static 'css/prism.css' %}" rel="stylesheet">
-{% endblock stylesheet %}
-
 {% block javascript %}
-  <script src="{% static 'js/prism.js' %}"></script>
   <script src="{% static 'js/application_settings/settings.js' %}"></script>
 {% endblock javascript %}
 
@@ -95,266 +90,73 @@
     </div>
   </form>
 
-  <form id="form_import_templates" action="{% url 'settings:save_import_templates' %}" method="post">
-    {% csrf_token %}
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Import template</h3>
-      </div>
-      <div class="panel-body">
-        <p>You may import decision items for a given deliverable or meeting from a external file. Supported file types are <strong>xls</strong>, <strong>xlsx</strong>, <strong>csv</strong>, <strong>txt</strong>, <strong>json</strong> and <strong>xml</strong>.</p>        
-        <div class="panel-group" id="templates" role="tablist" aria-multiselectable="true" style="margin-bottom: 0">
-          <div class="panel panel-default">
-            <div class="panel-heading" role="tab" id="heading-xls">
-              <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#templates" href="#collapse-xls" aria-expanded="true" aria-controls="collapse-xls">
-                  Excel <small>.xls, .xlsx</small>
-                </a>
-              </h4>
-            </div>
-            <div id="collapse-xls" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-xls">
-              <div class="panel-body">
-                <div class="form-horizontal">
-                  <div class="form-group">
-                    <div class="col-sm-8 col-md-6 col-lg-4">
-                      <label for="id_start_line">Orientation</label>
-                      <select id="id_orientation" name="orientation" class="form-control">
-                        <option value="row"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'row' %} selected="selected"{% endif %}>One entry per row</option>
-                        <option value="column"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'column' %} selected="selected"{% endif %}>One entry per column</option>
-                      </select>
-                    </div>
-                    <div class="col-sm-4 col-md-3 col-lg-2">
-                      <label for="id_starting_row" class="entry_per_row"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'column' %} style="display: none"{% endif %}>Starting row</label>
-                      <label for="id_starting_column" class="entry_per_column"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'row' %} style="display: none"{% endif %}>Starting column</label>
-                      <input type="text" class="form-control" id="id_starting_row_column" name="starting_row_column" value="{{ app_settings.EXCEL_STARTING_ROW_COLUMN }}">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="col-sm-12">
-                      <label>Spreadsheet template</label>
-                      <table class="table table-bordered" style="margin-bottom: 0; width: auto">
-                        <thead>
-                          <tr>
-                            <th>Field</th>
-                            <th class="entry_per_row"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'column' %} style="display: none"{% endif %}>Column</th>
-                            <th class="entry_per_column"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'row' %} style="display: none"{% endif %}>Row</th>
-                            <th>Import?</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {% for name, field in import_template_fields.items %}
-                            <tr>
-                              <td>{{ field.label }}</td>
-                              <td class="entry_per_row"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'column' %} style="display: none"{% endif %}>
-                                {% excel_columns name forloop.counter app_settings %}
-                              </td>
-                              <td class="entry_per_column"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'row' %} style="display: none"{% endif %}>
-                                {% excel_rows name forloop.counter app_settings %}
-                              </td>
-                              <td>
-                                <input type="checkbox" class="js-import-check" name="active_{{ name }}" value="active" {% excel_is_checked name app_settings %}>
-                              </td>
-                            </tr>
-                          {% endfor %}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="col-sm-4">
-                      <label for="id_excel_sheet_index">Sheet index <small>(Zero based index. Leave empty for all.)</small></label>
-                      <input type="text" class="form-control" id="id_excel_sheet_index" name="excel_sheet_index" value="{{ app_settings.EXCEL_SHEET_INDEX }}">
-                    </div>
-                  </div>
-                </div>              
-              </div>
-            </div>
-          </div>
-{% comment %}
-          <div class="panel panel-default">
-            <div class="panel-heading" role="tab" id="heading-csv">
-              <h4 class="panel-title">
-                <a class="collapsed" data-toggle="collapse" data-parent="#templates" href="#collapse-csv" aria-expanded="false" aria-controls="collapse-csv">
-                  Plain text <small>.csv, .txt</small>
-                </a>
-              </h4>
-            </div>
-            <div id="collapse-csv" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-csv">
-              <div class="panel-body">
-                <div class="form-group">
-                  <label for="id_separator">Separator</label>
-                  <div>
-                    <label class="radio-inline">
-                      <input type="radio" name="separator" id="id_comma" value="comma"> Comma
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio" name="separator" id="id_tab" value="tab"> Tab
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio" name="separator" id="id_semicolon" value="semicolon"> Semicolon
-                    </label>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="id_start_line">Start line</label>
-                  <input type="number" class="form-control" style="width: 100px" id="id_start_line" name="start_line">
-                </div>
-                <div class="form-group">
-                  <label>Column order</label>
-                  <div id="plain-text-column-order">
-                    <span class="label label-default sortable">Name</span><span class="label label-default sortable">Description</span>{% for name, field in custom_fields.items %}<span class="label label-default sortable">{{ field.label }}</span>{% endfor %}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="panel panel-default">
-            <div class="panel-heading" role="tab" id="heading-json">
-              <h4 class="panel-title">
-                <a class="collapsed" data-toggle="collapse" data-parent="#templates" href="#collapse-json" aria-expanded="false" aria-controls="collapse-json">
-                  JSON
-                </a>
-              </h4>
-            </div>
-            <div id="collapse-json" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-json">
-              <div class="panel-body">
-                <p>Use the following template to import data from a json file. Please note any attribute with different name will be ignored. Entries with empty <strong>name</strong> will be ignored as well. The attribute order doesn't matter and you don't have to put all the 30 custom attributes in the file.</p>
-                <pre><code class="language-js">[
-  {
-    'name': '',
-    'description': '',
-    'column_1': '',
-    'column_2': '',
-    'column_3': '',
-    …
-    'column_30': ''
-  },
-  {
-    'name': '',
-    'description': '',
-    'column_1': '',
-    'column_2': '',
-    'column_3': '',
-    …
-    'column_30': ''
-  }
-]</code></pre>
-              </div>
-            </div>
-          </div>
-
-          <div class="panel panel-default">
-            <div class="panel-heading" role="tab" id="heading-xml">
-              <h4 class="panel-title">
-                <a class="collapsed" data-toggle="collapse" data-parent="#templates" href="#collapse-xml" aria-expanded="false" aria-controls="collapse-xml">
-                  XML
-                </a>
-              </h4>
-            </div>
-            <div id="collapse-xml" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-xml">
-              <div class="panel-body">
-                <p>Use the following template to import data from a xml file. Please note any attribute with different name will be ignored. Entries with empty <strong>name</strong> will be ignored as well. The attribute order doesn't matter and you don't have to put all the 30 custom attributes in the file.</p>
-                <pre><code class="language-markup">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;items&gt;
-  &lt;item&gt;
-    &lt;name&gt;&lt;/name&gt;
-    &lt;description&gt;&lt;/description&gt;
-    &lt;column_1&gt;&lt;/column_1&gt;
-    &lt;column_2&gt;&lt;/column_2&gt;
-    &lt;column_3&gt;&lt;/column_3&gt;
-    …
-    &lt;column_30&gt;&lt;/column_30&gt;
-  &lt;/item&gt;
-  &lt;item&gt;
-    &lt;name&gt;&lt;/name&gt;
-    &lt;description&gt;&lt;/description&gt;
-    &lt;column_1&gt;&lt;/column_1&gt;
-    &lt;column_2&gt;&lt;/column_2&gt;
-    &lt;column_3&gt;&lt;/column_3&gt;
-    …
-    &lt;column_30&gt;&lt;/column_30&gt;
-  &lt;/item&gt;
-&lt;/items&gt;</code></pre>
-              </div>
-            </div>
-          </div>
-{% endcomment %}
-        </div>
-
-      </div>
-      <div class="panel-footer">
-        <button class="btn btn-primary" type="submit">Save changes</button>
-      </div>
-    </div>
-  </form>
-
   <form id="form_custom_fields" method="post" action="{% url 'settings:save_custom_fields' %}">
     {% csrf_token %}
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">Custom fields</h3>
       </div>
-      <div class="panel-body">
-        Add custom fields to the decision items model. Please note that the fields <strong>name</strong> and <strong>description</strong> are fixed.
+      <div class="panel-body" style="height: 400px; overflow-y: scroll;">
+        <p>Add custom fields to the decision items model. Please note that the fields <strong>name</strong> and <strong>description</strong> are fixed.</p>
+        <table class="table table-condensed table-bordered">
+          <thead>
+            <tr>
+              <th>Column</th>
+              <th>Label</th>
+              <th>Data type</th>
+              <th style="width: 60px;">Display</th>
+              <th style="width: 60px;">Active</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="vertical-align: middle">name</td>
+              <td><input type="text" class="form-control input-sm" disabled value="Name"></td>
+              <td>
+                <select class="form-control input-sm" disabled>
+                  <option>String</option>
+                </select>
+              </td>
+              <td style="vertical-align: middle; text-align: center;"><input type="checkbox" checked disabled></td>
+              <td style="vertical-align: middle; text-align: center;"><input type="checkbox" checked disabled></td>
+            </tr>
+            <tr>
+              <td style="vertical-align: middle;">description</td>
+              <td><input type="text" class="form-control input-sm" disabled value="Description"></td>
+              <td>
+                <select class="form-control input-sm" disabled>
+                  <option>String</option>
+                </select>
+              </td>
+              <td style="vertical-align: middle; text-align: center;"><input type="checkbox" checked disabled></td>
+              <td style="vertical-align: middle; text-align: center;"><input type="checkbox" checked disabled></td>
+            </tr>
+            {% for column_index in custom_fields_range %}
+              <tr>
+                <td style="vertical-align: middle">
+                  column_{{ column_index }}
+                </td>
+                <td>
+                  <input type="text" class="form-control input-sm js-control-disable" name="column_label_{{ column_index }}" maxlength="255" value="{% custom_field_attr custom_fields column_index 'label' %}">
+                </td>
+                <td>
+                  <select class="form-control input-sm js-control-disable" name="column_type_{{ column_index }}">
+                    {% for type in column_types %}
+                      <option value="{{ type.0 }}" {% custom_field_selected custom_fields column_index type %}>{{ type.1 }}</option>
+                    {% endfor %}
+                  </select>
+                </td>
+                <td style="vertical-align: middle; text-align: center;">
+                  <input type="checkbox" name="column_display_{{ column_index }}" class="js-control-disable" {% custom_field_display custom_fields column_index %}>
+                </td>
+                <td style="vertical-align: middle; text-align: center;">
+                  <input type="checkbox" name="column_is_active_{{ column_index }}" {% custom_field_is_active custom_fields column_index %}>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Column</th>
-            <th>Label</th>
-            <th>Data type</th>
-            <th>Display</th>
-            <th>Active</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="vertical-align: middle">name</td>
-            <td><input type="text" class="form-control" disabled value="Name"></td>
-            <td>
-              <select class="form-control" disabled>
-                <option>String</option>
-              </select>
-            </td>
-            <td style="vertical-align: middle"><input type="checkbox" checked disabled></td>
-            <td style="vertical-align: middle"><input type="checkbox" checked disabled></td>
-          </tr>
-          <tr>
-            <td style="vertical-align: middle">description</td>
-            <td><input type="text" class="form-control" disabled value="Description"></td>
-            <td>
-              <select class="form-control" disabled>
-                <option>String</option>
-              </select>
-            </td>
-            <td style="vertical-align: middle"><input type="checkbox" checked disabled></td>
-            <td style="vertical-align: middle"><input type="checkbox" checked disabled></td>
-          </tr>
-          {% for column_index in custom_fields_range %}
-          <tr>
-            <td style="vertical-align: middle">
-              column_{{ column_index }}
-            </td>
-            <td>
-              <input type="text" class="form-control js-control-disable" name="column_label_{{ column_index }}" maxlength="255" value="{% custom_field_attr custom_fields column_index 'label' %}">
-            </td>
-            <td>
-              <select class="form-control js-control-disable" name="column_type_{{ column_index }}">
-                {% for type in column_types %}
-                  <option value="{{ type.0 }}" {% custom_field_selected custom_fields column_index type %}>{{ type.1 }}</option>
-                {% endfor %}
-              </select>
-            </td>
-            <td style="vertical-align: middle">
-              <input type="checkbox" name="column_display_{{ column_index }}" class="js-control-disable" {% custom_field_display custom_fields column_index %}>
-            </td>
-            <td style="vertical-align: middle">
-              <input type="checkbox" name="column_is_active_{{ column_index }}" {% custom_field_is_active custom_fields column_index %}>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
       <div class="panel-footer">
         <button class="btn btn-primary" type="submit">Save changes</button>
       </div>
