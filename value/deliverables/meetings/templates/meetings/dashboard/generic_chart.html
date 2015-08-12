@@ -1,0 +1,28 @@
+{% extends 'meetings/dashboard/base_charts.html' %}
+
+{% load staticfiles %}
+
+{% block javascript %}
+  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
+  <script src="{% static 'js/meetings/dashboard.js' %}"></script>
+  <script type="text/javascript">
+    $(function () {
+        $("#chart-container").highcharts({{ dump|safe }});
+    });
+  </script>
+{% endblock javascript %}
+
+{% block charts %}
+  <div class="panel panel-default panel-chart">
+    <div class="panel-heading" data-meeting-id="{{ meeting.id }}" data-uri="{% url 'deliverables:deliverable' meeting.deliverable.id %}dashboard/{% if chart_uri %}{{ chart_uri }}/{% endif %}">
+      <div class="btn-group btn-group-xs pull-right chart-options" role="group" aria-label="Chart Options">
+        <button type="button" class="btn btn-default btn-xs btn-chart-expand"><span class="glyphicon glyphicon-resize-full"></span></button>
+        <button type="button" class="btn btn-default btn-xs btn-chart-modal"><span class="glyphicon glyphicon-new-window"></span></button>
+        <button type="button" class="btn btn-default btn-xs btn-chart-reload"><span class="glyphicon glyphicon-refresh"></span></button>
+      </div>
+      <p class="panel-title">{{ chart_page_title }}</p>
+    </div>
+    <div id="chart-container" class="panel-body">
+    </div>
+  </div>
+{% endblock charts %}

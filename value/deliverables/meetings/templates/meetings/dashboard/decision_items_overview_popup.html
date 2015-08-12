@@ -1,0 +1,34 @@
+{% extends 'meetings/dashboard/base_popup.html' %}
+
+{% block title %}Decision Items Overview{% endblock %}
+
+{% load staticfiles %}
+
+{% block javascript %}
+  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/exporting.js' %}"></script>
+  <script src="{% static 'js/meetings/dashboard.js' %}"></script>
+  <script type="text/javascript">
+    $(function () {
+        $("#chart-container").highcharts({{ dump|safe }});
+    });
+  </script>
+{% endblock javascript %}
+
+{% block content %}
+  <form action="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}dashboard/{{ chart_uri }}/">
+    <div class="panel panel-default panel-chart">
+      <div class="panel-heading" data-meeting-id="{{ meeting.id }}">
+        <div class="btn-group btn-group-xs pull-right chart-options" role="group" aria-label="Chart Options">
+          {% include 'meetings/dashboard/includes/reload_toolbar.html' with opened=True %}
+          {% include 'meetings/dashboard/includes/download_toolbar.html' with opened=True %}
+          {% include 'meetings/dashboard/includes/stakeholders_toolbar.html' with opened=True %}
+          {% include 'meetings/dashboard/includes/stacked_charts_toolbar.html' with opened=True %}
+        </div>
+        <p class="panel-title">{{ chart_page_title }}</p>
+      </div>
+      <div id="chart-container" class="panel-body">
+      </div>
+    </div>
+  </form>
+{% endblock content %}

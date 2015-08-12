@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block javascript %}
+  <script>
+    $(function () {
+      $("#id_started_at_datetime").datetimepicker({
+        format: "DD/MM/YYYY HH:mm"
+      });
+    });
+  </script>
+{% endblock javascript %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a></li>
+    <li><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
+    <li class="active">Settings</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block tabs %}
+  {% include 'meetings/includes/menu.html' with meeting=meeting active='settings' %}  
+{% endblock tabs %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-2 col-md-3 col-sm-4">
+      {% include 'meetings/settings/includes/menu.html' with meeting=meeting active='details' %}
+    </div>
+    <div class="col-lg-10 col-md-9 col-sm-8">
+      <form method="post">
+        {% csrf_token %}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Meeting details</h3>
+          </div>
+          <div class="panel-body">
+            {% include 'includes/form_vertical.html' with form=form %}
+          </div>
+          <div class="panel-footer">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock content %}

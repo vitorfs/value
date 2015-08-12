@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block stylesheet %}
+  <link href="{% static 'css/meetings/evaluate.css' %}" rel="stylesheet">
+{% endblock stylesheet %}
+
+{% block javascript %}
+  <script src="{% static 'js/meetings/evaluate.js' %}"></script>
+{% endblock javascript %}
+
+{% block mustache %}
+  {% if meeting.is_closed %}
+    {% verbatim %}
+    <script id="rationale-template" type="x-tmpl-mustache">
+      <div role="tabpanel">
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#rationale_{{ id }}" aria-controls="rationale_{{ id }}" role="tab" data-toggle="tab">Rationale</a></li>
+          <!--li role="presentation"><a href="#attachments_{{ id }}" aria-controls="attachments_{{ id }}" role="tab" data-toggle="tab">Attachments</a></li-->
+        </ul>
+        <div class="tab-content" style="margin-top: 15px;">
+          <div role="tabpanel" class="tab-pane fade in active" id="rationale_{{ id }}">
+            <div class="form-group">
+              <textarea class="form-control evaluation-rationale" style="resize: none; height: 150px;" maxlength="2000" readonly>{{ rationale }}</textarea>
+              <span class="help-block"></span>
+            </div>      
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="attachments_{{ id }}" style="height: 165px;">
+
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 text-right">
+          <button type="button" class="btn btn-sm btn-default" onclick="$(this).closest('.popover').popover('hide');">Close</button>
+        </div>
+      </div>
+    </script>
+    {% endverbatim %}
+  {% else %}
+    {% verbatim %}
+    <script id="rationale-template" type="x-tmpl-mustache">
+      <div role="tabpanel">
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#rationale_{{ id }}" aria-controls="rationale_{{ id }}" role="tab" data-toggle="tab">Rationale</a></li>
+          <!--li role="presentation"><a href="#attachments_{{ id }}" aria-controls="attachments_{{ id }}" role="tab" data-toggle="tab">Attachments</a></li-->
+        </ul>
+        <div class="tab-content" style="margin-top: 15px;">
+          <div role="tabpanel" class="tab-pane fade in active" id="rationale_{{ id }}">
+            <div class="form-group">
+              <textarea class="form-control evaluation-rationale" style="resize: none; height: 150px;" maxlength="2000">{{ rationale }}</textarea>
+              <span class="help-block"></span>
+            </div>      
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="attachments_{{ id }}" style="height: 165px;">
+
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <!--button type="button" class="btn btn-sm btn-default"><span class="fa fa-paperclip"></span> Attach files</button-->
+          <!--button type="button" class="btn btn-sm btn-danger">Delete</button-->
+        </div>
+        <div class="col-xs-6 text-right">
+          <button type="button" class="btn btn-sm btn-default" onclick="$(this).closest('.popover').popover('hide');">Cancel</button>
+          <button type="button" class="btn btn-sm btn-primary js-save-rationale">Save</button>
+        </div>
+      </div>
+    </script>
+    {% endverbatim %}
+  {% endif %}
+{% endblock mustache %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a></li>
+    <li><a href="{% url 'deliverables:meetings:index' meeting.deliverable.pk %}">Meetings</a></li>
+    <li><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
+    <li class="active">Evaluate</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+  {% include 'meetings/includes/menu.html' with active='evaluate' meeting=meeting %}
+  <div class="row" style="margin-bottom: 20px">
+    <div class="col-md-3">
+      <form role="form">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search" name="search" value="{{ search_query|default_if_none:'' }}">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">
+              <span class="glyphicon glyphicon-search"></span>
+            </button>
+          </span>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-3">
+      <span class="help-block">
+        {% if search_query %}
+          {{ meeting_items.count }} result{% if meeting_items.count > 1 %}s{% endif %}
+          (<a href="{% url 'deliverables:meetings:evaluate' meeting.deliverable.pk meeting.pk %}">{{ total_items }} total</a>)
+        {% endif %}
+      </span>
+    </div>
+    <div class="col-md-6 text-right">
+      <div class="btn-group" role="group" aria-label="Panel display options">
+        <button type="button" class="btn btn-default js-show-all">
+          <span class="glyphicon glyphicon-plus"></span>
+        </button>
+        <button type="button" class="btn btn-default js-hide-all">
+          <span class="glyphicon glyphicon-minus"></span>
+        </button>
+        <div class="btn-group js-grid-filters" role="group">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            View
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right" role="menu">
+            <li><a href="javascript:void(0);" data-action="all"><span class="glyphicon glyphicon-check"></span> All</a></li>
+            <li><a href="javascript:void(0);" data-action="todo"><span class="glyphicon glyphicon-unchecked"></span> To-do</a></li>
+            <li><a href="javascript:void(0);" data-action="finished"><span class="glyphicon glyphicon-unchecked"></span> Finished</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel-group panel-group-evaluation" role="tablist" aria-multiselectable="true">
+        {% include 'meetings/includes/evaluation_panels.html' with meeting=meeting meeting_items=meeting_items factors=factors measure_values=measure_values evaluations=evaluations %}
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-decision-item-details">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Details</h4>
+        </div>
+        <div class="modal-body">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="factor-description-container"></div>
+
+{% endblock content %}

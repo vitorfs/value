@@ -1,0 +1,35 @@
+{% extends 'meetings/dashboard/base_charts.html' %}
+
+{% load staticfiles %}
+
+{% block javascript %}
+  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/exporting.js' %}"></script>
+  <script src="{% static 'js/meetings/dashboard.js' %}"></script>
+  <script>
+    $(function () {
+      $(".charts .panel-heading").each(function () {
+        $(this).loadchart();
+      });
+    });
+  </script>
+{% endblock javascript %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a></li>
+    <li><a href="{% url 'deliverables:meetings:index' meeting.deliverable.pk %}">Meetings</a></li>
+    <li><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
+    <li class="active">Dashboard</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block charts %}
+  <div class="panel-group charts">
+    {% for chart in charts %}
+      {% include 'meetings/dashboard/dashboard_chart.html' with chart=chart opened=True %}
+    {% endfor %}
+  </div>
+{% endblock charts %}

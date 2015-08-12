@@ -10,10 +10,13 @@ urlpatterns = patterns('value.deliverables.meetings.views',
     url(r'^(?P<meeting_id>\d+)/add-stakeholders/$', 'add_stakeholders', name='add_stakeholders'),
     url(r'^(?P<meeting_id>\d+)/remove-decision-items/$', 'remove_decision_items', name='remove_decision_items'),
     url(r'^(?P<meeting_id>\d+)/add-decision-items/$', 'add_decision_items', name='add_decision_items'),
+
+    #Evaluate URLs
     url(r'^(?P<meeting_id>\d+)/evaluate/$', 'evaluate', name='evaluate'),
     url(r'^(?P<meeting_id>\d+)/evaluate/save/$', 'save_evaluation', name='save_evaluation'),
     url(r'^(?P<meeting_id>\d+)/evaluate/rationale/save/$', 'save_rationale', name='save_rationale'),
 
+    #Dashboard URLs
     url(r'^(?P<meeting_id>\d+)/dashboard/$', 'dashboard', name='dashboard'),
     url(r'^(?P<meeting_id>\d+)/dashboard/download/$', 'download', name='download'),
     url(r'^(?P<meeting_id>\d+)/dashboard/factors-usage/$', 'dashboard_factors_usage_chart', name='dashboard_factors_usage_chart'),
@@ -35,6 +38,10 @@ urlpatterns = patterns('value.deliverables.meetings.views',
 
     url(r'^(?P<meeting_id>\d+)/dashboard/value-ranking/$', 'value_ranking', name='value_ranking'),
 
+    #Final Decision URLs
+    url(r'^(?P<meeting_id>\d+)/decision/$', 'final_decision', name='final_decision'),
+
+    #Meeting Settings URLs
     url(r'^(?P<meeting_id>\d+)/settings/$', 'settings', name='settings'),
     url(r'^(?P<meeting_id>\d+)/settings/items/$', 'decision_items', name='decision_items'),
     url(r'^(?P<meeting_id>\d+)/settings/stakeholders/$', 'stakeholders', name='stakeholders'),
