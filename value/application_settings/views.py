@@ -138,5 +138,5 @@ def save_custom_fields(request):
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
-def notifications(request):
-    return render(request, 'application_settings/notifications.html')
+def import_template(request):
+    return render(request, 'application_settings/import.html')
