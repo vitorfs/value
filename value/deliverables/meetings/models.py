@@ -112,6 +112,18 @@ class MeetingItem(models.Model):
     def __unicode__(self):
         return '{0} ({1})'.format(self.decision_item.name, self.meeting.name)
 
+    def get_value_ranking_display(self):
+        return round(self.value_ranking, 2)
+
+    def value_ranking_as_html(self):
+        ranking = self.get_value_ranking_display()
+        if ranking < 0:
+            return u'<strong class="text-danger">{0}</strong>'.format(ranking)
+        elif ranking == 0:
+            return u'<strong class="text-warning">{0}</strong>'.format(ranking)
+        else:
+            return u'<strong class="text-success">{0}</strong>'.format(ranking)
+
     def calculate_ranking(self):
         item_evaluations = Evaluation.get_evaluations_by_meeting(self.meeting) \
                 .filter(meeting_item=self)
@@ -131,7 +143,7 @@ class MeetingItem(models.Model):
             for ranking in rankings:
                 votes = int(ranking['votes'])
                 if max_evaluations != 0:
-                    percentage = round((votes / float(max_evaluations)) * 100.0, 2)
+                    percentage = (votes / float(max_evaluations)) * 100.0
                 else:
                     percentage = 0.0
                 Ranking.objects.filter(meeting_item=self, measure_value__id=ranking['measure_value__id']).update(raw_votes=votes, percentage_votes=percentage)
@@ -161,6 +173,9 @@ class Ranking(models.Model):
 
     def __unicode__(self):
         return '{0} ({1}): {2}%'.format(self.meeting_item.decision_item.name, self.measure_value.description, self.percentage_votes)
+
+    def get_percentage_votes_display(self):
+        return round(self.percentage_votes, 2)
 
 
 class MeetingStakeholder(models.Model):
