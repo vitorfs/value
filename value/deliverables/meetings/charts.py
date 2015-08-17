@@ -480,6 +480,8 @@ class Highcharts(object):
         categories = meeting.meetingitem_set.all().values_list('decision_item__name', flat=True).order_by('-value_ranking')
         data = meeting.meetingitem_set.all().values_list('value_ranking', flat=True).order_by('-value_ranking')
 
+        data = [round(value, 2) for value in data]
+
         options = {
             'chart': { 'type': 'column' },
             'title': { 'text': 'Value Ranking' },
