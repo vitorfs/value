@@ -3,19 +3,8 @@
 {% load staticfiles %}
 
 {% block javascript %}
-  <script src="{% static 'js/meetings/evaluate.js' %}"></script>
-  <script>
-    $(function () {
-      $("[name='final-decision']").change(function () {
-        if ($(this).is(":checked")) {
-          $(this).siblings(".decision-text").text("Yes");
-        }
-        else {
-          $(this).siblings(".decision-text").text("No");
-        }
-      });
-    });
-  </script>
+  <script src="{% static 'js/meetings/meetings.js' %}"></script>
+  <script src="{% static 'js/meetings/decision.js' %}"></script>
 {% endblock javascript %}
 
 {% block breadcrumb %}
@@ -33,59 +22,61 @@
   {% include 'meetings/includes/menu.html' with active='decision' meeting=meeting %}
 
   <div class="row">
-    <div class="col-lg-6 col-md-8 col-sm-10">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Final Decision</h3>
+    <div class="col-lg-8 col-md-10 col-sm-12">
+
+      <form method="post" action="{% url 'deliverables:meetings:save_final_decision' meeting.deliverable.pk meeting.pk %}">
+        {% csrf_token %}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Final Decision</h3>
+          </div>
+          <table class="table table-bordered table-striped" id="table-final-decision">
+            <thead>
+              <th>Name</th>
+              <th>Summary</th>
+              <th style="width: 140px;">Value Ranking</th>
+              <th style="width: 100px;">Decision</th>
+              <th style="width: 150px;">Meeting Ranking</th>
+            </thead>
+            <tbody>
+              {% for item in meeting_items %}
+                <tr data-item-id="{{ item.pk }}">
+                  <td style="vertical-align: middle;">
+                    {{ item.decision_item.name }}
+                    <span data-toggle="tooltip" title="Click to view details" data-container="body" style="margin-left: 5px;">
+                      <a href="javascript:void(0);" class="btn-details js-decision-item-details" data-remote-url="{% url 'deliverables:details_decision_item' meeting.deliverable.pk item.decision_item.pk %}">
+                        <span class="glyphicon glyphicon-info-sign"></span>
+                      </a>
+                    </span>
+                  </td>
+                  <td style="vertical-align: middle;">
+                    <div class="progress" style="margin-bottom: 0">
+                      {% for ranking in item.ranking_set.all %}
+                        <div class="progress-bar" style="width: {{ ranking.percentage_votes }}%; background-color: {{ ranking.measure_value.color }}">
+                          <span class="measure-percent" data-measure-id="{{ ranking.measure_value.pk }}">{{ ranking.get_percentage_votes_display }}</span>%
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </td>
+                  <td style="vertical-align: middle; text-align: right;">{{ item.value_ranking_as_html|safe }}</td>
+                  <td style="vertical-align: middle; text-align: center;">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="final-decision">
+                        <span class="decision-text">No</span>
+                      </label>
+                    </div>
+                  </td>
+                  <td style="vertical-align: middle; text-align: center;">
+                    <input type="text" class="form-control input-sm" style="width: 100px; text-align: right; display: inline-block;">
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
-        <div class="panel-body">
-          
-        </div>
-        <table class="table table-striped">
-          <thead>
-            <th>Name</th>
-            <th>Summary</th>
-            <th style="width: 120px;">Value Ranking</th>
-            <th style="width: 75px;">Decision</th>
-            <th style="width: 140px;">Meeting Ranking</th>
-          </thead>
-          <tbody>
-            {% for item in meeting_items %}
-              <tr>
-                <td style="vertical-align: middle;">
-                  {{ item.decision_item.name }}
-                  <span data-toggle="tooltip" title="Click to view details" data-container="body" style="margin-left: 5px;">
-                    <a href="javascript:void(0);" class="btn-details js-decision-item-details" data-remote-url="{% url 'deliverables:details_decision_item' meeting.deliverable.pk item.decision_item.pk %}">
-                      <span class="glyphicon glyphicon-info-sign"></span>
-                    </a>
-                  </span>
-                </td>
-                <td style="vertical-align: middle;">
-                  <div class="progress" style="margin-bottom: 0">
-                    {% for ranking in item.ranking_set.all %}
-                      <div class="progress-bar" style="width: {{ ranking.percentage_votes }}%; background-color: {{ ranking.measure_value.color }}">
-                        <span class="measure-percent" data-measure-id="{{ ranking.measure_value.pk }}">{{ ranking.get_percentage_votes_display }}</span>%
-                      </div>
-                    {% endfor %}
-                  </div>
-                </td>
-                <td style="vertical-align: middle; text-align: right;">{{ item.value_ranking_as_html|safe }}</td>
-                <td style="vertical-align: middle; text-align: center;">
-                  <div class="checkbox">
-                    <label>
-                      <input type="checkbox" name="final-decision">
-                      <span class="decision-text">No</span>
-                    </label>
-                  </div>
-                </td>
-                <td style="vertical-align: middle; text-align: center;">
-                  <input type="text" class="form-control input-sm" style="width: 100px; text-align: right; display: inline-block;">
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+      </form>
+
     </div>
   </div>
 

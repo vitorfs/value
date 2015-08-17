@@ -624,3 +624,10 @@ def final_decision(request, deliverable_id, meeting_id):
             'meeting': meeting,
             'meeting_items': meeting_items
         })
+
+@login_required
+@require_POST
+@transaction.atomic
+def save_final_decision(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    return HttpResponse()

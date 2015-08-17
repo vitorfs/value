@@ -40,6 +40,7 @@ urlpatterns = patterns('value.deliverables.meetings.views',
 
     #Final Decision URLs
     url(r'^(?P<meeting_id>\d+)/decision/$', 'final_decision', name='final_decision'),
+    url(r'^(?P<meeting_id>\d+)/decision/save/$', 'save_final_decision', name='save_final_decision'),
 
     #Meeting Settings URLs
     url(r'^(?P<meeting_id>\d+)/settings/$', 'settings', name='settings'),

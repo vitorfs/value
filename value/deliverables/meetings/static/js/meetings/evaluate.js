@@ -9,20 +9,6 @@ var simulate = function () {
 $(function () {
 
   $(".js-factor-description").popover();
-
-  $(".js-decision-item-details").click(function () {
-    $.ajax({
-      url: $(this).attr("data-remote-url"),
-      cache: false,
-      beforeSend: function () {
-        $("#modal-decision-item-details").modal('show');
-        $("#modal-decision-item-details .modal-body").html("");
-      },
-      success: function (data) {
-        $("#modal-decision-item-details .modal-body").html(data);
-      }
-    });
-  });
   
   var factorsCount = $(".panel-group-evaluation .panel:eq(0) .table-evaluate tbody tr").length;
   $(".panel-group-evaluation .panel .table-evaluate tbody").each(function () {

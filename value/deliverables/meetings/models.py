@@ -102,9 +102,10 @@ class Meeting(models.Model):
 class MeetingItem(models.Model):
     meeting = models.ForeignKey(Meeting)
     decision_item = models.ForeignKey(DecisionItem)
-    meeting_decision = models.NullBooleanField(null=True, blank=True)
+    meeting_decision = models.BooleanField(default=False)
     rationales = models.ManyToManyField(Rationale)
     value_ranking = models.FloatField(default=0.0)
+    meeting_ranking = models.FloatField(default=0.0)
 
     class Meta:
         ordering = ('decision_item__name',)
