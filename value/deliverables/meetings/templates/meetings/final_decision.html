@@ -22,15 +22,16 @@
   {% include 'meetings/includes/menu.html' with active='decision' meeting=meeting %}
 
   <div class="row">
-    <div class="col-lg-8 col-md-10 col-sm-12">
+    <div class="col-lg-8 col-md-10 col-sm-12 col-lg-offset-2 col-md-offset-1">
 
-      <form method="post" action="{% url 'deliverables:meetings:save_final_decision' meeting.deliverable.pk meeting.pk %}">
+      <form id="form-final-decision" method="post" action="{% url 'deliverables:meetings:save_final_decision' meeting.deliverable.pk meeting.pk %}">
         {% csrf_token %}
+        {{ formset.management_form }}
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">Final Decision</h3>
           </div>
-          <table class="table table-bordered table-striped" id="table-final-decision">
+          <table class="table table-bordered" id="table-final-decision">
             <thead>
               <th>Name</th>
               <th>Summary</th>
@@ -39,36 +40,46 @@
               <th style="width: 150px;">Meeting Ranking</th>
             </thead>
             <tbody>
-              {% for item in meeting_items %}
-                <tr data-item-id="{{ item.pk }}">
+              {% for form in formset %}
+                <tr data-item-id="{{ form.instance.pk }}">
                   <td style="vertical-align: middle;">
-                    {{ item.decision_item.name }}
+                    {{ form.instance.decision_item.name }}
                     <span data-toggle="tooltip" title="Click to view details" data-container="body" style="margin-left: 5px;">
-                      <a href="javascript:void(0);" class="btn-details js-decision-item-details" data-remote-url="{% url 'deliverables:details_decision_item' meeting.deliverable.pk item.decision_item.pk %}">
+                      <a href="javascript:void(0);" class="btn-details js-decision-item-details" data-remote-url="{% url 'deliverables:details_decision_item' meeting.deliverable.pk form.instance.decision_item.pk %}">
                         <span class="glyphicon glyphicon-info-sign"></span>
                       </a>
                     </span>
+                    {% for hidden in form.hidden_fields %}
+                      {{ hidden }}
+                    {% endfor %}
                   </td>
                   <td style="vertical-align: middle;">
                     <div class="progress" style="margin-bottom: 0">
-                      {% for ranking in item.ranking_set.all %}
+                      {% for ranking in form.instance.ranking_set.all %}
                         <div class="progress-bar" style="width: {{ ranking.percentage_votes }}%; background-color: {{ ranking.measure_value.color }}">
                           <span class="measure-percent" data-measure-id="{{ ranking.measure_value.pk }}">{{ ranking.get_percentage_votes_display }}</span>%
                         </div>
                       {% endfor %}
                     </div>
                   </td>
-                  <td style="vertical-align: middle; text-align: right;">{{ item.value_ranking_as_html|safe }}</td>
+                  <td style="vertical-align: middle; text-align: right;">{{ form.instance.value_ranking_as_html|safe }}</td>
                   <td style="vertical-align: middle; text-align: center;">
                     <div class="checkbox">
                       <label>
-                        <input type="checkbox" name="final-decision">
-                        <span class="decision-text">No</span>
+                        {{ form.meeting_decision }}
+                        <span class="decision-text">
+                          {% if form.instance.meeting_decision %}
+                            Yes
+                          {% else %}
+                            No
+                          {% endif %}
+                        </span>
                       </label>
                     </div>
                   </td>
                   <td style="vertical-align: middle; text-align: center;">
-                    <input type="text" class="form-control input-sm" style="width: 100px; text-align: right; display: inline-block;">
+                    <span class="hide">{{ form.meeting_ranking.value }}</span>
+                    {{ form.meeting_ranking }}
                   </td>
                 </tr>
               {% endfor %}

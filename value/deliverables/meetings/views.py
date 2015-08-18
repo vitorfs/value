@@ -14,6 +14,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.db import transaction
+from django.forms.models import modelformset_factory
 
 from value.utils.svglib import SvgRenderer
 from value.factors.models import Factor
@@ -22,7 +23,7 @@ from value.deliverables.models import Deliverable, DecisionItemLookup, Rationale
 from value.deliverables.forms import RationaleForm
 from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
 from value.deliverables.meetings.charts import Highcharts
-from value.deliverables.meetings.forms import MeetingForm
+from value.deliverables.meetings.forms import MeetingForm, MeetingItemFinalDecisionForm
 
 
 @login_required
@@ -619,10 +620,14 @@ def add_decision_items(request, deliverable_id, meeting_id):
 def final_decision(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     meeting.calculate_all_rankings()
+
+    MeetingItemFormset = modelformset_factory(MeetingItem, form=MeetingItemFinalDecisionForm, extra=0)
     meeting_items = meeting.meetingitem_set.select_related('decision_item').all()
+    formset = MeetingItemFormset(queryset=meeting_items)
+
     return render(request, 'meetings/final_decision.html', { 
             'meeting': meeting,
-            'meeting_items': meeting_items
+            'formset': formset,
         })
 
 @login_required
@@ -630,4 +635,18 @@ def final_decision(request, deliverable_id, meeting_id):
 @transaction.atomic
 def save_final_decision(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    MeetingItemFormset = modelformset_factory(MeetingItem, form=MeetingItemFinalDecisionForm, extra=0)
+    formset = MeetingItemFormset(request.POST)
+
+    errors = []
+    for form in formset:
+        if form.is_valid():
+            form.save()
+        else:
+            errors.append(form.instance.pk)
+
+    if any(errors):
+        dump = json.dumps(errors)
+        return HttpResponseBadRequest(dump, content_type='application/json')
     return HttpResponse()
+        
