@@ -1,6 +1,8 @@
-from django.test import TestCase, RequestFactory
+# coding: utf-8
+
+from django.test import TestCase
 from django.core.urlresolvers import reverse as r
-from django.contrib.auth.models import AnonymousUser, User, Group
+from django.contrib.auth.models import User, Group
 
 
 class IndexTest(TestCase):

@@ -1,0 +1,24 @@
+[
+  {  
+    "fields":{  
+      "username":"john",
+      "first_name":"John",
+      "last_name":"Doe",
+      "is_active":true,
+      "is_superuser":true,
+      "is_staff":true,
+      "last_login":"2015-05-27T09:34:21.081Z",
+      "groups":[  
+
+      ],
+      "user_permissions":[  
+
+      ],
+      "password":"",
+      "email":"john@doe.com",
+      "date_joined":"2015-05-15T12:18:33.094Z"
+    },
+    "model":"auth.user",
+    "pk":1
+  }
+]
