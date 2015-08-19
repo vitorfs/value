@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 
 from value.factors.models import Factor, Group
 from value.factors.forms import FactorForm, GroupForm
@@ -83,19 +83,14 @@ def add_group(request):
     return redirect(reverse('factors:groups'))
 
 @login_required
-@require_POST
 @user_passes_test(lambda user: user.is_superuser)
-def add_factor_group(request):
-    factor_id = request.POST.get('factor')
-    group_id = request.POST.get('group', None)
-
-    factor = Factor.objects.get(pk=factor_id)
-    group = None
-    if group_id:
-        group = Group.objects.get(pk=group_id)
-    factor.group = group
-    factor.save()
-    return HttpResponse()
+def edit_group(request, group_id):
+    group = get_object_or_404(Group, pk=group_id)
+    if request.method == 'POST':
+        pass
+    else:
+        form = GroupForm(instance=group)
+    return render(request, 'includes/form_vertical.html', { 'form': form })
 
 @login_required
 @require_POST
@@ -109,3 +104,18 @@ def delete_group(request):
     except Group.DoesNotExist:
         pass
     return redirect(reverse('factors:groups'))
+
+@login_required
+@require_POST
+@user_passes_test(lambda user: user.is_superuser)
+def add_factor_group(request):
+    factor_id = request.POST.get('factor')
+    group_id = request.POST.get('group', None)
+
+    factor = Factor.objects.get(pk=factor_id)
+    group = None
+    if group_id:
+        group = Group.objects.get(pk=group_id)
+    factor.group = group
+    factor.save()
+    return HttpResponse()

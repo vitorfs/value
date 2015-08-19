@@ -12,6 +12,22 @@ $(function () {
     $("#delete-group").modal("show");
   });
 
+  $(".js-edit-group").click(function () {
+    var url = $(this).attr("data-group-edit-url");
+    var form = $("#form-edit-group");
+    $.ajax({
+      url: url,
+      type: 'get',
+      cache: false,
+      beforeSend: function () {
+        $("#modal-edit-group").modal("show");
+      },
+      success: function (data) {
+        $("#modal-edit-group .modal-body").html(data);
+      }
+    });
+  });
+
   var updateSelection = function (evt) {
     var factor_id = $(evt.item).attr("data-factor-id");
     var group = $(evt.item).closest(".list-group");
