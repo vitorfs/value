@@ -93,6 +93,7 @@ class OngoingMeetingFinalDecisionTest(FinalDecisionTestCase):
     def test_csrf(self):
         self.assertContains(self.response, 'csrfmiddlewaretoken')
 
+
 class ClosedMeetingFinalDecisionTest(FinalDecisionTestCase):
     '''
     Specific testing for Final Decision View having meeting status as CLOSED
@@ -108,3 +109,29 @@ class ClosedMeetingFinalDecisionTest(FinalDecisionTestCase):
         self.assertContains(self.response, 'type="checkbox"', 0)
         self.assertContains(self.response, 'type="text"', 0)
 
+
+class MeetingNotFoundFinalDecisionTest(FinalDecisionTestCase):
+    '''
+    Test 404 status for Final Decision View
+    '''
+    def setUp(self):
+        super(MeetingNotFoundFinalDecisionTest, self).setUp()
+        self.response = self.client.get(r('deliverables:meetings:final_decision', args=(0, 0)))
+
+    def test_not_found(self):
+        self.assertEqual(404, self.response.status_code)
+
+
+class LoginRequiredFinalDecisionTest(FinalDecisionTestCase):
+    '''
+    Test if view has login required decorator
+    '''
+    def setUp(self):
+        '''
+        Override base class method to avoid login
+        '''
+        self.response = self.client.get(r('deliverables:meetings:final_decision', args=(self.meeting.deliverable.pk, self.meeting.pk)))
+
+    def test_login_required(self):
+        self.assertEqual(302, self.response.status_code)
+        self.assertRedirects(self.response, '{0}?next={1}'.format(r('signin'), r('deliverables:meetings:final_decision', args=(self.meeting.deliverable.pk, self.meeting.pk))))
