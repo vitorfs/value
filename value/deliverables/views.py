@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.decorators.http import require_POST
 from django.template.loader import render_to_string
@@ -31,7 +31,6 @@ def index(request):
     return render(request, 'deliverables/index.html', { 'deliverables': deliverables })
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
 @transaction.atomic
 def new(request):
     fields = DecisionItemLookup.get_visible_fields()
@@ -106,7 +105,6 @@ def excel_column_map():
     return column_map
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
 @require_POST
 def import_decision_items(request):
     form = UploadFileForm(request.POST, request.FILES)
@@ -157,7 +155,6 @@ def load_available_stakeholders(request, deliverable_id):
     return HttpResponse(html)
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
 @require_POST
 def add_stakeholders(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
@@ -183,7 +180,6 @@ def remove_stakeholder(request, deliverable_id):
     return HttpResponse(u'{0} was removed successfully.'.format(user.profile.get_display_name()))
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
 @require_POST
 def process_decision_items_list_actions(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
@@ -204,7 +200,6 @@ def process_decision_items_list_actions(request, deliverable_id):
     return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
 def decision_items(request, deliverable_id):
     if request.method == 'POST':
         return process_decision_items_list_actions(request, deliverable_id)
@@ -212,7 +207,6 @@ def decision_items(request, deliverable_id):
     return render(request, 'deliverables/decision_items/list.html', { 'deliverable': deliverable })
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
 @require_POST
 def save_imported_decision_items(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
@@ -237,7 +231,6 @@ def save_imported_decision_items(request, deliverable_id):
         return HttpResponseBadRequest(html)
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
 def add_decision_item(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     fields = DecisionItemLookup.get_all_fields()
@@ -260,7 +253,6 @@ def add_decision_item(request, deliverable_id):
             })
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
 def edit_decision_item(request, deliverable_id, decision_item_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     decision_item = get_object_or_404(DecisionItem, pk=decision_item_id)
@@ -285,7 +277,6 @@ def edit_decision_item(request, deliverable_id, decision_item_id):
             })
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
 def delete_decision_item(request, deliverable_id, decision_item_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     decision_item = get_object_or_404(DecisionItem, pk=decision_item_id)
@@ -314,7 +305,6 @@ def details_decision_item(request, deliverable_id, decision_item_id):
             })
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
 def settings(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     users = User.objects.exclude(pk=request.user.id).order_by(Lower('first_name').asc(), Lower('last_name').asc(), Lower('username').asc())
@@ -334,7 +324,6 @@ def settings(request, deliverable_id):
             })
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
 @transaction.atomic
 @require_POST
 def delete(request, deliverable_id):
@@ -344,7 +333,6 @@ def delete(request, deliverable_id):
     return redirect(reverse('deliverables:index'))
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
 @require_POST
 def transfer(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)

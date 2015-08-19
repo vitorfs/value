@@ -124,3 +124,7 @@ EMAIL_SUBJECT_PREFIX = '[VALUE Tool Report] '
 SERVER_EMAIL = 'application@valueproject.fi'
 
 ENVIRONMENT_NAME = config('ENVIRONMENT_NAME', default='')
+
+FIXTURE_DIRS = (
+    PROJECT_DIR.child('fixtures'),
+)
