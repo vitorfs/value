@@ -11,41 +11,88 @@
 
 {% block content %}
 
-  {% if deliverables.exists %}
+  {% if manager_deliverables.exists or stakeholder_deliverables %}
     <div style="margin-bottom: 20px">
       <a class="btn btn-primary" href="{% url 'deliverables:new' %}"><span class="glyphicon glyphicon-plus"></span> New deliverable</a>
     </div>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Deliverables</h3>
-      </div>
-      <table class="table table-hover table-clickable-row">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Meetings</th>
-            <th>Created at</th>
-            <th>Updated at</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for deliverable in deliverables %}
-            <tr data-href="{% url 'deliverables:deliverable' deliverable.pk %}">
-              <td><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></td>
-              <td>{{ deliverable.meeting_set.count }}</td>
-              <td>{{ deliverable.created_at }}</td>
-              <td>{{ deliverable.updated_at }}</td>
+    {% if manager_deliverables.exists %}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Deliverables <span class="badge">Manager</span></h3>
+        </div>
+        <table class="table table-hover table-clickable-row">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Manager</th>
+              <th>Stakeholders</th>
+              <th>Meetings</th>
+              <th>Created at</th>
+              <th>Updated at</th>
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {% for deliverable in manager_deliverables %}
+              <tr data-href="{% url 'deliverables:deliverable' deliverable.pk %}">
+                <td><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></td>
+                <td>{% avatar_img deliverable.manager 20 %}</td>
+                <td>
+                  {% for stakeholder in deliverable.stakeholders.all %}
+                    {% avatar_img stakeholder 20 %}
+                  {% endfor %}
+                </td>
+                <td>{{ deliverable.meeting_set.count }}</td>
+                <td>{{ deliverable.created_at }}</td>
+                <td>{{ deliverable.updated_at }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+
+    {% if stakeholder_deliverables.exists %}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Deliverables <span class="badge">Stakeholder</span></h3>
+        </div>
+        <table class="table table-hover table-clickable-row">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Manager</th>
+              <th>Stakeholders</th>
+              <th>Meetings</th>
+              <th>Created at</th>
+              <th>Updated at</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for deliverable in stakeholder_deliverables %}
+              <tr data-href="{% url 'deliverables:deliverable' deliverable.pk %}">
+                <td><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></td>
+                <td>{% avatar_img deliverable.manager 20 %}</td>
+                <td>
+                  {% for stakeholder in deliverable.stakeholders.all %}
+                    {% avatar_img stakeholder 20 %}
+                  {% endfor %}
+                </td>
+                <td>{{ deliverable.meeting_set.count }}</td>
+                <td>{{ deliverable.created_at }}</td>
+                <td>{{ deliverable.updated_at }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+
   {% else %}
     <div class="well" style="height: 100%">
       <div class="text-center" style="padding: 4em 0;">
         <span class="fa fa-inbox text-muted" style="font-size: 3em"></span>
         <h3 style="">Welcome to your repository of deliverables!</h3>
-        <p class="lead">A deliverable can be a project, a product, a release, a service or an idea. <a href="">Learn more.</a></p>
+        <p class="lead">A deliverable can be a project, a product, a release, a service or an idea.</p>
         <a class="btn btn-primary" href="{% url 'deliverables:new' %}"><span class="glyphicon glyphicon-plus"></span> Add your first deliverable</a>
       </div>
     </div>

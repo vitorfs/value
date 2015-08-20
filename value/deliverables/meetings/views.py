@@ -90,7 +90,11 @@ def new(request, deliverable_id):
 
 @login_required
 def meeting(request, deliverable_id, meeting_id):
-    return redirect(reverse('deliverables:meetings:evaluate', args=(deliverable_id, meeting_id)))
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    if meeting.is_closed():
+        return redirect(reverse('deliverables:meetings:final_decision', args=(deliverable_id, meeting_id)))
+    else:
+        return redirect(reverse('deliverables:meetings:evaluate', args=(deliverable_id, meeting_id)))
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)

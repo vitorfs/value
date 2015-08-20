@@ -109,7 +109,7 @@ TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.request',)
 
 LOGIN_URL = '/signin/'
 LOGOUT_URL = '/signout/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/deliverables/'
 
 
 EMAIL_HOST = config('EMAIL_HOST', default='localhost')

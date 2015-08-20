@@ -27,8 +27,12 @@ from value.measures.models import Measure
 
 @login_required
 def index(request):
-    deliverables = Deliverable.objects.filter(manager=request.user).order_by('-updated_at')
-    return render(request, 'deliverables/index.html', { 'deliverables': deliverables })
+    manager_deliverables = Deliverable.objects.filter(manager=request.user).order_by('-updated_at')
+    stakeholder_deliverables = Deliverable.objects.filter(stakeholders__in=[request.user]).exclude(manager=request.user).order_by('-updated_at')
+    return render(request, 'deliverables/index.html', { 
+            'manager_deliverables': manager_deliverables,
+            'stakeholder_deliverables': stakeholder_deliverables
+        })
 
 @login_required
 @transaction.atomic

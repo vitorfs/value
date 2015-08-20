@@ -21,17 +21,19 @@
     
     {% if has_meetings %}
       <div style="margin-bottom: 20px;" class="clearfix">
-        <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> New meeting</a>
+        <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> New meeting</a>
       </div>
     {% endif %}
 
     {% if has_meetings %}
-      <div class="panel panel-success">
-        <div class="panel-heading">
-          <h3 class="panel-title">Ongoing meeting</h3>
+      {% if deliverable.get_ongoing_meetings.exists %}
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            <h3 class="panel-title">Ongoing meeting</h3>
+          </div>
+          {% include 'deliverables/includes/meetings_table.html' with meetings=deliverable.get_ongoing_meetings %}
         </div>
-        {% include 'deliverables/includes/meetings_table.html' with meetings=deliverable.get_ongoing_meetings %}
-      </div>
+      {% endif %}
       {% if deliverable.get_closed_meetings.exists %}
         <div class="panel panel-default">
           <div class="panel-heading">

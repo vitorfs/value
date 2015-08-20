@@ -6,6 +6,14 @@
   <link href="{% static 'css/cover.css' %}" rel="stylesheet">
 {% endblock stylesheet %}
 
+{% block javascript %}
+  <script>
+    $(function () {
+      $("#id_username").focus();
+    });
+  </script>
+{% endblock %}
+
 {% block body %}
 
   <div class="wrapper">

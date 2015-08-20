@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from functools import wraps
 
 from django.core.urlresolvers import reverse as r
@@ -7,6 +9,7 @@ from django.http import HttpResponseForbidden
 from value.deliverables.models import Deliverable
 from value.deliverables.meetings.models import Meeting
 
+
 def permission_denied(request):
     if request.is_ajax():
         return HttpResponseForbidden()
@@ -14,7 +17,6 @@ def permission_denied(request):
         return redirect(r('signin'))
 
 def user_is_manager(function):
-
     def wrap(request, *args, **kwargs):
         try:
             deliverable = Deliverable.objects.get(pk=kwargs['deliverable_id'])
@@ -24,8 +26,20 @@ def user_is_manager(function):
                 return permission_denied(request)
         except Deliverable.DoesNotExist:
             return permission_denied(request)
-
     wrap.__doc__ = function.__doc__
     wrap.__name__ = function.__name__
+    return wrap
 
+def user_is_stakeholder(function):
+    def wrap(request, *args, **kwargs):
+        try:
+            deliverable = Deliverable.objects.get(pk=kwargs['deliverable_id'])
+            if request.user in deliverable.stakeholders.all():
+                return function(request, *args, **kwargs)
+            else:
+                return permission_denied(request)
+        except Deliverable.DoesNotExist:
+            return permission_denied(request)
+    wrap.__doc__ = function.__doc__
+    wrap.__name__ = function.__name__
     return wrap
