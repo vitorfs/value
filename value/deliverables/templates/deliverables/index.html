@@ -27,7 +27,6 @@
               <th>Manager</th>
               <th>Stakeholders</th>
               <th>Meetings</th>
-              <th>Created at</th>
               <th>Updated at</th>
             </tr>
           </thead>
@@ -42,7 +41,6 @@
                   {% endfor %}
                 </td>
                 <td>{{ deliverable.meeting_set.count }}</td>
-                <td>{{ deliverable.created_at }}</td>
                 <td>{{ deliverable.updated_at }}</td>
               </tr>
             {% endfor %}
@@ -63,7 +61,6 @@
               <th>Manager</th>
               <th>Stakeholders</th>
               <th>Meetings</th>
-              <th>Created at</th>
               <th>Updated at</th>
             </tr>
           </thead>
@@ -78,7 +75,6 @@
                   {% endfor %}
                 </td>
                 <td>{{ deliverable.meeting_set.count }}</td>
-                <td>{{ deliverable.created_at }}</td>
                 <td>{{ deliverable.updated_at }}</td>
               </tr>
             {% endfor %}
