@@ -21,6 +21,7 @@ from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
 from value.deliverables.models import Deliverable, DecisionItemLookup, Rationale, DecisionItem
 from value.deliverables.forms import RationaleForm
+from value.deliverables.decorators import user_is_manager, user_is_stakeholder
 from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
 from value.deliverables.meetings.charts import Highcharts
 from value.deliverables.meetings.forms import MeetingForm, MeetingItemFinalDecisionForm
@@ -32,6 +33,7 @@ def index(request, deliverable_id):
     return render(request, 'deliverables/meetings.html', { 'deliverable': deliverable })
 
 @login_required
+@user_is_manager
 def new(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     decision_items_fields = DecisionItemLookup.get_visible_fields()

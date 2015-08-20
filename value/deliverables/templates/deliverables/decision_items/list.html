@@ -5,6 +5,14 @@
 {% block javascript %}
   <script src="{% static 'js/deliverables/import_decision_items.js' %}"></script>
   <script src="{% static 'js/deliverables/decision_items.js' %}"></script>
+  {% if deliverable.manager != user %}
+    <script>
+      $(function () {
+        $("#decision-items-table tbody tr td:not(:first-child)").unbind();
+        $("#decision-items-table").removeClass("table-hover");
+      });
+    </script>
+  {% endif %}
 {% endblock javascript %}
 
 {% block breadcrumb %}
@@ -23,9 +31,13 @@
 {% block content %}
   <form method="post">
     {% csrf_token %}
-    <input type="hidden" name="action" id="id_action">
-    <div class="row" style="margin-bottom: 20px;">
-      <div class="col-xs-6">
+    {% if deliverable.manager = user %}
+      <input type="hidden" name="action" id="id_action">
+      <div style="margin-bottom: 20px;">
+        <a href="{% url 'deliverables:add_decision_item' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add item</a>
+        <span id="import-decision-items-container" data-save-import-url="{% url 'deliverables:save_imported_decision_items' deliverable.pk %}" data-csrf-token="{{ csrf_token }}">
+          {% include 'deliverables/includes/import_decision_items.html' %}
+        </span>
         <div class="btn-group">
           <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
             <span class="glyphicon glyphicon-check"></span> Actions <span class="caret"></span>
@@ -35,15 +47,7 @@
           </ul>
         </div>
       </div>
-      <div class="col-xs-6">
-        <div class="pull-right">
-          <span id="import-decision-items-container" data-save-import-url="{% url 'deliverables:save_imported_decision_items' deliverable.pk %}" data-csrf-token="{{ csrf_token }}">
-            {% include 'deliverables/includes/import_decision_items.html' %}
-          </span>
-          <a href="{% url 'deliverables:add_decision_item' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add item</a>
-        </div>
-      </div>
-    </div>
+    {% endif %}
     {% include 'deliverables/decision_items/includes/decision_items_table.html' with deliverable=deliverable %}
   </form>
 {% endblock content %}

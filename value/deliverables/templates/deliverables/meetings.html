@@ -20,9 +20,11 @@
   {% with has_meetings=deliverable.meeting_set.exists %}
     
     {% if has_meetings %}
-      <div style="margin-bottom: 20px;" class="clearfix">
-        <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> New meeting</a>
-      </div>
+      {% if deliverable.manager = user %}
+        <div style="margin-bottom: 20px;" class="clearfix">
+          <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> New meeting</a>
+        </div>
+      {% endif %}
     {% endif %}
 
     {% if has_meetings %}
@@ -47,7 +49,9 @@
         <div class="text-center" style="padding: 2em 0;">
           <span class="fa fa-calendar text-muted" style="font-size: 2.5em"></span>
           <h4 style="margin: 1em 0;">This deliverable had no meeting yet.</h4>
-          <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Start a meeting</a>
+          {% if deliverable.manager = user %}
+            <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Start a meeting</a>
+          {% endif %}
         </div>
       </div>
     {% endif %}

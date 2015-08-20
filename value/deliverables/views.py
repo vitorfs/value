@@ -17,12 +17,12 @@ from django.db.models.functions import Lower
 
 from value.application_settings.models import ApplicationSetting
 from value.core.exceptions import MeasureImproperlyConfigured, FactorsImproperlyConfigured
+from value.factors.models import Factor
+from value.measures.models import Measure
+from value.deliverables.decorators import user_is_manager, user_is_stakeholder
 from value.deliverables.models import Deliverable, DecisionItem, DecisionItemLookup
 from value.deliverables.meetings.models import Evaluation
 from value.deliverables.forms import UploadFileForm, DeliverableForm, DeliverableBasicDataForm
-from value.deliverables.decorators import user_is_manager
-from value.factors.models import Factor
-from value.measures.models import Measure
 
 
 @login_required
@@ -152,6 +152,7 @@ def stakeholders(request, deliverable_id):
     return render(request, 'deliverables/stakeholders.html', { 'deliverable': deliverable })
 
 @login_required
+@user_is_manager
 def load_available_stakeholders(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     available_stakeholders = User.objects.filter(is_active=True).exclude(pk__in=deliverable.stakeholders.all())
@@ -159,6 +160,7 @@ def load_available_stakeholders(request, deliverable_id):
     return HttpResponse(html)
 
 @login_required
+@user_is_manager
 @require_POST
 def add_stakeholders(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
@@ -184,6 +186,7 @@ def remove_stakeholder(request, deliverable_id):
     return HttpResponse(u'{0} was removed successfully.'.format(user.profile.get_display_name()))
 
 @login_required
+@user_is_manager
 @require_POST
 def process_decision_items_list_actions(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
@@ -211,6 +214,7 @@ def decision_items(request, deliverable_id):
     return render(request, 'deliverables/decision_items/list.html', { 'deliverable': deliverable })
 
 @login_required
+@user_is_manager
 @require_POST
 def save_imported_decision_items(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
@@ -235,6 +239,7 @@ def save_imported_decision_items(request, deliverable_id):
         return HttpResponseBadRequest(html)
 
 @login_required
+@user_is_manager
 def add_decision_item(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     fields = DecisionItemLookup.get_all_fields()
@@ -257,6 +262,7 @@ def add_decision_item(request, deliverable_id):
             })
 
 @login_required
+@user_is_manager
 def edit_decision_item(request, deliverable_id, decision_item_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     decision_item = get_object_or_404(DecisionItem, pk=decision_item_id)
@@ -281,6 +287,7 @@ def edit_decision_item(request, deliverable_id, decision_item_id):
             })
 
 @login_required
+@user_is_manager
 def delete_decision_item(request, deliverable_id, decision_item_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     decision_item = get_object_or_404(DecisionItem, pk=decision_item_id)
@@ -309,6 +316,7 @@ def details_decision_item(request, deliverable_id, decision_item_id):
             })
 
 @login_required
+@user_is_manager
 def settings(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     users = User.objects.exclude(pk=request.user.id).order_by(Lower('first_name').asc(), Lower('last_name').asc(), Lower('username').asc())
@@ -328,6 +336,7 @@ def settings(request, deliverable_id):
             })
 
 @login_required
+@user_is_manager
 @transaction.atomic
 @require_POST
 def delete(request, deliverable_id):
@@ -337,6 +346,7 @@ def delete(request, deliverable_id):
     return redirect(reverse('deliverables:index'))
 
 @login_required
+@user_is_manager
 @require_POST
 def transfer(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
