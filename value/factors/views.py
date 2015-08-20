@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -7,6 +9,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 
 from value.factors.models import Factor, Group
 from value.factors.forms import FactorForm, GroupForm
+
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
@@ -87,10 +90,16 @@ def add_group(request):
 def edit_group(request, group_id):
     group = get_object_or_404(Group, pk=group_id)
     if request.method == 'POST':
-        pass
+        form = GroupForm(request.POST, instance=group)
+        if form.is_valid():
+            group = form.save()
+            messages.success(request, u'Group {0} successfully edited!'.format(group.name))
+        else:
+            messages.error(request, u'Name is a required field!')
+        return redirect(reverse('factors:groups'))
     else:
         form = GroupForm(instance=group)
-    return render(request, 'includes/form_vertical.html', { 'form': form })
+        return render(request, 'factors/edit_group_form.html', { 'form': form })
 
 @login_required
 @require_POST

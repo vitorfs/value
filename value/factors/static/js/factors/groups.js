@@ -4,6 +4,14 @@ $(function () {
     $("#id_name").focus();
   });
 
+  $("#modal-edit-group").on("shown.bs.modal", function () {
+    $("#modal-edit-group input[type='text']").focus();
+  });
+
+  $("#btn-save-group-edit").click(function () {
+    $("#modal-edit-group form").submit();
+  });
+
   $(".js-confirm-group-deletion").click(function () {
     var group_id = $(this).attr("data-group-id");
     var group_name = $(this).attr("data-group-name");

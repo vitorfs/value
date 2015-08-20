@@ -28,6 +28,7 @@ from value.deliverables.meetings.forms import MeetingForm, MeetingItemFinalDecis
 
 
 @login_required
+@user_is_stakeholder
 def index(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     return render(request, 'deliverables/meetings.html', { 'deliverable': deliverable })

@@ -142,11 +142,12 @@ def import_decision_items(request):
     return HttpResponse(html)
 
 @login_required
+@user_is_stakeholder
 def deliverable(request, deliverable_id):
-    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    return render(request, 'deliverables/meetings.html', { 'deliverable': deliverable })
+    return redirect(reverse('deliverables:meetings:index', args=(deliverable_id,)))
 
 @login_required
+@user_is_stakeholder
 def stakeholders(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     return render(request, 'deliverables/stakeholders.html', { 'deliverable': deliverable })
@@ -207,6 +208,7 @@ def process_decision_items_list_actions(request, deliverable_id):
     return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
 
 @login_required
+@user_is_stakeholder
 def decision_items(request, deliverable_id):
     if request.method == 'POST':
         return process_decision_items_list_actions(request, deliverable_id)
@@ -305,6 +307,7 @@ def delete_decision_item(request, deliverable_id, decision_item_id):
                 })
 
 @login_required
+@user_is_stakeholder
 def details_decision_item(request, deliverable_id, decision_item_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     decision_item = get_object_or_404(DecisionItem, pk=decision_item_id)
