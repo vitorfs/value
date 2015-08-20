@@ -1,5 +1,7 @@
 # VALUE
 
+[![Build Status](https://magnum.travis-ci.com/UniOULU-TOL/value.svg?token=MbJaKuStkb4gdMsR68Cq)](https://magnum.travis-ci.com/UniOULU-TOL)
+
 This repository stores the source code of the first generation of the **VALUE** tool.
 
 The **VALUE** tool is supposed to be used within a company, during decision-making meetings, persisting the stakeholders' evaluations during a decision-making meeting session.
