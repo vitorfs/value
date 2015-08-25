@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views.decorators.http import require_POST
 from django.template.loader import render_to_string
-from django.forms.models import modelform_factory, modelformset_factory
+from django.forms.models import modelform_factory, modelformset_factory, inlineformset_factory
 from django.db import transaction
 from django.db.models.functions import Lower
 
@@ -20,7 +20,7 @@ from value.core.exceptions import MeasureImproperlyConfigured, FactorsImproperly
 from value.factors.models import Factor
 from value.measures.models import Measure
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
-from value.deliverables.models import Deliverable, DecisionItem, DecisionItemLookup
+from value.deliverables.models import Deliverable, DecisionItem, DecisionItemAttachment, DecisionItemLookup
 from value.deliverables.meetings.models import Evaluation
 from value.deliverables.forms import UploadFileForm, DeliverableForm, DeliverableBasicDataForm
 
@@ -270,11 +270,17 @@ def edit_decision_item(request, deliverable_id, decision_item_id):
     decision_item = get_object_or_404(DecisionItem, pk=decision_item_id)
     fields = DecisionItemLookup.get_all_fields()
     DecisionItemForm = modelform_factory(DecisionItem, fields=fields.keys())
+    AttachmentFormset = inlineformset_factory(DecisionItem, DecisionItemAttachment, fields=('attachment',))
     if request.method == 'POST':
         form = DecisionItemForm(request.POST, instance=decision_item)
-        if form.is_valid():
+        formset = AttachmentFormset(request.POST, request.FILES, instance=decision_item)
+        if form.is_valid() and formset.is_valid():
             form.instance.updated_by = request.user
             decision_item = form.save()
+            for form in formset:
+                if form.is_valid() and form.instance.attachment:
+                    form.save()
+            formset.save()
             deliverable.save()
             messages.success(request, u'The decision item {0} was saved successfully.'.format(decision_item.name))
             return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
@@ -282,10 +288,13 @@ def edit_decision_item(request, deliverable_id, decision_item_id):
             messages.error(request, u'Please correct the error below.')
     else:
         form = DecisionItemForm(instance=decision_item)
+        formset = AttachmentFormset(instance=decision_item)
+
     return render(request, 'deliverables/decision_items/edit.html', { 
             'deliverable': deliverable,
             'fields': fields,
-            'form': form
+            'form': form,
+            'formset': formset
             })
 
 @login_required

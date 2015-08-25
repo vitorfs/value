@@ -18,7 +18,7 @@
 
 {% block content %}
   <h1 class="lead">Change decision item</h1>
-  <form class="form-horizontal" method="post">
+  <form class="form-horizontal" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {% for hidden in form.hidden_fields %}
       {{ hidden }}
@@ -41,6 +41,41 @@
         </div>
       </div>
     {% endfor %}
+    <hr>
+    <div class="form-group">
+      {{ formset.management_form }}
+      <div class="col-md-6 col-sm-8 col-md-offset-2 col-sm-offset-4">
+        <div class="panel panel-default" style="margin-bottom: 0;">
+          <div class="panel-heading">
+            <h3 class="panel-title">Attachments</h3>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>File</th>
+                <th style="width: 50px;">Remove?</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for form in formset %}
+                <tr>
+                  <td>{{ form.attachment }}</td>
+                  <td style="text-align: center;">
+                    {% for hidden in form.hidden_fields %}
+                      {{ hidden }}
+                    {% endfor %}
+                    {% if form.instance.pk %}
+                      {{ form.DELETE }}
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <hr>
     <div class="form-group">
       <div class="col-sm-offset-4 col-sm-8 col-md-offset-2 col-md-10">
         <a href="{% url 'deliverables:delete_decision_item' deliverable.pk form.instance.pk %}" class="btn btn-danger pull-right">Delete</a>

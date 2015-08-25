@@ -1,9 +1,11 @@
+# coding: utf-8
+
 from collections import OrderedDict
 
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 from value.application_settings.models import ApplicationSetting
 from value.factors.models import Factor
@@ -78,6 +80,21 @@ class DecisionItem(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+def attachment_file_upload_to(instance, filename):
+    return u'deliverables/{0}/attachments/{1}'.format(instance.decision_item.deliverable.pk, filename)
+
+class DecisionItemAttachment(models.Model):
+    decision_item = models.ForeignKey(DecisionItem)
+    attachment = models.FileField(upload_to=attachment_file_upload_to)
+
+@receiver(post_delete, sender=DecisionItemAttachment)
+def attachment_post_delete_handler(sender, **kwargs):
+    attachment = kwargs['instance']
+    storage, path = attachment.attachment.storage, attachment.attachment.path
+    storage.delete(path)
+
 
 class DecisionItemLookup(models.Model):
     STRING = u'S'
