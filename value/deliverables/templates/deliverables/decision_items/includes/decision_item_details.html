@@ -1,8 +1,29 @@
 {% load attr %}
 
-{% for name, field in fields.items %}
-  <div class="form-group">
-    <label class="control-label">{{ field.label }}</label>
-    <input type="text" class="form-control" value="{{ item|attr:name }}" readonly>
+<div>
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">Details</a></li>
+    <li role="presentation"><a href="#attachments" aria-controls="attachments" role="tab" data-toggle="tab">Attachments</a></li>
+  </ul>
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="details">
+      {% for name, field in fields.items %}
+        <div class="form-group">
+          <label class="control-label">{{ field.label }}</label>
+          <input type="text" class="form-control" value="{{ item|attr:name }}" readonly>
+        </div>
+      {% endfor %}
+    </div>
+    <div role="tabpanel" class="tab-pane" id="attachments">
+      {% if item.has_attachments %}
+        <ul class="list-group" style="margin-top: 20px;">
+          {% for attachment in item.attachments.all %}
+            <li class="list-group-item"><a href="{{ MEDIA_URL }}{{ attachment.attachment }}" target="_blank">{{ attachment.attachment }}</a></li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <em class="text-muted" style="margin: 20px 0; display: block;">This item has no attachments.</em>
+      {% endif %}
+    </div>
   </div>
-{% endfor %}
+</div>

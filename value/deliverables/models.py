@@ -81,12 +81,15 @@ class DecisionItem(models.Model):
     def __unicode__(self):
         return self.name
 
+    def has_attachments(self):
+        return self.attachments.exists()
+
 
 def attachment_file_upload_to(instance, filename):
     return u'deliverables/{0}/attachments/{1}'.format(instance.decision_item.deliverable.pk, filename)
 
 class DecisionItemAttachment(models.Model):
-    decision_item = models.ForeignKey(DecisionItem)
+    decision_item = models.ForeignKey(DecisionItem, related_name='attachments')
     attachment = models.FileField(upload_to=attachment_file_upload_to)
 
 @receiver(post_delete, sender=DecisionItemAttachment)
