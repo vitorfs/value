@@ -4,6 +4,21 @@
 
 {% block javascript %}
   <script src="{% static 'js/application_settings/settings.js' %}"></script>
+  <script>
+    $(function () {
+      Sortable.create($("#column-display-order")[0], { 
+        draggable: ".sortable",
+        onEnd: function (evt) {
+          var value = '';
+          $("#column-display-order span").each(function () {
+            value += $(this).attr("data-field-name") + ",";
+            $(this).attr("data-field-order", $(this).index());
+          });
+          $("#id_column_display").val(value);
+        }
+      });
+    });
+  </script>
 {% endblock javascript %}
 
 {% block breadcrumb %}

@@ -1,24 +1,5 @@
 $(function () {
 
-  /*
-  Sortable.create($("#order-by")[0], { group: "order" });
-  Sortable.create($("#columns")[0], { group: "order" });
-  */
-
-  Sortable.create($("#column-display-order")[0], { 
-    draggable: ".sortable",
-    onEnd: function (evt) {
-      var value = '';
-      $("#column-display-order span").each(function () {
-        value += $(this).attr("data-field-name") + ",";
-        $(this).attr("data-field-order", $(this).index());
-      });
-      $("#id_column_display").val(value);
-    }
-  });
-
-  /*Sortable.create($("#plain-text-column-order")[0], { draggable: ".sortable" });*/
-
   $(".js-import-check").click(function () {
     var isActive = $(this).is(":checked");
     var row = $(this).closest("tr");
