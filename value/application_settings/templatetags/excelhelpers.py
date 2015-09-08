@@ -9,9 +9,10 @@ def excel_columns(name, index, settings):
     option = '<option value="{0}"{1}>{0}</option>'
 
     selected = ''
-    if settings['EXCEL_ENTRY_ORIENTATION'] == 'row':
-        if name in settings['EXCEL_IMPORT_TEMPLATE'].keys():
-            selected = settings['EXCEL_IMPORT_TEMPLATE'][name]
+    if 'EXCEL_ENTRY_ORIENTATION' in settings.keys():
+        if settings['EXCEL_ENTRY_ORIENTATION'] == 'row':
+            if name in settings['EXCEL_IMPORT_TEMPLATE'].keys():
+                selected = settings['EXCEL_IMPORT_TEMPLATE'][name]
 
     options = ''
     is_selected = False
@@ -59,8 +60,11 @@ def excel_rows(name, index, settings):
     select = '<select id="id_row_{0}" name="row_{0}" class="form-control">{1}</select>'
     option = '<option value="{0}"{1}>{0}</option>'
 
-    if settings['EXCEL_ENTRY_ORIENTATION'] == 'column':
-        selected = settings['EXCEL_IMPORT_TEMPLATE'][name]
+    selected = ''
+    if 'EXCEL_ENTRY_ORIENTATION' in settings.keys():
+        if settings['EXCEL_ENTRY_ORIENTATION'] == 'column':
+            if name in settings['EXCEL_IMPORT_TEMPLATE'].keys():
+                selected = settings['EXCEL_IMPORT_TEMPLATE'][name]
     else:
         selected = index
 

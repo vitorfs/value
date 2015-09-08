@@ -4,6 +4,7 @@
   <li role="presentation"{% if active == 'meetings' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:index' deliverable.pk %}"><span class="fa fa-laptop"></span> Meetings</a></li>
   <li role="presentation"{% if active == 'stakeholders' %} class="active"{% endif %}><a href="{% url 'deliverables:stakeholders' deliverable.pk %}"><span class="fa fa-users"></span> Stakeholders</a></li>
   <li role="presentation"{% if active == 'decision_items' %} class="active"{% endif %}><a href="{% url 'deliverables:decision_items' deliverable.pk %}"><span class="fa fa-list"></span> Decision Items</a></li>
+  <li role="presentation"{% if active == 'historical_dashboard' %} class="active"{% endif %}><a href="{% url 'deliverables:historical_dashboard' deliverable.pk %}"><span class="fa fa-line-chart"></span> Historical Dashboard</a></li>
   {% if user == deliverable.manager %}
     <li role="presentation"{% if active == 'settings' %} class="active"{% endif %}><a href="{% url 'deliverables:settings' deliverable.pk %}"><span class="fa fa-wrench"></span> Settings</a></li>
   {% endif %}

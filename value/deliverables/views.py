@@ -372,4 +372,8 @@ def transfer(request, deliverable_id):
     except:
         messages.error(request, 'Something went wrong. Nothing changed.')
     return redirect(reverse('deliverables:settings', args=(deliverable.pk,)))
-    
+
+@login_required
+def historical_dashboard(request, deliverable_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    return render(request, 'deliverables/historical_dashboard.html', { 'deliverable': deliverable })

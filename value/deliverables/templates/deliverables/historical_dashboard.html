@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></li>
+    <li class="active">Historical Dashboard</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+  {% include 'deliverables/includes/menu.html' with active='historical_dashboard' deliverable=deliverable %}
+
+
+{% endblock content %}
