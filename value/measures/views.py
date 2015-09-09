@@ -71,9 +71,10 @@ def edit(request, measure_id):
 def delete(request, measure_id):
     measure = get_object_or_404(Measure, pk=measure_id)
     measure_has_relations = measure.deliverables.exists()
-    associated_deliverables = measure.deliverables.values_list('name', flat=True)
-    str_associated_deliverables = ', '.join(associated_deliverables)
-    messages.warning(request, u'The measure {0} is associated with deliverables. Deleting this measure will lead to data loss. If you really want to delete this measure from the system, please delete the associated deliverables first: {1}.'.format(measure.name, str_associated_deliverables))
+    if measure_has_relations:
+        associated_deliverables = measure.deliverables.values_list('name', flat=True)
+        str_associated_deliverables = ', '.join(associated_deliverables)
+        messages.warning(request, u'The measure {0} is associated with deliverables. Deleting this measure will lead to data loss. If you really want to delete this measure from the system, please delete the associated deliverables first: {1}.'.format(measure.name, str_associated_deliverables))
     if request.method == 'POST' and not measure_has_relations:
         measure.delete()
         messages.success(request, u'The measure {0} was deleted successfully.'.format(measure.name))
