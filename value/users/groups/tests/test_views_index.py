@@ -12,7 +12,7 @@ class IndexTest(TestCase):
         user.is_superuser = True
         user.save()
         self.client.login(username='vitor', password='p4ssw0rd')
-        self.resp = self.client.get(r('groups:index'))
+        self.resp = self.client.get(r('users:groups:index'))
 
     def test_get(self):
         self.assertEqual(self.resp.status_code, 200)

@@ -24,7 +24,6 @@
   <form method="post" class="form-horizontal" role="form">
     {% csrf_token %}
     {% include 'includes/form_horizontal.html' with form=form %}
-    <hr>
     {% include 'measures/includes/measure_values_formset.html' with formset=formset %}
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
