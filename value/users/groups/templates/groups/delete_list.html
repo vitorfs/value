@@ -3,7 +3,7 @@
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'groups:index' %}">Groups</a></li>
+    <li><a href="{% url 'users:groups:index' %}">Users Groups</a></li>
     <li class="active">Delete groups</li>
   </ol>
 {% endblock breadcrumb %}
@@ -13,7 +13,7 @@
 
   <ul style="margin-bottom: 20px">
     {% for group in groups %}
-      <li><a href="{% url 'groups:edit' group.pk %}">{{ group.name }}</a></li>
+      <li><a href="{% url 'users:groups:edit' group.pk %}">{{ group.name }}</a></li>
     {% endfor %}
   </ul>
 
@@ -27,7 +27,7 @@
     <div class="form-group">
       <div class="col-sm-12">
         <button type="submit" class="btn btn-primary">Confirm</button>
-        <a href="{% url 'groups:index' %}" class="btn btn-default">Cancel</a>
+        <a href="{% url 'users:groups:index' %}" class="btn btn-default">Cancel</a>
       </div>
     </div>
   </form>

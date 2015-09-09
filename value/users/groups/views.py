@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import Group, User
 from django.views.decorators.http import require_POST
 
-from value.groups.forms import GroupForm
+from value.users.groups.forms import GroupForm
 
 
 @login_required
@@ -21,7 +21,7 @@ def process_list_actions(request):
             messages.success(request, 'The selected group were deleted successfully.')
         else:
             return render(request, 'groups/delete_list.html', { 'groups': groups, 'action': action })
-    return redirect(reverse('groups:index'))
+    return redirect(reverse('users:groups:index'))
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
@@ -39,7 +39,7 @@ def add(request):
         if form.is_valid():
             group = form.save()
             messages.success(request, u'The group {0} was added successfully.'.format(group.name))
-            return redirect(reverse('groups:index'))
+            return redirect(reverse('users:groups:index'))
         else:
             messages.error(request, u'Please correct the error below.')
     else:
@@ -55,7 +55,7 @@ def edit(request, group_id):
         if form.is_valid():
             group = form.save()
             messages.success(request, u'The group {0} was changed successfully.'.format(group.name))
-            return redirect(reverse('groups:index'))
+            return redirect(reverse('users:groups:index'))
         else:
             messages.error(request, u'Please correct the error below.')
     else:
@@ -69,5 +69,5 @@ def delete(request, group_id):
     if request.method == 'POST':
         group.delete()
         messages.success(request, u'The group {0} was deleted successfully.'.format(group.name))
-        return redirect(reverse('groups:index'))
+        return redirect(reverse('users:groups:index'))
     return render(request, 'groups/delete.html', { 'group': group })

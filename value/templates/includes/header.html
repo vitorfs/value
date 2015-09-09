@@ -23,13 +23,11 @@
                   <span class="fa fa-gears"></span> Management <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" role="menu">
-                  <li class="dropdown-header">Value Management</li>
                   <li><a href="{% url 'measures:index' %}">Measures</a></li>
                   <li><a href="{% url 'factors:factors' %}">Factors</a></li>
-                  <li class="divider"></li>
-                  <li class="dropdown-header">User Management</li>
+                  <li><a href="{% url 'factors:groups' %}">Factors Groups</a></li>
                   <li><a href="{% url 'users:users' %}">Users</a></li>
-                  <li><a href="{% url 'groups:index'  %}">Groups</a></li>
+                  <li><a href="{% url 'users:groups:index'  %}">Users Groups</a></li>
                 </ul>
               </li>
             {% endif %}

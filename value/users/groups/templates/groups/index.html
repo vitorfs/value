@@ -9,7 +9,7 @@
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
-    <li class="active">Groups</li>
+    <li class="active">Users Groups</li>
   </ol>
 {% endblock breadcrumb %}
 
@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="col-xs-6">
-        <a href="{% url 'groups:add' %}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> Add group</a>
+        <a href="{% url 'users:groups:add' %}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> Add group</a>
       </div>
     </div>
     <table class="table table-bordered table-striped table-check-all">
@@ -44,7 +44,7 @@
         {% for group in groups %}
           <tr>
             <td><input type="checkbox" name="group_id" value="{{ group.pk }}"></td>
-            <td><a href="{% url 'groups:edit' group.pk %}">{{ group.name }}</a></td>
+            <td><a href="{% url 'users:groups:edit' group.pk %}">{{ group.name }}</a></td>
           </tr>
         {% empty %}
           <tr>
