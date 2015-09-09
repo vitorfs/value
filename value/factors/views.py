@@ -69,7 +69,11 @@ def delete(request, factor_id):
 @user_passes_test(lambda user: user.is_superuser)
 def groups(request):
     groups = Group.objects.all()
-    available_factors = Factor.list().filter(group=None)
+    try:
+        available_factors = Factor.list().filter(group=None)
+    except Exception, e:
+        available_factors = list()
+        messages.warning(request, e.message)
     form = GroupForm()
     return render(request, 'factors/groups.html', { 
             'groups': groups,
