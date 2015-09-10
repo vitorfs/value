@@ -10,15 +10,17 @@
 {% block content %}
   <a class="btn btn-primary pull-right" href="{% url 'users:add' %}"><span class="glyphicon glyphicon-plus"></span> Add user</a>
 
-  <h1 class="lead">Select user to change</h1>
+  <h1 class="lead">Available users</h1>
 
   <table class="table table-striped">
     <thead>
       <tr>
         <th>Username</th>
+        <th>Email</th>
         <th>First name</th>
         <th>Last name</th>
         <th>Active</th>
+        <th>Roles</th>
         <th></th>
       </tr>
     </thead>
@@ -26,6 +28,7 @@
       {% for user in users %}
         <tr>
           <td><a href="{% url 'users:user' user.pk %}">{{ user.username }}</a></td>
+          <td>{{ user.email }}</td>
           <td>{{ user.first_name }}</td>
           <td>{{ user.last_name }}</td>
           <td>
@@ -35,6 +38,7 @@
               <span class="glyphicon glyphicon-remove-sign text-danger"></span>
             {% endif %}
           </td>
+          <td>{{ user.profile.get_display_roles }}</td>
           <td class="text-right text-nowrap">
             <a href="{% url 'users:user' user.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
             <a href="{% url 'users:delete' user.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</a>

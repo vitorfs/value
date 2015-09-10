@@ -23,27 +23,15 @@
                   <span class="fa fa-gears"></span> Management <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="{% url 'measures:index' %}">Measures</a></li>
                   <li><a href="{% url 'factors:factors' %}">Factors</a></li>
                   <li><a href="{% url 'factors:groups' %}">Factors Groups</a></li>
                   <li><a href="{% url 'users:users' %}">Users</a></li>
-                  <li><a href="{% url 'users:groups:index'  %}">Users Groups</a></li>
+                  <li><a href="{% url 'users:groups:index'  %}">Roles</a></li>
+                  <li><a href="{% url 'measures:index' %}">Measures</a></li>
                 </ul>
               </li>
             {% endif %}
           </ul>
-          {% comment %}<form class="navbar-form navbar-left{% if '/search/' == request.path %} hide{% endif %}" role="search" action="{% url 'search:index' %}">
-            <div class="form-group">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" name="q">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="submit">
-                    <span class="glyphicon glyphicon-search"></span>
-                  </button>
-                </span>
-              </div>
-            </div>
-          </form>{% endcomment %}
           <ul class="nav navbar-nav navbar-right">
             {% comment %}
             <li{% if '/help/' in request.path %} class="active"{% endif %}>

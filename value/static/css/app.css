@@ -444,3 +444,23 @@ th.headerSortUp:after {
 .btn-details:hover {
   color: #23527c!important;
 }
+
+.blank-state {
+  text-align: center;
+  padding: 4em 0;
+}
+
+.blank-state > .glyphicon,
+.blank-state > .fa {
+  color: #777;
+  font-size: 3em
+}
+
+.blank-state h3 + .btn {
+  margin-top: 20px;
+}
+
+.table tbody tr td, 
+.table thead tr th {
+  vertical-align: middle;
+}

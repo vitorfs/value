@@ -23,7 +23,6 @@ def add(request):
     if request.method == 'POST':
         form = FactorForm(request.POST)
         if form.is_valid():
-            form.instance.created_by = request.user
             factor = form.save()
             messages.success(request, u'The factor {0} was added successfully.'.format(factor.name))
             return redirect(reverse('factors:factors'))
@@ -41,7 +40,6 @@ def factor(request, factor_id):
     if request.method == 'POST':
         form = FactorForm(request.POST, instance=factor)
         if form.is_valid():
-            form.instance.updated_by = request.user
             factor = form.save()
             messages.success(request, u'The factor {0} was changed successfully.'.format(factor.name))
             return redirect(reverse('factors:factors'))
@@ -74,7 +72,6 @@ def groups(request):
         available_factors = Factor.list().filter(group=None)
     except Exception, e:
         available_factors = list()
-        messages.warning(request, e.message)
     form = GroupForm()
     return render(request, 'factors/groups.html', { 
             'groups': groups,

@@ -12,10 +12,6 @@ class Measure(models.Model):
     """
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, related_name='measure_creation_user')
-    updated_at = models.DateTimeField(auto_now=True)
-    updated_by = models.ForeignKey(User, null=True, related_name='measure_update_user')
 
     def __unicode__(self):
         return self.name

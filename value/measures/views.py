@@ -24,7 +24,6 @@ def add(request):
         form = MeasureForm(request.POST)
         formset = MeasureValueFormSet(request.POST)
         if form.is_valid() and formset.is_valid():
-            form.instance.created_by = request.user
             measure = form.save()
             formset.instance = measure
             formset.save()
@@ -51,7 +50,6 @@ def edit(request, measure_id):
         form = MeasureForm(request.POST, instance=measure)
         formset = MeasureValueFormSet(request.POST, instance=measure)
         if form.is_valid() and formset.is_valid():
-            form.instance.updated_by = request.user
             form.save()
             formset.save()
             for value in measure.measurevalue_set.all():

@@ -9,51 +9,54 @@
 
 {% block content %}
 
-  <div class="row">
-    <div class="col-sm-6">
-      <p class="lead">Select factor to change</p>
+  {% if factors.exists %}
+    <div class="row">
+      <div class="col-sm-6">
+        <p class="lead">Select factor to change</p>
+      </div>
+      <div class="col-sm-6 text-right">
+        <a href="{% url 'factors:add' %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add factor</a>
+      </div>
     </div>
-    <div class="col-sm-6 text-right">
-      <a href="{% url 'factors:add' %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add factor</a>
-    </div>
-  </div>
-
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Measure</th>
-        <th>Group</th>
-        <th>Active</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for factor in factors %}
-      <tr>
-        <td><a href="{% url 'factors:factor' factor.pk %}">{{ factor.name }}</a></td>
-        <td>{{ factor.description }}</td>
-        <td>{{ factor.measure.name }}</td>
-        <td>{{ factor.group.name }}</td>
-        <td>
-          {% if factor.is_active %}
-            <span class="glyphicon glyphicon-ok-sign text-success"></span>
-          {% else %}
-            <span class="glyphicon glyphicon-remove-sign text-danger"></span>
-          {% endif %}
-        </td>
-        <td class="text-right text-nowrap">
-          <a href="{% url 'factors:factor' factor.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
-          <a href="{% url 'factors:delete' factor.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</a>
-        </td>
-      </tr>
-      {% empty %}
+    <table class="table table-striped">
+      <thead>
         <tr>
-          <td colspan="5">No data</td>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Measure</th>
+          <th>Group</th>
+          <th>Active</th>
+          <th></th>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {% for factor in factors %}
+          <tr>
+            <td><a href="{% url 'factors:factor' factor.pk %}">{{ factor.name }}</a></td>
+            <td>{{ factor.description }}</td>
+            <td>{{ factor.measure.name }}</td>
+            <td>{{ factor.group.name }}</td>
+            <td>
+              {% if factor.is_active %}
+                <span class="glyphicon glyphicon-ok-sign text-success"></span>
+              {% else %}
+                <span class="glyphicon glyphicon-remove-sign text-danger"></span>
+              {% endif %}
+            </td>
+            <td class="text-right text-nowrap">
+              <a href="{% url 'factors:factor' factor.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+              <a href="{% url 'factors:delete' factor.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="well blank-state">
+      <span class="fa fa-briefcase"></span>
+      <h3>The factors directory is empty.</h3>
+      <a href="{% url 'factors:add' %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add the first factor</a>
+    </div>
+  {% endif %}
 {% endblock content %}
 

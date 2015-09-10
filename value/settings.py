@@ -49,7 +49,6 @@ INSTALLED_APPS = (
     'value.factors',
     'value.help',
     'value.measures',
-    'value.search',
     'value.users',
     'value.users.groups',
     'value.avatar',

@@ -15,16 +15,15 @@
 
 {% block content %}
 
-  <div class="row">
+  {% if groups.exists %}
+    <div class="row">
       <div class="col-sm-6">
-        <p class="lead">Drag and drop to asign a group</p>
+        <p class="lead">Use drag and drop to assign a factor to a group</p>
       </div>
       <div class="col-sm-6 text-right">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#new-group"><span class="glyphicon glyphicon-plus"></span> Add a factor group</button>
       </div>
     </div>
-
-  {% if groups.exists %}
     <div class="row">
       <div class="col-sm-4 col-md-3">
         <div class="panel panel-info">
@@ -66,12 +65,10 @@
       </div>
     </div>
   {% else %}
-    <div class="well">
-      <div class="text-center" style="padding: 2em 0;">
-        <span class="glyphicon glyphicon-list-alt text-muted" style="font-size: 2.5em"></span>
-        <h4 style="margin: 1em 0;">The factor groups directory is empty.</h4>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#new-group"><span class="glyphicon glyphicon-plus"></span> Add a factor group</button>
-      </div>
+    <div class="well blank-state">
+      <span class="fa fa-clone"></span>
+      <h3>The factors groups directory is empty.</h3>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#new-group"><span class="glyphicon glyphicon-plus"></span> Add the first factor group</button>
     </div>
   {% endif %}
 

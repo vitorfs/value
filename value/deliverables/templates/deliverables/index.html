@@ -84,13 +84,11 @@
     {% endif %}
 
   {% else %}
-    <div class="well" style="height: 100%">
-      <div class="text-center" style="padding: 4em 0;">
-        <span class="fa fa-inbox text-muted" style="font-size: 3em"></span>
-        <h3 style="">Welcome to your repository of deliverables!</h3>
-        <p class="lead">A deliverable can be a project, a product, a release, a service or an idea.</p>
-        <a class="btn btn-primary" href="{% url 'deliverables:new' %}"><span class="glyphicon glyphicon-plus"></span> Add your first deliverable</a>
-      </div>
+    <div class="well blank-state">
+      <span class="fa fa-inbox"></span>
+      <h3>Welcome to your repository of deliverables!</h3>
+      <p class="lead">A deliverable can be a project, a product, a release or a service.</p>
+      <a class="btn btn-primary" href="{% url 'deliverables:new' %}"><span class="glyphicon glyphicon-plus"></span> Add your first deliverable</a>
     </div>
   {% endif %}
 

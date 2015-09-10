@@ -18,6 +18,10 @@ class Profile(models.Model):
         else:
             return self.user.username
 
+    def get_display_roles(self):
+        groups = self.user.groups.all().values_list('name', flat=True)
+        return ', '.join(groups)
+
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
