@@ -2,11 +2,7 @@
   {  
     "fields":{  
       "name":"Architecture's Quality",
-      "created_at":"2015-05-15T12:42:30.441Z",
       "is_active":true,
-      "updated_at":"2015-05-23T22:16:10.686Z",
-      "created_by":1,
-      "updated_by":1,
       "measure":1,
       "description":""
     },
@@ -16,11 +12,7 @@
   {  
     "fields":{  
       "name":"Business Process Perspective",
-      "created_at":"2015-05-15T12:42:43.622Z",
       "is_active":true,
-      "updated_at":"2015-05-23T22:16:14.425Z",
-      "created_by":1,
-      "updated_by":1,
       "measure":1,
       "description":""
     },
@@ -30,11 +22,7 @@
   {  
     "fields":{  
       "name":"Company's Perspective",
-      "created_at":"2015-05-15T12:42:55.164Z",
       "is_active":true,
-      "updated_at":"2015-05-23T22:16:19.581Z",
-      "created_by":1,
-      "updated_by":1,
       "measure":1,
       "description":""
     },
@@ -44,11 +32,7 @@
   {  
     "fields":{  
       "name":"Continuous Improvement",
-      "created_at":"2015-05-18T05:16:28.539Z",
       "is_active":true,
-      "updated_at":"2015-05-23T22:16:23.511Z",
-      "created_by":1,
-      "updated_by":1,
       "measure":1,
       "description":""
     },
@@ -58,11 +42,7 @@
   {  
     "fields":{  
       "name":"Core Competencies",
-      "created_at":"2015-05-18T05:16:38.284Z",
       "is_active":true,
-      "updated_at":"2015-05-23T22:16:27.396Z",
-      "created_by":1,
-      "updated_by":1,
       "measure":1,
       "description":""
     },
@@ -72,11 +52,7 @@
   {  
     "fields":{  
       "name":"Customer Retention",
-      "created_at":"2015-05-18T05:16:49.303Z",
       "is_active":true,
-      "updated_at":"2015-05-23T22:16:32.363Z",
-      "created_by":1,
-      "updated_by":1,
       "measure":1,
       "description":""
     },
@@ -86,11 +62,7 @@
   {  
     "fields":{  
       "name":"Customer Satisfaction",
-      "created_at":"2015-05-18T05:16:58.847Z",
       "is_active":true,
-      "updated_at":"2015-05-23T22:16:36.913Z",
-      "created_by":1,
-      "updated_by":1,
       "measure":1,
       "description":""
     },
@@ -100,11 +72,7 @@
   {  
     "fields":{  
       "name":"Customer's Perspective",
-      "created_at":"2015-05-18T05:17:30.483Z",
       "is_active":true,
-      "updated_at":"2015-05-18T05:17:30.483Z",
-      "created_by":1,
-      "updated_by":null,
       "measure":1,
       "description":""
     },
@@ -114,11 +82,7 @@
   {  
     "fields":{  
       "name":"Revenue Growth",
-      "created_at":"2015-05-18T05:17:41.342Z",
       "is_active":true,
-      "updated_at":"2015-05-18T05:17:41.342Z",
-      "created_by":1,
-      "updated_by":null,
       "measure":1,
       "description":""
     },
@@ -128,11 +92,7 @@
   {  
     "fields":{  
       "name":"Streamline Processes",
-      "created_at":"2015-05-18T05:18:09.883Z",
       "is_active":true,
-      "updated_at":"2015-05-18T05:18:09.883Z",
-      "created_by":1,
-      "updated_by":null,
       "measure":1,
       "description":""
     },

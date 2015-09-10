@@ -20,5 +20,3 @@ class IndexTest(TestCase):
     def test_template(self):
         self.assertTemplateUsed(self.resp, 'groups/index.html')
 
-    def test_html(self):
-        self.assertContains(self.resp, 'Select group to change')
