@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from reportlab.graphics import renderPDF
 import xml.dom.minidom
 import json

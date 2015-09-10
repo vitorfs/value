@@ -1,13 +1,18 @@
 # coding: utf-8
 
+import json
+
 from django.core.urlresolvers import reverse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm, AdminPasswordChangeForm, PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import render, redirect, get_object_or_404
 from django.forms.models import modelform_factory
-from django.contrib import messages
+from django.template import RequestContext
+from django.template.loader import render_to_string
 
 from value.factors.models import Factor
 from value.users.forms import AccountForm
@@ -83,9 +88,25 @@ def delete(request, user_id):
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def roles(request):
+    return render(request, 'users/roles.html')
+
+def add_role(request):
     RoleForm = modelform_factory(Group, fields=('name',))
-    form = RoleForm()
-    return render(request, 'users/roles.html', { 'form': form })
+    json_context = dict()
+    if request.method == 'POST':
+        form = RoleForm(request.POST, prefix='add')
+        if form.is_valid():
+            role = form.save()
+            json_context['is_valid'] = True
+            messages.success(request, u'Role {0} successfully added!'.format(role.name))
+        else:
+            json_context['is_valid'] = False
+    else:
+        form = RoleForm(prefix='add')
+    context = RequestContext(request, { 'form': form })
+    json_context['html'] = render_to_string('includes/form_vertical.html', context)
+    dump = json.dumps(json_context)
+    return HttpResponse(dump, content_type='application/json')
 
 @login_required
 def account(request):
