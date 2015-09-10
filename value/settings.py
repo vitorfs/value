@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     #'debug_toolbar',
+    'widget_tweaks',
 
     'value.core',
     'value.deliverables',

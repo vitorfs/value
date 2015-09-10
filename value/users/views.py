@@ -1,20 +1,26 @@
+# coding: utf-8
+
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm, AdminPasswordChangeForm, PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.forms.models import modelform_factory
 from django.contrib import messages
+
 from value.factors.models import Factor
 from value.users.forms import AccountForm
 
-@login_required
-def users(request):
-    users = User.objects.all().order_by('username')
-    return render(request, 'users/users.html', { 'users' : users })
 
 @login_required
+@user_passes_test(lambda user: user.is_superuser)
+def users(request):
+    users = User.objects.all().order_by('username')
+    return render(request, 'users/index.html', { 'users' : users })
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
 def add(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -30,6 +36,7 @@ def add(request):
     return render(request, 'users/add.html', { 'form' : form })
 
 @login_required
+@user_passes_test(lambda user: user.is_superuser)
 def user(request, user_id):
     Form = modelform_factory(User, form=UserChangeForm, exclude=('date_joined', 'is_superuser', 'is_staff',))
     user = get_object_or_404(User, pk=user_id)
@@ -43,9 +50,10 @@ def user(request, user_id):
             messages.error(request, u'Please correct the error below.')
     else:
         form = Form(instance=user)
-    return render(request, 'users/user.html', { 'form' : form })
+    return render(request, 'users/edit.html', { 'form' : form })
 
 @login_required
+@user_passes_test(lambda user: user.is_superuser)
 def password(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     if request.method == 'POST':
@@ -63,6 +71,7 @@ def password(request, user_id):
     return render(request, 'users/password.html', { 'form' : form })
 
 @login_required
+@user_passes_test(lambda user: user.is_superuser)
 def delete(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     if request.method == 'POST':
@@ -70,6 +79,13 @@ def delete(request, user_id):
         messages.success(request, u'The user {0} was deleted successfully.'.format(user.username))
         return redirect(reverse('users:users'))
     return render(request, 'users/delete.html', { 'delete_user' : user })
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+def roles(request):
+    RoleForm = modelform_factory(Group, fields=('name',))
+    form = RoleForm()
+    return render(request, 'users/roles.html', { 'form': form })
 
 @login_required
 def account(request):

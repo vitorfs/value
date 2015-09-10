@@ -9,5 +9,5 @@ urlpatterns = patterns('value.users.views',
     url(r'^(\d+)/$', 'user', name='user'),
     url(r'^(\d+)/password/$', 'password', name='password'),
     url(r'^(\d+)/delete/$', 'delete', name='delete'),
-    url(r'groups/', include('value.users.groups.urls', namespace='groups')),
+    url(r'^roles/$', 'roles', name='roles'),
 )

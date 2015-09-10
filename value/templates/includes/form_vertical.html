@@ -1,4 +1,4 @@
-{% load fieldtype %}
+{% load fieldtype widget_tweaks %}
 
 {% for hidden in form.hidden_fields %}
   {{ hidden }}
@@ -24,7 +24,7 @@
           <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
         </div>
       {% else %}
-        {{ field }}
+        {{ field|add_class:'form-control' }}
       {% endif %}
       {% for error in field.errors %}
         <p class="help-block">{{ error }}</p>

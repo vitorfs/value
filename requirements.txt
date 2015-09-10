@@ -10,3 +10,4 @@ reportlab==3.2.0
 sqlparse==0.1.15
 wsgiref==0.1.2
 xlrd==0.9.4
+django-widget-tweaks==1.4.1
