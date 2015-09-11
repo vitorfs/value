@@ -10,5 +10,6 @@ urlpatterns = patterns('value.users.views',
     url(r'^(\d+)/password/$', 'password', name='password'),
     url(r'^(\d+)/delete/$', 'delete', name='delete'),
     url(r'^roles/$', 'roles', name='roles'),
+    url(r'^roles/add/$', 'add_role', name='add_role'),
     url(r'groups/', include('value.users.groups.urls', namespace='groups')),
 )

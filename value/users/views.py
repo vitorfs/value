@@ -88,8 +88,11 @@ def delete(request, user_id):
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def roles(request):
-    return render(request, 'users/roles.html')
+    roles_groups = Group.objects.all()
+    return render(request, 'users/roles.html', { 'roles_groups': roles_groups })
 
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
 def add_role(request):
     RoleForm = modelform_factory(Group, fields=('name',))
     json_context = dict()
@@ -98,6 +101,7 @@ def add_role(request):
         if form.is_valid():
             role = form.save()
             json_context['is_valid'] = True
+            json_context['redirect_to'] = reverse('users:roles')
             messages.success(request, u'Role {0} successfully added!'.format(role.name))
         else:
             json_context['is_valid'] = False
