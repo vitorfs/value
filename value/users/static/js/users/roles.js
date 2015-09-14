@@ -1,5 +1,23 @@
 $(function () {
 
+  var updateSelection = function () {
+
+  };
+
+  $("#available-users").sortable({
+    group: { name: "roles", pull: "clone", put: false},
+    sort: false
+  });
+
+  $(".role").sortable({
+    group: "roles",
+    onAdd: updateSelection,
+    onRemove: updateSelection,
+    onEnd: function (evt) {
+      
+    }
+  });
+
   $("#btn-add-role").click(function () {
 
     $.ajax({

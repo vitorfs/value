@@ -88,8 +88,9 @@ def delete(request, user_id):
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def roles(request):
-    roles_groups = Group.objects.all()
-    return render(request, 'users/roles.html', { 'roles_groups': roles_groups })
+    users = User.objects.all()
+    roles = Group.objects.all()
+    return render(request, 'users/roles.html', { 'users': users, 'roles': roles })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
