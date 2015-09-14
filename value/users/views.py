@@ -114,6 +114,26 @@ def add_role(request):
     return HttpResponse(dump, content_type='application/json')
 
 @login_required
+@user_passes_test(lambda user: user.is_superuser)
+def add_user_role(request):
+    user_id = request.POST.get('user')
+    group_id = request.POST.get('role')
+    user_role = User.objects.get(pk=user_id)
+    group = Group.objects.get(pk=group_id)
+    user_role.groups.add(group)
+    return HttpResponse()
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+def remove_user_role(request):
+    user_id = request.POST.get('user')
+    group_id = request.POST.get('role')
+    user_role = User.objects.get(pk=user_id)
+    group = Group.objects.get(pk=group_id)
+    user_role.groups.remove(group)
+    return HttpResponse()
+
+@login_required
 def account(request):
     if request.method == 'POST':
         form = AccountForm(request.POST, instance=request.user)

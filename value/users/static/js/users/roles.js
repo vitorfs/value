@@ -1,11 +1,11 @@
 $(function () {
 
-  var updateSelection = function (evt) {
-    $(".js-btn-remove", evt.item).css("display", "inline");
-  };
-
   $("main").on("click", ".js-btn-remove", function () {
-    $(this).closest("li").remove();
+    var li = $(this).closest("li");
+    var user = $(li).attr("data-user-id");
+    var role = $(li).closest("ul").attr("data-role-id");
+    removeUserFromRole(user, role);
+    $(li).remove();
   });
 
   $("#available-users").sortable({
@@ -17,6 +17,20 @@ $(function () {
     sort: false
   });
 
+  var removeUserFromRole = function (user, role) {
+    var form = $("#form-remove-user-role");
+    $("#id_user_remove").val(user);
+    $("#id_role_remove").val(role);
+    $.ajax({
+      url: $(form).attr("action"),
+      type: $(form).attr("method"),
+      data: $(form).serialize(),
+      success: function () {
+
+      }
+    });
+  };
+
   $(".role").sortable({
     group: "roles",
     onAdd: function (evt) {
@@ -24,17 +38,38 @@ $(function () {
       var ul = $(user).closest("ul");
       var id = $(user).attr("data-user-id");
       var count = 0;
+      var is_duplicated = false;
       $("li", ul).each(function () {
         if ($(this).attr("data-user-id") == id) {
           count++;
-          if (count > 1) {
+          is_duplicated = count > 1;
+          if (is_duplicated) {
             $(this).remove();
           }
         }
       });
-      updateSelection(evt);
+
+      if (!is_duplicated) {
+        var form = $("#form-add-user-role");
+        $("#id_user").val($(user).attr("data-user-id"));
+        $("#id_role").val($(ul).attr("data-role-id"));
+        $.ajax({
+          url: $(form).attr("action"),
+          type: $(form).attr("method"),
+          data: $(form).serialize(),
+          success: function () {
+
+          }
+        });
+      }
+
+      $(".js-btn-remove", evt.item).css("display", "inline");
     },
-    onRemove: updateSelection
+    onRemove: function (evt) {
+      var user = $(evt.item).attr("data-user-id");
+      var role = $(evt.from).attr("data-role-id");
+      removeUserFromRole(user, role);
+    }
   });
 
   $("#btn-add-role").click(function () {

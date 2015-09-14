@@ -11,5 +11,7 @@ urlpatterns = patterns('value.users.views',
     url(r'^(\d+)/delete/$', 'delete', name='delete'),
     url(r'^roles/$', 'roles', name='roles'),
     url(r'^roles/add/$', 'add_role', name='add_role'),
+    url(r'^roles/add-user/$', 'add_user_role', name='add_user_role'),
+    url(r'^roles/remove-user/$', 'remove_user_role', name='remove_user_role'),
     url(r'groups/', include('value.users.groups.urls', namespace='groups')),
 )
