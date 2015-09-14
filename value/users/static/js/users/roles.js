@@ -26,7 +26,7 @@ $(function () {
       type: $(form).attr("method"),
       data: $(form).serialize(),
       success: function () {
-
+        toastr.success("Changes successfully saved!");
       }
     });
   };
@@ -58,7 +58,7 @@ $(function () {
           type: $(form).attr("method"),
           data: $(form).serialize(),
           success: function () {
-
+            toastr.success("Changes successfully saved!");
           }
         });
       }
@@ -91,11 +91,12 @@ $(function () {
 
   });
 
-  $("#form-add-role").submit(function () {
+  $(".form-role").submit(function () {
+    var form = $(this);
     $.ajax({
-      url: $("#form-add-role").attr("action"),
-      data: $("#form-add-role").serialize(),
-      type: $("#form-add-role").attr("method"),
+      url: $(form).attr("action"),
+      data: $(form).serialize(),
+      type: $(form).attr("method"),
       dataType: 'json',
       cache: false,
       success: function(data) {
@@ -103,11 +104,40 @@ $(function () {
           location.href = data.redirect_to;
         }
         else {
-          $("#modal-add-role .modal-body").html(data.html);
+          $(".modal .modal-body", form).html(data.html);
         }
       }
     });
     return false;
+  });
+
+  $(".js-edit-role").click(function () {
+    var url = $(this).attr("data-role-edit-url");
+    var form = $("#form-edit-role");
+    $(form).attr("action", url);
+    $.ajax({
+      url: url,
+      type: 'get',
+      cache: false,
+      beforeSend: function () {
+        $("#modal-edit-role").modal("show");
+      },
+      success: function (data) {
+        $("#modal-edit-role .modal-body").html(data.html);
+        $("#modal-edit-role").on("shown.bs.modal", function () {
+          $("#id_edit-name").focus();
+        });
+      }
+    });
+  });
+
+
+  $(".js-confirm-role-deletion").click(function () {
+    var role_id = $(this).attr("data-role-id");
+    var role_name = $(this).attr("data-role-name");
+    $("#form-delete-role [name='role']").val(role_id)
+    $("#form-delete-role .role-name").text(role_name);
+    $("#delete-role").modal("show");
   });
 
 });

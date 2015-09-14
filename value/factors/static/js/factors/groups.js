@@ -49,7 +49,10 @@ $(function () {
       url: $(form).attr("action"),
       type: $(form).attr("method"),
       data: $(form).serialize(),
-      cache: false
+      cache: false,
+      success: function () {
+        toastr.success("Changes successfully saved!");
+      }
     });
   };
 

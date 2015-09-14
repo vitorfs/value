@@ -29,7 +29,7 @@
           <div class="panel-heading">
             <h3 class="panel-title">Available Users</h3>
           </div>
-          <ul class="list-group sortable" id="available-users" data-group-id="" style="min-height: 38px;">
+          <ul class="list-group sortable" id="available-users" style="min-height: 38px;">
             {% for user in users %}
               <li class="list-group-item" data-user-id="{{ user.pk }}" style="line-height: 32px;">
                 <img src="{% avatar user 32 %}" alt="{{ user.profile.get_display_name }}" class="img-circle" style="margin-right: 5px">
@@ -52,7 +52,7 @@
                   <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Click to remove the role" data-container="body" class="pull-right js-confirm-role-deletion" data-role-id="{{ role.pk }}" data-role-name="{{ role.name }}">
                     <span class="glyphicon glyphicon-remove"></span>
                   </a>
-                  <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Click to edit the role" data-container="body" class="pull-right js-edit-role" data-role-edit-url="{% url 'factors:edit_group' role.pk %}" style="margin-right: 5px;">
+                  <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Click to edit the role" data-container="body" class="pull-right js-edit-role" data-role-edit-url="{% url 'users:edit_role' role.pk %}" style="margin-right: 5px;">
                     <span class="glyphicon glyphicon-pencil"></span>
                   </a>
                   {{ role.name }}
@@ -83,7 +83,7 @@
     </div>
   {% endif %}
 
-  <form method="post" action="{% url 'users:add_role' %}" id="form-add-role">
+  <form method="post" action="{% url 'users:add_role' %}" id="form-add-role" class="form-role">
     {% csrf_token %}
     <div class="modal fade" id="modal-add-role">
       <div class="modal-dialog modal-sm">
@@ -91,6 +91,25 @@
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">New role</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <form method="post" action="" id="form-edit-role" class="form-role">
+    {% csrf_token %}
+    <div class="modal fade" id="modal-edit-role">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Edit role</h4>
           </div>
           <div class="modal-body"></div>
           <div class="modal-footer">
@@ -112,6 +131,27 @@
     {% csrf_token %}
     <input type="hidden" id="id_user_remove" name="user">
     <input type="hidden" id="id_role_remove" name="role">
+  </form>
+
+  <form method="post" action="{% url 'users:delete_role' %}" id="form-delete-role">
+    {% csrf_token %}
+    <input type="hidden" name="role">
+    <div class="modal fade" id="delete-role">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Are you sure?</h4>
+          </div>
+          <div class="modal-body">
+            <p>The associated users won't be deleted.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-danger btn-block">Delete role <span class="role-name"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
   </form>
 
 {% endblock content %}

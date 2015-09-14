@@ -38,13 +38,9 @@
     <div class="form-group">
       <label for="{{ form.password.id_for_label }}" class="col-sm-2 control-label">{{ form.password.label }}</label>
       <div class="col-sm-10">
-        {{ form.password }}
-        <input type="hidden" name="password" value="123">
         <span class="help-block">{{ form.password.help_text | safe }}</span>
       </div>
     </div>
-
-    <hr>
 
     <div class="form-group{% if form.first_name.errors %} has-error{% endif %}">
       <label for="{{ form.first_name.id_for_label }}" class="col-sm-2 control-label">{{ form.first_name.label }}</label>
@@ -66,8 +62,6 @@
         <input type="email" class="form-control" value="{{ form.email.value }}" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" maxlength="{{ form.email.field.max_length }}">
       </div>
     </div>
-
-    <hr>
 
     <div class="form-group">
       <div class="col-sm-10 col-sm-offset-2">

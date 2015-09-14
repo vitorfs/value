@@ -13,6 +13,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.forms.models import modelform_factory
 from django.template import RequestContext
 from django.template.loader import render_to_string
+from django.views.decorators.http import require_POST
 
 from value.factors.models import Factor
 from value.users.forms import AccountForm
@@ -112,6 +113,41 @@ def add_role(request):
     json_context['html'] = render_to_string('includes/form_vertical.html', context)
     dump = json.dumps(json_context)
     return HttpResponse(dump, content_type='application/json')
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+def edit_role(request, role_id):
+    RoleForm = modelform_factory(Group, fields=('name',))
+    role = Group.objects.get(pk=role_id)
+    json_context = dict()
+    if request.method == 'POST':
+        form = RoleForm(request.POST, instance=role, prefix='edit')
+        if form.is_valid():
+            role = form.save()
+            json_context['is_valid'] = True
+            json_context['redirect_to'] = reverse('users:roles')
+            messages.success(request, u'Role {0} successfully edited!'.format(role.name))
+        else:
+            json_context['is_valid'] = False
+    else:
+        form = RoleForm(instance=role, prefix='edit')
+    context = RequestContext(request, { 'form': form })
+    json_context['html'] = render_to_string('includes/form_vertical.html', context)
+    dump = json.dumps(json_context)
+    return HttpResponse(dump, content_type='application/json')
+
+@login_required
+@require_POST
+@user_passes_test(lambda user: user.is_superuser)
+def delete_role(request):
+    try:
+        role_id = request.POST.get('role')
+        role = Group.objects.get(pk=role_id)
+        role.delete()
+        messages.success(request, u'The role {0} was deleted successfully.'.format(role.name))
+    except Group.DoesNotExist:
+        pass
+    return redirect(reverse('users:roles'))
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
