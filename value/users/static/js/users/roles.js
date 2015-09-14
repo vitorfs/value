@@ -1,21 +1,40 @@
 $(function () {
 
-  var updateSelection = function () {
-
+  var updateSelection = function (evt) {
+    $(".js-btn-remove", evt.item).css("display", "inline");
   };
 
+  $("main").on("click", ".js-btn-remove", function () {
+    $(this).closest("li").remove();
+  });
+
   $("#available-users").sortable({
-    group: { name: "roles", pull: "clone", put: false},
+    group: { 
+      name: "roles", 
+      pull: "clone", 
+      put: false
+    },
     sort: false
   });
 
   $(".role").sortable({
     group: "roles",
-    onAdd: updateSelection,
-    onRemove: updateSelection,
-    onEnd: function (evt) {
-      
-    }
+    onAdd: function (evt) {
+      var user = evt.item;
+      var ul = $(user).closest("ul");
+      var id = $(user).attr("data-user-id");
+      var count = 0;
+      $("li", ul).each(function () {
+        if ($(this).attr("data-user-id") == id) {
+          count++;
+          if (count > 1) {
+            $(this).remove();
+          }
+        }
+      });
+      updateSelection(evt);
+    },
+    onRemove: updateSelection
   });
 
   $("#btn-add-role").click(function () {

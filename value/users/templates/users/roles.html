@@ -31,9 +31,12 @@
           </div>
           <ul class="list-group sortable" id="available-users" data-group-id="" style="min-height: 38px;">
             {% for user in users %}
-              <li class="list-group-item" data-user-id="{{ user.pk }}">
+              <li class="list-group-item" data-user-id="{{ user.pk }}" style="line-height: 32px;">
                 <img src="{% avatar user 32 %}" alt="{{ user.profile.get_display_name }}" class="img-circle" style="margin-right: 5px">
                 {{ user.profile.get_display_name }}
+                <button type="button" class="btn btn-xs btn-danger js-btn-remove pull-right" style="margin-top: 6px; display: none;">
+                  <span class="glyphicon glyphicon-remove"></span>
+                </button>
               </li>
             {% endfor %}
           </ul>
