@@ -187,7 +187,6 @@ def remove_stakeholder(request, deliverable_id):
     return HttpResponse(u'{0} was removed successfully.'.format(user.profile.get_display_name()))
 
 @login_required
-@user_is_manager
 @require_POST
 def process_decision_items_list_actions(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
