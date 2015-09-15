@@ -16,6 +16,10 @@ var uuid = function () {
   return _uuid;
 };
 
+var getCSRF = function () {
+  return $("meta[name='csrf']").attr("content");
+}
+
 $.fn.loading = function () {
   if ($(this).hasClass("loading")) {
     $(this).find(".block-spinner").remove();
@@ -163,6 +167,34 @@ $(function () {
   $(".table-clickable-row tbody tr").click(function (e) {
     e.stopPropagation();
     location.href = $(this).attr("data-href");
+  });
+
+  $(".js-toggle-active").click(function () {
+    var component = $(this);
+    var icon = $(".glyphicon", this);
+    var is_active = $(this).attr("data-is-active") === "True";
+    $.ajax({
+      url: 'active/',
+      type: 'post',
+      data: {
+        'id': $(component).attr("data-id"),
+        'csrfmiddlewaretoken': getCSRF()
+      },
+      success: function () {
+        toastr.success("Changes successfully saved!");
+        if (is_active) {
+          $(icon).removeClass().addClass("glyphicon glyphicon-remove-sign text-danger")
+          $(component).attr("data-is-active", "False");
+        }
+        else {
+          $(icon).removeClass().addClass("glyphicon glyphicon-ok-sign text-success")
+          $(component).attr("data-is-active", "True");
+        }
+      },
+      error: function () {
+        toastr.error("An unexpected error ocurred. This might be caused by a network failure. Please try again later.");
+      }
+    });
   });
 
 });

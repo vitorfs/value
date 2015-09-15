@@ -27,7 +27,7 @@
           <tr>
             <td><a href="{% url 'measures:edit' measure.pk %}">{{ measure.name }}</a></td>
             <td>{{ measure.get_values_as_string|safe }}</td>
-            <td>{% toggle_boolean measure.is_active %}</td>
+            <td>{% toggle_boolean measure %}</td>
             <td class="text-right text-nowrap">
               <a href="{% url 'measures:edit' measure.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
               <a href="{% url 'measures:delete' measure.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</a>

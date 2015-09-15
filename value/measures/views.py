@@ -1,9 +1,13 @@
+# coding: utf-8
+
 from django.db import transaction
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.forms.models import modelform_factory, inlineformset_factory
 from django.contrib import messages
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.views.decorators.http import require_POST
 
 from value.measures.models import Measure, MeasureValue
 from value.measures.forms import CreateMeasureForm, ChangeMeasureForm
@@ -82,4 +86,16 @@ def delete(request, measure_id):
         messages.success(request, u'The measure {0} was deleted successfully.'.format(measure.name))
         return redirect(reverse('measures:index'))
     return render(request, 'measures/delete.html', { 'measure' : measure, 'can_delete': measure_has_relations })
-    
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+@require_POST
+def toggle_active(request):
+    measure_id = request.POST.get('id')
+    try:
+        measure = Measure.objects.get(pk=measure_id)
+        measure.is_active = not measure.is_active
+        measure.save()
+        return HttpResponse()
+    except Measure.DoesNotExist:
+        return HttpResponseBadRequest()

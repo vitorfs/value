@@ -66,6 +66,19 @@ def delete(request, factor_id):
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
+@require_POST
+def toggle_active(request):
+    factor_id = request.POST.get('id')
+    try:
+        factor = Factor.objects.get(pk=factor_id)
+        factor.is_active = not factor.is_active
+        factor.save()
+        return HttpResponse()
+    except Factor.DoesNotExist:
+        return HttpResponseBadRequest()
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
 def groups(request):
     groups = Group.objects.all()
     try:

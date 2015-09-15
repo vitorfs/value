@@ -88,6 +88,19 @@ def delete(request, user_id):
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
+@require_POST
+def toggle_active(request):
+    user_id = request.POST.get('id')
+    try:
+        user = User.objects.get(pk=user_id)
+        user.is_active = not user.is_active
+        user.save()
+        return HttpResponse()
+    except User.DoesNotExist:
+        return HttpResponseBadRequest()
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
 def roles(request):
     users = User.objects.all()
     roles = Group.objects.all()

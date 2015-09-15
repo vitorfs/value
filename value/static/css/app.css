@@ -464,3 +464,7 @@ th.headerSortUp:after {
 .table thead tr th {
   vertical-align: middle;
 }
+
+.btn-active {
+  cursor: pointer;
+}

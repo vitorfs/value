@@ -5,4 +5,5 @@ urlpatterns = patterns('value.measures.views',
     url(r'^add/$', 'add', name='add'),
     url(r'^(\d+)/$', 'edit', name='edit'),
     url(r'^(\d+)/delete/$', 'delete', name='delete'),
+    url(r'^active/$', 'toggle_active', name='toggle_active'),
 )
