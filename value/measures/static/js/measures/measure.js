@@ -7,6 +7,11 @@ $(function () {
     $("#table-measure-values tbody tr").each(function () {
       $("td:eq(0) input", this).val($(this).index());
     });
+
+    $(".js-order-increase, .js-order-decrease").show();
+
+    $("#table-measure-values tbody tr:first-child .js-order-increase").hide();
+    $("#table-measure-values tbody tr:last-child .js-order-decrease").hide();
   };
 
   manage_value_order();
@@ -16,14 +21,14 @@ $(function () {
     var template = [
       "<tr>",
       "<td class='text-center' style='vertical-align: middle'>",
-      "<a href='#' class='js-order-increase'><span class='glyphicon glyphicon-triangle-top'></span></a>",
-      "<a href='#' class='js-order-decrease'><span class='glyphicon glyphicon-triangle-bottom'></span></a>",
+      "<a href='#' class='js-order-increase' style='display: block;'><span class='glyphicon glyphicon-triangle-top'></span></a>",
+      "<a href='#' class='js-order-decrease' style='display: block;'><span class='glyphicon glyphicon-triangle-bottom'></span></a>",
       "<input type='hidden' name='measurevalue_set-{value}-order' id='id_measurevalue_set-{value}-order'>",
       "</td>",
       "<td style='vertical-align: middle'>",
       "<input type='hidden' name='measurevalue_set-{value}-id' id='id_measurevalue_set-{value}-id'>",
       "<input type='hidden' name='measurevalue_set-{value}-measure' id='id_measurevalue_set-{value}-measure'>",
-      "<input type='text' maxlength='255' name='measurevalue_set-{value}-description' id='id_measurevalue_set-{value}-description' value='' class='form-control input-sm'>",
+      "<input type='text' maxlength='255' name='measurevalue_set-{value}-description' id='id_measurevalue_set-{value}-description' value='' class='form-control'>",
       "</td>",
       "<td class='text-center' style='vertical-align: middle'>",
       "<select id='id_measurevalue_set-{value}-color' name='measurevalue_set-{value}-color' class='color-selector' style='display: none;'>",

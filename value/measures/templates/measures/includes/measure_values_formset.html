@@ -22,15 +22,15 @@
       {% for form in formset.forms %}
         <tr>
           <td class="text-center" style="vertical-align: middle">
-            <a href="#" class="js-order-increase" data-toggle="tooltip" data-placement="top" title="Move choice up"><span class="glyphicon glyphicon-triangle-top"></span></a>
-            <a href="#" class="js-order-decrease" data-toggle="tooltip" data-placement="top" title="Move choice down"><span class="glyphicon glyphicon-triangle-bottom"></span></a>
+            <a href="#" class="js-order-increase" style="display: block;"><span class="glyphicon glyphicon-triangle-top"></span></a>
+            <a href="#" class="js-order-decrease" style="display: block;"><span class="glyphicon glyphicon-triangle-bottom"></span></a>
             <input type="hidden" value="{{ form.order.value|default_if_none:'' }}" id="{{ form.order.id_for_label }}" name="{{ form.order.html_name }}">
           </td>
           <td style="vertical-align: middle"{% if form.description.errors %} class="has-error"{% endif %}>
             {% for hidden in form.hidden_fields %}
               {{ hidden }}
             {% endfor %}
-            <input type="text" class="form-control input-sm" value="{{ form.description.value|default_if_none:'' }}" id="{{ form.description.id_for_label }}" name="{{ form.description.html_name }}" maxlength="{{ form.description.field.max_length }}">
+            <input type="text" class="form-control" value="{{ form.description.value|default_if_none:'' }}" id="{{ form.description.id_for_label }}" name="{{ form.description.html_name }}" maxlength="{{ form.description.field.max_length }}">
             {% for error in form.description.errors %}
               <p class="help-block">{{ error }}</p>
             {% endfor %}
