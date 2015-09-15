@@ -52,7 +52,7 @@ $(function () {
       "<option data-color='#85D5EC' value='#85D5EC'>#85D5EC</option>",
       "<option data-color='#39ACCD' value='#39ACCD'>#39ACCD</option>",
       "<option data-color='#1993B6' value='#1993B6'>#1993B6</option>",
-      "<option data-color='#337BB7' value='#337BB7'>#337BB7</option>",
+      "<option data-color='#337BB7' value='#337BB7' selected>#337BB7</option>",
       "<option data-color='#7EB1DC' value='#7EB1DC'>#7EB1DC</option>",
       "<option data-color='#5393C8' value='#5393C8'>#5393C8</option>",
       "<option data-color='#1265AB' value='#1265AB'>#1265AB</option>",

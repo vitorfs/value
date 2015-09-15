@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li class="active">Factors</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+
+  {% if factors.exists %}
+    <div class="row">
+      <div class="col-sm-6">
+        <p class="lead">Available factors</p>
+      </div>
+      <div class="col-sm-6 text-right">
+        <a href="{% url 'factors:add' %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add factor</a>
+      </div>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Measure</th>
+          <th>Group</th>
+          <th>Active</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for factor in factors %}
+          <tr>
+            <td><a href="{% url 'factors:edit' factor.pk %}">{{ factor.name }}</a></td>
+            <td>{{ factor.description }}</td>
+            <td>{{ factor.measure.name }}</td>
+            <td>{{ factor.group.name }}</td>
+            <td>
+              {% if factor.is_active %}
+                <span class="glyphicon glyphicon-ok-sign text-success"></span>
+              {% else %}
+                <span class="glyphicon glyphicon-remove-sign text-danger"></span>
+              {% endif %}
+            </td>
+            <td class="text-right text-nowrap">
+              <a href="{% url 'factors:edit' factor.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+              <a href="{% url 'factors:delete' factor.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="well blank-state">
+      <span class="fa fa-briefcase"></span>
+      <h3>The factors directory is empty.</h3>
+      <a href="{% url 'factors:add' %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add the first factor</a>
+    </div>
+  {% endif %}
+{% endblock content %}
+
