@@ -3,8 +3,8 @@
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'factors:factors' %}">Users</a></li>
-    <li><a href="{% url 'factors:factor' factor.pk %}">{{ factor.name }}</a></li>
+    <li><a href="{% url 'factors:index' %}">Users</a></li>
+    <li><a href="{% url 'factors:edit' factor.pk %}">{{ factor.name }}</a></li>
     <li class="active">Delete</li>
   </ol>
 {% endblock breadcrumb %}
@@ -16,7 +16,7 @@
     <div class="form-group">
       <div class="col-sm-12">
         <button type="submit" class="btn btn-primary">Confirm</button>
-        <a href="{% url 'factors:factors' %}" class="btn btn-default">Cancel</a>
+        <a href="{% url 'factors:index' %}" class="btn btn-default">Cancel</a>
       </div>
     </div>
   </form>
