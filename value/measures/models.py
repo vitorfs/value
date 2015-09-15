@@ -43,60 +43,61 @@ class Measure(models.Model):
 
     def get_values_as_string(self):
         """
-        Parse all MeasureValue objects into a string formatted shape.
-        The output should look like 'Positive, Neutral, Negative'.
+        Parse all MeasureValue objects into a string formatted shape with
+        small colored squares.
+        The output should look like '[#] Positive, [#] Neutral, [#] Negative'.
         """
         string_values = []
         for value in self.measurevalue_set.all():
-            string_values.append(value.description)
+            string_values.append(u'<span style="display: inline-block; border-radius: 2px; height: 12px; width: 12px; background-color: {1};"></span> {0}'.format(value.description, value.color))
         return u', '.join(string_values)
 
 
 class MeasureValue(models.Model):
 
-    PRIMARY_BLUE = u'#337BB7'
+    PRIMARY_BLUE = '#337BB7'
 
     COLORS = (
-        (u'#5CB85C', u'#5CB85C'),
-        (u'#BAE8BA', u'#BAE8BA'),
-        (u'#8AD38A', u'#8AD38A'),
-        (u'#369836', u'#369836'),
-        (u'#1B7C1B', u'#1B7C1B'),
+        ('#5CB85C', '#5CB85C'),
+        ('#BAE8BA', '#BAE8BA'),
+        ('#8AD38A', '#8AD38A'),
+        ('#369836', '#369836'),
+        ('#1B7C1B', '#1B7C1B'),
 
-        (u'#F0AD4E', u'#F0AD4E'),
-        (u'#FFD8A0', u'#FFD8A0'),
-        (u'#FFC675', u'#FFC675'),
-        (u'#DE9226', u'#DE9226'),
-        (u'#AD6D11', u'#AD6D11'),
+        ('#F0AD4E', '#F0AD4E'),
+        ('#FFD8A0', '#FFD8A0'),
+        ('#FFC675', '#FFC675'),
+        ('#DE9226', '#DE9226'),
+        ('#AD6D11', '#AD6D11'),
 
-        (u'#D9534F', u'#D9534F'),
-        (u'#FFADAB', u'#FFADAB'),
-        (u'#FC827F', u'#FC827F'),
-        (u'#BE2F2B', u'#BE2F2B'),
-        (u'#961512', u'#961512'),
+        ('#D9534F', '#D9534F'),
+        ('#FFADAB', '#FFADAB'),
+        ('#FC827F', '#FC827F'),
+        ('#BE2F2B', '#BE2F2B'),
+        ('#961512', '#961512'),
 
-        (u'#5BC1DE', u'#5BC1DE'),
-        (u'#BAEAF8', u'#BAEAF8'),
-        (u'#85D5EC', u'#85D5EC'),
-        (u'#39ACCD', u'#39ACCD'),
-        (u'#1993B6', u'#1993B6'),
+        ('#5BC1DE', '#5BC1DE'),
+        ('#BAEAF8', '#BAEAF8'),
+        ('#85D5EC', '#85D5EC'),
+        ('#39ACCD', '#39ACCD'),
+        ('#1993B6', '#1993B6'),
 
-        (PRIMARY_BLUE, u'#337BB7'),
-        (u'#7EB1DC', u'#7EB1DC'),
-        (u'#5393C8', u'#5393C8'),
-        (u'#1265AB', u'#1265AB'),
-        (u'#094B83', u'#094B83'),
+        (PRIMARY_BLUE, '#337BB7'),
+        ('#7EB1DC', '#7EB1DC'),
+        ('#5393C8', '#5393C8'),
+        ('#1265AB', '#1265AB'),
+        ('#094B83', '#094B83'),
 
-        (u'#222222', u'#222222'),
-        (u'#929191', u'#929191'),
-        (u'#5E5E5E', u'#5E5E5E'),
-        (u'#000000', u'#000000'),
-        (u'#030202', u'#030202'),
+        ('#222222', '#222222'),
+        ('#929191', '#929191'),
+        ('#5E5E5E', '#5E5E5E'),
+        ('#000000', '#000000'),
+        ('#030202', '#030202'),
         )
     measure = models.ForeignKey(Measure)
-    description = models.CharField(max_length=255, null=True, blank=True)
-    order = models.IntegerField(default=0, null=True, blank=True)
-    color = models.CharField(max_length=7, null=True, blank=True, choices=COLORS, default=PRIMARY_BLUE)
+    description = models.CharField(max_length=255)
+    order = models.IntegerField(default=0)
+    color = models.CharField(max_length=7, choices=COLORS, default=PRIMARY_BLUE)
 
     class Meta:
         ordering = ('order',)

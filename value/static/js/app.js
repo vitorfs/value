@@ -36,7 +36,7 @@ $.fn.updateFormsetIndex = function () {
 
   $(tableRows).each(function () {
     var rowIndex = $(this).index();
-    $("td input", this).each(function () {
+    $("td input, td select", this).each(function () {
       var name = $(this).attr("name");
       $(this).attr("name", name.replace(/-(.*?)-/, "-" + rowIndex + "-"));
       var id = $(this).attr("id");

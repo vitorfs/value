@@ -24,7 +24,7 @@
         {% for measure in measures %}
           <tr>
             <td><a href="{% url 'measures:edit' measure.pk %}">{{ measure.name }}</a></td>
-            <td>{{ measure.get_values_as_string }}</td>
+            <td>{{ measure.get_values_as_string|safe }}</td>
             <td>
               {% if measure.is_active %}
                 <span class="glyphicon glyphicon-ok-sign text-success"></span>
