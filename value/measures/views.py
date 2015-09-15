@@ -6,6 +6,7 @@ from django.forms.models import modelform_factory, inlineformset_factory
 from django.contrib import messages
 
 from value.measures.models import Measure, MeasureValue
+from value.measures.forms import CreateMeasureForm, ChangeMeasureForm
 
 
 @login_required
@@ -18,7 +19,6 @@ def index(request):
 @user_passes_test(lambda user: user.is_superuser)
 @transaction.atomic
 def add(request):
-    MeasureForm = modelform_factory(Measure, fields=('name',))
     MeasureValueFormSet = inlineformset_factory(
             Measure, 
             MeasureValue, 
@@ -28,7 +28,7 @@ def add(request):
             validate_min = True
         )
     if request.method == 'POST':
-        form = MeasureForm(request.POST)
+        form = CreateMeasureForm(request.POST)
         formset = MeasureValueFormSet(request.POST)
         if form.is_valid() and formset.is_valid():
             measure = form.save()
@@ -40,7 +40,7 @@ def add(request):
             messages.error(request, u'Please correct the error below.')
     else:
         measure = Measure()
-        form = MeasureForm()
+        form = CreateMeasureForm()
         formset = MeasureValueFormSet()
     return render(request, 'measures/add.html', { 'form' : form, 'formset' : formset })
 
@@ -49,10 +49,9 @@ def add(request):
 @transaction.atomic
 def edit(request, measure_id):
     measure = get_object_or_404(Measure, pk=measure_id)
-    MeasureForm = modelform_factory(Measure, fields=('name', 'is_active',))
     MeasureValueFormSet = inlineformset_factory(Measure, MeasureValue, fields=('description', 'order', 'color'), extra=0)
     if request.method == 'POST':
-        form = MeasureForm(request.POST, instance=measure)
+        form = ChangeMeasureForm(request.POST, instance=measure)
         formset = MeasureValueFormSet(request.POST, instance=measure)
         if form.is_valid() and formset.is_valid():
             form.save()
@@ -65,7 +64,7 @@ def edit(request, measure_id):
         else:
             messages.error(request, u'Please correct the error below.')
     else:
-        form = MeasureForm(instance=measure)
+        form = ChangeMeasureForm(instance=measure)
         formset = MeasureValueFormSet(instance=measure)
     return render(request, 'measures/edit.html', { 'form' : form, 'formset' : formset })
 

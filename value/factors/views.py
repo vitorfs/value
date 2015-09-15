@@ -8,46 +8,46 @@ from django.views.decorators.http import require_POST
 from django.http import HttpResponse, HttpResponseBadRequest
 
 from value.factors.models import Factor, Group
-from value.factors.forms import FactorForm, GroupForm
+from value.factors.forms import CreateFactorForm, ChangeFactorForm, GroupForm
 
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
-def factors(request):
+def index(request):
     factors = Factor.objects.all().order_by('name')
-    return render(request, 'factors/factors.html', { 'factors': factors })
+    return render(request, 'factors/index.html', { 'factors': factors })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def add(request):
     if request.method == 'POST':
-        form = FactorForm(request.POST)
+        form = CreateFactorForm(request.POST)
         if form.is_valid():
             factor = form.save()
             messages.success(request, u'The factor {0} was added successfully.'.format(factor.name))
-            return redirect(reverse('factors:factors'))
+            return redirect(reverse('factors:index'))
         else:
             messages.error(request, u'Please correct the error below.')
     else:
         factor = Factor()
-        form = FactorForm(instance=factor)
-    return render(request, 'factors/factor.html', { 'form': form })
+        form = CreateFactorForm(instance=factor)
+    return render(request, 'factors/add.html', { 'form': form })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
-def factor(request, factor_id):
+def edit(request, factor_id):
     factor = get_object_or_404(Factor, pk=factor_id)
     if request.method == 'POST':
-        form = FactorForm(request.POST, instance=factor)
+        form = ChangeFactorForm(request.POST, instance=factor)
         if form.is_valid():
             factor = form.save()
             messages.success(request, u'The factor {0} was changed successfully.'.format(factor.name))
-            return redirect(reverse('factors:factors'))
+            return redirect(reverse('factors:index'))
         else:
             messages.error(request, u'Please correct the error below.')
     else:
-        form = FactorForm(instance=factor)
-    return render(request, 'factors/factor.html', { 'form': form })
+        form = ChangeFactorForm(instance=factor)
+    return render(request, 'factors/edit.html', { 'form': form })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
@@ -61,7 +61,7 @@ def delete(request, factor_id):
     if request.method == 'POST' and not factor_has_relations:
         factor.delete()
         messages.success(request, u'The factor {0} was deleted successfully.'.format(factor.name))
-        return redirect(reverse('factors:factors'))
+        return redirect(reverse('factors:index'))
     return render(request, 'factors/delete.html', { 'factor': factor })
 
 @login_required
@@ -105,7 +105,7 @@ def edit_group(request, group_id):
         return redirect(reverse('factors:groups'))
     else:
         form = GroupForm(instance=group)
-        return render(request, 'factors/edit_group_form.html', { 'form': form })
+        return render(request, 'factors/includes/group_form.html', { 'form': form })
 
 @login_required
 @require_POST

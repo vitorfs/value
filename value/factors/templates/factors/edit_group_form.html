@@ -1,4 +1,0 @@
-<form method="post" action="{% url 'factors:edit_group' form.instance.pk %}" id="form-edit-group">
-  {% csrf_token %}
-  {% include 'includes/form_vertical.html' with form=form %}
-</form>
