@@ -22,7 +22,8 @@ class ChangeFactorForm(BaseFactorForm):
     is_active = forms.BooleanField(
         widget=forms.CheckboxInput(), 
         label='Active',
-        help_text='Unselect this instead of deleting factors.')
+        help_text='Unselect this instead of deleting factors.',
+        required=False)
 
     class Meta:
         model = Factor

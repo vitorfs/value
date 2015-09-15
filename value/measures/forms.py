@@ -17,7 +17,8 @@ class ChangeMeasureForm(BaseMeasureForm):
     is_active = forms.BooleanField(
         widget=forms.CheckboxInput(), 
         label='Active',
-        help_text='Unselect this instead of deleting measures.')
+        help_text='Unselect this instead of deleting measures.',
+        required=False)
     
     class Meta:
         model = Measure
