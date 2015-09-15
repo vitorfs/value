@@ -6,13 +6,13 @@ from value.core.exceptions import FactorsImproperlyConfigured
 
 
 class Group(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
 
     def __unicode__(self):
         return self.name
 
 class Factor(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     description = models.TextField(max_length=2000, null=True, blank=True)
     measure = models.ForeignKey(Measure, null=True, blank=True)
     is_active = models.BooleanField(default=True)

@@ -10,7 +10,7 @@ class Measure(models.Model):
     active (is_active = True) measure object within the context of the
     application.
     """
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
 
     def __unicode__(self):
