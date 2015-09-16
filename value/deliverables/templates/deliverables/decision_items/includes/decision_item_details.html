@@ -10,7 +10,7 @@
       {% for name, field in fields.items %}
         <div class="form-group">
           <label class="control-label">{{ field.label }}</label>
-          <input type="text" class="form-control" value="{{ item|attr:name }}" readonly>
+          <p>{{ item|attr:name }}</p>
         </div>
       {% endfor %}
     </div>
