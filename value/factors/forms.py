@@ -8,8 +8,8 @@ from value.measures.models import Measure
 
 class BaseFactorForm(forms.ModelForm):
     description = forms.CharField(widget=forms.Textarea(attrs={'class': 'expanding', 'rows': '3'}), max_length=2000, required=False)
-    measure = forms.ModelChoiceField(widget=forms.Select(attrs={'style': 'width: 50%'}), queryset=Measure.objects.filter(is_active=True), empty_label='Select...', required=False)
-    group = forms.ModelChoiceField(widget=forms.Select(attrs={'style': 'width: 50%'}), queryset=Group.objects.all(), empty_label='Select...', required=False)
+    measure = forms.ModelChoiceField(widget=forms.Select(), queryset=Measure.objects.filter(is_active=True), empty_label='Select...', required=False)
+    group = forms.ModelChoiceField(widget=forms.Select(), queryset=Group.objects.all(), empty_label='Select...', required=False)
     
     class Meta:
         model = Factor

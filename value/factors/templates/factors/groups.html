@@ -32,7 +32,12 @@
           </div>
           <ul class="list-group sortable" id="available-factors" data-group-id="" style="min-height: 38px;">
             {% for factor in available_factors %}
-              <li class="list-group-item" data-factor-id="{{ factor.pk }}">{{ factor.name }}</li>
+              <li class="list-group-item" data-factor-id="{{ factor.pk }}">
+                {{ factor.name }}
+                <button type="button" class="btn btn-xs btn-danger js-btn-remove pull-right" style="display: none;">
+                  <span class="glyphicon glyphicon-remove"></span>
+                </button>
+              </li>
             {% endfor %}
           </ul>
         </div>
@@ -55,7 +60,12 @@
               </div>
               <ul class="list-group factors-group sortable" data-group-id="{{ group.pk }}" style="min-height: 38px;">
                 {% for factor in group.factor_set.all %}
-                  <li class="list-group-item" data-factor-id="{{ factor.pk }}">{{ factor.name }}</li>
+                  <li class="list-group-item" data-factor-id="{{ factor.pk }}">
+                    {{ factor.name }}
+                    <button type="button" class="btn btn-xs btn-danger js-btn-remove pull-right">
+                      <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                  </li>
                 {% endfor %}
               </ul>
             </div>

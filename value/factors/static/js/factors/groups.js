@@ -54,6 +54,13 @@ $(function () {
         toastr.success("Changes successfully saved!");
       }
     });
+    if ($(evt.item).closest("ul").attr("id") === "available-factors") {
+      $(".js-btn-remove", evt.item).css("display", "none");
+    }
+    else {
+      $(".js-btn-remove", evt.item).css("display", "inline");
+    }
+    
   };
 
   $("#available-factors").sortable({
@@ -64,6 +71,14 @@ $(function () {
     group: "factors",
     onAdd: updateSelection,
     onRemove: updateSelection
+  });
+
+  $("main").on("click", ".js-btn-remove", function () {
+    var li = $(this).closest("li").remove();
+    $("#available-factors").append(li);
+    var evt = Array();
+    evt['item'] = li;
+    updateSelection(evt);
   });
 
 });

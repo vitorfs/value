@@ -45,14 +45,12 @@
         </div>
       {% endif %}
     {% else %}
-      <div class="well">
-        <div class="text-center" style="padding: 2em 0;">
-          <span class="fa fa-calendar text-muted" style="font-size: 2.5em"></span>
-          <h4 style="margin: 1em 0;">This deliverable had no meeting yet.</h4>
-          {% if deliverable.manager = user %}
-            <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Start a meeting</a>
-          {% endif %}
-        </div>
+      <div class="well blank-state">
+        <span class="fa fa-calendar"></span>
+        <h3>This deliverable had no meeting yet.</h3>
+        {% if deliverable.manager = user %}
+          <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Start a meeting</a>
+        {% endif %}
       </div>
     {% endif %}
   {% endwith %}
