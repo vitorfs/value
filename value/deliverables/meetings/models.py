@@ -224,3 +224,25 @@ class Evaluation(models.Model):
     @staticmethod
     def get_user_evaluations_by_meeting(user, meeting):
         return Evaluation._list(meeting).filter(user=user)
+
+class Scenario(models.Model):
+    """
+    The Scenario class is used to aggregate decision items to generate different 
+    types of visualization inside the dashboard.
+    """
+    FACTORS = 'FACTORS'
+    FACTORS_GROUPS = 'FACTORS_GROUPS'
+    ACCEPTANCE = 'ACCEPTANCE'
+    CATEGORIES = (
+        (FACTORS, 'Factors Comparison'),
+        (FACTORS_GROUPS, 'Factors Groups Comparison'),
+        (ACCEPTANCE, 'Decision Items Acceptance'),
+        )
+
+    name = models.CharField(max_length=255)
+    meeting = models.ForeignKey(Meeting)
+    category = models.CharField(max_length=14, choices=CATEGORIES)
+    meeting_items = models.ManyToManyField(MeetingItem)
+
+    class Meta:
+        unique_together = (('name', 'meeting', 'category',),)

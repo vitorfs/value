@@ -26,7 +26,7 @@ from value.deliverables.forms import RationaleForm
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
 from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
 from value.deliverables.meetings.charts import Highcharts
-from value.deliverables.meetings.forms import MeetingForm, MeetingItemFinalDecisionForm
+from value.deliverables.meetings.forms import MeetingForm, MeetingItemFinalDecisionForm, ScenarioForm
 
 
 @login_required
@@ -295,11 +295,13 @@ def features_scenarios(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     charts = list()
     stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
+    form = ScenarioForm()
     return render(request, 'meetings/dashboard/features_scenarios.html', { 
         'meeting': meeting,
         'charts': charts,
         'stakeholder_ids': stakeholder_ids,
         'chart_menu_active': 'features',
+        'form': form
         })
 
 @login_required

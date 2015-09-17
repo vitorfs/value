@@ -3,7 +3,7 @@ import datetime
 from django import forms
 from django.contrib.auth.models import User
 
-from value.deliverables.meetings.models import Meeting, MeetingItem
+from value.deliverables.meetings.models import Meeting, MeetingItem, Scenario
 
 
 class MeetingForm(forms.ModelForm):
@@ -21,6 +21,7 @@ class MeetingForm(forms.ModelForm):
         model = Meeting
         fields = ['name', 'started_at', 'location', 'description',]
 
+
 class MeetingItemFinalDecisionForm(forms.ModelForm):
     meeting_decision = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class' : 'final-decision'}), required=False)
     meeting_ranking = forms.FloatField(widget=forms.TextInput(attrs={'class' : 'form-control input-sm'}), required=False)
@@ -28,3 +29,9 @@ class MeetingItemFinalDecisionForm(forms.ModelForm):
     class Meta:
         model = MeetingItem
         fields = ['meeting_decision', 'meeting_ranking',]
+
+
+class ScenarioForm(forms.ModelForm):
+    class Meta:
+        model = Scenario
+        fields = ('name', 'meeting_items')
