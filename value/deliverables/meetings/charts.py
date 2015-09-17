@@ -226,15 +226,12 @@ class Highcharts(object):
             categories.append(meeting_item.decision_item.name)
 
         for measure_value in measure.measurevalue_set.all():
-            filtered_evaluations = evaluations.filter(measure_value=measure_value)
-            vqs = filtered_evaluations.values('meeting_item__id', 'meeting_item__decision_item__name').annotate(count=Count('meeting_item__id')).order_by('-meeting_item__decision_item__name')
             serie_data = []
-            for result in vqs:
-                votes = result['count']
+            for meeting_item in meeting.meetingitem_set.all():
+                votes = evaluations.filter(measure_value=measure_value, meeting_item=meeting_item).count()
+                percentage = 0.0
                 if max_votes != 0:
                     percentage = round((votes / float(max_votes)) * 100.0, 2)
-                else:
-                    percentage = 0.0
                 serie_data.append(percentage)
             series.append({ 'name': measure_value.description, 'data': serie_data, 'color': measure_value.color })
 
