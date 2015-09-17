@@ -14,7 +14,9 @@
     <li><a href="{% url 'deliverables:meetings:index' meeting.deliverable.pk %}">Meetings</a></li>
     <li><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
     <li><a href="{% url 'deliverables:meetings:dashboard' meeting.deliverable.pk meeting.pk %}">Dashboard</a></li>
-    <li class="active">{{ chart_page_title }}</li>
+    {% block breadcrumb_extra %}
+      <li class="active">{{ chart_page_title }}</li>
+    {% endblock breadcrumb_extra %}
   </ol>
 {% endblock breadcrumb %}
 

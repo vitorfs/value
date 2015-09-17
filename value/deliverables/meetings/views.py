@@ -291,6 +291,18 @@ def features(request, deliverable_id, meeting_id):
         })
 
 @login_required
+def features_scenarios(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    charts = list()
+    stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
+    return render(request, 'meetings/dashboard/features_scenarios.html', { 
+        'meeting': meeting,
+        'charts': charts,
+        'stakeholder_ids': stakeholder_ids,
+        'chart_menu_active': 'features',
+        })
+
+@login_required
 def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     meeting_item = meeting.meetingitem_set.get(pk=meeting_item_id)

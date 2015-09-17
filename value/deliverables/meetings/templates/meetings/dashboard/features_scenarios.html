@@ -9,10 +9,15 @@
   <script src="{% static 'js/meetings/dashboard.js' %}"></script>
   <script>
     $(function () {
-      $(".charts .panel-heading:eq(0)").loadchart();
+      //$(".charts .panel-heading:eq(0)").loadchart();
     });
   </script>
 {% endblock javascript %}
+
+{% block breadcrumb_extra %}
+  <li><a href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">Factors Comparison</a></li>
+  <li class="active">Scenarios</li>
+{% endblock breadcrumb_extra %}
 
 {% block charts %}
   <div class="panel panel-default">
@@ -21,13 +26,11 @@
     </div>
     <div class="panel-body">
       <ul class="nav nav-tabs" style="margin-bottom: 20px;">
-        <li role="presentation" class="active"><a href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">All Decision Items</a></li>
-        <li role="presentation"><a href="{% url 'deliverables:meetings:features_scenarios' meeting.deliverable.pk meeting.pk %}">Scenarios</a></li>
+        <li role="presentation"><a href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">All Decision Items</a></li>
+        <li role="presentation" class="active"><a href="{% url 'deliverables:meetings:features_scenarios' meeting.deliverable.pk meeting.pk %}">Scenarios</a></li>
       </ul>
       <div class="panel-group charts">
-        {% for chart in charts %}
-          {% include 'meetings/dashboard/features_chart.html' with opened=forloop.first %}
-        {% endfor %}
+
       </div>
     </div>
   </div>
