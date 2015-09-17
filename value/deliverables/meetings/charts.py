@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.db.models import Count
 from django.utils.html import escape
 
-from value.factors.models import Factor
+from value.factors.models import Factor, Group as FactorGroup
 from value.deliverables.meetings.models import Meeting, MeetingItem, Evaluation
 
 
@@ -19,6 +19,12 @@ def get_stakeholders_group_names(stakeholder_ids):
             groups.add(group.name)
     groups_text = u', '.join(groups)
     return escape(groups_text)
+
+def get_votes_percentage(max_value, value):
+    percentage = 0.0
+    if max_value != 0:
+        percentage = round((value / float(max_value)) * 100.0, 2)
+    return percentage
 
 class Highcharts(object):
 
@@ -37,11 +43,7 @@ class Highcharts(object):
 
         data = []
         for result in vqs:
-            votes = result['count']
-            if max_votes != 0:
-                percentage = round((votes / float(max_votes)) * 100.0, 2)
-            else:
-                percentage = 0.0
+            percentage = get_votes_percentage(max_votes, result['count'])
             data.append([result['meeting_item__decision_item__name'], percentage])
 
         groups_text = get_stakeholders_group_names(stakeholder_ids)
@@ -93,10 +95,7 @@ class Highcharts(object):
 
         for meeting_stakeholder in meeting_stakeholders:
             votes = evaluations.filter(user=meeting_stakeholder.stakeholder).count()
-            if max_input != 0:
-                percentage = round((votes / float(max_input)) * 100.0, 2)
-            else:
-                percentage = 0.0
+            percentage = get_votes_percentage(max_input, votes)
             data.append([meeting_stakeholder.stakeholder.profile.get_display_name(), percentage])
 
         data = sorted(data, key=operator.itemgetter(1))
@@ -143,10 +142,7 @@ class Highcharts(object):
 
         for factor in factors:
             votes = evaluations.filter(factor=factor).exclude(measure_value__description='N/A').count()
-            if max_votes != 0:
-                percentage = round((votes / float(max_votes)) * 100.0, 2)
-            else:
-                percentage = 0.0
+            percentage = get_votes_percentage(max_votes, votes)
             if factor.group:
                 data.append([u'{0} ({1})'.format(factor.name, factor.group.name), percentage])
             else:
@@ -229,9 +225,7 @@ class Highcharts(object):
             serie_data = []
             for meeting_item in meeting.meetingitem_set.all():
                 votes = evaluations.filter(measure_value=measure_value, meeting_item=meeting_item).count()
-                percentage = 0.0
-                if max_votes != 0:
-                    percentage = round((votes / float(max_votes)) * 100.0, 2)
+                percentage = get_votes_percentage(max_votes, votes)
                 serie_data.append(percentage)
             series.append({ 'name': measure_value.description, 'data': serie_data, 'color': measure_value.color })
 
@@ -443,11 +437,15 @@ class Highcharts(object):
                     'name': measure_value.description, 
                     'color': measure_value.color, 
                     'pointPlacement': 'on', 
-                    'data': [] 
+                    'data': list()
                 }
             for category in categories:
-                count = evaluations.filter(factor__group__name=category, measure_value=measure_value).count()
-                serie['data'].append(count)
+                group = FactorGroup.objects.get(name=category)
+                factors_count = group.factor_set.count()
+                max_votes = factors_count * len(stakeholder_ids)
+                votes = evaluations.filter(factor__group__name=category, measure_value=measure_value).count()
+                percentage = get_votes_percentage(max_votes, votes)
+                serie['data'].append(percentage)
             series.append(serie)
 
         categories = [category if category else 'No group' for category in categories]
@@ -476,7 +474,6 @@ class Highcharts(object):
     def value_ranking(self, meeting):
         categories = meeting.meetingitem_set.all().values_list('decision_item__name', flat=True).order_by('-value_ranking')
         data = meeting.meetingitem_set.all().values_list('value_ranking', flat=True).order_by('-value_ranking')
-
         data = [round(value, 2) for value in data]
 
         options = {
