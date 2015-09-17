@@ -45,7 +45,7 @@
                   <td style="vertical-align: middle;">
                     {{ form.instance.decision_item.name }}
                     <span data-toggle="tooltip" title="Click to view details" data-container="body" style="margin-left: 5px;">
-                      <a href="javascript:void(0);" class="btn-details js-decision-item-details" data-remote-url="{% url 'deliverables:details_decision_item' meeting.deliverable.pk form.instance.decision_item.pk %}">
+                      <a href="javascript:void(0);" class="btn-details js-decision-item-details" data-toggle="modal" data-target="#modal-decision-item-details" data-remote-url="{% url 'deliverables:details_decision_item' meeting.deliverable.pk form.instance.decision_item.pk %}">
                         <span class="glyphicon glyphicon-info-sign"></span>
                       </a>
                     </span>

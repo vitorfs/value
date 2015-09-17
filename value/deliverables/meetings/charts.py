@@ -197,9 +197,10 @@ class Highcharts(object):
             'chart': { 'type': chart_type },
             'title': { 'text': '' },
             'xAxis': { 'categories': categories },
-            'yAxis': { 'min': 0, 'title': { 'text': 'Number of votes' } },
+            'yAxis': { 'min': 0, 'max': 100, 'title': { 'text': 'Percentage of evaluations' }, 'labels': { 'format': '{value}%' } },
             'legend': { 'reversed': True },
             'plotOptions': { 'series': { 'stacking': stacking }},
+            'tooltip': { 'pointFormat': 'Percentage: <strong>{point.y}%</strong>' },
             'exporting': { 'enabled': False },
             'series': series
         }
@@ -242,6 +243,8 @@ class Highcharts(object):
         meeting_item = MeetingItem.objects.get(pk=meeting_item_id)
         evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
 
+        max_votes = len(stakeholder_ids)
+
         if evaluations:
 
             data = {}
@@ -260,7 +263,7 @@ class Highcharts(object):
                     label = u'<strong style="text-decoration: underline;">{0}:</strong> {1}'.format(evaluation.factor.group.name, evaluation.factor.name)
                 else:
                     label = evaluation.factor.name
-                data[label][evaluation.measure_value.description] = data[label][evaluation.measure_value.description] + 1
+                data[label][evaluation.measure_value.description] += 1
 
             sorted_data = sorted(data.items(), key=operator.itemgetter(0))
 
@@ -274,7 +277,8 @@ class Highcharts(object):
             for value in measure.measurevalue_set.all():
                 serie_data = []
                 for factor in sorted_data:
-                    serie_data.append(factor[1][value.description])
+                    percentage = get_votes_percentage(max_votes, factor[1][value.description])
+                    serie_data.append(percentage)
                 series.append({ 'name': value.description, 'data': serie_data, 'color': value.color })
 
             options = self._base_stacked_chart(categories, series, chart)

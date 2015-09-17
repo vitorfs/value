@@ -169,6 +169,8 @@ $(function () {
     location.href = $(this).attr("data-href");
   });
 
+  /* Active/Inactive grid buttons */
+
   $(".js-toggle-active").click(function () {
     var component = $(this);
     var icon = $(".glyphicon", this);
@@ -195,6 +197,31 @@ $(function () {
         toastr.error("An unexpected error ocurred. This might be caused by a network failure. Please try again later.");
       }
     });
+  });
+
+  /* Stackable Modal */
+
+  $('[data-toggle="modal"]').on('click', function(){
+    var $btn = $(this);
+    var currentDialog = $btn.closest('.modal-dialog'),
+    targetDialog = $($btn.attr('data-target'));;
+    if (!currentDialog.length)
+      return;
+    targetDialog.data('previous-dialog', currentDialog);
+    currentDialog.addClass('aside');
+    var stackedDialogCount = $('.modal.in .modal-dialog.aside').length;
+    if (stackedDialogCount <= 5){
+      currentDialog.addClass('aside-' + stackedDialogCount);
+    }
+  });
+
+  $('.modal').on('hide.bs.modal', function(){
+    var $dialog = $(this);  
+    var previousDialog = $dialog.data('previous-dialog');
+    if (previousDialog){
+      previousDialog.removeClass('aside');
+      $dialog.data('previous-dialog', undefined);
+    }
   });
 
 });
