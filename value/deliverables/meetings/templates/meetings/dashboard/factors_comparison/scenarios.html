@@ -1,0 +1,126 @@
+{% extends 'meetings/dashboard/base_charts.html' %}
+
+{% load staticfiles %}
+
+{% block javascript %}
+  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
+  <script src="{% static 'js/highcharts/highcharts-more.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/exporting.js' %}"></script>
+  <script src="{% static 'js/meetings/dashboard.js' %}"></script>
+  <script src="{% static 'js/meetings/meetings.js' %}"></script>
+  <script>
+    $(function () {
+      //$(".charts .panel-heading:eq(0)").loadchart();
+
+      $("#modal-add-scenario").on("shown.bs.modal", function () {
+        $.ajax({
+          url: $("#form-add-scenario").attr("action"),
+          dataType: 'json',
+          beforeSend: function () {
+            $("#modal-add-scenario .modal-body").loading();
+          },
+          success: function (data) {
+            $("#modal-add-scenario .modal-body").html(data.form);
+            $("#table-decision-items").tablesorter({ headers: { 0: { sorter: false }}});
+            initializeCheckAll();
+          }
+        });
+      });
+
+      $("#form-add-scenario").submit(function () {
+        $.ajax({
+          url: $("#form-add-scenario").attr("action"),
+          data: $("#form-add-scenario").serialize(),
+          type: $("#form-add-scenario").attr("method"),
+          dataType: 'json',
+          beforeSend: function () {
+            
+          },
+          success: function (data) {
+            if (data.is_valid) {
+
+            }
+            else {
+              $("#modal-add-scenario .modal-body").html(data.form);
+              $("#table-decision-items").tablesorter({ headers: { 0: { sorter: false }}});
+              initializeCheckAll();
+            }
+          }
+        });
+        return false;
+      });
+
+    });
+  </script>
+{% endblock javascript %}
+
+{% block breadcrumb_extra %}
+  <li><a href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">Factors Comparison</a></li>
+  <li class="active">Scenarios</li>
+{% endblock breadcrumb_extra %}
+
+{% block charts %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Factors Comparison</h3>
+    </div>
+    <div class="panel-body">
+      <ul class="nav nav-tabs" style="margin-bottom: 20px;">
+        <li role="presentation"><a href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">All Decision Items</a></li>
+        <li role="presentation" class="active"><a href="{% url 'deliverables:meetings:features_scenarios' meeting.deliverable.pk meeting.pk %}">Scenarios</a></li>
+      </ul>
+      <div class="panel-group charts">
+        {% if charts %}
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add-scenario">
+            <span class="glyphicon glyphicon-plus"></span> Add scenario
+          </button>
+        {% else %}
+          <div class="well blank-state">
+            <span class="fa fa-bar-chart"></span>
+            <h3>You haven't created any scenario yet.</h3>
+            <p class="lead">A scenario can be used to combine different set of decision items.</p>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add-scenario">
+              <span class="glyphicon glyphicon-plus"></span> Add the first scenario
+            </button>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <form id="form-add-scenario" method="post" action="{% url 'deliverables:meetings:add_features_scenario' meeting.deliverable.pk meeting.pk %}">
+    {% csrf_token %}
+    <div class="modal fade" id="modal-add-scenario" data-modal-index="1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Cancel"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">New scenario</h4>
+          </div>
+          <div class="modal-body" style="min-height: 200px;">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="modal fade" id="modal-decision-item-details" data-modal-index="2">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Details</h4>
+        </div>
+        <div class="modal-body">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock charts %}

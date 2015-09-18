@@ -32,6 +32,18 @@ class MeetingItemFinalDecisionForm(forms.ModelForm):
 
 
 class ScenarioForm(forms.ModelForm):
+    meeting = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Meeting.objects.all(), required=True)
+    category = forms.CharField(widget=forms.HiddenInput(), required=True)
+    meeting_items = forms.ModelMultipleChoiceField(
+            widget=forms.CheckboxSelectMultiple(), 
+            queryset=None,
+            required=True
+            )
+
+    def __init__(self, *args, **kwargs):
+        super(ScenarioForm, self).__init__(*args, **kwargs)
+        self.fields['meeting_items'].queryset = self.instance.meeting.meetingitem_set.all()
+
     class Meta:
         model = Scenario
-        fields = ('name', 'meeting_items')
+        fields = ('name', 'meeting', 'category', 'meeting_items')

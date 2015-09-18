@@ -201,7 +201,7 @@ $(function () {
 
   /* Stackable Modal */
 
-  $('[data-toggle="modal"]').on('click', function(){
+  $(document).on('click', '[data-toggle="modal"]', function(){
     var $btn = $(this);
     var currentDialog = $btn.closest('.modal-dialog'),
     targetDialog = $($btn.attr('data-target'));;

@@ -17,6 +17,8 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.db import transaction
 from django.forms.models import modelformset_factory
+from django.template import RequestContext
+from django.template.loader import render_to_string
 
 from value.utils.svglib import SvgRenderer
 from value.factors.models import Factor
@@ -280,7 +282,7 @@ def features(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     charts = meeting.meetingitem_set.all()
     stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
-    return render(request, 'meetings/dashboard/features_list.html', { 
+    return render(request, 'meetings/dashboard/factors_comparison/list.html', { 
         'meeting': meeting,
         'charts': charts,
         'stakeholder_ids': stakeholder_ids,
@@ -295,18 +297,30 @@ def features_scenarios(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     charts = list()
     stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
-    form = ScenarioForm(instance=Scenario(meeting=meeting))
-    return render(request, 'meetings/dashboard/features_scenarios.html', { 
+    return render(request, 'meetings/dashboard/factors_comparison/scenarios.html', { 
         'meeting': meeting,
         'charts': charts,
         'stakeholder_ids': stakeholder_ids,
-        'chart_menu_active': 'features',
-        'form': form
+        'chart_menu_active': 'features'
         })
 
 @login_required
-def add_features_scenarios(request, deliverable_id, meeting_id):
-    pass
+def add_features_scenario(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    scenario = Scenario(meeting=meeting, category=Scenario.FACTORS)
+    json_context = dict()
+    if request.method == 'POST':
+        form = ScenarioForm(request.POST, instance=scenario, prefix='add')
+        if form.is_valid():
+            role = form.save()
+            json_context['is_valid'] = True
+        else:
+            json_context['is_valid'] = False
+    else:
+        form = ScenarioForm(instance=scenario, prefix='add')
+    context = RequestContext(request, { 'form': form })
+    json_context['form'] = render_to_string('meetings/dashboard/factors_comparison/add_scenario.html', context)
+    return HttpResponse(json.dumps(json_context), content_type='application/json')
 
 @login_required
 def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
@@ -324,7 +338,7 @@ def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        return render(request, 'meetings/dashboard/features_popup.html', { 
+        return render(request, 'meetings/dashboard/factors_comparison/popup.html', { 
             'meeting': meeting,
             'chart': meeting_item,
             'chart_uri': 'features',

@@ -24,6 +24,7 @@ urlpatterns = patterns('value.deliverables.meetings.views',
 
     url(r'^(?P<meeting_id>\d+)/dashboard/features/$', 'features', name='features'),
     url(r'^(?P<meeting_id>\d+)/dashboard/features/scenarios/$', 'features_scenarios', name='features_scenarios'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/features/add_scenario/$', 'add_features_scenario', name='add_features_scenario'),
     url(r'^(?P<meeting_id>\d+)/dashboard/features/(?P<meeting_item_id>\d+)/$', 'features_chart', name='features_chart'),
 
     url(r'^(?P<meeting_id>\d+)/dashboard/factors-groups-comparison/$', 'factors_groups', name='factors_groups'),
