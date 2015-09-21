@@ -23,9 +23,10 @@ urlpatterns = patterns('value.deliverables.meetings.views',
     url(r'^(?P<meeting_id>\d+)/dashboard/stakeholders-input/$', 'dashboard_stakeholders_input_chart', name='dashboard_stakeholders_input_chart'),
 
     url(r'^(?P<meeting_id>\d+)/dashboard/features/$', 'features', name='features'),
-    url(r'^(?P<meeting_id>\d+)/dashboard/features/scenarios/$', 'features_scenarios', name='features_scenarios'),
-    url(r'^(?P<meeting_id>\d+)/dashboard/features/add_scenario/$', 'add_features_scenario', name='add_features_scenario'),
     url(r'^(?P<meeting_id>\d+)/dashboard/features/(?P<meeting_item_id>\d+)/$', 'features_chart', name='features_chart'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/features/scenarios/$', 'features_scenarios', name='features_scenarios'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/features/scenarios/add/$', 'add_features_scenario', name='add_features_scenario'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/features/scenarios/(?P<scenario_id>\d+)/$', 'features_scenario_chart', name='features_scenario_chart'),
 
     url(r'^(?P<meeting_id>\d+)/dashboard/factors-groups-comparison/$', 'factors_groups', name='factors_groups'),
     url(r'^(?P<meeting_id>\d+)/dashboard/factors-groups-comparison/(?P<meeting_item_id>\d+)/$', 'factors_groups_chart', name='factors_groups_chart'),
@@ -39,6 +40,8 @@ urlpatterns = patterns('value.deliverables.meetings.views',
     url(r'^(?P<meeting_id>\d+)/dashboard/features-comparison/(?P<measure_value_id>\d+)/$', 'features_comparison_chart', name='features_comparison_chart'),
 
     url(r'^(?P<meeting_id>\d+)/dashboard/value-ranking/$', 'value_ranking', name='value_ranking'),
+
+    url(r'^(?P<meeting_id>\d+)/dashboard/delete-scenario/$', 'delete_scenario', name='delete_scenario'),
 
     #Final Decision URLs
     url(r'^(?P<meeting_id>\d+)/decision/$', 'final_decision', name='final_decision'),

@@ -280,7 +280,11 @@ def dashboard_stakeholders_input_chart(request, deliverable_id, meeting_id):
 @login_required
 def features(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    charts = meeting.meetingitem_set.all()
+    charts = [{ 
+        'id': item.pk,
+        'name': item.decision_item.name, 
+        'remote': reverse('deliverables:meetings:features_chart', args=(meeting.deliverable.pk, meeting.pk, item.pk))
+    } for item in meeting.meetingitem_set.all()]
     stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
     return render(request, 'meetings/dashboard/factors_comparison/list.html', { 
         'meeting': meeting,
@@ -292,16 +296,65 @@ def features(request, deliverable_id, meeting_id):
         })
 
 @login_required
+def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    meeting_item = meeting.meetingitem_set.get(pk=meeting_item_id)
+    chart_type = request.GET.get('chart-type')
+    stakeholder_ids = request.GET.getlist('stakeholder')
+    try:
+        stakeholder_ids = list(map(int, stakeholder_ids))
+    except:
+        pass
+    chart = Highcharts()
+    options = chart.features_selection_stacked_chart(meeting_id, meeting_item_id, chart_type, stakeholder_ids)
+    dump = json.dumps(options)
+    chart = { 
+        'id': meeting_item.pk,
+        'name': meeting_item.decision_item.name, 
+        'remote': reverse('deliverables:meetings:features_chart', args=(meeting.deliverable.pk, meeting.pk, meeting_item.pk))
+    }
+    if 'application/json' in request.META.get('HTTP_ACCEPT'):
+        return HttpResponse(dump, content_type='application/json')
+    else:
+        return render(request, 'meetings/dashboard/factors_comparison/popup.html', { 
+            'meeting': meeting,
+            'chart': chart,
+            'chart_type': chart_type,
+            'stakeholder_ids': stakeholder_ids,
+            'dump': dump
+            })
+
+@login_required
 def features_scenarios(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    scenarios = meeting.scenarios.filter(category=Scenario.FACTORS)
+    charts = [{
+        'id': scenario.pk,
+        'name': scenario.name,
+        'remote': reverse('deliverables:meetings:features_scenario_chart', args=(meeting.deliverable.pk, meeting.pk, scenario.pk))
+    } for scenario in meeting.scenarios.filter(category=Scenario.FACTORS)]
     stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
     return render(request, 'meetings/dashboard/factors_comparison/scenarios.html', { 
         'meeting': meeting,
-        'scenarios': scenarios,
+        'charts': charts,
         'stakeholder_ids': stakeholder_ids,
         'chart_menu_active': 'features'
         })
+
+@login_required
+def features_scenario_chart(request, deliverable_id, meeting_id, scenario_id):
+    chart = Highcharts()
+    options = {}
+    dump = json.dumps(options)
+    if 'application/json' in request.META.get('HTTP_ACCEPT'):
+        return HttpResponse(dump, content_type='application/json')
+    else:
+        return render(request, 'meetings/dashboard/factors_comparison/popup.html', { 
+            'meeting': meeting,
+            'chart': meeting_item,
+            'chart_type': chart_type,
+            'stakeholder_ids': stakeholder_ids,
+            'dump': dump
+            })
 
 @login_required
 def add_features_scenario(request, deliverable_id, meeting_id):
@@ -320,31 +373,6 @@ def add_features_scenario(request, deliverable_id, meeting_id):
     context = RequestContext(request, { 'form': form })
     json_context['form'] = render_to_string('meetings/dashboard/factors_comparison/add_scenario.html', context)
     return HttpResponse(json.dumps(json_context), content_type='application/json')
-
-@login_required
-def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
-    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    meeting_item = meeting.meetingitem_set.get(pk=meeting_item_id)
-    chart_type = request.GET.get('chart-type')
-    stakeholder_ids = request.GET.getlist('stakeholder')
-    try:
-        stakeholder_ids = list(map(int, stakeholder_ids))
-    except:
-        pass
-    chart = Highcharts()
-    options = chart.features_selection_stacked_chart(meeting_id, meeting_item_id, chart_type, stakeholder_ids)
-    dump = json.dumps(options)
-    if 'application/json' in request.META.get('HTTP_ACCEPT'):
-        return HttpResponse(dump, content_type='application/json')
-    else:
-        return render(request, 'meetings/dashboard/factors_comparison/popup.html', { 
-            'meeting': meeting,
-            'chart': meeting_item,
-            'chart_uri': 'features',
-            'chart_type': chart_type,
-            'stakeholder_ids': stakeholder_ids,
-            'dump': dump
-            })
 
 @login_required
 def features_acceptance(request, deliverable_id, meeting_id):
@@ -689,4 +717,16 @@ def save_final_decision(request, deliverable_id, meeting_id):
         dump = json.dumps(errors)
         return HttpResponseBadRequest(dump, content_type='application/json')
     return HttpResponse()
-        
+
+@require_POST
+@login_required
+def delete_scenario(request, deliverable_id, meeting_id):
+    scenario_id = request.POST.get('scenario')
+    next = request.POST.get('next', reverse('deliverables:meetings:dashboard', args=(deliverable_id, meeting_id)))
+    try:
+        scenario = Scenario.objects.get(pk=scenario_id)
+        scenario.delete()
+        messages.success(request, u'Scenario {0} successfully deleted!'.format(scenario.name))
+    except Scenario.DoesNotExist:
+        messages.error(request, 'An unexpected error ocurred.')
+    return redirect(next)

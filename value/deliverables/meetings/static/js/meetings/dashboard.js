@@ -37,7 +37,7 @@ $.fn.loadchart = function (callback) {
 
 $(function () {
 
-  $(".js-select-stakeholder").click(function (e) {
+  $(".charts").on("click", ".js-select-stakeholder", function (e) {
     e.preventDefault();
     var checkbox = $("input[type='checkbox'][name='stakeholder']", this);
     var icon = $(".glyphicon", this);
@@ -54,14 +54,14 @@ $(function () {
     return false;
   });
 
-  $(".btn-chart-download").click(function () {
+  $(".charts").on("click", ".btn-chart-download", function () {
     var panel = $(this).closest(".panel");
     var chart = $(".panel-body", panel).highcharts(), svg = chart.getSVG();
     $("#id_svg").val(svg);
     $("#chart-download").submit();
   });
 
-  $(".btn-chart-expand").click(function () {
+  $(".charts").on("click", ".btn-chart-expand", function () {
 
     var container = $(this).closest(".panel");
     var title = $(".panel-title", container).text();
@@ -80,7 +80,7 @@ $(function () {
 
   });
 
-  $(".btn-chart-toggle").click(function () {
+  $(".charts").on("click", ".btn-chart-toggle", function () {
 
     var container = $(this).closest(".panel-heading");
 
@@ -89,12 +89,12 @@ $(function () {
 
     if ($(target).is(":visible")) {
       $(".btn-chart-toggle .glyphicon", container).removeClass("glyphicon-minus").addClass("glyphicon-plus");
-      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .btn-chart-download, .dropdown-toggle", container).prop("disabled", true);
+      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .btn-chart-download, .btn-chart-delete, .btn-chart-edit, .dropdown-toggle", container).prop("disabled", true);
       $(target).slideUp();
     }
     else {
       $(".btn-chart-toggle .glyphicon", container).addClass("glyphicon-minus").removeClass("glyphicon-plus");
-      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .btn-chart-download, .dropdown-toggle", container).prop("disabled", false);
+      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .btn-chart-download, .btn-chart-delete, .btn-chart-edit, .dropdown-toggle", container).prop("disabled", false);
       $(target).slideDown(400, function () {
         if (!$(container).hasClass("loaded")) {
           $(container).loadchart();
@@ -104,7 +104,7 @@ $(function () {
 
   });
 
-  $(".btn-chart-reload").click(function () {
+  $(".charts").on("click", ".btn-chart-reload", function () {
     var icon = $(".glyphicon", this);
     if (! $(icon).hasClass("fa-spin")) {
       $(icon).addClass("fa-spin");
@@ -114,7 +114,7 @@ $(function () {
     }
   });
 
-  $(".js-chart-type a").click(function () {
+  $(".charts").on("click", ".js-chart-type a", function () {
     var item = $(this).closest("li");
     if (!$(item).hasClass("active")) {
       var ul = $(this).closest("ul");
@@ -126,7 +126,7 @@ $(function () {
     }
   });
 
-  $(".btn-chart-modal").click(function () {
+  $(".charts").on("click", ".btn-chart-modal", function () {
     var form = $(this).closest("form");
     var url = $(form).attr("action");
     var data = $(form).serialize();
@@ -136,7 +136,7 @@ $(function () {
     var win = window.open(url, name, 'height=500,width=800,resizable=yes,scrollbars=yes');
   });
 
-  $(".select-all-stakeholders").click(function (e) {
+  $(".charts").on("click", ".select-all-stakeholders", function (e) {
     e.stopPropagation();
     var container = $(this).closest(".js-stakeholders");
     var group_name = $(this).closest("li").attr("data-target-group-name");
@@ -148,7 +148,7 @@ $(function () {
     });
   });
 
-  $(".select-none-stakeholders").click(function (e) {
+  $(".charts").on("click", ".select-none-stakeholders", function (e) {
     e.stopPropagation();
     var container = $(this).closest(".js-stakeholders");
     var group_name = $(this).closest("li").attr("data-target-group-name");
@@ -158,6 +158,16 @@ $(function () {
         $(stakeholder).click();
       }
     });
+  });
+
+  $(".charts").on("click", ".btn-chart-delete", function () {
+    var container = $(this).closest("form");
+    var scenario_id = $(container).attr("data-chart-id");
+    var name = $(".panel-title", container).text();
+
+    $("#delete-scenario").val(scenario_id);
+    $(".scenario-name").text(name);
+    $("#modal-delete-scenario").modal("show");
   });
 
 });
