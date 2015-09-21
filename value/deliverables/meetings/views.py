@@ -305,8 +305,7 @@ def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
         stakeholder_ids = list(map(int, stakeholder_ids))
     except:
         pass
-    chart = Highcharts()
-    options = chart.features_selection_stacked_chart(meeting_id, meeting_item_id, chart_type, stakeholder_ids)
+    options = Highcharts().factors_comparison(meeting_id, meeting_item_id, chart_type, stakeholder_ids)
     dump = json.dumps(options)
     chart = { 
         'id': meeting_item.pk,
@@ -336,21 +335,38 @@ def features_scenarios(request, deliverable_id, meeting_id):
     return render(request, 'meetings/dashboard/factors_comparison/scenarios.html', { 
         'meeting': meeting,
         'charts': charts,
+        'chart_type': 'stacked_bars',
         'stakeholder_ids': stakeholder_ids,
         'chart_menu_active': 'features'
         })
 
 @login_required
 def features_scenario_chart(request, deliverable_id, meeting_id, scenario_id):
-    chart = Highcharts()
-    options = {}
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    scenario = get_object_or_404(Scenario, pk=scenario_id)
+
+    chart_type = request.GET.get('chart-type')
+    stakeholder_ids = request.GET.getlist('stakeholder')
+    try:
+        stakeholder_ids = list(map(int, stakeholder_ids))
+    except:
+        pass
+
+    options = Highcharts().factors_comparison_scenario(meeting, scenario, chart_type, stakeholder_ids)
     dump = json.dumps(options)
+
+    chart = {
+        'id': scenario.pk,
+        'name': scenario.name,
+        'remote': reverse('deliverables:meetings:features_scenario_chart', args=(meeting.deliverable.pk, meeting.pk, scenario.pk))
+    }
+
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
         return render(request, 'meetings/dashboard/factors_comparison/popup.html', { 
             'meeting': meeting,
-            'chart': meeting_item,
+            'chart': chart,
             'chart_type': chart_type,
             'stakeholder_ids': stakeholder_ids,
             'dump': dump

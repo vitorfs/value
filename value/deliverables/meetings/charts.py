@@ -237,26 +237,21 @@ class Highcharts(object):
         return options
 
 
-    def features_selection_stacked_chart(self, meeting_id, meeting_item_id, chart, stakeholder_ids):
-        
-        meeting = Meeting.objects.get(pk=meeting_id)
-        meeting_item = MeetingItem.objects.get(pk=meeting_item_id)
-        evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
-
-        max_votes = len(stakeholder_ids)
-
+    def _factors_comparison_chart(self, chart_type, evaluations, max_votes):
         if evaluations:
+            evaluations = evaluations.select_related('factor', 'factor__group', 'measure', 'measure_value')
+            measure = evaluations[0].measure
 
             data = {}
-
+            measure_values = measure.measurevalue_set.values_list('description', flat=True)
             for evaluation in evaluations:
                 if evaluation.factor.group:
                     label = u'<strong style="text-decoration: underline;">{0}:</strong> {1}'.format(evaluation.factor.group.name, evaluation.factor.name)
                 else:
                     label = evaluation.factor.name
                 data[label] = {}
-                for value in evaluation.factor.measure.measurevalue_set.all():
-                    data[label][value.description] = 0
+                for value in measure_values:
+                    data[label][value] = 0
 
             for evaluation in evaluations:
                 if evaluation.factor.group:
@@ -271,8 +266,6 @@ class Highcharts(object):
             for factor in sorted_data:
                 categories.append(factor[0])
 
-            measure = evaluations[0].measure
-
             series = []
             for value in measure.measurevalue_set.all():
                 serie_data = []
@@ -281,13 +274,38 @@ class Highcharts(object):
                     serie_data.append(percentage)
                 series.append({ 'name': value.description, 'data': serie_data, 'color': value.color })
 
-            options = self._base_stacked_chart(categories, series, chart)
-            groups_text = get_stakeholders_group_names(stakeholder_ids)
-            options['title'] = { 'text': u'{0} Value Factors Comparison'.format(meeting_item.decision_item.name) }
-            options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
+            options = self._base_stacked_chart(categories, series, chart_type)
             return options
 
         return {}
+
+
+    def factors_comparison(self, meeting_id, meeting_item_id, chart_type, stakeholder_ids):
+        meeting = Meeting.objects.get(pk=meeting_id)
+        meeting_item = MeetingItem.objects.get(pk=meeting_item_id)
+        evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
+        max_votes = len(stakeholder_ids)
+
+        options = self._factors_comparison_chart(chart_type, evaluations, max_votes)
+        groups_text = get_stakeholders_group_names(stakeholder_ids)
+        options['title'] = { 'text': u'{0} Value Factors Comparison'.format(meeting_item.decision_item.name) }
+        options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
+
+        return options
+
+    
+    def factors_comparison_scenario(self, meeting, scenario, chart_type, stakeholder_ids):
+        evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(meeting_item__in=scenario.meeting_items.all(), user_id__in=stakeholder_ids)
+        items_count = scenario.meeting_items.count()
+        max_votes = len(stakeholder_ids) * items_count
+
+        options = self._factors_comparison_chart(chart_type, evaluations, max_votes)
+        groups_text = get_stakeholders_group_names(stakeholder_ids)
+        options['title'] = { 'text': u'{0} Value Factors Comparison'.format(scenario.name) }
+        options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
+
+        return options
+
 
     def _base_treemap(self, data):
         options = {

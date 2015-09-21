@@ -10,9 +10,9 @@
   <script src="{% static 'js/meetings/meetings.js' %}"></script>
   <script>
     $(function () {
-      //$(".charts .panel-heading:eq(0)").loadchart();
+      $(".charts .panel-heading:eq(0)").loadchart();
 
-      $("#modal-add-scenario").on("shown.bs.modal", function () {
+      $("#modal-add-scenario").on("show.bs.modal", function () {
         $.ajax({
           url: $("#form-add-scenario").attr("action"),
           dataType: 'json',
@@ -39,7 +39,9 @@
           success: function (data) {
             if (data.is_valid) {
               var url = $("scenarios").attr("data-remote");
-              $("#scenarios").load(" #scenarios > *");
+              $("#scenarios").load(" #scenarios > *", function () {
+                $(".charts .panel-heading:eq(0)").loadchart();
+              });
               $("#modal-add-scenario").modal("hide");
             }
             else {
