@@ -1,6 +1,6 @@
-<form id="chart-form-{{ chart.id }}" class="chart-form" action="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}dashboard/{{ chart_uri }}/{{ chart.id }}/">
+<form id="chart-form-{{ chart.id }}" class="chart-form" action="{% url 'deliverables:meetings:features_chart' meeting.deliverable.pk meeting.pk chart.id %}">
   <div class="panel panel-default panel-chart">
-    <div class="panel-heading" data-target="#collapse-{{ chart.id }}" data-instance-id="{{ instance.id }}" data-item-id="{{ chart.id }}" data-uri="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}dashboard/{{ chart_uri }}/{{ chart.id }}/">
+    <div class="panel-heading" data-target="#collapse-{{ chart.id }}">
       <div class="btn-group btn-group-xs pull-right chart-options" role="group" aria-label="Chart Options">
         {% include 'meetings/dashboard/includes/toggle_toolbar.html' with opened=opened %}
         {% include 'meetings/dashboard/includes/expand_toolbar.html' with opened=opened %}

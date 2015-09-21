@@ -287,7 +287,6 @@ def features(request, deliverable_id, meeting_id):
         'charts': charts,
         'stakeholder_ids': stakeholder_ids,
         'chart_type': 'stacked_bars',
-        'chart_uri': 'features',
         'chart_menu_active': 'features',
         'chart_page_title': 'Factors Comparison'
         })
