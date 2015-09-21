@@ -295,11 +295,11 @@ def features(request, deliverable_id, meeting_id):
 @login_required
 def features_scenarios(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    charts = list()
+    scenarios = meeting.scenarios.filter(category=Scenario.FACTORS)
     stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
     return render(request, 'meetings/dashboard/factors_comparison/scenarios.html', { 
         'meeting': meeting,
-        'charts': charts,
+        'scenarios': scenarios,
         'stakeholder_ids': stakeholder_ids,
         'chart_menu_active': 'features'
         })

@@ -38,7 +38,9 @@
           },
           success: function (data) {
             if (data.is_valid) {
-
+              var url = $("scenarios").attr("data-remote");
+              $("#scenarios").load(" #scenarios > *");
+              $("#modal-add-scenario").modal("hide");
             }
             else {
               $("#modal-add-scenario .modal-body").html(data.form);
@@ -70,10 +72,22 @@
         <li role="presentation" class="active"><a href="{% url 'deliverables:meetings:features_scenarios' meeting.deliverable.pk meeting.pk %}">Scenarios</a></li>
       </ul>
       <div class="panel-group charts">
-        {% if charts %}
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add-scenario">
+        {% if scenarios %}
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add-scenario" style="margin-bottom: 20px;">
             <span class="glyphicon glyphicon-plus"></span> Add scenario
           </button>
+          <div id="scenarios">
+            {% for scenario in scenarios %}
+              <div class="panel panel-default panel-chart">
+                <div class="panel-heading">
+                  <h3 class="panel-title">{{ scenario.name }}</h3>
+                </div>
+                <div class="panel-body">
+                  
+                </div>
+              </div>
+            {% endfor %}
+          </div>
         {% else %}
           <div class="well blank-state">
             <span class="fa fa-bar-chart"></span>

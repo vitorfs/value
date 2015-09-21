@@ -1,5 +1,5 @@
 $(function () {
-  $(".js-decision-item-details").click(function () {
+  $(document).on("click", ".js-decision-item-details", function () {
     $(this).tooltip("hide");
     $.ajax({
       url: $(this).attr("data-remote-url"),

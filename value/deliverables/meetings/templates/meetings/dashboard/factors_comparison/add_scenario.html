@@ -1,4 +1,4 @@
-{% load fieldtype widget_tweaks %}
+{% load fieldtype widget_tweaks meeting_item %}
 
 {% for hidden in form.hidden_fields %}
   {{ hidden }}
@@ -28,27 +28,29 @@
     </thead>
     <tbody>
       {% for field in form.meeting_items %}
-        <tr>
-          <td>{{ field.tag }}</td>
-          <td>
-            {{ field.choice_label }}
-            <span data-toggle="tooltip" title="Click to view details" data-container="body" style="margin-left: 5px;">
-              <a href="javascript:void(0);" class="btn-details js-decision-item-details" data-toggle="modal" data-target="#modal-decision-item-details" data-remote-url="{% url 'deliverables:details_decision_item' form.instance.meeting.deliverable.pk field.choice_value %}">
-                <span class="glyphicon glyphicon-info-sign"></span>
-              </a>
-            </span>
-          </td>
-          <td style="vertical-align: middle;">
-            <div class="progress" style="margin-bottom: 0">
-              {% for ranking in item.ranking_set.all %}
-                <div class="progress-bar" style="width: {{ ranking.percentage_votes }}%; background-color: {{ ranking.measure_value.color }}">
-                  <span class="measure-percent" data-measure-id="{{ ranking.measure_value.pk }}">{{ ranking.get_percentage_votes_display }}</span>%
-                </div>
-              {% endfor %}
-            </div>
-          </td>
-          <td class="text-right">{{ item.value_ranking_as_html|safe }}</td>
-        </tr>
+        {% with field.choice_value|meeting_item as item %}
+          <tr>
+            <td>{{ field.tag }}</td>
+            <td>
+              {{ field.choice_label }}
+              <span data-toggle="tooltip" title="Click to view details" data-container="body" style="margin-left: 5px;">
+                <a href="javascript:void(0);" class="btn-details js-decision-item-details" data-toggle="modal" data-target="#modal-decision-item-details" data-remote-url="{% url 'deliverables:details_decision_item' form.instance.meeting.deliverable.pk item.decision_item.pk %}">
+                  <span class="glyphicon glyphicon-info-sign"></span>
+                </a>
+              </span>
+            </td>
+            <td style="vertical-align: middle;">
+              <div class="progress" style="margin-bottom: 0">
+                {% for ranking in item.ranking_set.all %}
+                  <div class="progress-bar" style="width: {{ ranking.percentage_votes }}%; background-color: {{ ranking.measure_value.color }}">
+                    <span class="measure-percent" data-measure-id="{{ ranking.measure_value.pk }}">{{ ranking.get_percentage_votes_display }}</span>%
+                  </div>
+                {% endfor %}
+              </div>
+            </td>
+            <td class="text-right">{{ item.value_ranking_as_html|safe }}</td>
+          </tr>
+        {% endwith %}
       {% endfor %}
     </tbody>
   </table>
