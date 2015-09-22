@@ -478,7 +478,10 @@ class Highcharts(object):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting_item.meeting) \
                 .filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
         options = self._factors_groups(evaluations, stakeholder_ids)
+        stakeholders_text = get_stakeholders_group_names(stakeholder_ids)
+        subtitle = '<strong>Stakeholders Roles:</strong> {0}'.format(stakeholders_text)
         options['title'] = { 'text': escape(meeting_item.decision_item.name) }
+        options['subtitle'] = { 'text': subtitle }
         return options
 
     def factors_groups_scenario(self, meeting, scenario, stakeholder_ids):
@@ -486,7 +489,12 @@ class Highcharts(object):
                 .filter(meeting_item__in=scenario.meeting_items.all(), user_id__in=stakeholder_ids)
         aggregated_max_votes = scenario.meeting_items.count()
         options = self._factors_groups(evaluations, stakeholder_ids, aggregated_max_votes)
+        items_names = scenario.meeting_items.values_list('decision_item__name', flat=True)
+        items_text = u', '.join(items_names)
+        stakeholders_text = get_stakeholders_group_names(stakeholder_ids)
+        subtitle = u'<strong>Decision Items:</strong> {0}<br><strong>Stakeholders Roles:</strong> {1}'.format(escape(items_text), stakeholders_text)
         options['title'] = { 'text': escape(scenario.name) }
+        options['subtitle'] = { 'text': subtitle }
         return options
 
     def value_ranking(self, meeting):
