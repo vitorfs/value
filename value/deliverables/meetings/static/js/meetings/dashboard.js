@@ -37,7 +37,7 @@ $.fn.loadchart = function (callback) {
 
 $(function () {
 
-  $(".charts").on("click", ".js-select-stakeholder", function (e) {
+  $(document).on("click", ".js-select-stakeholder", function (e) {
     e.preventDefault();
     var checkbox = $("input[type='checkbox'][name='stakeholder']", this);
     var icon = $(".glyphicon", this);
@@ -54,14 +54,14 @@ $(function () {
     return false;
   });
 
-  $(".charts").on("click", ".btn-chart-download", function () {
+  $(document).on("click", ".btn-chart-download", function () {
     var panel = $(this).closest(".panel");
     var chart = $(".panel-body", panel).highcharts(), svg = chart.getSVG();
     $("#id_svg").val(svg);
     $("#chart-download").submit();
   });
 
-  $(".charts").on("click", ".btn-chart-expand", function () {
+  $(document).on("click", ".btn-chart-expand", function () {
 
     var container = $(this).closest(".panel");
     var title = $(".panel-title", container).text();
@@ -80,7 +80,7 @@ $(function () {
 
   });
 
-  $(".charts").on("click", ".btn-chart-toggle", function () {
+  $(document).on("click", ".btn-chart-toggle", function () {
 
     var container = $(this).closest(".panel-heading");
 
@@ -104,7 +104,7 @@ $(function () {
 
   });
 
-  $(".charts").on("click", ".btn-chart-reload", function () {
+  $(document).on("click", ".btn-chart-reload", function () {
     var icon = $(".glyphicon", this);
     if (! $(icon).hasClass("fa-spin")) {
       $(icon).addClass("fa-spin");
@@ -114,7 +114,7 @@ $(function () {
     }
   });
 
-  $(".charts").on("click", ".js-chart-type a", function () {
+  $(document).on("click", ".js-chart-type a", function () {
     var item = $(this).closest("li");
     if (!$(item).hasClass("active")) {
       var ul = $(this).closest("ul");
@@ -126,7 +126,7 @@ $(function () {
     }
   });
 
-  $(".charts").on("click", ".btn-chart-modal", function () {
+  $(document).on("click", ".btn-chart-modal", function () {
     var form = $(this).closest("form");
     var url = $(form).attr("action");
     var data = $(form).serialize();
@@ -136,7 +136,7 @@ $(function () {
     var win = window.open(url, name, 'height=500,width=800,resizable=yes,scrollbars=yes');
   });
 
-  $(".charts").on("click", ".select-all-stakeholders", function (e) {
+  $(document).on("click", ".select-all-stakeholders", function (e) {
     e.stopPropagation();
     var container = $(this).closest(".js-stakeholders");
     var group_name = $(this).closest("li").attr("data-target-group-name");
@@ -148,7 +148,7 @@ $(function () {
     });
   });
 
-  $(".charts").on("click", ".select-none-stakeholders", function (e) {
+  $(document).on("click", ".select-none-stakeholders", function (e) {
     e.stopPropagation();
     var container = $(this).closest(".js-stakeholders");
     var group_name = $(this).closest("li").attr("data-target-group-name");
@@ -160,7 +160,7 @@ $(function () {
     });
   });
 
-  $(".charts").on("click", ".btn-chart-delete", function () {
+  $(document).on("click", ".btn-chart-delete", function () {
     var container = $(this).closest("form");
     var scenario_id = $(container).attr("data-chart-id");
     var name = $(".panel-title", container).text();
