@@ -373,7 +373,7 @@ def features_scenario_chart(request, deliverable_id, meeting_id, scenario_id):
             })
 
 @login_required
-def add_features_scenario(request, deliverable_id, meeting_id):
+def add_scenario(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     scenario = Scenario(meeting=meeting, category=Scenario.FACTORS)
     json_context = dict()
@@ -387,7 +387,7 @@ def add_features_scenario(request, deliverable_id, meeting_id):
     else:
         form = ScenarioForm(instance=scenario, prefix='add')
     context = RequestContext(request, { 'form': form })
-    json_context['form'] = render_to_string('meetings/dashboard/factors_comparison/add_scenario.html', context)
+    json_context['form'] = render_to_string('meetings/dashboard/includes/partial_scenario_form.html', context)
     return HttpResponse(json.dumps(json_context), content_type='application/json')
 
 @login_required
@@ -421,8 +421,6 @@ def features_acceptance_chart(request, deliverable_id, meeting_id, meeting_item_
         options = chart.features_acceptance_simple_treemap(meeting_id, meeting_item_id, stakeholder_ids)
     elif chart_type == 'detailed':
         options = chart.features_acceptance_detailed_treemap(meeting_id, meeting_item_id, stakeholder_ids)
-    elif chart_type == 'bubble':
-        options = chart.features_acceptance_bubbles(meeting_id, meeting_item_id, stakeholder_ids)
     else:
         options = chart.features_acceptance_pie_chart_drilldown(meeting_id, meeting_item_id, stakeholder_ids)
     dump = json.dumps(options)
@@ -514,9 +512,13 @@ def features_comparison_chart(request, deliverable_id, meeting_id, measure_value
 @login_required
 def factors_groups(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    charts = meeting.meetingitem_set.all()
+    charts = [{ 
+        'id': item.pk,
+        'name': item.decision_item.name, 
+        'remote': reverse('deliverables:meetings:factors_groups_chart', args=(meeting.deliverable.pk, meeting.pk, item.pk))
+    } for item in meeting.meetingitem_set.all()]
     stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
-    return render(request, 'meetings/dashboard/factors_groups_list.html', { 
+    return render(request, 'meetings/dashboard/factors_groups_comparison/list.html', { 
             'meeting': meeting,
             'charts': charts,
             'stakeholder_ids': stakeholder_ids,
@@ -541,10 +543,56 @@ def factors_groups_chart(request, deliverable_id, meeting_id, meeting_item_id):
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        return render(request, 'meetings/dashboard/factors_groups_popup.html', { 
+        return render(request, 'meetings/dashboard/factors_groups_comparison/popup.html', { 
             'meeting': meeting,
             'chart': meeting_item,
             'chart_uri': 'features',
+            'stakeholder_ids': stakeholder_ids,
+            'dump': dump
+            })
+
+@login_required
+def factors_groups_scenarios(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    charts = [{
+        'id': scenario.pk,
+        'name': scenario.name,
+        'remote': reverse('deliverables:meetings:factors_groups_scenario_chart', args=(meeting.deliverable.pk, meeting.pk, scenario.pk))
+    } for scenario in meeting.scenarios.all()]
+    stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
+    return render(request, 'meetings/dashboard/factors_groups_comparison/scenarios.html', { 
+        'meeting': meeting,
+        'charts': charts,
+        'stakeholder_ids': stakeholder_ids,
+        'chart_menu_active': 'factors_groups'
+        })
+
+@login_required
+def factors_groups_scenario_chart(request, deliverable_id, meeting_id, scenario_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    scenario = get_object_or_404(Scenario, pk=scenario_id)
+
+    stakeholder_ids = request.GET.getlist('stakeholder')
+    try:
+        stakeholder_ids = list(map(int, stakeholder_ids))
+    except:
+        pass
+
+    options = Highcharts().factors_groups_scenario(meeting, scenario, stakeholder_ids)
+    dump = json.dumps(options)
+
+    chart = {
+        'id': scenario.pk,
+        'name': scenario.name,
+        'remote': reverse('deliverables:meetings:factors_groups_scenario_chart', args=(meeting.deliverable.pk, meeting.pk, scenario.pk))
+    }
+
+    if 'application/json' in request.META.get('HTTP_ACCEPT'):
+        return HttpResponse(dump, content_type='application/json')
+    else:
+        return render(request, 'meetings/dashboard/factors_groups_comparison/popup.html', { 
+            'meeting': meeting,
+            'chart': chart,
             'stakeholder_ids': stakeholder_ids,
             'dump': dump
             })

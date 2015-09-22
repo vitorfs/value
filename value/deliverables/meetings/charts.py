@@ -301,7 +301,7 @@ class Highcharts(object):
 
         options = self._factors_comparison_chart(chart_type, evaluations, max_votes)
         groups_text = get_stakeholders_group_names(stakeholder_ids)
-        options['title'] = { 'text': u'{0} Value Factors Comparison'.format(scenario.name) }
+        options['title'] = { 'text': u'{0} Value Factors Comparison'.format(escape(scenario.name)) }
         options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
 
         return options
@@ -429,68 +429,64 @@ class Highcharts(object):
             }
         return options
 
-    def features_acceptance_bubbles(self, meeting_id, meeting_item_id, stakeholder_ids):
-        options = {
-            'chart': { 'type': 'bubble', 'zoomType': 'xy' },
-            'title': { 'text': '' },
-            'exporting': { 'enabled': False },
-            'series': [{
-                'name': 'Test',
-                'data': [[97, 36, 79], [94, 74, 60], [68, 76, 58], [64, 87, 56], [68, 27, 73], [74, 99, 42], [7, 93, 87], [51, 69, 40], [38, 23, 33], [57, 86, 31]]
-            }, {
-                'data': [[25, 10, 87], [2, 75, 59], [11, 54, 8], [86, 55, 93], [5, 3, 58], [90, 63, 44], [91, 33, 17], [97, 3, 56], [15, 67, 48], [54, 25, 81]]
-            }, {
-                'data': [[47, 47, 21], [20, 12, 4], [6, 76, 91], [38, 30, 60], [57, 98, 64], [61, 17, 80], [83, 60, 13], [67, 78, 75], [64, 12, 10], [30, 77, 82]]
-            }]
-        }
+    def _factors_groups(self, evaluations, stakeholder_ids, aggregated_max_votes=1):
+        categories = evaluations.values_list('factor__group__name', flat=True).distinct().order_by('factor__group__name')
+        options = dict()
+        if evaluations.exists():
+            measure = evaluations.first().measure
+            series = []
+            for measure_value in measure.measurevalue_set.all():
+                serie = { 
+                        'name': measure_value.description, 
+                        'color': measure_value.color, 
+                        'pointPlacement': 'on', 
+                        'data': list()
+                    }
+                for category in categories:
+                    group = FactorGroup.objects.get(name=category)
+                    factors_count = group.factor_set.count()
+                    max_votes = factors_count * len(stakeholder_ids) * aggregated_max_votes
+                    votes = evaluations.filter(factor__group__name=category, measure_value=measure_value).count()
+                    percentage = get_votes_percentage(max_votes, votes)
+                    serie['data'].append(percentage)
+                series.append(serie)
 
+            categories = [category if category else 'No group' for category in categories]
+
+            options = {
+                'chart': { 'polar': True, 'type': 'line' },
+                'xAxis': {
+                    'categories': list(categories),
+                    'tickmarkPlacement': 'on',
+                    'lineWidth': 0
+                },
+                'yAxis': {
+                    'gridLineInterpolation': 'polygon',
+                    'min': 0
+                },
+                'tooltip': {
+                    'shared': True,
+                    'pointFormat': '<span style="color:{series.color}">{series.name}: <b>{point.y} votes</b><br/>'
+                },
+                'exporting': { 'enabled': False },
+                'series': series
+            }
         return options
+
 
     def factors_groups(self, meeting_item, stakeholder_ids):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting_item.meeting) \
                 .filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
+        options = self._factors_groups(evaluations, stakeholder_ids)
+        options['title'] = { 'text': escape(meeting_item.decision_item.name) }
+        return options
 
-        categories = evaluations.values_list('factor__group__name', flat=True).distinct().order_by('factor__group__name')
-
-        measure = meeting_item.meeting.deliverable.measure
-        series = []
-        for measure_value in measure.measurevalue_set.all():
-            serie = { 
-                    'name': measure_value.description, 
-                    'color': measure_value.color, 
-                    'pointPlacement': 'on', 
-                    'data': list()
-                }
-            for category in categories:
-                group = FactorGroup.objects.get(name=category)
-                factors_count = group.factor_set.count()
-                max_votes = factors_count * len(stakeholder_ids)
-                votes = evaluations.filter(factor__group__name=category, measure_value=measure_value).count()
-                percentage = get_votes_percentage(max_votes, votes)
-                serie['data'].append(percentage)
-            series.append(serie)
-
-        categories = [category if category else 'No group' for category in categories]
-
-        options = {
-            'chart': { 'polar': True, 'type': 'line' },
-            'title': { 'text': escape(meeting_item.decision_item.name) },
-            'xAxis': {
-                'categories': list(categories),
-                'tickmarkPlacement': 'on',
-                'lineWidth': 0
-            },
-            'yAxis': {
-                'gridLineInterpolation': 'polygon',
-                'min': 0
-            },
-            'tooltip': {
-                'shared': True,
-                'pointFormat': '<span style="color:{series.color}">{series.name}: <b>{point.y} votes</b><br/>'
-            },
-            'exporting': { 'enabled': False },
-            'series': series
-        }
+    def factors_groups_scenario(self, meeting, scenario, stakeholder_ids):
+        evaluations = Evaluation.get_evaluations_by_meeting(meeting) \
+                .filter(meeting_item__in=scenario.meeting_items.all(), user_id__in=stakeholder_ids)
+        aggregated_max_votes = scenario.meeting_items.count()
+        options = self._factors_groups(evaluations, stakeholder_ids, aggregated_max_votes)
+        options['title'] = { 'text': escape(scenario.name) }
         return options
 
     def value_ranking(self, meeting):

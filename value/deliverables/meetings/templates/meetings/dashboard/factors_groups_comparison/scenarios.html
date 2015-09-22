@@ -12,19 +12,19 @@
 {% endblock javascript %}
 
 {% block breadcrumb_extra %}
-  <li><a href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">Factors Comparison</a></li>
+  <li><a href="{% url 'deliverables:meetings:factors_groups' meeting.deliverable.pk meeting.pk %}">Factors Groups Comparison</a></li>
   <li class="active">Scenarios</li>
 {% endblock breadcrumb_extra %}
 
 {% block charts %}
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">Factors Comparison</h3>
+      <h3 class="panel-title">Factors Groups Comparison</h3>
     </div>
     <div class="panel-body">
       <ul class="nav nav-tabs" style="margin-bottom: 20px;">
-        <li role="presentation"><a href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">All Decision Items</a></li>
-        <li role="presentation" class="active"><a href="{% url 'deliverables:meetings:features_scenarios' meeting.deliverable.pk meeting.pk %}">Scenarios</a></li>
+        <li role="presentation"><a href="{% url 'deliverables:meetings:factors_groups' meeting.deliverable.pk meeting.pk %}">All Decision Items</a></li>
+        <li role="presentation" class="active"><a href="{% url 'deliverables:meetings:factors_groups_scenarios' meeting.deliverable.pk meeting.pk %}">Scenarios</a></li>
       </ul>
       <div class="panel-group charts" id="scenarios">
         {% if charts %}
@@ -32,7 +32,7 @@
             <span class="glyphicon glyphicon-plus"></span> Add scenario
           </button>
           {% for chart in charts %}
-            {% include 'meetings/dashboard/factors_comparison/chart.html' with opened=forloop.first can_edit=True can_delete=True %}
+            {% include 'meetings/dashboard/factors_groups_comparison/chart.html' with opened=forloop.first can_edit=True can_delete=True %}
           {% endfor %}
         {% else %}
           <div class="well blank-state">
