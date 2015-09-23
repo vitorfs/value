@@ -426,7 +426,7 @@ def features_acceptance_chart(request, deliverable_id, meeting_id, meeting_item_
 @login_required
 def decision_items_overview(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    chart_type = request.GET.get('chart-type', 'stacked_bars')
+    chart_type = request.GET.get('chart-type', 'stacked_columns')
     chart = Highcharts()
     if 'stakeholder' in request.GET:
         stakeholder_ids = request.GET.getlist('stakeholder')
@@ -448,7 +448,7 @@ def decision_items_overview(request, deliverable_id, meeting_id):
             'meeting': meeting, 
             'dump': dump,
             'stakeholder_ids': stakeholder_ids,
-            'chart_type': 'stacked_bars',
+            'chart_type': chart_type,
             'chart_uri': 'decision-items-overview',
             'chart_menu_active': 'decision_items_overview',
             'chart_page_title': 'Decision Items Overview'
