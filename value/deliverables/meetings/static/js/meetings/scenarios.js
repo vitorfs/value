@@ -25,6 +25,9 @@ $(function () {
       }
     });
   });
+  $("#modal-add-scenario").on("hidden.bs.modal", function () {
+    $("#modal-add-scenario .modal-body").html("");
+  });
 
   $("#form-add-scenario").submit(function () {
     $.ajax({

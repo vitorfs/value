@@ -29,6 +29,9 @@
           }
         });
       });
+      $("#modal-scenario-builder").on("hidden.bs.modal", function () {
+        $("#modal-scenario-builder .modal-body").html("");
+      });
 
       $("#form-scenario-builder").submit(function () {
         var form = $(this);
