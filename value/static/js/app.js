@@ -215,12 +215,13 @@ $(function () {
     }
   });
 
-  $('.modal').on('hide.bs.modal', function(){
+  $('.modal').on('hidden.bs.modal', function(){
     var $dialog = $(this);  
     var previousDialog = $dialog.data('previous-dialog');
     if (previousDialog){
       previousDialog.removeClass('aside');
       $dialog.data('previous-dialog', undefined);
+      $('body').addClass('modal-open');
     }
   });
 

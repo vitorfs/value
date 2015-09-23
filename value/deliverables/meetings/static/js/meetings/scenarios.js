@@ -19,6 +19,9 @@ $(function () {
           sortList: [[VALUE_RANKING_COLUMN, DESCENDING]]
         });
         initializeCheckAll();
+      },
+      complete: function () {
+        $("#modal-add-scenario .modal-body").loading();
       }
     });
   });
