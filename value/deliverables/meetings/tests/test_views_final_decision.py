@@ -88,7 +88,7 @@ class OngoingMeetingFinalDecisionTest(FinalDecisionTestCase):
     def test_html(self):
         self.assertContains(self.response, '<form')
         self.assertContains(self.response, 'type="checkbox"', self.meeting.meetingitem_set.count())
-        self.assertContains(self.response, 'type="text"', self.meeting.meetingitem_set.count())
+        #self.assertContains(self.response, 'type="text"', self.meeting.meetingitem_set.count())
 
     def test_csrf(self):
         self.assertContains(self.response, 'csrfmiddlewaretoken')
