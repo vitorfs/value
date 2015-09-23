@@ -47,28 +47,6 @@
     </div>
   </div>
 
-  <form method="post" action="{% url 'deliverables:meetings:delete_scenario' meeting.deliverable.pk meeting.pk %}" id="form-delete-scenario">
-    {% csrf_token %}
-    <input type="hidden" name="scenario" id="delete-scenario">
-    <input type="hidden" name="next" value="{{ request.path }}">
-    <div class="modal fade" id="modal-delete-scenario">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Are you sure?</h4>
-          </div>
-          <div class="modal-body">
-            <p>The scenario <strong class="scenario-name"></strong> will be permanently deleted.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="submit" id="confirm-deletion" class="btn btn-danger btn-block">Delete <span class="scenario-name"></span></button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </form>
-
   <form id="chart-download" method="post" action="{% url 'deliverables:meetings:download' meeting.deliverable.pk meeting.pk %}">
     {% csrf_token %}
     <input type="hidden" name="svg" id="id_svg">

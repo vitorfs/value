@@ -3,6 +3,7 @@ import datetime
 from django import forms
 from django.contrib.auth.models import User
 
+from value.factors.models import Group
 from value.deliverables.meetings.models import Meeting, MeetingItem, Scenario
 
 
@@ -33,7 +34,6 @@ class MeetingItemFinalDecisionForm(forms.ModelForm):
 
 class ScenarioForm(forms.ModelForm):
     meeting = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Meeting.objects.all(), required=True)
-    category = forms.CharField(widget=forms.HiddenInput(), required=True)
     meeting_items = forms.ModelMultipleChoiceField(
             widget=forms.CheckboxSelectMultiple(), 
             queryset=None,
@@ -46,4 +46,21 @@ class ScenarioForm(forms.ModelForm):
 
     class Meta:
         model = Scenario
-        fields = ('name', 'meeting', 'category', 'meeting_items')
+        fields = ('name', 'meeting', 'meeting_items')
+
+class FactorsGroupsScenarioBuilderForm(forms.Form):
+    meeting = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Meeting.objects.all(), required=True)
+    category = forms.CharField(widget=forms.HiddenInput(), required=True)
+    meeting_items_count = forms.ChoiceField(label='Select decision items', required=True)
+    factors_groups = forms.ModelChoiceField(label='And build the best scenario related to', queryset=Group.objects.all(), required=True, empty_label=None)
+    criteria = forms.ModelChoiceField(label='Based on', queryset=None, required=True, empty_label=None)
+
+    def __init__(self, *args, **kwargs):
+        super(FactorsGroupsScenarioBuilderForm, self).__init__(*args, **kwargs)
+        items_range = self.initial['meeting'].meetingitem_set.count()
+        self.fields['meeting_items_count'].choices = [(choice, choice) for choice in range(1, items_range+1)]
+        self.fields['criteria'].queryset = self.initial['meeting'].deliverable.measure.measurevalue_set.all()
+
+    class Meta:
+        fields = ('meeting', 'category', 'meeting_items_count', 'factors_groups', 'criteria')
+

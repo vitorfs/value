@@ -34,7 +34,6 @@ $(function () {
       },
       success: function (data) {
         if (data.is_valid) {
-          var url = $("scenarios").attr("data-remote");
           $("#scenarios").load(" #scenarios > *", function () {
             $(".charts .panel-heading:eq(0)").loadchart();
           });

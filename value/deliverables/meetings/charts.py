@@ -462,7 +462,9 @@ class Highcharts(object):
                 },
                 'yAxis': {
                     'gridLineInterpolation': 'polygon',
-                    'min': 0
+                    'min': 0,
+                    'max': 100,
+                    'labels': { 'format': '{value}%' }
                 },
                 'tooltip': {
                     'shared': True,

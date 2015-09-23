@@ -241,7 +241,7 @@ class Scenario(models.Model):
 
     name = models.CharField(max_length=255)
     meeting = models.ForeignKey(Meeting, related_name='scenarios')
-    category = models.CharField(max_length=14, choices=CATEGORIES)
+    category = models.CharField(max_length=14, choices=CATEGORIES, null=True, blank=True)
     meeting_items = models.ManyToManyField(MeetingItem)
 
     class Meta:

@@ -30,6 +30,7 @@ urlpatterns = patterns('value.deliverables.meetings.views',
     url(r'^(?P<meeting_id>\d+)/dashboard/factors-groups-comparison/$', 'factors_groups', name='factors_groups'),
     url(r'^(?P<meeting_id>\d+)/dashboard/factors-groups-comparison/(?P<meeting_item_id>\d+)/$', 'factors_groups_chart', name='factors_groups_chart'),
     url(r'^(?P<meeting_id>\d+)/dashboard/factors-groups-comparison/scenarios/$', 'factors_groups_scenarios', name='factors_groups_scenarios'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/factors-groups-comparison/scenarios/builder/$', 'factors_groups_scenario_builder', name='factors_groups_scenario_builder'),
     url(r'^(?P<meeting_id>\d+)/dashboard/factors-groups-comparison/scenarios/(?P<scenario_id>\d+)/$', 'factors_groups_scenario_chart', name='factors_groups_scenario_chart'),
 
     url(r'^(?P<meeting_id>\d+)/dashboard/features-acceptance/$', 'features_acceptance', name='features_acceptance'),
@@ -43,6 +44,7 @@ urlpatterns = patterns('value.deliverables.meetings.views',
     url(r'^(?P<meeting_id>\d+)/dashboard/value-ranking/$', 'value_ranking', name='value_ranking'),
 
     url(r'^(?P<meeting_id>\d+)/dashboard/scenarios/add/$', 'add_scenario', name='add_scenario'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/scenarios/build/$', 'build_scenario', name='build_scenario'),
     url(r'^(?P<meeting_id>\d+)/dashboard/scenarios/delete/$', 'delete_scenario', name='delete_scenario'),
 
     #Final Decision URLs
