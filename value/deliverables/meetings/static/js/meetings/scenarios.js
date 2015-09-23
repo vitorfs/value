@@ -2,7 +2,7 @@ $(function () {
 
   $(".charts .panel-heading:eq(0)").loadchart();
 
-  $("#modal-add-scenario").on("show.bs.modal", function () {
+  $("#modal-add-scenario").on("shown.bs.modal", function () {
     $.ajax({
       url: $("#form-add-scenario").attr("action"),
       dataType: 'json',
