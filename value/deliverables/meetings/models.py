@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from django.db import models, transaction
 from django.db.models import F, Count, Min
 from django.contrib.auth.models import User, Group
@@ -246,3 +248,22 @@ class Scenario(models.Model):
 
     class Meta:
         unique_together = (('name', 'meeting', 'category',),)
+
+    def build(self, *args, **kwargs):
+        print kwargs
+        limit = int(kwargs['meeting_items_count'])
+        group = kwargs['factors_groups']
+        measure_value = kwargs['criteria']
+
+        evaluations = self.meeting.get_evaluations()
+        scenario_items = evaluations.filter(measure_value=measure_value, factor__group=group) \
+            .values_list('meeting_item', flat=True) \
+            .annotate(count=Count('measure_value')) \
+            .order_by('-count')[:limit]
+
+        name = u'Scenario {0} {1} {2} Best Fit'.format(group.name, measure_value.description, measure_value.measure.name)
+        with transaction.atomic():
+            self.name = name
+            self.save()
+            self.meeting_items.add(*scenario_items)
+        return self

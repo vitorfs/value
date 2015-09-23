@@ -14,8 +14,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.utils import timezone
 from django.contrib.auth.models import User
-from django.db.models import Q, Count
+from django.db.models import Q
 from django.db import transaction
+from django import forms
 from django.forms.models import modelformset_factory
 from django.template import RequestContext
 from django.template.loader import render_to_string
@@ -28,7 +29,8 @@ from value.deliverables.forms import RationaleForm
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
 from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation, Scenario
 from value.deliverables.meetings.charts import Highcharts
-from value.deliverables.meetings.forms import MeetingForm, MeetingItemFinalDecisionForm, ScenarioForm, FactorsGroupsScenarioBuilderForm
+from value.deliverables.meetings.forms import MeetingForm, MeetingItemFinalDecisionForm, ScenarioForm, \
+        FactorsScenarioBuilderForm, FactorsGroupsScenarioBuilderForm
 
 
 @login_required
@@ -804,43 +806,30 @@ def delete_scenario(request, deliverable_id, meeting_id):
         messages.error(request, 'An unexpected error ocurred.')
     return redirect(next)
 
+def get_scenario_builder_form(category):
+    ScenarioBuilderForm = forms.Form
+    if category in (Scenario.FACTORS, Scenario.ACCEPTANCE):
+        ScenarioBuilderForm = FactorsScenarioBuilderForm
+    elif category == Scenario.FACTORS_GROUPS:
+        ScenarioBuilderForm = FactorsGroupsScenarioBuilderForm
+    return ScenarioBuilderForm
+
 @require_POST
-@transaction.atomic
 @login_required
 def build_scenario(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     category = request.POST.get('category')
     json_context = dict()
-    form = dict()
 
-    if category == Scenario.FACTORS:
-        pass
-    elif category == Scenario.FACTORS_GROUPS:
-        form = FactorsGroupsScenarioBuilderForm(request.POST, initial={ 'meeting': meeting, 'category': Scenario.FACTORS_GROUPS })
-        if form.is_valid():
-            try:
-                limit = int(form.cleaned_data['meeting_items_count'])
-            except:
-                limit = 1
-            group = form.cleaned_data['factors_groups']
-            measure_value = form.cleaned_data['criteria']
-            evaluations = meeting.get_evaluations()
-            scenario_items = evaluations.filter(measure_value=measure_value, factor__group=group) \
-                .values_list('meeting_item', flat=True) \
-                .annotate(count=Count('measure_value')) \
-                .order_by('-count')[:limit]
+    ScenarioBuilderForm = get_scenario_builder_form(category)
 
-            name = u'Scenario {0} {1} {2} Best Fit'.format(group.name, measure_value.description, measure_value.measure.name)
-            scenario = Scenario(meeting=meeting, category=Scenario.FACTORS_GROUPS, name=name)
-            scenario.save()
-            scenario.meeting_items.add(*scenario_items)
-
-            json_context['is_valid'] = True
-        else:
-            json_context['is_valid'] = False
-
-    elif category == Scenario.ACCEPTANCE:
-        pass
+    form = ScenarioBuilderForm(request.POST, initial={ 'meeting': meeting })
+    if form.is_valid():
+        scenario = Scenario(meeting=meeting, category=category)
+        scenario.build(**form.cleaned_data)
+        json_context['is_valid'] = True
+    else:
+        json_context['is_valid'] = False
 
     context = RequestContext(request, { 'form': form })
     json_context['form'] = render_to_string('includes/form_vertical.html', context)

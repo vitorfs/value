@@ -48,6 +48,11 @@ class ScenarioForm(forms.ModelForm):
         model = Scenario
         fields = ('name', 'meeting', 'meeting_items')
 
+
+class FactorsScenarioBuilderForm(forms.Form):
+    pass
+
+
 class FactorsGroupsScenarioBuilderForm(forms.Form):
     meeting = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Meeting.objects.all(), required=True)
     category = forms.CharField(widget=forms.HiddenInput(), required=True)
