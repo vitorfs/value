@@ -11,7 +11,7 @@ $(function () {
       },
       success: function (data) {
         var DESCENDING = 1;
-        var VALUE_RANKING_COLUMN = 3; 
+        var VALUE_RANKING_COLUMN = 3;
 
         $("#modal-add-scenario .modal-body").html(data.form);
         $("#table-decision-items").tablesorter({ 

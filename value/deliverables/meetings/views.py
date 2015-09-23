@@ -286,7 +286,7 @@ def features(request, deliverable_id, meeting_id):
         'id': item.pk,
         'name': item.decision_item.name, 
         'remote': reverse('deliverables:meetings:features_chart', args=(meeting.deliverable.pk, meeting.pk, item.pk)),
-        'decision_item_remote': reverse('deliverables:details_decision_item', args=(meeting.deliverable.pk, item.decision_item.pk))
+        'info_remote': reverse('deliverables:details_decision_item', args=(meeting.deliverable.pk, item.decision_item.pk))
     } for item in meeting.meetingitem_set.all()]
     stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
     return render(request, 'meetings/dashboard/factors_comparison/list.html', { 
@@ -333,7 +333,8 @@ def features_scenarios(request, deliverable_id, meeting_id):
     charts = [{
         'id': scenario.pk,
         'name': scenario.name,
-        'remote': reverse('deliverables:meetings:features_scenario_chart', args=(meeting.deliverable.pk, meeting.pk, scenario.pk))
+        'remote': reverse('deliverables:meetings:features_scenario_chart', args=(meeting.deliverable.pk, meeting.pk, scenario.pk)),
+        'info_remote': reverse('deliverables:meetings:details_scenario', args=(meeting.deliverable.pk, meeting.pk, scenario.pk))
     } for scenario in meeting.scenarios.all()]
     stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
     return render(request, 'meetings/dashboard/factors_comparison/scenarios.html', { 
@@ -502,17 +503,17 @@ def factors_groups(request, deliverable_id, meeting_id):
     charts = [{ 
         'id': item.pk,
         'name': item.decision_item.name, 
-        'remote': reverse('deliverables:meetings:factors_groups_chart', args=(meeting.deliverable.pk, meeting.pk, item.pk))
+        'remote': reverse('deliverables:meetings:factors_groups_chart', args=(meeting.deliverable.pk, meeting.pk, item.pk)),
+        'info_remote': reverse('deliverables:details_decision_item', args=(meeting.deliverable.pk, item.decision_item.pk))
     } for item in meeting.meetingitem_set.all()]
     stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
     return render(request, 'meetings/dashboard/factors_groups_comparison/list.html', { 
             'meeting': meeting,
             'charts': charts,
             'stakeholder_ids': stakeholder_ids,
-            'chart_type': 'stacked_bars',
-            'chart_uri': 'factors-groups-comparison',
             'chart_menu_active': 'factors_groups',
-            'chart_page_title': 'Factors Groups Comparison'
+            'chart_page_title': 'Factors Groups Comparison',
+            'type': 'meeting_item'
             })
 
 @login_required
@@ -544,14 +545,16 @@ def factors_groups_scenarios(request, deliverable_id, meeting_id):
     charts = [{
         'id': scenario.pk,
         'name': scenario.name,
-        'remote': reverse('deliverables:meetings:factors_groups_scenario_chart', args=(meeting.deliverable.pk, meeting.pk, scenario.pk))
+        'remote': reverse('deliverables:meetings:factors_groups_scenario_chart', args=(meeting.deliverable.pk, meeting.pk, scenario.pk)),
+        'info_remote': reverse('deliverables:meetings:details_scenario', args=(meeting.deliverable.pk, meeting.pk, scenario.pk))
     } for scenario in meeting.scenarios.all()]
     stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
     return render(request, 'meetings/dashboard/factors_groups_comparison/scenarios.html', { 
         'meeting': meeting,
         'charts': charts,
         'stakeholder_ids': stakeholder_ids,
-        'chart_menu_active': 'factors_groups'
+        'chart_menu_active': 'factors_groups',
+        'type': 'scenario'
         })
 
 @login_required
@@ -795,6 +798,15 @@ def add_scenario(request, deliverable_id, meeting_id):
     context = RequestContext(request, { 'form': form })
     json_context['form'] = render_to_string('meetings/dashboard/includes/partial_scenario_form.html', context)
     return HttpResponse(json.dumps(json_context), content_type='application/json')
+
+@login_required
+def details_scenario(request, deliverable_id, meeting_id, scenario_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    scenario = get_object_or_404(Scenario, pk=scenario_id)
+    return render(request, 'meetings/dashboard/includes/scenario_details.html', {
+        'meeting': meeting,
+        'scenario': scenario
+        })
 
 @require_POST
 @login_required

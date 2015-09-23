@@ -170,4 +170,38 @@ $(function () {
     $("#modal-delete-scenario").modal("show");
   });
 
+  $(document).on("click", ".btn-chart-info", function () {
+    $(this).tooltip("hide");
+    var url = $(this).attr("data-remote-url");
+    var type = $(this).attr("data-type");
+    var modal;
+    
+    if (type === "scenario") {
+      modal = $("#modal-scenario-details");
+    }
+    else {
+      modal = $("#modal-decision-item-details");
+    }
+
+    $.ajax({
+      url: url,
+      cache: false,
+      beforeSend: function () {
+        $(modal).modal("show");
+        $(".modal-body", modal).html("");
+      },
+      success: function (data) {
+        var DESCENDING = 1;
+        var VALUE_RANKING_COLUMN = 2;
+        $(".modal-body", modal).html(data);
+        if (type === "scenario") {
+          $("table", modal).tablesorter({
+            sortList: [[VALUE_RANKING_COLUMN, DESCENDING]]
+          });
+        }
+      }
+    });
+
+  });
+
 });
