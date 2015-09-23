@@ -285,7 +285,8 @@ def features(request, deliverable_id, meeting_id):
     charts = [{ 
         'id': item.pk,
         'name': item.decision_item.name, 
-        'remote': reverse('deliverables:meetings:features_chart', args=(meeting.deliverable.pk, meeting.pk, item.pk))
+        'remote': reverse('deliverables:meetings:features_chart', args=(meeting.deliverable.pk, meeting.pk, item.pk)),
+        'decision_item_remote': reverse('deliverables:details_decision_item', args=(meeting.deliverable.pk, item.decision_item.pk))
     } for item in meeting.meetingitem_set.all()]
     stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
     return render(request, 'meetings/dashboard/factors_comparison/list.html', { 
@@ -294,7 +295,8 @@ def features(request, deliverable_id, meeting_id):
         'stakeholder_ids': stakeholder_ids,
         'chart_type': 'stacked_bars',
         'chart_menu_active': 'features',
-        'chart_page_title': 'Factors Comparison'
+        'chart_page_title': 'Factors Comparison',
+        'type': 'meeting_item'
         })
 
 @login_required
@@ -339,7 +341,8 @@ def features_scenarios(request, deliverable_id, meeting_id):
         'charts': charts,
         'chart_type': 'stacked_bars',
         'stakeholder_ids': stakeholder_ids,
-        'chart_menu_active': 'features'
+        'chart_menu_active': 'features',
+        'type': 'scenario'
         })
 
 @login_required

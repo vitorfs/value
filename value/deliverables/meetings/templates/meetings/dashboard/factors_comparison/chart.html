@@ -1,19 +1,20 @@
-<form id="chart-form-{{ chart.id }}" class="chart-form" action="{{ chart.remote }}" data-chart-id="{{ chart.id }}">
+<form id="chart-form-{{ chart.id }}" class="chart-form" action="{{ chart.remote }}" data-chart-id="{{ chart.id }}" data-type="{{ type }}">
   <div class="panel panel-default panel-chart">
     <div class="panel-heading" data-target="#collapse-{{ chart.id }}">
       <div class="btn-group btn-group-xs pull-right chart-options" role="group" aria-label="Chart Options">
-        {% include 'meetings/dashboard/includes/toggle_toolbar.html' with opened=opened %}
-        {% include 'meetings/dashboard/includes/expand_toolbar.html' with opened=opened %}
-        {% include 'meetings/dashboard/includes/modal_toolbar.html' with opened=opened %}
-        {% include 'meetings/dashboard/includes/reload_toolbar.html' with opened=opened %}
-        {% include 'meetings/dashboard/includes/download_toolbar.html' with opened=opened %}
-        {% include 'meetings/dashboard/includes/stakeholders_toolbar.html' with opened=opened %}
-        {% include 'meetings/dashboard/includes/stacked_charts_toolbar.html' with opened=opened %}
+        {% include 'meetings/dashboard/includes/toggle_toolbar.html' %}
+        {% include 'meetings/dashboard/includes/info_toolbar.html' %}
+        {% include 'meetings/dashboard/includes/expand_toolbar.html' %}
+        {% include 'meetings/dashboard/includes/modal_toolbar.html' %}
+        {% include 'meetings/dashboard/includes/reload_toolbar.html' %}
+        {% include 'meetings/dashboard/includes/download_toolbar.html' %}
+        {% include 'meetings/dashboard/includes/stakeholders_toolbar.html' %}
+        {% include 'meetings/dashboard/includes/stacked_charts_toolbar.html' %}
         {% if can_edit %}
-          {% include 'meetings/dashboard/includes/edit_toolbar.html' with opened=opened %}
+          {% include 'meetings/dashboard/includes/edit_toolbar.html' %}
         {% endif %}
         {% if can_delete %}
-          {% include 'meetings/dashboard/includes/delete_toolbar.html' with opened=opened %}
+          {% include 'meetings/dashboard/includes/delete_toolbar.html' %}
         {% endif %}
       </div>
       <p class="panel-title"><a href="javascript:void(0)" class="btn-chart-toggle">{{ chart.name }}</a></p>
