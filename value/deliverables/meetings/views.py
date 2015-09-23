@@ -750,7 +750,7 @@ def final_decision(request, deliverable_id, meeting_id):
     meeting.calculate_all_rankings()
 
     MeetingItemFormset = modelformset_factory(MeetingItem, form=MeetingItemFinalDecisionForm, extra=0)
-    meeting_items = meeting.meetingitem_set.select_related('decision_item').all()
+    meeting_items = meeting.meetingitem_set.select_related('decision_item').all().order_by('-meeting_decision')
     formset = MeetingItemFormset(queryset=meeting_items)
 
     return render(request, 'meetings/final_decision.html', { 
