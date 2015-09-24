@@ -16,7 +16,7 @@
   <script src="{% static 'js/meetings/dashboard.js' %}"></script>
   <script type="text/javascript">
     $(function () {
-      $(".chart-options .btn-chart-toggle, .chart-options .btn-chart-expand, .chart-options .btn-chart-modal").remove();
+      $(".chart-options .btn-chart-info, .chart-options .btn-chart-toggle, .chart-options .btn-chart-expand, .chart-options .btn-chart-modal").remove();
       $(".btn-chart-toggle").unbind();
       $(".panel-body").highcharts({{ dump|safe }});
     });

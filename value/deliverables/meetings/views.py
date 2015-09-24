@@ -525,15 +525,20 @@ def factors_groups_chart(request, deliverable_id, meeting_id, meeting_item_id):
         stakeholder_ids = list(map(int, stakeholder_ids))
     except:
         pass
-    chart = Highcharts()
-    options = chart.factors_groups(meeting_item, stakeholder_ids)
+    options = Highcharts().factors_groups(meeting_item, stakeholder_ids)
     dump = json.dumps(options)
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
+        chart = { 
+            'id': meeting_item.pk,
+            'name': meeting_item.decision_item.name, 
+            'remote': reverse('deliverables:meetings:factors_groups_chart', args=(meeting.deliverable.pk, meeting.pk, meeting_item.pk)),
+            'info_remote': reverse('deliverables:details_decision_item', args=(meeting.deliverable.pk, meeting_item.decision_item.pk))
+        }
         return render(request, 'meetings/dashboard/factors_groups_comparison/popup.html', { 
             'meeting': meeting,
-            'chart': meeting_item,
+            'chart': chart,
             'chart_uri': 'features',
             'stakeholder_ids': stakeholder_ids,
             'dump': dump
