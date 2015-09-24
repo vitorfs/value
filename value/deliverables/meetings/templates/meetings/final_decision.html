@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load staticfiles %}
+{% load staticfiles meeting_item %}
 
 {% block javascript %}
   <script src="{% static 'js/meetings/meetings.js' %}"></script>
@@ -54,13 +54,7 @@
                     {% endfor %}
                   </td>
                   <td style="vertical-align: middle;">
-                    <div class="progress" style="margin-bottom: 0">
-                      {% for ranking in form.instance.ranking_set.all %}
-                        <div class="progress-bar" style="width: {{ ranking.percentage_votes }}%; background-color: {{ ranking.measure_value.color }}">
-                          <span class="measure-percent" data-measure-id="{{ ranking.measure_value.pk }}">{{ ranking.get_percentage_votes_display }}</span>%
-                        </div>
-                      {% endfor %}
-                    </div>
+                    {% display_ranking form.instance.ranking_set.all %}
                   </td>
                   <td style="vertical-align: middle; text-align: right;">{{ form.instance.value_ranking_as_html|safe }}</td>
                   <td style="vertical-align: middle; text-align: center;">

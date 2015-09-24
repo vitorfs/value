@@ -755,7 +755,7 @@ def add_decision_items(request, deliverable_id, meeting_id):
 @login_required
 def final_decision(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    meeting.calculate_all_rankings()
+    #meeting.calculate_all_rankings()
 
     MeetingItemFormset = modelformset_factory(MeetingItem, form=MeetingItemFinalDecisionForm, extra=0)
     meeting_items = meeting.meetingitem_set.select_related('decision_item').all().order_by('-meeting_decision')
