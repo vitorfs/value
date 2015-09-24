@@ -41,7 +41,7 @@
             </thead>
             <tbody>
               {% for form in formset %}
-                <tr data-item-id="{{ form.instance.pk }}">
+                <tr data-item-id="{{ form.instance.pk }}"{% if meeting.is_closed %} class="{% if form.instance.meeting_decision %}bg-success{% else %}bg-danger{% endif %}"{% endif %}>
                   <td style="vertical-align: middle;">
                     {{ form.instance.decision_item.name }}
                     <span data-toggle="tooltip" title="Click to view details" data-container="body" style="margin-left: 5px;">
