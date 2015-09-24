@@ -2,6 +2,7 @@
 
 from django import template
 from django.utils.html import escape
+from django.core.urlresolvers import reverse
 
 from value.deliverables.meetings.models import MeetingItem
 
@@ -17,8 +18,8 @@ def meeting_item(meeting_item_id):
         return None
 
 @register.simple_tag
-def display_ranking(ranking_set):
-    ranking_set = ranking_set.select_related('measure_value')
+def display_ranking(meeting_item):
+    ranking_set = meeting_item.ranking_set.all().select_related('measure_value')
     html = u'<div class="progress" style="margin-bottom: 0">'
     for ranking in ranking_set:
         progress_bar = u'''<div class="progress-bar" style="width: {0}%; background-color: {1};">
@@ -29,4 +30,14 @@ def display_ranking(ranking_set):
                      ranking.get_percentage_votes_display())
         html += progress_bar
     html += u'</div>'
+    return html
+
+@register.simple_tag
+def display_info_button(meeting_item):
+    remote = reverse('deliverables:details_decision_item', args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk))
+    html = u'''<span data-toggle="tooltip" title="Click to view details" data-container="body" style="margin-left: 5px;">
+            <a href="javascript:void(0);" class="btn-details js-decision-item-details" data-toggle="modal" data-target="#modal-decision-item-details" data-remote-url="{0}">
+              <span class="glyphicon glyphicon-info-sign"></span>
+            </a>
+          </span>'''.format(remote)
     return html

@@ -1,4 +1,4 @@
-{% load evaluation_percent evaluation_options %}
+{% load evaluation_percent evaluation_options meeting_item %}
 
 <form method="post" action="{% url 'deliverables:meetings:save_evaluation' meeting.deliverable.pk meeting.pk %}">
   {% csrf_token %}
@@ -12,11 +12,7 @@
               <td style="width: 25%">
                 <p class="panel-title">
                   <a href="javascript:void(0);" class="btn-toggle">{{ meeting_item.decision_item.name }}</a>
-                  <span data-toggle="tooltip" title="Click to view details" data-container="body">
-                    <a href="javascript:void(0);" class="btn-details js-decision-item-details" data-toggle="modal" data-target="#modal-decision-item-details" data-remote-url="{% url 'deliverables:details_decision_item' meeting.deliverable.pk meeting_item.decision_item.pk %}">
-                      <span class="glyphicon glyphicon-info-sign"></span>
-                    </a>
-                  </span>
+                  {% display_info_button meeting_item %}
                 </p>
               </td>
               <td>

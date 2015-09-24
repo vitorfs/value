@@ -44,17 +44,13 @@
                 <tr data-item-id="{{ form.instance.pk }}"{% if meeting.is_closed %} class="{% if form.instance.meeting_decision %}bg-success{% else %}bg-danger{% endif %}"{% endif %}>
                   <td style="vertical-align: middle;">
                     {{ form.instance.decision_item.name }}
-                    <span data-toggle="tooltip" title="Click to view details" data-container="body" style="margin-left: 5px;">
-                      <a href="javascript:void(0);" class="btn-details js-decision-item-details" data-toggle="modal" data-target="#modal-decision-item-details" data-remote-url="{% url 'deliverables:details_decision_item' meeting.deliverable.pk form.instance.decision_item.pk %}">
-                        <span class="glyphicon glyphicon-info-sign"></span>
-                      </a>
-                    </span>
+                    {% display_info_button form.instance %}
                     {% for hidden in form.hidden_fields %}
                       {{ hidden }}
                     {% endfor %}
                   </td>
                   <td style="vertical-align: middle;">
-                    {% display_ranking form.instance.ranking_set.all %}
+                    {% display_ranking form.instance %}
                   </td>
                   <td style="vertical-align: middle; text-align: right;">{{ form.instance.value_ranking_as_html|safe }}</td>
                   <td style="vertical-align: middle; text-align: center;">
