@@ -3,7 +3,6 @@
 <form id="chart-form-{{ chart.id }}" class="chart-form" action="{{ chart.remote }}" data-chart-id="{{ chart.id }}" data-type="{{ type }}">
   <div class="panel panel-default panel-chart">
     <div class="panel-heading" data-target="#collapse-{{ chart.id }}">
-      
       <div class="btn-group btn-group-xs pull-right chart-options" role="group" aria-label="Chart Options">
         {% include 'meetings/dashboard/includes/toggle_toolbar.html' %}
         {% include 'meetings/dashboard/includes/info_toolbar.html' %}
@@ -20,6 +19,11 @@
           {% include 'meetings/dashboard/includes/delete_toolbar.html' %}
         {% endif %}
       </div>
+      {% if type = 'meeting_item' %}
+        <div class="pull-right" style="width: 200px; margin-right: 10px;">
+          {% display_ranking chart.meeting_item %}
+        </div>
+      {% endif %}
       <p class="panel-title"><a href="javascript:void(0)" class="btn-chart-toggle">{{ chart.name }}</a></p>
     </div>
     <div id="collapse-{{ chart.id }}" class="panel-collapse collapse"{% if opened %} style="display: block;"{% endif %}>
