@@ -279,15 +279,20 @@ def dashboard_stakeholders_input_chart(request, deliverable_id, meeting_id):
             'dump': dump
             })
 
+def get_features_chart_dict(meeting_item):
+    chart_data = {
+        'id': meeting_item.pk,
+        'name': meeting_item.decision_item.name,
+        'meeting_item': meeting_item,
+        'remote': reverse('deliverables:meetings:features_chart', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)),
+        'info_remote': reverse('deliverables:details_decision_item', args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk))
+    }    
+    return chart_data
+
 @login_required
 def features(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    charts = [{ 
-        'id': item.pk,
-        'name': item.decision_item.name, 
-        'remote': reverse('deliverables:meetings:features_chart', args=(meeting.deliverable.pk, meeting.pk, item.pk)),
-        'info_remote': reverse('deliverables:details_decision_item', args=(meeting.deliverable.pk, item.decision_item.pk))
-    } for item in meeting.meetingitem_set.all()]
+    charts = map(get_features_chart_dict, meeting.meetingitem_set.all())
     stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
     return render(request, 'meetings/dashboard/factors_comparison/list.html', { 
         'meeting': meeting,
@@ -311,11 +316,7 @@ def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
         pass
     options = Highcharts().factors_comparison(meeting_id, meeting_item_id, chart_type, stakeholder_ids)
     dump = json.dumps(options)
-    chart = { 
-        'id': meeting_item.pk,
-        'name': meeting_item.decision_item.name, 
-        'remote': reverse('deliverables:meetings:features_chart', args=(meeting.deliverable.pk, meeting.pk, meeting_item.pk))
-    }
+    chart = get_features_chart_dict(meeting_item)
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
@@ -327,15 +328,19 @@ def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
             'dump': dump
             })
 
+def get_features_scenario_chart_dict(scenario):
+    chart_data = {
+        'id': scenario.pk,
+        'name': scenario.name,
+        'remote': reverse('deliverables:meetings:features_scenario_chart', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk)),
+        'info_remote': reverse('deliverables:meetings:details_scenario', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk))
+    }
+    return chart_data
+
 @login_required
 def features_scenarios(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    charts = [{
-        'id': scenario.pk,
-        'name': scenario.name,
-        'remote': reverse('deliverables:meetings:features_scenario_chart', args=(meeting.deliverable.pk, meeting.pk, scenario.pk)),
-        'info_remote': reverse('deliverables:meetings:details_scenario', args=(meeting.deliverable.pk, meeting.pk, scenario.pk))
-    } for scenario in meeting.scenarios.all()]
+    charts = map(get_features_scenario_chart_dict, meeting.scenarios.all())
     stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
     return render(request, 'meetings/dashboard/factors_comparison/scenarios.html', { 
         'meeting': meeting,
@@ -360,12 +365,7 @@ def features_scenario_chart(request, deliverable_id, meeting_id, scenario_id):
 
     options = Highcharts().factors_comparison_scenario(meeting, scenario, chart_type, stakeholder_ids)
     dump = json.dumps(options)
-
-    chart = {
-        'id': scenario.pk,
-        'name': scenario.name,
-        'remote': reverse('deliverables:meetings:features_scenario_chart', args=(meeting.deliverable.pk, meeting.pk, scenario.pk))
-    }
+    chart = get_features_scenario_chart_dict(scenario)
 
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')

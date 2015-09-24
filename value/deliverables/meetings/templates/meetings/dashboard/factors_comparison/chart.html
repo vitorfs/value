@@ -1,6 +1,9 @@
+{% load meeting_item %}
+
 <form id="chart-form-{{ chart.id }}" class="chart-form" action="{{ chart.remote }}" data-chart-id="{{ chart.id }}" data-type="{{ type }}">
   <div class="panel panel-default panel-chart">
     <div class="panel-heading" data-target="#collapse-{{ chart.id }}">
+      
       <div class="btn-group btn-group-xs pull-right chart-options" role="group" aria-label="Chart Options">
         {% include 'meetings/dashboard/includes/toggle_toolbar.html' %}
         {% include 'meetings/dashboard/includes/info_toolbar.html' %}
