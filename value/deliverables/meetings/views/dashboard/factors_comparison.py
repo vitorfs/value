@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from value.measures.models import MeasureValue
 from value.deliverables.meetings.models import Meeting, Scenario, Ranking
 from value.deliverables.meetings.charts import Highcharts
+from value.deliverables.meetings.utils import get_or_set_charts_order_session, get_stakeholders_ids
 
 
 ''' Support functions '''
@@ -28,21 +29,11 @@ def get_features_scenario_chart_dict(scenario):
     chart_data = {
         'id': scenario.pk,
         'name': scenario.name,
+        'scenario': scenario,
         'remote': reverse('deliverables:meetings:features_scenario_chart', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk)),
         'info_remote': reverse('deliverables:meetings:details_scenario', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk))
     }
     return chart_data
-
-def get_or_set_charts_order_session(request, cookie_name, default_order, valid_orders):
-    order = default_order
-    if 'order' in request.GET:
-        order = request.GET.get('order')
-    elif cookie_name in request.session:
-        order = request.session.get(cookie_name)
-    if order not in valid_orders:
-        order = default_order
-    request.session[cookie_name] = order
-    return order
 
 def get_or_set_factors_comparison_charts_order_session(request, measure):
     cookie_name = 'factors_comparison_order'
@@ -61,7 +52,6 @@ def get_ordered_factors_comparison_charts(meeting, order):
         meeting_items = map(lambda item: item.meeting_item, ordered_by_ranking)
     return meeting_items
 
-
 ''' Views '''
 
 @login_required
@@ -69,7 +59,7 @@ def features(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     order = get_or_set_factors_comparison_charts_order_session(request, meeting.deliverable.measure)
     charts = map(get_features_chart_dict, get_ordered_factors_comparison_charts(meeting, order))
-    stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
+    stakeholder_ids = get_stakeholders_ids(meeting)
     return render(request, 'meetings/dashboard/factors_comparison/list.html', { 
         'meeting': meeting,
         'charts': charts,
@@ -86,11 +76,8 @@ def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     meeting_item = meeting.meetingitem_set.get(pk=meeting_item_id)
     chart_type = request.GET.get('chart-type')
-    stakeholder_ids = request.GET.getlist('stakeholder')
-    try:
-        stakeholder_ids = list(map(int, stakeholder_ids))
-    except:
-        pass
+    stakeholders = request.GET.getlist('stakeholder')
+    stakeholder_ids = get_stakeholders_ids(meeting, stakeholders)
     options = Highcharts().factors_comparison(meeting_id, meeting_item_id, chart_type, stakeholder_ids)
     dump = json.dumps(options)
     chart = get_features_chart_dict(meeting_item)
@@ -109,7 +96,7 @@ def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
 def features_scenarios(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     charts = map(get_features_scenario_chart_dict, meeting.scenarios.all())
-    stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
+    stakeholder_ids = get_stakeholders_ids(meeting)
     return render(request, 'meetings/dashboard/factors_comparison/scenarios.html', { 
         'meeting': meeting,
         'charts': charts,
@@ -123,14 +110,9 @@ def features_scenarios(request, deliverable_id, meeting_id):
 def features_scenario_chart(request, deliverable_id, meeting_id, scenario_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     scenario = get_object_or_404(Scenario, pk=scenario_id)
-
     chart_type = request.GET.get('chart-type')
-    stakeholder_ids = request.GET.getlist('stakeholder')
-    try:
-        stakeholder_ids = list(map(int, stakeholder_ids))
-    except:
-        pass
-
+    stakeholders = request.GET.getlist('stakeholder')
+    stakeholder_ids = get_stakeholders_ids(meeting, stakeholders)
     options = Highcharts().factors_comparison_scenario(meeting, scenario, chart_type, stakeholder_ids)
     dump = json.dumps(options)
     chart = get_features_scenario_chart_dict(scenario)
