@@ -27,7 +27,7 @@ from value.measures.models import Measure, MeasureValue
 from value.deliverables.models import Deliverable, DecisionItemLookup, Rationale, DecisionItem
 from value.deliverables.forms import RationaleForm
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
-from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation, Scenario
+from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation, Scenario, Ranking
 from value.deliverables.meetings.charts import Highcharts
 from value.deliverables.meetings.forms import MeetingForm, MeetingItemFinalDecisionForm, ScenarioForm, \
         FactorsScenarioBuilderForm, FactorsGroupsScenarioBuilderForm
@@ -289,10 +289,39 @@ def get_features_chart_dict(meeting_item):
     }    
     return chart_data
 
+def get_or_set_charts_order_session(request, cookie_name, default_order, valid_orders):
+    order = default_order
+    if 'order' in request.GET:
+        order = request.GET.get('order')
+    elif cookie_name in request.session:
+        order = request.session.get(cookie_name)
+    if order not in valid_orders:
+        order = default_order
+    request.session[cookie_name] = order
+    return order
+
+def get_or_set_factors_comparison_charts_order_session(request, measure):
+    cookie_name = 'factors_comparison_order'
+    default_order = '-value_ranking'
+    valid_measures = map(str, measure.measurevalue_set.values_list('id', flat=True))
+    valid_orders = ['decision_item__name', '-value_ranking'] + valid_measures
+    return get_or_set_charts_order_session(request, cookie_name, default_order, valid_orders)
+
+def get_ordered_factors_comparison_charts(meeting, order):
+    meeting_items = meeting.meetingitem_set.all()
+    can_order_in_db = order in ['decision_item__name', '-value_ranking']
+    if can_order_in_db:
+        meeting_items = meeting_items.order_by(order)
+    else:
+        ordered_by_ranking = Ranking.objects.filter(meeting_item__meeting=meeting, measure_value__id=order).order_by('-raw_votes')
+        meeting_items = map(lambda item: item.meeting_item, ordered_by_ranking)
+    return meeting_items
+
 @login_required
 def features(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    charts = map(get_features_chart_dict, meeting.meetingitem_set.all())
+    order = get_or_set_factors_comparison_charts_order_session(request, meeting.deliverable.measure)
+    charts = map(get_features_chart_dict, get_ordered_factors_comparison_charts(meeting, order))
     stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
     return render(request, 'meetings/dashboard/factors_comparison/list.html', { 
         'meeting': meeting,
@@ -301,7 +330,8 @@ def features(request, deliverable_id, meeting_id):
         'chart_type': 'stacked_bars',
         'chart_menu_active': 'features',
         'chart_page_title': 'Factors Comparison',
-        'type': 'meeting_item'
+        'type': 'meeting_item',
+        'order': order
         })
 
 @login_required

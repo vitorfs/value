@@ -23,7 +23,7 @@ def display_ranking(meeting_item):
     html = u'<div class="progress" style="margin-bottom: 0">'
     for ranking in ranking_set:
         progress_bar = u'''<div class="progress-bar" style="width: {0}%; background-color: {1};">
-      <span class="measure-percent" data-measure-id="{2}">{3}</span>%
+      <span class="measure-percent" data-measure-id="{2}" data-percentage="{0}">{3}</span>%
     </div>'''.format(ranking.percentage_votes, 
                      ranking.measure_value.color, 
                      ranking.measure_value.pk, 
