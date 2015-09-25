@@ -2,26 +2,19 @@
 
 import json
 
-from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST
 from django.core.urlresolvers import reverse
-from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
-from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.db import transaction
-from django.forms.models import modelformset_factory
 
-from value.factors.models import Factor
-from value.measures.models import Measure, MeasureValue
-from value.deliverables.models import Deliverable, DecisionItemLookup, Rationale, DecisionItem
-from value.deliverables.forms import RationaleForm
+from value.deliverables.models import Deliverable, DecisionItemLookup, DecisionItem
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
-from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation, Ranking
-from value.deliverables.meetings.forms import MeetingForm, MeetingItemFinalDecisionForm
+from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
+from value.deliverables.meetings.forms import MeetingForm
 
 
 @login_required
