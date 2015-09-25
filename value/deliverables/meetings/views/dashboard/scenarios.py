@@ -24,7 +24,7 @@ def add_scenario(request, deliverable_id, meeting_id):
     if request.method == 'POST':
         form = ScenarioForm(request.POST, instance=scenario, prefix='add')
         if form.is_valid():
-            role = form.save()
+            form.save()
             json_context['is_valid'] = True
         else:
             json_context['is_valid'] = False

@@ -4,7 +4,7 @@ from django import template
 from django.utils.html import escape
 from django.core.urlresolvers import reverse
 
-from value.deliverables.meetings.models import MeetingItem
+from value.deliverables.meetings.models import MeetingItem, Scenario
 
 register = template.Library()
 
@@ -18,17 +18,18 @@ def meeting_item(meeting_item_id):
         return None
 
 @register.simple_tag
-def display_ranking(meeting_item):
-    ranking_set = meeting_item.ranking_set.all().select_related('measure_value')
+def display_ranking(instance):
     html = u'<div class="progress" style="margin-bottom: 0">'
-    for ranking in ranking_set:
-        progress_bar = u'''<div class="progress-bar" style="width: {0}%; background-color: {1};">
-      <span class="measure-percent" data-measure-id="{2}" data-percentage="{0}">{3}</span>%
-    </div>'''.format(ranking.percentage_votes, 
-                     ranking.measure_value.color, 
-                     ranking.measure_value.pk, 
-                     ranking.get_percentage_votes_display())
-        html += progress_bar
+    if isinstance(instance, MeetingItem):
+        ranking_set = instance.ranking_set.all().select_related('measure_value')
+        for ranking in ranking_set:
+            progress_bar = u'''<div class="progress-bar" style="width: {0}%; background-color: {1};">
+              <span class="measure-percent" data-measure-id="{2}" data-percentage="{0}">{3}</span>%
+            </div>'''.format(ranking.percentage_votes, 
+                             ranking.measure_value.color, 
+                             ranking.measure_value.pk, 
+                             ranking.get_percentage_votes_display())
+            html += progress_bar
     html += u'</div>'
     return html
 

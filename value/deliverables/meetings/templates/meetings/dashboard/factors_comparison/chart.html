@@ -19,11 +19,10 @@
           {% include 'meetings/dashboard/includes/delete_toolbar.html' %}
         {% endif %}
       </div>
-      {% if type = 'meeting_item' %}
-        <div class="pull-right" style="width: 200px; margin-right: 10px;">
-          {% display_ranking chart.meeting_item %}
-        </div>
-      {% endif %}
+      <div class="pull-right" style="width: 200px; margin-right: 10px;">
+        {% display_ranking chart.instance %}
+      </div>
+      <span class="badge pull-right" style="margin-right: 10px;">{{ chart.ranking }}</span>
       <p class="panel-title"><a href="javascript:void(0)" class="btn-chart-toggle">{{ chart.name }}</a></p>
     </div>
     <div id="collapse-{{ chart.id }}" class="panel-collapse collapse"{% if opened %} style="display: block;"{% endif %}>

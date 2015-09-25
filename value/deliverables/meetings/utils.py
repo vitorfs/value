@@ -11,11 +11,11 @@ def get_or_set_charts_order_session(request, cookie_name, default_order, valid_o
     request.session[cookie_name] = order
     return order
 
-def get_stakeholders_ids(meeting, ids=None):
-    stakeholder_ids = meeting.meetingstakeholder_set.all().values_list('stakeholder__id', flat=True)
-    if ids:
+def get_stakeholders_ids(meeting, stakeholders=None):
+    stakeholder_ids = list(meeting.meetingstakeholder_set.all().values_list('stakeholder__id', flat=True))
+    if hasattr(stakeholders, '__iter__'):
         try:
-            stakeholder_ids = map(int, ids)
+            stakeholder_ids = map(int, stakeholders)
         except:
-            pass
+            stakeholder_ids = list()
     return stakeholder_ids

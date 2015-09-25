@@ -19,10 +19,10 @@
         <li role="presentation">
           <a role="menuitem" tabindex="-1" href="javascript:void(0);" class="js-select-stakeholder" data-group-name="{{ group_name }}">
             {% if stakeholder.pk in stakeholder_ids %}
-              <input type="checkbox" name="stakeholder" value="{{ stakeholder.pk }}" checked style="display: none;">
+              <input type="checkbox" name="stakeholder" value="{{ stakeholder.pk }}" checked style="display: none;" autocomplete="off">
               <span class="glyphicon glyphicon-check"></span> 
             {% else %}
-              <input type="checkbox" name="stakeholder" value="{{ stakeholder.pk }}" style="display: none;">
+              <input type="checkbox" name="stakeholder" value="{{ stakeholder.pk }}" style="display: none;" autocomplete="off">
               <span class="glyphicon glyphicon-unchecked"></span> 
             {% endif %}
             {{ stakeholder.profile.get_display_name }}

@@ -3,6 +3,7 @@
 from django.db import models, transaction
 from django.db.models import F, Count, Min
 from django.contrib.auth.models import User, Group
+from django.db.models.signals import m2m_changed
 
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
@@ -100,6 +101,21 @@ class Meeting(models.Model):
                 del grouped_stakeholders[name]
         return grouped_stakeholders
 
+    def get_ordered_meeting_items(self, order):
+        """
+        Order can represent regular meeting item fields and it's foreign keys.
+        It's also possible to pass a MeasureValue id as parameter to order
+        by the meeting item ranking.
+        """
+        meeting_items = self.meetingitem_set.all()
+        can_order_in_db = order in ['decision_item__name', '-value_ranking']
+        if can_order_in_db:
+            meeting_items = meeting_items.order_by(order)
+        else:
+            ordered_by_ranking = Ranking.objects.filter(meeting_item__meeting=self, measure_value__id=order).order_by('-raw_votes')
+            meeting_items = map(lambda item: item.meeting_item, ordered_by_ranking)
+        return meeting_items
+
 
 class MeetingItem(models.Model):
     meeting = models.ForeignKey(Meeting)
@@ -116,7 +132,8 @@ class MeetingItem(models.Model):
         return '{0} ({1})'.format(self.decision_item.name, self.meeting.name)
 
     def get_value_ranking_display(self):
-        return round(self.value_ranking, 2)
+        display = round(self.value_ranking, 2)
+        return '{:2.2f}'.format(display)
 
     def value_ranking_as_html(self):
         ranking = self.get_value_ranking_display()
@@ -245,15 +262,15 @@ class Scenario(models.Model):
     meeting = models.ForeignKey(Meeting, related_name='scenarios')
     category = models.CharField(max_length=14, choices=CATEGORIES, null=True, blank=True)
     meeting_items = models.ManyToManyField(MeetingItem)
+    value_ranking = models.FloatField(default=0.0)
 
     class Meta:
         unique_together = (('name', 'meeting', 'category',),)
 
     def build(self, *args, **kwargs):
-        print kwargs
-        limit = int(kwargs['meeting_items_count'])
-        group = kwargs['factors_groups']
-        measure_value = kwargs['criteria']
+        limit = int(kwargs.get('meeting_items_count'))
+        group = kwargs.get('factors_groups')
+        measure_value = kwargs.get('criteria')
 
         evaluations = self.meeting.get_evaluations()
         scenario_items = evaluations.filter(measure_value=measure_value, factor__group=group) \
@@ -267,3 +284,10 @@ class Scenario(models.Model):
             self.save()
             self.meeting_items.add(*scenario_items)
         return self
+
+def calculate_scenario_ranking(sender, **kwargs):
+    action = kwargs.get('action')
+    if action in ['post_save', 'post_remove']:
+        pass
+
+m2m_changed.connect(calculate_scenario_ranking, sender=Scenario.meeting_items.through)

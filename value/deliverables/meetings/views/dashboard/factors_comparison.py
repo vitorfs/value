@@ -19,7 +19,8 @@ def get_features_chart_dict(meeting_item):
     chart_data = {
         'id': meeting_item.pk,
         'name': meeting_item.decision_item.name,
-        'meeting_item': meeting_item,
+        'ranking': meeting_item.get_value_ranking_display(),
+        'instance': meeting_item,
         'remote': reverse('deliverables:meetings:features_chart', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)),
         'info_remote': reverse('deliverables:details_decision_item', args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk))
     }    
@@ -29,7 +30,8 @@ def get_features_scenario_chart_dict(scenario):
     chart_data = {
         'id': scenario.pk,
         'name': scenario.name,
-        'scenario': scenario,
+        'ranking': 0,
+        'instance': scenario,
         'remote': reverse('deliverables:meetings:features_scenario_chart', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk)),
         'info_remote': reverse('deliverables:meetings:details_scenario', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk))
     }
@@ -42,15 +44,6 @@ def get_or_set_factors_comparison_charts_order_session(request, measure):
     valid_orders = ['decision_item__name', '-value_ranking'] + valid_measures
     return get_or_set_charts_order_session(request, cookie_name, default_order, valid_orders)
 
-def get_ordered_factors_comparison_charts(meeting, order):
-    meeting_items = meeting.meetingitem_set.all()
-    can_order_in_db = order in ['decision_item__name', '-value_ranking']
-    if can_order_in_db:
-        meeting_items = meeting_items.order_by(order)
-    else:
-        ordered_by_ranking = Ranking.objects.filter(meeting_item__meeting=meeting, measure_value__id=order).order_by('-raw_votes')
-        meeting_items = map(lambda item: item.meeting_item, ordered_by_ranking)
-    return meeting_items
 
 ''' Views '''
 
@@ -58,7 +51,7 @@ def get_ordered_factors_comparison_charts(meeting, order):
 def features(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     order = get_or_set_factors_comparison_charts_order_session(request, meeting.deliverable.measure)
-    charts = map(get_features_chart_dict, get_ordered_factors_comparison_charts(meeting, order))
+    charts = map(get_features_chart_dict, meeting.get_ordered_meeting_items(order))
     stakeholder_ids = get_stakeholders_ids(meeting)
     return render(request, 'meetings/dashboard/factors_comparison/list.html', { 
         'meeting': meeting,
