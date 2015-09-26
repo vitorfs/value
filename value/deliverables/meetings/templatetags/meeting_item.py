@@ -31,6 +31,32 @@ def display_evaluation_summary(instance):
                              ranking.measure_value.pk, 
                              ranking.get_percentage_votes_display())
             html += progress_bar
+    elif isinstance(instance, Scenario):
+        ranking = instance.meeting_items.first().ranking_set.first()
+        measure = ranking.measure_value.measure
+        scenario_ranking = dict()
+        
+        for measure_value in measure.measurevalue_set.all():
+            scenario_ranking[measure_value.pk] = { 
+                'percentage_votes': 0.0, 
+                'color': measure_value.color 
+            }
+        
+        meeting_items_count = instance.meeting_items.count()
+        for meeting_item in instance.meeting_items.all():
+            for ranking in meeting_item.ranking_set.all().select_related('measure_value'):
+                scenario_ranking[ranking.measure_value.pk]['percentage_votes'] += ranking.percentage_votes
+
+        for key, value in scenario_ranking.iteritems():
+            percentage_votes = value['percentage_votes'] / float(meeting_items_count)
+            progress_bar = u'''<div class="progress-bar" style="width: {0}%; background-color: {1};">
+              <span class="measure-percent" data-measure-id="{2}" data-percentage="{0}">{3}</span>%
+            </div>'''.format(percentage_votes, 
+                             value['color'], 
+                             key, 
+                             format_percentage(percentage_votes))
+            html += progress_bar
+
     html += u'</div>'
     return html
 
