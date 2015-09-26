@@ -288,17 +288,15 @@ class Scenario(models.Model):
     def get_value_ranking_display(self):
         return format_percentage(self.value_ranking)
 
-def calculate_scenario_ranking(sender, **kwargs):
-    action = kwargs.get('action')
-    scenario = kwargs.get('instance')
+def calculate_scenario_ranking(sender, instance, action, **kwargs):
     if action in ['post_add', 'post_remove']:
-        meeting_items_count = scenario.meeting_items.count()
-        result = scenario.meeting_items.aggregate(ranking=Sum('value_ranking'))
+        meeting_items_count = instance.meeting_items.count()
+        result = instance.meeting_items.aggregate(ranking=Sum('value_ranking'))
         meeting_items_ranking = result['ranking']
         if meeting_items_count > 0:
-            scenario.value_ranking = meeting_items_ranking / float(meeting_items_count)
+            instance.value_ranking = meeting_items_ranking / float(meeting_items_count)
         else:
-            scenario.value_ranking = 0.0
-        scenario.save()
+            instance.value_ranking = 0.0
+        instance.save()
 
 m2m_changed.connect(calculate_scenario_ranking, sender=Scenario.meeting_items.through)
