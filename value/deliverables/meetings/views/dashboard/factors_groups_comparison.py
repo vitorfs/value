@@ -12,18 +12,44 @@ from django.template.loader import render_to_string
 from value.deliverables.meetings.models import Meeting, Scenario
 from value.deliverables.meetings.charts import Highcharts
 from value.deliverables.meetings.forms import FactorsGroupsScenarioBuilderForm
-from value.deliverables.meetings.utils import get_stakeholders_ids
+from value.deliverables.meetings.utils import get_stakeholders_ids, get_or_set_charts_order_session, \
+        get_or_set_scenario_chars_order_session
 
+
+''' Support functions '''
+
+def get_factors_groups_chart_dict(meeting_item):
+    chart_data = { 
+        'id': meeting_item.pk,
+        'name': meeting_item.decision_item.name,
+        'ranking': meeting_item.value_ranking,
+        'instance': meeting_item,
+        'instance_type': 'meeting_item',
+        'remote': reverse('deliverables:meetings:factors_groups_chart', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)),
+        'info_remote': reverse('deliverables:details_decision_item', args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk))
+    }
+    return chart_data
+
+def get_factors_groups_scenario_chart_dict(scenario):
+    chart_data = {
+        'id': scenario.pk,
+        'name': scenario.name,
+        'ranking': scenario.value_ranking,
+        'instance': scenario,
+        'instance_type': 'scenario',
+        'remote': reverse('deliverables:meetings:factors_groups_scenario_chart', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk)),
+        'info_remote': reverse('deliverables:meetings:details_scenario', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk))
+    }
+    return chart_data
+
+
+''' Views '''
 
 @login_required
 def factors_groups(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    charts = [{ 
-        'id': item.pk,
-        'name': item.decision_item.name, 
-        'remote': reverse('deliverables:meetings:factors_groups_chart', args=(meeting.deliverable.pk, meeting.pk, item.pk)),
-        'info_remote': reverse('deliverables:details_decision_item', args=(meeting.deliverable.pk, item.decision_item.pk))
-    } for item in meeting.meetingitem_set.all()]
+    order = get_or_set_charts_order_session(request, meeting, 'factors_groups_comparison_order')
+    charts = map(get_factors_groups_chart_dict, meeting.get_ordered_meeting_items(order))
     stakeholder_ids = get_stakeholders_ids(meeting)
     return render(request, 'meetings/dashboard/factors_groups_comparison/list.html', { 
             'meeting': meeting,
@@ -31,7 +57,7 @@ def factors_groups(request, deliverable_id, meeting_id):
             'stakeholder_ids': stakeholder_ids,
             'chart_menu_active': 'factors_groups',
             'chart_page_title': 'Factors Groups Comparison',
-            'type': 'meeting_item'
+            'order': order
             })
 
 @login_required
@@ -45,12 +71,7 @@ def factors_groups_chart(request, deliverable_id, meeting_id, meeting_item_id):
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        chart = { 
-            'id': meeting_item.pk,
-            'name': meeting_item.decision_item.name, 
-            'remote': reverse('deliverables:meetings:factors_groups_chart', args=(meeting.deliverable.pk, meeting.pk, meeting_item.pk)),
-            'info_remote': reverse('deliverables:details_decision_item', args=(meeting.deliverable.pk, meeting_item.decision_item.pk))
-        }
+        chart = get_factors_groups_chart_dict(meeting_item)
         return render(request, 'meetings/dashboard/factors_groups_comparison/popup.html', { 
             'meeting': meeting,
             'chart': chart,
@@ -62,19 +83,13 @@ def factors_groups_chart(request, deliverable_id, meeting_id, meeting_item_id):
 @login_required
 def factors_groups_scenarios(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    charts = [{
-        'id': scenario.pk,
-        'name': scenario.name,
-        'remote': reverse('deliverables:meetings:factors_groups_scenario_chart', args=(meeting.deliverable.pk, meeting.pk, scenario.pk)),
-        'info_remote': reverse('deliverables:meetings:details_scenario', args=(meeting.deliverable.pk, meeting.pk, scenario.pk))
-    } for scenario in meeting.scenarios.all()]
+    charts = map(get_factors_groups_scenario_chart_dict, meeting.scenarios.all())
     stakeholder_ids = get_stakeholders_ids(meeting)
     return render(request, 'meetings/dashboard/factors_groups_comparison/scenarios.html', { 
         'meeting': meeting,
         'charts': charts,
         'stakeholder_ids': stakeholder_ids,
-        'chart_menu_active': 'factors_groups',
-        'type': 'scenario'
+        'chart_menu_active': 'factors_groups'
         })
 
 @login_required
@@ -85,13 +100,7 @@ def factors_groups_scenario_chart(request, deliverable_id, meeting_id, scenario_
     stakeholder_ids = get_stakeholders_ids(meeting, stakeholders)
     options = Highcharts().factors_groups_scenario(meeting, scenario, stakeholder_ids)
     dump = json.dumps(options)
-
-    chart = {
-        'id': scenario.pk,
-        'name': scenario.name,
-        'remote': reverse('deliverables:meetings:factors_groups_scenario_chart', args=(meeting.deliverable.pk, meeting.pk, scenario.pk))
-    }
-
+    chart = get_factors_groups_scenario_chart_dict(scenario)
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
