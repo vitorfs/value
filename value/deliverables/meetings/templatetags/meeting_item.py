@@ -41,7 +41,7 @@ def display_ranking_label(ranking):
         label = 'label-danger'
     elif ranking == 0:
         label = 'label-warning'        
-    html = u'<span class="label {0} pull-right" style="margin-right: 10px; margin-top: 3px;">{1}</span>'.format(label, format_percentage(ranking))
+    html = u'<span class="label {0} pull-right" style="margin-right: 10px; margin-top: 2px;">{1}</span>'.format(label, format_percentage(ranking))
     return html
 
 @register.simple_tag

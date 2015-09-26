@@ -11,7 +11,6 @@ from django.template.loader import render_to_string
 
 from value.deliverables.meetings.models import Meeting, Scenario
 from value.deliverables.meetings.charts import Highcharts
-from value.deliverables.meetings.forms import FactorsGroupsScenarioBuilderForm
 from value.deliverables.meetings.utils import get_stakeholders_ids, get_or_set_charts_order_session, \
         get_or_set_scenario_chars_order_session
 
@@ -89,7 +88,8 @@ def factors_groups_scenarios(request, deliverable_id, meeting_id):
         'meeting': meeting,
         'charts': charts,
         'stakeholder_ids': stakeholder_ids,
-        'chart_menu_active': 'factors_groups'
+        'chart_menu_active': 'factors_groups',
+        'scenario_category': Scenario.FACTORS_GROUPS
         })
 
 @login_required
@@ -110,12 +110,3 @@ def factors_groups_scenario_chart(request, deliverable_id, meeting_id, scenario_
             'stakeholder_ids': stakeholder_ids,
             'dump': dump
             })
-
-@login_required
-def factors_groups_scenario_builder(request, deliverable_id, meeting_id):
-    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    form = FactorsGroupsScenarioBuilderForm(initial={ 'meeting': meeting, 'category': Scenario.FACTORS_GROUPS })
-    context = RequestContext(request, { 'form': form })
-    json_context = dict()
-    json_context['form'] = render_to_string('includes/form_vertical.html', context)
-    return HttpResponse(json.dumps(json_context), content_type='application/json')

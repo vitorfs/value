@@ -54,5 +54,55 @@ $(function () {
     });
     return false;
   });
+
+  $("#modal-scenario-builder").on("shown.bs.modal", function () {
+    var url = $("#btn-scenario-builder").attr("data-remote-url");
+    var category = $("#btn-scenario-builder").attr("data-scenario-builder");
+    $.ajax({
+      url: url,
+      type: 'get',
+      data: {
+        'category': category
+      },
+      dataType: 'json',
+      cache: false,
+      beforeSend: function () {
+        $("#modal-scenario-builder .modal-body").loading();
+      },
+      success: function (data) {
+        $("#modal-scenario-builder .modal-body").html(data.form);
+      },
+      complete: function () {
+        $("#modal-scenario-builder .modal-body").loading();
+      }
+    });
+  });
+  $("#modal-scenario-builder").on("hidden.bs.modal", function () {
+    $("#modal-scenario-builder .modal-body").html("");
+  });
+
+  $("#form-scenario-builder").submit(function () {
+    var form = $(this);
+    $.ajax({
+      url: $(form).attr("action"),
+      type: $(form).attr("method"),
+      data: $(form).serialize(),
+      beforeSend: function () {
+
+      },
+      success: function (data) {
+        if (data.is_valid) {
+          $("#scenarios").load(" #scenarios > *", function () {
+            $(".charts .panel-heading:eq(0)").loadchart();
+          });
+          $("#modal-scenario-builder").modal("hide");
+        }
+        else {
+          $("#modal-scenario-builder .modal-body").html(data.form);
+        }
+      }
+    });
+    return false;
+  });
       
 });

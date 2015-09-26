@@ -28,9 +28,14 @@
       </ul>
       <div class="panel-group charts" id="scenarios">
         {% if charts %}
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add-scenario" style="margin-bottom: 20px;">
-            <span class="glyphicon glyphicon-plus"></span> Add scenario
-          </button>
+          <div style="margin-bottom: 20px;">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add-scenario">
+              <span class="glyphicon glyphicon-plus"></span> Add scenario
+            </button>
+            <button type="button" class="btn btn-primary" id="btn-scenario-builder" data-toggle="modal" data-target="#modal-scenario-builder" data-remote-url="{% url 'deliverables:meetings:scenario_builder' meeting.deliverable.pk meeting.pk %}" data-scenario-builder="{{ scenario_category }}">
+              <span class="fa fa-wrench"></span> Scenario builder
+            </button>
+          </div>
           {% for chart in charts %}
             {% include 'meetings/dashboard/factors_comparison/chart.html' with opened=forloop.first can_edit=True can_delete=True %}
           {% endfor %}
@@ -41,6 +46,10 @@
             <p class="lead">A scenario can be used to combine different set of decision items.</p>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add-scenario">
               <span class="glyphicon glyphicon-plus"></span> Add the first scenario
+            </button>
+            <span style="margin: 0 10px;">or</span>
+            <button type="button" class="btn btn-primary" id="btn-scenario-builder" data-toggle="modal" data-target="#modal-scenario-builder" data-remote-url="{% url 'deliverables:meetings:scenario_builder' meeting.deliverable.pk meeting.pk %}"  data-scenario-builder="{{ scenario_category }}">
+              <span class="fa fa-wrench"></span> Build an automatic scenario
             </button>
           </div>
         {% endif %}

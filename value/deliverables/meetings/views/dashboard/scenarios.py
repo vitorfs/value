@@ -64,22 +64,23 @@ def get_scenario_builder_form(category):
         ScenarioBuilderForm = FactorsGroupsScenarioBuilderForm
     return ScenarioBuilderForm
 
-@require_POST
 @login_required
-def build_scenario(request, deliverable_id, meeting_id):
+def scenario_builder(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    category = request.POST.get('category')
     json_context = dict()
-
+    category = request.GET.get('category', request.POST.get('category'))
     ScenarioBuilderForm = get_scenario_builder_form(category)
 
-    form = ScenarioBuilderForm(request.POST, initial={ 'meeting': meeting })
-    if form.is_valid():
-        scenario = Scenario(meeting=meeting, category=category)
-        scenario.build(**form.cleaned_data)
-        json_context['is_valid'] = True
+    if request.method == 'POST':
+        form = ScenarioBuilderForm(request.POST, initial={ 'meeting': meeting })
+        if form.is_valid():
+            scenario = Scenario(meeting=meeting, category=category)
+            scenario.build(**form.cleaned_data)
+            json_context['is_valid'] = True
+        else:
+            json_context['is_valid'] = False
     else:
-        json_context['is_valid'] = False
+        form = ScenarioBuilderForm(initial={ 'meeting': meeting, 'category': category })
 
     context = RequestContext(request, { 'form': form })
     json_context['form'] = render_to_string('includes/form_vertical.html', context)

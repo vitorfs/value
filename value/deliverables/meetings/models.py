@@ -278,7 +278,7 @@ class Scenario(models.Model):
             .annotate(count=Count('measure_value')) \
             .order_by('-count')[:limit]
 
-        name = u'Scenario {0} {1} {2} Best Fit'.format(group.name, measure_value.description, measure_value.measure.name)
+        name = u'{0} Scenario {1} {2} Best Fit'.format(group.name, measure_value.description, measure_value.measure.name)
         with transaction.atomic():
             self.name = name
             self.save()

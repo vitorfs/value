@@ -90,7 +90,8 @@ def features_scenarios(request, deliverable_id, meeting_id):
         'charts': charts,
         'chart_type': 'stacked_bars',
         'stakeholder_ids': stakeholder_ids,
-        'chart_menu_active': 'features'
+        'chart_menu_active': 'features',
+        'scenario_category': Scenario.FACTORS
         })
 
 @login_required
