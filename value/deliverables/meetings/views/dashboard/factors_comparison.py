@@ -19,7 +19,7 @@ def get_features_chart_dict(meeting_item):
     chart_data = {
         'id': meeting_item.pk,
         'name': meeting_item.decision_item.name,
-        'ranking': meeting_item.get_value_ranking_display(),
+        'ranking': meeting_item.value_ranking,
         'instance': meeting_item,
         'remote': reverse('deliverables:meetings:features_chart', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)),
         'info_remote': reverse('deliverables:details_decision_item', args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk))
@@ -30,7 +30,7 @@ def get_features_scenario_chart_dict(scenario):
     chart_data = {
         'id': scenario.pk,
         'name': scenario.name,
-        'ranking': 0,
+        'ranking': scenario.value_ranking,
         'instance': scenario,
         'remote': reverse('deliverables:meetings:features_scenario_chart', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk)),
         'info_remote': reverse('deliverables:meetings:details_scenario', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk))

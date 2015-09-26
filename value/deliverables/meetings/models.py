@@ -1,13 +1,14 @@
 # coding: utf-8
 
 from django.db import models, transaction
-from django.db.models import F, Count, Min
+from django.db.models import F, Count, Min, Sum
 from django.contrib.auth.models import User, Group
 from django.db.models.signals import m2m_changed
 
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
 from value.deliverables.models import Deliverable, DecisionItem, Rationale
+from value.deliverables.meetings.utils import format_percentage
 
 
 class Meeting(models.Model):
@@ -132,17 +133,16 @@ class MeetingItem(models.Model):
         return '{0} ({1})'.format(self.decision_item.name, self.meeting.name)
 
     def get_value_ranking_display(self):
-        display = round(self.value_ranking, 2)
-        return '{:2.2f}'.format(display)
+        return format_percentage(self.value_ranking)
 
     def value_ranking_as_html(self):
-        ranking = self.get_value_ranking_display()
-        if ranking < 0:
-            return u'<strong class="text-danger">{0}</strong>'.format(ranking)
-        elif ranking == 0:
-            return u'<strong class="text-warning">{0}</strong>'.format(ranking)
+        formatted_ranking = self.get_value_ranking_display()
+        if self.value_ranking < 0:
+            return u'<strong class="text-danger">{0}</strong>'.format(formatted_ranking)
+        elif self.value_ranking == 0:
+            return u'<strong class="text-warning">{0}</strong>'.format(formatted_ranking)
         else:
-            return u'<strong class="text-success">{0}</strong>'.format(ranking)
+            return u'<strong class="text-success">{0}</strong>'.format(formatted_ranking)
 
     def calculate_ranking(self):
         item_evaluations = Evaluation.get_evaluations_by_meeting(self.meeting) \
@@ -285,9 +285,20 @@ class Scenario(models.Model):
             self.meeting_items.add(*scenario_items)
         return self
 
+    def get_value_ranking_display(self):
+        return format_percentage(self.value_ranking)
+
 def calculate_scenario_ranking(sender, **kwargs):
     action = kwargs.get('action')
-    if action in ['post_save', 'post_remove']:
-        pass
+    scenario = kwargs.get('instance')
+    if action in ['post_add', 'post_remove']:
+        meeting_items_count = scenario.meeting_items.count()
+        result = scenario.meeting_items.aggregate(ranking=Sum('value_ranking'))
+        meeting_items_ranking = result['ranking']
+        if meeting_items_count > 0:
+            scenario.value_ranking = meeting_items_ranking / float(meeting_items_count)
+        else:
+            scenario.value_ranking = 0.0
+        scenario.save()
 
 m2m_changed.connect(calculate_scenario_ranking, sender=Scenario.meeting_items.through)

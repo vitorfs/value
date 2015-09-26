@@ -5,6 +5,7 @@ from django.utils.html import escape
 from django.core.urlresolvers import reverse
 
 from value.deliverables.meetings.models import MeetingItem, Scenario
+from value.deliverables.meetings.utils import format_percentage
 
 register = template.Library()
 
@@ -18,7 +19,7 @@ def meeting_item(meeting_item_id):
         return None
 
 @register.simple_tag
-def display_ranking(instance):
+def display_evaluation_summary(instance):
     html = u'<div class="progress" style="margin-bottom: 0">'
     if isinstance(instance, MeetingItem):
         ranking_set = instance.ranking_set.all().select_related('measure_value')
@@ -31,6 +32,16 @@ def display_ranking(instance):
                              ranking.get_percentage_votes_display())
             html += progress_bar
     html += u'</div>'
+    return html
+
+@register.simple_tag
+def display_ranking_label(ranking):
+    label = 'label-success'
+    if ranking < 0:
+        label = 'label-danger'
+    elif ranking == 0:
+        label = 'label-warning'        
+    html = u'<span class="label {0} pull-right" style="margin-right: 10px; margin-top: 3px;">{1}</span>'.format(label, format_percentage(ranking))
     return html
 
 @register.simple_tag

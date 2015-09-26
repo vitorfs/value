@@ -19,3 +19,7 @@ def get_stakeholders_ids(meeting, stakeholders=None):
         except:
             stakeholder_ids = list()
     return stakeholder_ids
+
+def format_percentage(raw_value):
+    rounded_value = round(raw_value, 2)
+    return '{:2.2f}'.format(rounded_value)
