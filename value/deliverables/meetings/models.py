@@ -278,7 +278,12 @@ class Scenario(models.Model):
             .annotate(count=Count('measure_value')) \
             .order_by('-count')[:limit]
 
-        name = u'{0} Scenario {1} {2} Best Fit'.format(group.name, measure_value.description, measure_value.measure.name)
+        base_name = u'{0} Scenario {1} {2}'.format(group.name, measure_value.description, measure_value.measure.name)
+        name = base_name
+        name_count = 1
+        while Scenario.objects.filter(meeting=self.meeting, name=name).exists():
+            name_count += 1
+            name = u'{0} ({1})'.format(base_name, name_count)
         with transaction.atomic():
             self.name = name
             self.save()
