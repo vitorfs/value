@@ -41,12 +41,6 @@ class DecisionItem(models.Model):
     deliverable = models.ForeignKey(Deliverable)
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=2000, null=True, blank=True)
-    final_decision = models.NullBooleanField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, related_name='decision_item_creation_user')
-    updated_at = models.DateTimeField(auto_now=True)
-    updated_by = models.ForeignKey(User, null=True, related_name='decision_item_update_user')
-    ranking = models.FloatField(default=0.0)
     column_1 = models.CharField(max_length=255, null=True, blank=True)
     column_2 = models.CharField(max_length=255, null=True, blank=True)
     column_3 = models.CharField(max_length=255, null=True, blank=True)
@@ -100,17 +94,17 @@ def attachment_post_delete_handler(sender, **kwargs):
 
 
 class DecisionItemLookup(models.Model):
-    STRING = u'S'
-    FLOAT = u'F'
-    INTEGER = u'I'
-    DATE = u'D'
-    DATE_TIME = u'T'
+    STRING = 'S'
+    FLOAT = 'F'
+    INTEGER = 'I'
+    DATE = 'D'
+    DATE_TIME = 'T'
     COLUMN_TYPES = (
-        (STRING, u'String'),
-        (FLOAT, u'Float'),
-        (INTEGER, u'Integer'),
-        (DATE, u'Date'),
-        (DATE_TIME, u'Date Time'),
+        (STRING, 'String'),
+        (FLOAT, 'Float'),
+        (INTEGER, 'Integer'),
+        (DATE, 'Date'),
+        (DATE_TIME, 'Date Time'),
         )
 
     column_name = models.CharField(max_length=255, primary_key=True)
@@ -124,12 +118,12 @@ class DecisionItemLookup(models.Model):
     @staticmethod
     def get_base_fields():
         base_fields = {}
-        base_fields[u'name'] = { 
-                'label': u'Name', 
+        base_fields['name'] = { 
+                'label': 'Name', 
                 'type': DecisionItemLookup.STRING, 
                 'display': True }
-        base_fields[u'description'] = { 
-                'label': u'Description', 
+        base_fields['description'] = { 
+                'label': 'Description', 
                 'type': DecisionItemLookup.STRING, 
                 'display': True }
         return base_fields

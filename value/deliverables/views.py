@@ -73,7 +73,6 @@ def new(request):
 
             for form in formset:
                 form.instance.deliverable = deliverable
-                form.instance.created_by = request.user
 
             formset.save()
             deliverable.save()
@@ -225,7 +224,6 @@ def save_imported_decision_items(request, deliverable_id):
     if formset.is_valid():
         for form in formset:
             form.instance.deliverable = deliverable
-            form.instance.created_by = request.user
         formset.save()
         deliverable.save()
         html = render_to_string('deliverables/decision_items/includes/decision_items_table.html', { 
@@ -246,7 +244,7 @@ def add_decision_item(request, deliverable_id):
     fields = DecisionItemLookup.get_all_fields()
     DecisionItemForm = modelform_factory(DecisionItem, fields=fields.keys())
     if request.method == 'POST':
-        form = DecisionItemForm(request.POST, instance=DecisionItem(deliverable=deliverable, created_by=request.user))
+        form = DecisionItemForm(request.POST, instance=DecisionItem(deliverable=deliverable))
         if form.is_valid():
             decision_item = form.save()
             deliverable.save()
@@ -274,7 +272,6 @@ def edit_decision_item(request, deliverable_id, decision_item_id):
         form = DecisionItemForm(request.POST, instance=decision_item)
         formset = AttachmentFormset(request.POST, request.FILES, instance=decision_item)
         if form.is_valid() and formset.is_valid():
-            form.instance.updated_by = request.user
             decision_item = form.save()
             for form in formset:
                 if form.is_valid() and form.instance.attachment:
