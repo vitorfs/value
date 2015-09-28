@@ -2,8 +2,10 @@
 
 from django.db import models, transaction
 from django.db.models import F, Count, Min, Sum
-from django.contrib.auth.models import User, Group
 from django.db.models.signals import m2m_changed
+from django.contrib.auth.models import User, Group
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
 
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
@@ -115,9 +117,36 @@ class Meeting(models.Model):
         if can_order_in_db:
             meeting_items = meeting_items.order_by(order)
         else:
-            ordered_by_ranking = Ranking.objects.filter(meeting_item__meeting=self, measure_value__id=order).order_by('-raw_votes')
-            meeting_items = map(lambda item: item.meeting_item, ordered_by_ranking)
+            meeting_item_content_type = ContentType.objects.get_for_model(MeetingItem)
+            ordered_by_ranking = Ranking.objects.filter(content_type=meeting_item_content_type, meeting=self, measure_value__id=order).order_by('-raw_votes')
+            meeting_items = map(lambda item: item.content_object, ordered_by_ranking)
         return meeting_items
+
+
+class Ranking(models.Model):
+    """
+    The ranking class is a convenience class, and also to reduce the detabase overhead.
+    All the data stored by the Ranking class is calculated based on the Evaluation data.
+    Saves for each MeetingItem, separeted by MeasureValue, the total number of votes and
+    also the calculated percentage.
+    """
+    meeting = models.ForeignKey(Meeting)
+    measure_value = models.ForeignKey(MeasureValue)
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+    raw_votes = models.IntegerField(default=0)
+    percentage_votes = models.FloatField(default=0.0)
+
+    class Meta:
+        unique_together = (('content_type', 'object_id', 'measure_value',),)
+        ordering = ('measure_value__order',)
+
+    def __unicode__(self):
+        return '{0}: {1}%'.format(self.measure_value.description, self.percentage_votes)
+
+    def get_percentage_votes_display(self):
+        return round(self.percentage_votes, 2)
 
 
 class MeetingItem(models.Model):
@@ -127,6 +156,7 @@ class MeetingItem(models.Model):
     rationales = models.ManyToManyField(Rationale)
     value_ranking = models.FloatField(default=0.0)
     meeting_ranking = models.FloatField(default=0.0)
+    evaluation_summary = GenericRelation(Ranking)
 
     class Meta:
         ordering = ('decision_item__name',)
@@ -159,8 +189,10 @@ class MeetingItem(models.Model):
 
         with transaction.atomic():
 
+            meeting_item_content_type = ContentType.objects.get_for_model(MeetingItem)
+
             for measure_value in measure.measurevalue_set.all():
-                Ranking.objects.get_or_create(meeting_item=self, measure_value=measure_value)
+                Ranking.objects.get_or_create(content_type=meeting_item_content_type, object_id=self.pk, measure_value=measure_value)
 
             for ranking in rankings:
                 votes = int(ranking['votes'])
@@ -168,36 +200,13 @@ class MeetingItem(models.Model):
                     percentage = (votes / float(max_evaluations)) * 100.0
                 else:
                     percentage = 0.0
-                Ranking.objects.filter(meeting_item=self, measure_value__id=ranking['measure_value__id']).update(raw_votes=votes, percentage_votes=percentage)
+                Ranking.objects.filter(content_type=meeting_item_content_type, object_id=self.pk, measure_value__id=ranking['measure_value__id']).update(raw_votes=votes, percentage_votes=percentage)
 
-            rankings = Ranking.objects.filter(meeting_item=self).order_by('measure_value__order')
+            rankings = Ranking.objects.filter(content_type=meeting_item_content_type, object_id=self.pk).order_by('measure_value__order')
             highest = rankings.first()
             lowest = rankings.last()
             self.value_ranking = highest.percentage_votes - lowest.percentage_votes
             self.save()
-
-
-class Ranking(models.Model):
-    """
-    The ranking class is a convenience class, and also to reduce the detabase overhead.
-    All the data stored by the Ranking class is calculated based on the Evaluation data.
-    Saves for each MeetingItem, separeted by MeasureValue, the total number of votes and
-    also the calculated percentage.
-    """
-    meeting_item = models.ForeignKey(MeetingItem)
-    measure_value = models.ForeignKey(MeasureValue)
-    raw_votes = models.IntegerField(default=0)
-    percentage_votes = models.FloatField(default=0.0)
-
-    class Meta:
-        unique_together = (('meeting_item', 'measure_value',),)
-        ordering = ('meeting_item__decision_item__description', 'measure_value__order')
-
-    def __unicode__(self):
-        return '{0} ({1}): {2}%'.format(self.meeting_item.decision_item.name, self.measure_value.description, self.percentage_votes)
-
-    def get_percentage_votes_display(self):
-        return round(self.percentage_votes, 2)
 
 
 class MeetingStakeholder(models.Model):
@@ -265,6 +274,7 @@ class Scenario(models.Model):
     category = models.CharField(max_length=14, choices=CATEGORIES, null=True, blank=True)
     meeting_items = models.ManyToManyField(MeetingItem)
     value_ranking = models.FloatField(default=0.0)
+    evaluation_summary = GenericRelation(Ranking)
 
     class Meta:
         unique_together = (('name', 'meeting', 'category',),)

@@ -22,8 +22,8 @@ def meeting_item(meeting_item_id):
 def display_evaluation_summary(instance):
     html = u'<div class="progress" style="margin-bottom: 0">'
     if isinstance(instance, MeetingItem):
-        ranking_set = instance.ranking_set.all().select_related('measure_value')
-        for ranking in ranking_set:
+        evaluation_summary = instance.evaluation_summary.all().select_related('measure_value')
+        for ranking in evaluation_summary:
             progress_bar = u'''<div class="progress-bar" style="width: {0}%; background-color: {1};">
               <span class="measure-percent" data-measure-id="{2}" data-percentage="{0}">{3}</span>%
             </div>'''.format(ranking.percentage_votes, 
@@ -32,7 +32,7 @@ def display_evaluation_summary(instance):
                              ranking.get_percentage_votes_display())
             html += progress_bar
     elif isinstance(instance, Scenario):
-        ranking = instance.meeting_items.first().ranking_set.first()
+        ranking = instance.meeting_items.first().evaluation_summary.first()
         measure = ranking.measure_value.measure
         scenario_ranking = dict()
         
@@ -44,7 +44,7 @@ def display_evaluation_summary(instance):
         
         meeting_items_count = instance.meeting_items.count()
         for meeting_item in instance.meeting_items.all():
-            for ranking in meeting_item.ranking_set.all().select_related('measure_value'):
+            for ranking in meeting_item.evaluation_summary.all().select_related('measure_value'):
                 scenario_ranking[ranking.measure_value.pk]['percentage_votes'] += ranking.percentage_votes
 
         for key, value in scenario_ranking.iteritems():

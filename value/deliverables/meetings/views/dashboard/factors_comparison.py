@@ -8,7 +8,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from value.measures.models import MeasureValue
-from value.deliverables.meetings.models import Meeting, Scenario, Ranking
+from value.deliverables.meetings.models import Meeting, Scenario
 from value.deliverables.meetings.charts import Highcharts
 from value.deliverables.meetings.utils import *
 
@@ -88,7 +88,7 @@ def features_scenarios(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     charts = map(get_features_scenario_chart_dict, meeting.scenarios.all())
     stakeholder_ids = get_stakeholders_ids(meeting)
-    chart_type = get_or_set_bar_chart_type_session(request, 'factors_comparison_chart_type')
+    chart_type = get_or_set_bar_chart_type_session(request, 'factors_comparison_scenario_chart_type')
     chart_types_options = get_bar_chart_types_dict()
     return render(request, 'meetings/dashboard/factors_comparison/scenarios.html', { 
         'meeting': meeting,
