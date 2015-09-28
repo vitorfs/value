@@ -7,7 +7,7 @@ from django.db.models.signals import m2m_changed
 
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
-from value.deliverables.models import Deliverable, DecisionItem, Rationale
+from value.deliverables.models import Deliverable, DecisionItem, DecisionItemLookup, Rationale
 from value.deliverables.meetings.utils import format_percentage
 
 
@@ -109,7 +109,9 @@ class Meeting(models.Model):
         by the meeting item ranking.
         """
         meeting_items = self.meetingitem_set.all()
-        can_order_in_db = order in ['decision_item__name', '-value_ranking']
+        db_model_order = map(lambda key: u'decision_item__{0}'.format(key), DecisionItemLookup.get_visible_fields().keys())
+        db_model_order.append('-value_ranking')
+        can_order_in_db = order in db_model_order
         if can_order_in_db:
             meeting_items = meeting_items.order_by(order)
         else:

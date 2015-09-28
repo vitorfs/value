@@ -10,8 +10,8 @@ from django.contrib.auth.decorators import login_required
 from value.measures.models import MeasureValue
 from value.deliverables.meetings.models import Meeting, Scenario, Ranking
 from value.deliverables.meetings.charts import Highcharts
-from value.deliverables.meetings.utils import get_stakeholders_ids, get_or_set_charts_order_session, \
-        get_or_set_scenario_chars_order_session
+from value.deliverables.meetings.utils import get_stakeholders_ids, get_charts_order_dict, \
+        get_or_set_charts_order_session, get_or_set_scenario_chars_order_session
 
 
 ''' Support functions '''
@@ -46,6 +46,7 @@ def get_features_scenario_chart_dict(scenario):
 @login_required
 def features(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    chart_order_options = get_charts_order_dict(meeting.deliverable.measure)
     order = get_or_set_charts_order_session(request, meeting, 'factors_comparison_order')
     charts = map(get_features_chart_dict, meeting.get_ordered_meeting_items(order))
     stakeholder_ids = get_stakeholders_ids(meeting)
@@ -55,8 +56,8 @@ def features(request, deliverable_id, meeting_id):
         'stakeholder_ids': stakeholder_ids,
         'chart_type': 'stacked_bars',
         'chart_menu_active': 'features',
-        'chart_page_title': 'Factors Comparison',
-        'order': order
+        'chart_order_options': chart_order_options,
+        'order': order,
         })
 
 @login_required

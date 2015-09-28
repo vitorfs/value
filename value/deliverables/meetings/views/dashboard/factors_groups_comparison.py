@@ -11,8 +11,8 @@ from django.template.loader import render_to_string
 
 from value.deliverables.meetings.models import Meeting, Scenario
 from value.deliverables.meetings.charts import Highcharts
-from value.deliverables.meetings.utils import get_stakeholders_ids, get_or_set_charts_order_session, \
-        get_or_set_scenario_chars_order_session
+from value.deliverables.meetings.utils import get_stakeholders_ids, get_charts_order_dict, \
+        get_or_set_charts_order_session, get_or_set_scenario_chars_order_session
 
 
 ''' Support functions '''
@@ -47,6 +47,7 @@ def get_factors_groups_scenario_chart_dict(scenario):
 @login_required
 def factors_groups(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    chart_order_options = get_charts_order_dict(meeting.deliverable.measure)
     order = get_or_set_charts_order_session(request, meeting, 'factors_groups_comparison_order')
     charts = map(get_factors_groups_chart_dict, meeting.get_ordered_meeting_items(order))
     stakeholder_ids = get_stakeholders_ids(meeting)
@@ -55,7 +56,7 @@ def factors_groups(request, deliverable_id, meeting_id):
             'charts': charts,
             'stakeholder_ids': stakeholder_ids,
             'chart_menu_active': 'factors_groups',
-            'chart_page_title': 'Factors Groups Comparison',
+            'chart_order_options': chart_order_options,
             'order': order
             })
 
