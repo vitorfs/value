@@ -19,7 +19,10 @@
 {% block charts %}
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">Factors Comparison</h3>
+      <h3 class="panel-title">
+        {% include 'meetings/dashboard/factors_comparison/partial_default_bar_chart.html' %}
+        Factors Comparison
+      </h3>
     </div>
     <div class="panel-body">
       <ul class="nav nav-tabs" style="margin-bottom: 20px;">

@@ -5,6 +5,25 @@ from collections import OrderedDict
 from value.deliverables.models import DecisionItemLookup
 
 
+def get_bar_chart_types_dict():
+    chart_types = OrderedDict()
+    chart_types['stacked_bars'] = { 'label': 'Stacked Bars', 'icon': 'glyphicon-align-left' }
+    chart_types['basic_bars'] = { 'label': 'Basic Bars', 'icon': 'glyphicon-align-left' }
+    chart_types['stacked_columns'] = { 'label': 'Stacked Columns', 'icon': 'glyphicon-signal' }
+    chart_types['basic_columns'] = { 'label': 'Basic Columns', 'icon': 'glyphicon-signal' }
+    return chart_types
+
+def get_or_set_bar_chart_type_session(request, cookie_name):
+    chart_type = 'stacked_bars'
+    if 'chart_type' in request.GET:
+        chart_type = request.GET.get('chart_type')
+    elif cookie_name in request.session:
+        chart_type = request.session.get(cookie_name)
+    if chart_type not in get_bar_chart_types_dict().keys():
+        chart_type = 'stacked_bars'
+    request.session[cookie_name] = chart_type
+    return chart_type
+
 def get_or_set_order_session(request, meeting, cookie_name, db_model_order):
     order = '-value_ranking'
     db_model_order.append('-value_ranking')
