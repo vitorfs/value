@@ -38,17 +38,19 @@
   {% endif %}
 {% endif %}
 
-<h2 style="margin-bottom: 20px; font-weight: 300;">
-  <a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a>
+<h3 style="margin-bottom: 20px;">
+  <a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}" style="font-weight: 300;">{{ meeting.deliverable.name }}</a>
   <span style="font-weight: 100;">/</span>
-  <a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a>
-  <span style="font-size: 14px; vertical-align: 7px; margin-left: 10px;">
+  <a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">
+    {{ meeting.name }}
+  </a>
+  <span style="font-size: 14px; vertical-align: 5px; margin-left: 10px;">
     {{ meeting.get_status_label_html|safe }}
   </span>
-  <span style="font-size: 12px; vertical-align: 6px;">
+  <span style="font-size: 12px; vertical-align: 4px;">
     <span class="fa fa-calendar" style="margin-left: 10px;"></span> {{ meeting.started_at }}{% if meeting.location %}, <span class="fa fa-map-marker" style="margin-left: 10px;"></span> {{ meeting.location }}{% endif %}
   </span>
-</h2>
+</h3>
 
 <ul class="nav nav-tabs" style="margin-bottom: 20px">
   <li role="presentation"{% if active == 'evaluate' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:evaluate' meeting.deliverable.pk meeting.pk %}"><span class="fa fa-balance-scale"></span> Evaluate</a></li>
