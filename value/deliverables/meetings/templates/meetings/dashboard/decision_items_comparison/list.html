@@ -18,7 +18,7 @@
 {% block charts %}
   <div class="panel-group charts">
     {% for chart in charts %}
-      {% include 'meetings/dashboard/decision_items_comparison_chart.html' with opened=forloop.first %}
+      {% include 'meetings/dashboard/decision_items_comparison/chart.html' with opened=forloop.first %}
     {% endfor %}
   </div>
 {% endblock charts %}

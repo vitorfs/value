@@ -76,17 +76,21 @@ def value_ranking(request, deliverable_id, meeting_id):
     chart = Highcharts()
     options = chart.value_ranking(meeting)
     dump = json.dumps(options)
+    chart_data = { 
+        'chart_title': 'Value Ranking', 
+    }
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
         template_name = 'meetings/dashboard/value_ranking.html'
         if 'popup' in request.GET:
-            template_name = 'meetings/dashboard/decision_items_overview_popup.html'
+            template_name = 'meetings/dashboard/dashboard_popup.html'
         return render(request, template_name, { 
             'meeting': meeting,
             'chart_page_title': 'Value Ranking',
             'chart_menu_active': 'value_ranking',
             'chart_uri': 'value-ranking',
+            'chart': chart_data,
             'dump': dump
             })
 
@@ -128,9 +132,9 @@ def features_comparison(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     stakeholder_ids = get_stakeholders_ids(meeting)
     evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(user_id__in=stakeholder_ids)
-    measure = evaluations[0].measure
+    measure = meeting.deliverable.measure
     charts = measure.measurevalue_set.all()
-    return render(request, 'meetings/dashboard/decision_items_comparison_list.html', { 
+    return render(request, 'meetings/dashboard/decision_items_comparison/list.html', { 
         'meeting': meeting, 
         'charts': charts,
         'stakeholder_ids': stakeholder_ids,
@@ -155,7 +159,7 @@ def features_comparison_chart(request, deliverable_id, meeting_id, measure_value
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        return render(request, 'meetings/dashboard/decision_items_comparison_popup.html', { 
+        return render(request, 'meetings/dashboard/decision_items_comparison/popup.html', { 
             'meeting': meeting, 
             'dump': dump,
             'chart': chart,
