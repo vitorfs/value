@@ -7,51 +7,144 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from value.deliverables.meetings.models import Meeting
+from value.deliverables.meetings.models import Meeting, Scenario
 from value.deliverables.meetings.charts import Highcharts
+from value.deliverables.meetings.utils import *
 
+
+''' Support functions'''
+
+def get_features_acceptance_chart_dict(meeting_item):
+    chart_data = {
+        'id': meeting_item.pk,
+        'name': meeting_item.decision_item.name,
+        'ranking': meeting_item.value_ranking,
+        'instance': meeting_item,
+        'instance_type': 'meeting_item',
+        'remote': reverse('deliverables:meetings:features_acceptance_chart', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)),
+        'info_remote': reverse('deliverables:details_decision_item', args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk))
+    }    
+    return chart_data
+
+def get_features_acceptance_scenario_chart_dict(scenario):
+    chart_data = {
+        'id': scenario.pk,
+        'name': scenario.name,
+        'ranking': scenario.value_ranking,
+        'instance': scenario,
+        'instance_type': 'scenario',
+        'remote': reverse('deliverables:meetings:features_acceptance_scenario_chart', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk)),
+        'info_remote': reverse('deliverables:meetings:details_scenario', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk))
+    }
+    return chart_data
+
+def get_features_acceptance_chart_options(meeting_item, stakeholder_ids, chart_type):
+    charts = Highcharts()
+    chart_function = charts.features_acceptance_simple_treemap
+
+    if chart_type == 'pie': 
+        chart_function = charts.features_acceptance_pie_chart_drilldown
+    elif chart_type == 'detailed':
+        chart_function = charts.features_acceptance_detailed_treemap
+
+    options = chart_function(meeting_item.meeting.pk, meeting_item.pk, stakeholder_ids)
+    return options
+
+
+''' Views '''
 
 @login_required
 def features_acceptance(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    charts = meeting.meetingitem_set.all()
-    stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
-    return render(request, 'meetings/dashboard/features_acceptance_list.html', { 
+
+    chart_type = get_or_set_treemap_chart_type_session(request, 'decision_items_acceptance_chart_type')
+    chart_types_options = get_treemap_chart_types_dict()
+
+    chart_order_options = get_charts_order_dict(meeting.deliverable.measure)
+    order = get_or_set_charts_order_session(request, meeting, 'decision_items_acceptance_order')
+
+    charts = map(get_features_acceptance_chart_dict, meeting.get_ordered_meeting_items(order))
+    stakeholder_ids = get_stakeholders_ids(meeting)
+
+    return render(request, 'meetings/dashboard/decision_items_acceptance/list.html', { 
         'meeting': meeting,
+        'chart_menu_active': 'features_acceptance',
         'charts': charts,
         'stakeholder_ids': stakeholder_ids,
-        'chart_type': 'simple',
-        'chart_uri': 'features-acceptance',
-        'chart_menu_active': 'features_acceptance',
-        'chart_page_title': 'Features Acceptance'
+        'chart_types_options': chart_types_options,
+        'chart_type': chart_type,
+        'chart_order_options': chart_order_options,
+        'order': order
         })
 
 @login_required
 def features_acceptance_chart(request, deliverable_id, meeting_id, meeting_item_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     meeting_item = meeting.meetingitem_set.get(pk=meeting_item_id)
-    chart_type = request.GET.get('chart-type', 'simple')
+    
+    chart_type = request.GET.get('chart_type', 'simple')
     stakeholder_ids = request.GET.getlist('stakeholder')
-    try:
-        stakeholder_ids = list(map(int, stakeholder_ids))
-    except:
-        pass
-    chart = Highcharts()
-    options = {}
-    if chart_type == 'simple': 
-        options = chart.features_acceptance_simple_treemap(meeting_id, meeting_item_id, stakeholder_ids)
-    elif chart_type == 'detailed':
-        options = chart.features_acceptance_detailed_treemap(meeting_id, meeting_item_id, stakeholder_ids)
-    else:
-        options = chart.features_acceptance_pie_chart_drilldown(meeting_id, meeting_item_id, stakeholder_ids)
+
+    stakeholder_ids = get_stakeholders_ids(meeting)
+    options = get_features_acceptance_chart_options(meeting_item, stakeholder_ids, chart_type)
     dump = json.dumps(options)
+    chart = get_features_acceptance_chart_dict(meeting_item)
+
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        return render(request, 'meetings/dashboard/features_acceptance_popup.html', { 
+        return render(request, 'meetings/dashboard/decision_items_acceptance/popup.html', { 
             'meeting': meeting,
-            'chart': meeting_item,
-            'chart_uri': 'features-acceptance',
+            'chart': chart,
+            'chart_type': chart_type,
+            'stakeholder_ids': stakeholder_ids,
+            'dump': dump
+            })
+
+@login_required
+def features_acceptance_scenarios(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    
+    chart_type = get_or_set_treemap_chart_type_session(request, 'decision_items_acceptance_scenario_chart_type')
+    chart_types_options = get_treemap_chart_types_dict()
+
+    chart_order_options = get_scenario_charts_order_dict(meeting.deliverable.measure)
+    order = get_or_set_scenario_charts_order_session(request, meeting, 'decision_items_acceptance_scenario_order')
+
+    charts = map(get_features_acceptance_scenario_chart_dict, meeting.get_ordered_scenarios(order))
+    stakeholder_ids = get_stakeholders_ids(meeting)
+
+    return render(request, 'meetings/dashboard/decision_items_acceptance/scenarios.html', { 
+        'meeting': meeting,
+        'chart_menu_active': 'features',
+        'charts': charts,
+        'stakeholder_ids': stakeholder_ids,
+        'scenario_category': Scenario.ACCEPTANCE,
+        'chart_types_options': chart_types_options,
+        'chart_type': chart_type,
+        'chart_order_options': chart_order_options,
+        'order': order
+        })
+
+@login_required
+def features_acceptance_scenario_chart(request, deliverable_id, meeting_id, scenario_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    scenario = get_object_or_404(Scenario, pk=scenario_id)
+
+    chart_type = request.GET.get('chart_type')
+    stakeholders = request.GET.getlist('stakeholder')
+    
+    stakeholder_ids = get_stakeholders_ids(meeting, stakeholders)
+    options = dict()
+    dump = json.dumps(options)
+    chart = get_features_acceptance_scenario_chart_dict(scenario)
+
+    if 'application/json' in request.META.get('HTTP_ACCEPT'):
+        return HttpResponse(dump, content_type='application/json')
+    else:
+        return render(request, 'meetings/dashboard/decision_items_acceptance/popup.html', { 
+            'meeting': meeting,
+            'chart': chart,
             'chart_type': chart_type,
             'stakeholder_ids': stakeholder_ids,
             'dump': dump

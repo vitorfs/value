@@ -5,6 +5,9 @@
 {% block javascript %}
   <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
   <script src="{% static 'js/highcharts/highcharts-more.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/data.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/treemap.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/drilldown.js' %}"></script>
   <script src="{% static 'js/highcharts/modules/exporting.js' %}"></script>
   <script src="{% static 'js/meetings/dashboard.js' %}"></script>
   <script src="{% static 'js/meetings/meetings.js' %}"></script>
@@ -12,7 +15,7 @@
 {% endblock javascript %}
 
 {% block breadcrumb_extra %}
-  <li><a href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">Factors Comparison</a></li>
+  <li><a href="{% url 'deliverables:meetings:features_acceptance' meeting.deliverable.pk meeting.pk %}">Decision Items Acceptance</a></li>
   <li class="active">Scenarios</li>
 {% endblock breadcrumb_extra %}
 
@@ -22,13 +25,13 @@
       <h3 class="panel-title">
         {% include 'meetings/dashboard/includes/charts_order.html' %}
         {% include 'meetings/dashboard/includes/partial_default_chart_type.html' %}
-        Factors Comparison
+        Decision Items Acceptance
       </h3>
     </div>
     <div class="panel-body">
       <ul class="nav nav-tabs" style="margin-bottom: 20px;">
-        <li role="presentation"><a href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">All Decision Items</a></li>
-        <li role="presentation" class="active"><a href="{% url 'deliverables:meetings:features_scenarios' meeting.deliverable.pk meeting.pk %}">Scenarios</a></li>
+        <li role="presentation"><a href="{% url 'deliverables:meetings:features_acceptance' meeting.deliverable.pk meeting.pk %}">All Decision Items</a></li>
+        <li role="presentation" class="active"><a href="{% url 'deliverables:meetings:features_acceptance_scenarios' meeting.deliverable.pk meeting.pk %}">Scenarios</a></li>
       </ul>
       <div class="panel-group charts" id="scenarios">
         {% if charts %}
@@ -41,7 +44,7 @@
             </button>
           </div>
           {% for chart in charts %}
-            {% include 'meetings/dashboard/factors_comparison/chart.html' with opened=forloop.first can_edit=True can_delete=True %}
+            {% include 'meetings/dashboard/decision_items_acceptance/chart.html' with opened=forloop.first can_edit=True can_delete=True %}
           {% endfor %}
         {% else %}
           <div class="well blank-state">

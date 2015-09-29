@@ -15,6 +15,7 @@ from value.utils.svglib import SvgRenderer
 from value.measures.models import MeasureValue
 from value.deliverables.meetings.models import Meeting, Evaluation
 from value.deliverables.meetings.charts import Highcharts
+from value.deliverables.meetings.utils import *
 
 
 @login_required
@@ -81,18 +82,19 @@ def value_ranking(request, deliverable_id, meeting_id):
 @login_required
 def decision_items_overview(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    chart_type = request.GET.get('chart-type', 'stacked_columns')
-    chart = Highcharts()
+
+    chart_type = get_or_set_bar_chart_type_session(request, 'decision_items_overview_chart_type', 'stacked_columns')
+    chart_types_options = get_bar_chart_types_dict()
+
     if 'stakeholder' in request.GET:
-        stakeholder_ids = request.GET.getlist('stakeholder')
-        try:
-            stakeholder_ids = list(map(int, stakeholder_ids))
-        except:
-            pass
+        stakeholders = request.GET.getlist('stakeholder')
+        stakeholder_ids = get_stakeholders_ids(meeting, stakeholders)
     else:
-        stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
-    options = chart.decision_items_overview(meeting, chart_type, stakeholder_ids)
+        stakeholder_ids = get_stakeholders_ids(meeting)
+
+    options = Highcharts().decision_items_overview(meeting, chart_type, stakeholder_ids)
     dump = json.dumps(options)
+
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
@@ -104,6 +106,7 @@ def decision_items_overview(request, deliverable_id, meeting_id):
             'dump': dump,
             'stakeholder_ids': stakeholder_ids,
             'chart_type': chart_type,
+            'chart_types_options': chart_types_options,
             'chart_uri': 'decision-items-overview',
             'chart_menu_active': 'decision_items_overview',
             'chart_page_title': 'Decision Items Overview'
@@ -112,7 +115,7 @@ def decision_items_overview(request, deliverable_id, meeting_id):
 @login_required
 def features_comparison(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    stakeholder_ids = [stakeholder.stakeholder.pk for stakeholder in meeting.meetingstakeholder_set.all()]
+    stakeholder_ids = get_stakeholders_ids(meeting)
     evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(user_id__in=stakeholder_ids)
     measure = evaluations[0].measure
     charts = measure.measurevalue_set.all()
@@ -129,22 +132,22 @@ def features_comparison(request, deliverable_id, meeting_id):
 def features_comparison_chart(request, deliverable_id, meeting_id, measure_value_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     measure_value = MeasureValue.objects.get(pk=measure_value_id)
-    stakeholder_ids = request.GET.getlist('stakeholder')
-    try:
-        stakeholder_ids = list(map(int, stakeholder_ids))
-    except:
-        pass
-    chart = Highcharts()
-    options = chart.feature_comparison_bar_chart(meeting, measure_value, stakeholder_ids)
+    
+    stakeholders = request.GET.getlist('stakeholder')
+
+    stakeholder_ids = get_stakeholders_ids(meeting, stakeholders)
+    options = Highcharts().feature_comparison_bar_chart(meeting, measure_value, stakeholder_ids)
+
     dump = json.dumps(options)
-    chart_data = MeasureValue.objects.get(id=measure_value_id)
+    chart = MeasureValue.objects.get(id=measure_value_id)
+
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
         return render(request, 'meetings/dashboard/decision_items_comparison_popup.html', { 
             'meeting': meeting, 
             'dump': dump,
-            'chart': chart_data,
+            'chart': chart,
             'stakeholder_ids': stakeholder_ids,
             'chart_uri': 'features-comparison',
             'chart_menu_active': 'features_comparison',

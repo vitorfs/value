@@ -42,8 +42,10 @@ urlpatterns = patterns('value.deliverables.meetings.views',
     url(r'^(?P<meeting_id>\d+)/dashboard/groups/scenarios/(?P<scenario_id>\d+)/$', 'factors_groups_scenario_chart', name='factors_groups_scenario_chart'),
 
     ### Decision Items Acceptance URLs
-    url(r'^(?P<meeting_id>\d+)/dashboard/features-acceptance/$', 'features_acceptance', name='features_acceptance'),
-    url(r'^(?P<meeting_id>\d+)/dashboard/features-acceptance/(?P<meeting_item_id>\d+)/$', 'features_acceptance_chart', name='features_acceptance_chart'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/acceptance/$', 'features_acceptance', name='features_acceptance'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/acceptance/(?P<meeting_item_id>\d+)/$', 'features_acceptance_chart', name='features_acceptance_chart'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/acceptance/scenarios/$', 'features_acceptance_scenarios', name='features_acceptance_scenarios'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/acceptance/scenarios/(?P<scenario_id>\d+)/$', 'features_acceptance_scenario_chart', name='features_acceptance_scenario_chart'),
 
     ## Scenarios URLs
     url(r'^(?P<meeting_id>\d+)/dashboard/scenarios/add/$', 'add_scenario', name='add_scenario'),

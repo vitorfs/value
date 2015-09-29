@@ -173,7 +173,7 @@ $(function () {
   $(document).on("click", ".btn-chart-info", function () {
     $(this).tooltip("hide");
     var url = $(this).attr("data-remote-url");
-    var type = $(this).attr("data-type");
+    var type = $(this).closest("form").attr("data-type");
     var modal;
     
     if (type === "scenario") {

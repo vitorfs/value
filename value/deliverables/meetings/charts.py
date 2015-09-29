@@ -203,29 +203,32 @@ class Highcharts(object):
     def decision_items_overview(self, meeting, chart, stakeholder_ids):
         stakeholder_ids = list(set(stakeholder_ids))
         evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(user_id__in=stakeholder_ids)
-        measure = evaluations[0].measure
-        stakeholders_count = len(stakeholder_ids)
-        factors_count = Factor.list().count()
-        max_votes = stakeholders_count * factors_count
+        options = dict()
+        if evaluations.exists():
+            measure = meeting.deliverable.measure
+            stakeholders_count = len(stakeholder_ids)
+            factors_count = Factor.list().count()
+            max_votes = stakeholders_count * factors_count
 
-        categories = []
-        series = []
+            categories = []
+            series = []
 
-        for meeting_item in meeting.meetingitem_set.all():
-            categories.append(meeting_item.decision_item.name)
-
-        for measure_value in measure.measurevalue_set.all():
-            serie_data = []
             for meeting_item in meeting.meetingitem_set.all():
-                votes = evaluations.filter(measure_value=measure_value, meeting_item=meeting_item).count()
-                percentage = get_votes_percentage(max_votes, votes)
-                serie_data.append(percentage)
-            series.append({ 'name': measure_value.description, 'data': serie_data, 'color': measure_value.color })
+                categories.append(meeting_item.decision_item.name)
 
-        options = self._base_stacked_chart(categories, series, chart)
-        groups_text = get_stakeholders_group_names(stakeholder_ids)
+            for measure_value in measure.measurevalue_set.all():
+                serie_data = []
+                for meeting_item in meeting.meetingitem_set.all():
+                    votes = evaluations.filter(measure_value=measure_value, meeting_item=meeting_item).count()
+                    percentage = get_votes_percentage(max_votes, votes)
+                    serie_data.append(percentage)
+                series.append({ 'name': measure_value.description, 'data': serie_data, 'color': measure_value.color })
+
+            options = self._base_stacked_chart(categories, series, chart)
+            groups_text = get_stakeholders_group_names(stakeholder_ids)
+            options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
+            
         options['title'] = { 'text': u'Decision Items Overview' }
-        options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
         return options
 
 

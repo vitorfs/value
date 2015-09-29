@@ -9,7 +9,7 @@
     {% for key, value in chart_types_options.iteritems %}
       <li role="presentation"{% if chart_type == key %} class="active"{% endif %}>
         <a role="menuitem" tabindex="-1" href="?chart_type={{ key }}">
-          <span class="glyphicon {{ value.icon }}"></span> {{ value.label }}
+          <span class="{{ value.icon }}"></span> {{ value.label }}
         </a>
       </li>
     {% endfor %}

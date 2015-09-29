@@ -71,7 +71,7 @@ def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     meeting_item = meeting.meetingitem_set.get(pk=meeting_item_id)
 
-    chart_type = request.GET.get('chart-type')
+    chart_type = request.GET.get('chart_type')
     stakeholders = request.GET.getlist('stakeholder')
 
     stakeholder_ids = get_stakeholders_ids(meeting, stakeholders)
@@ -120,7 +120,7 @@ def features_scenario_chart(request, deliverable_id, meeting_id, scenario_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     scenario = get_object_or_404(Scenario, pk=scenario_id)
 
-    chart_type = request.GET.get('chart-type')
+    chart_type = request.GET.get('chart_type')
     stakeholders = request.GET.getlist('stakeholder')
     
     stakeholder_ids = get_stakeholders_ids(meeting, stakeholders)
