@@ -40,16 +40,27 @@ def get_features_acceptance_scenario_chart_dict(scenario):
 
 def get_features_acceptance_chart_options(meeting_item, stakeholder_ids, chart_type):
     charts = Highcharts()
-    chart_function = charts.features_acceptance_simple_treemap
+    chart_function = charts.decision_item_acceptance_simple_treemap
 
-    if chart_type == 'pie': 
+    '''if chart_type == 'pie': 
         chart_function = charts.features_acceptance_pie_chart_drilldown
     elif chart_type == 'detailed':
-        chart_function = charts.features_acceptance_detailed_treemap
+        chart_function = charts.features_acceptance_detailed_treemap'''
 
-    options = chart_function(meeting_item.meeting.pk, meeting_item.pk, stakeholder_ids)
+    options = chart_function(meeting_item, stakeholder_ids)
     return options
 
+def get_features_acceptance_scenario_chart_options(scenario, stakeholder_ids, chart_type):
+    charts = Highcharts()
+    chart_function = charts.decision_item_acceptance_scenario_simple_treemap
+
+    '''if chart_type == 'pie': 
+        chart_function = charts.features_acceptance_pie_chart_drilldown
+    elif chart_type == 'detailed':
+        chart_function = charts.features_acceptance_detailed_treemap'''
+
+    options = chart_function(scenario, stakeholder_ids)
+    return options
 
 ''' Views '''
 
@@ -135,7 +146,7 @@ def features_acceptance_scenario_chart(request, deliverable_id, meeting_id, scen
     stakeholders = request.GET.getlist('stakeholder')
     
     stakeholder_ids = get_stakeholders_ids(meeting, stakeholders)
-    options = dict()
+    options = get_features_acceptance_scenario_chart_options(scenario, stakeholder_ids, chart_type)
     dump = json.dumps(options)
     chart = get_features_acceptance_scenario_chart_dict(scenario)
 

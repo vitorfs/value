@@ -227,7 +227,7 @@ class Highcharts(object):
             options = self._base_stacked_chart(categories, series, chart)
             groups_text = get_stakeholders_group_names(stakeholder_ids)
             options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
-            
+
         options['title'] = { 'text': u'Decision Items Overview' }
         return options
 
@@ -325,22 +325,30 @@ class Highcharts(object):
         }
         return options
 
-    def features_acceptance_simple_treemap(self, instance_id, item_id, stakeholder_ids):
-        instance = Meeting.objects.get(pk=instance_id)
-        item = MeetingItem.objects.get(pk=item_id)
-        evaluations = Evaluation.get_evaluations_by_meeting(instance).filter(meeting_item=item, user_id__in=stakeholder_ids)
-
+    def _decision_item_acceptance_simple_treemap(self, evaluations):
         vqs = evaluations.values('measure_value__description', 'measure_value__color').annotate(value=Count('measure_value__description')).order_by()
         data = [kv for kv in vqs]
         for d in data:
             d['name'] = d.pop('measure_value__description')
             d['color'] = d.pop('measure_value__color')
-
         options = self._base_treemap(data)
-        options['title'] = { 'text': u'{0} Acceptance'.format(item.decision_item.name) }
-        groups_text = get_stakeholders_group_names(stakeholder_ids)
-        options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
+        return options
 
+    def decision_item_acceptance_simple_treemap(self, meeting_item, stakeholder_ids):
+        evaluations = Evaluation.get_evaluations_by_meeting(meeting_item.meeting).filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
+        options = self._decision_item_acceptance_simple_treemap(evaluations)
+        groups_text = get_stakeholders_group_names(stakeholder_ids)
+        options['title'] = { 'text': u'{0} Acceptance'.format(escape(meeting_item.decision_item.name)) }
+        options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
+        return options
+
+    def decision_item_acceptance_scenario_simple_treemap(self, scenario, stakeholder_ids):
+        evaluations = Evaluation.get_evaluations_by_meeting(scenario.meeting) \
+                .filter(meeting_item__in=scenario.meeting_items.all(), user_id__in=stakeholder_ids)
+        options = self._decision_item_acceptance_simple_treemap(evaluations)
+        groups_text = get_stakeholders_group_names(stakeholder_ids)
+        options['title'] = { 'text': u'{0} Acceptance'.format(escape(scenario.name)) }
+        options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
         return options
 
     def features_acceptance_detailed_treemap(self, instance_id, item_id, stakeholder_ids):
