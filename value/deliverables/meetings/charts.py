@@ -1,5 +1,4 @@
 import operator
-import pprint
 
 from django.contrib.auth.models import User
 from django.db.models import Count
@@ -7,9 +6,8 @@ from django.utils.html import escape
 
 from value.factors.models import Factor, Group as FactorGroup
 from value.deliverables.meetings.models import Meeting, MeetingItem, Evaluation
+from value.deliverables.meetings.utils import get_votes_percentage
 
-
-pp = pprint.PrettyPrinter(indent=4, depth=6)
 
 def get_stakeholders_group_names(stakeholder_ids):
     stakeholders = User.objects.filter(id__in=stakeholder_ids)
@@ -19,12 +17,6 @@ def get_stakeholders_group_names(stakeholder_ids):
             groups.add(group.name)
     groups_text = u', '.join(groups)
     return escape(groups_text)
-
-def get_votes_percentage(max_value, value):
-    percentage = 0.0
-    if max_value != 0:
-        percentage = round((value / float(max_value)) * 100.0, 2)
-    return percentage
 
 class Highcharts(object):
 

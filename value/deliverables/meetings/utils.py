@@ -69,3 +69,11 @@ def get_stakeholders_ids(meeting, stakeholders=None):
 def format_percentage(raw_value):
     rounded_value = round(raw_value, 2)
     return '{:2.2f}'.format(rounded_value)
+
+def get_votes_percentage(max_value, value, round_value=True):
+    percentage = 0.0
+    if max_value != 0:
+        percentage = (value / float(max_value)) * 100.0
+        if round_value:
+            percentage = round(percentage, 2)
+    return percentage

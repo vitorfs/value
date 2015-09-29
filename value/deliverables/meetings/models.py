@@ -10,7 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
 from value.deliverables.models import Deliverable, DecisionItem, DecisionItemLookup, Rationale
-from value.deliverables.meetings.utils import format_percentage
+from value.deliverables.meetings.utils import format_percentage, get_votes_percentage
 
 
 class Meeting(models.Model):
@@ -196,10 +196,7 @@ class MeetingItem(models.Model):
 
             for ranking in rankings:
                 votes = int(ranking['votes'])
-                if max_evaluations != 0:
-                    percentage = (votes / float(max_evaluations)) * 100.0
-                else:
-                    percentage = 0.0
+                percentage = get_votes_percentage(max_evaluations, votes, round_value=False)
                 Ranking.objects.filter(content_type=meeting_item_content_type, object_id=self.pk, measure_value__id=ranking['measure_value__id']).update(raw_votes=votes, percentage_votes=percentage)
 
             rankings = Ranking.objects.filter(content_type=meeting_item_content_type, object_id=self.pk).order_by('measure_value__order')
@@ -272,7 +269,7 @@ class Scenario(models.Model):
     name = models.CharField(max_length=255)
     meeting = models.ForeignKey(Meeting, related_name='scenarios')
     category = models.CharField(max_length=14, choices=CATEGORIES, null=True, blank=True)
-    meeting_items = models.ManyToManyField(MeetingItem)
+    meeting_items = models.ManyToManyField(MeetingItem, related_name='scenarios')
     value_ranking = models.FloatField(default=0.0)
     evaluation_summary = GenericRelation(Ranking)
 
@@ -305,15 +302,36 @@ class Scenario(models.Model):
     def get_value_ranking_display(self):
         return format_percentage(self.value_ranking)
 
+    def calculate_ranking(self):
+        meeting_items_count = self.meeting_items.count()
+        stakeholders_count = self.meeting.meetingstakeholder_set.count()
+        factors_count = self.meeting.deliverable.factors.count()
+        max_evaluations = stakeholders_count * factors_count * meeting_items_count
+
+        with transaction.atomic():
+            value_ranking_sum = self.meeting_items.aggregate(total=Sum('value_ranking'))
+            meeting_items_ranking = value_ranking_sum['total']
+            if meeting_items_count > 0:
+                self.value_ranking = meeting_items_ranking / float(meeting_items_count)
+            else:
+                self.value_ranking = 0.0
+            self.save()
+
+            self.evaluation_summary.all().delete()
+            aggregated_measure_values = dict()
+            for meeting_item in self.meeting_items.all():
+                for ranking in meeting_item.evaluation_summary.all():
+                    if ranking.measure_value.pk not in aggregated_measure_values.keys():
+                        aggregated_measure_values[ranking.measure_value.pk] = 0
+                    aggregated_measure_values[ranking.measure_value.pk] += ranking.raw_votes
+
+            for measure_value_id, raw_votes in aggregated_measure_values.iteritems():
+                percentage_votes = get_votes_percentage(max_evaluations, raw_votes, round_value=False)
+                measure_value = MeasureValue.objects.get(pk=measure_value_id)
+                Ranking.objects.create(content_object=self, meeting=self.meeting, measure_value=measure_value, raw_votes=raw_votes, percentage_votes=percentage_votes)
+
 def calculate_scenario_ranking(sender, instance, action, **kwargs):
     if action in ['post_add', 'post_remove']:
-        meeting_items_count = instance.meeting_items.count()
-        result = instance.meeting_items.aggregate(ranking=Sum('value_ranking'))
-        meeting_items_ranking = result['ranking']
-        if meeting_items_count > 0:
-            instance.value_ranking = meeting_items_ranking / float(meeting_items_count)
-        else:
-            instance.value_ranking = 0.0
-        instance.save()
+        instance.calculate_ranking()
 
 m2m_changed.connect(calculate_scenario_ranking, sender=Scenario.meeting_items.through)
