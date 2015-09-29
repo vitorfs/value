@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import operator
 
 from django.contrib.auth.models import User
@@ -18,60 +20,64 @@ def get_stakeholders_group_names(stakeholder_ids):
     groups_text = u', '.join(groups)
     return escape(groups_text)
 
+
 class Highcharts(object):
 
-    label_style = { 'fontSize': '13px', 'fontFamily': '"Helvetica Neue", Helvetica, Arial, sans-serif' }
+    def __init__(self):
+        self.label_style = { 'fontSize': '13px', 'fontFamily': '"Helvetica Neue", Helvetica, Arial, sans-serif' }
 
-    def feature_comparison_bar_chart(self, meeting, measure_value, stakeholder_ids):
-        stakeholder_ids = list(set(stakeholder_ids))
-        evaluations = Evaluation.get_evaluations_by_meeting(meeting)
-        filtered_evaluations = evaluations.filter(measure_value=measure_value, user_id__in=stakeholder_ids)
+    ''' Support Functions '''
 
-        stakeholders_count = len(stakeholder_ids)
-        factors_count = Factor.list().count()
-        max_votes = stakeholders_count * factors_count
+    def _base_stacked_chart(self, categories, series, chart='stacked_columns'):
 
-        vqs = filtered_evaluations.values('meeting_item__id', 'meeting_item__decision_item__name').annotate(count=Count('meeting_item__id')).order_by('-count')
+        chart_type = 'bar'
+        stacking = None
 
-        data = []
-        for result in vqs:
-            percentage = get_votes_percentage(max_votes, result['count'])
-            data.append([result['meeting_item__decision_item__name'], percentage])
+        if chart in ['stacked_bars', 'stacked_columns',]:
+            stacking = 'normal'
 
-        groups_text = get_stakeholders_group_names(stakeholder_ids)
+        if chart in ['stacked_columns', 'basic_columns',]:
+            chart_type = 'column'
+
         options = {
-            'chart': { 'type': 'column' },
-            'title': { 'text': u'Features Comparison: {0} {1}'.format(measure_value.description, measure_value.measure.name) },
-            'subtitle': { 'text': u'{0} opinion'.format(groups_text) },
-            'xAxis': {
-                'type': 'category',
-                'labels': {
-                    'rotation': -45,
-                    'style': self.label_style
-                }
-            },
-            'yAxis': { 'min': 0, 'title': { 'text': measure_value.description + ' ' + measure_value.measure.name }},
-            'legend': { 'enabled': False },
-            'tooltip': { 'pointFormat': measure_value.description + ' ' + measure_value.measure.name + ': <strong>{point.y}%</strong>' },
+            'chart': { 'type': chart_type },
+            'title': { 'text': '' },
+            'xAxis': { 'categories': categories },
+            'yAxis': { 'min': 0, 'max': 100, 'title': { 'text': 'Percentage of evaluations' }, 'labels': { 'format': '{value}%' } },
+            'legend': { 'reversed': True },
+            'plotOptions': { 'series': { 'stacking': stacking }},
+            'tooltip': { 'pointFormat': 'Percentage: <strong>{point.y}%</strong>' },
             'exporting': { 'enabled': False },
-            'series': [{
-                'name': measure_value.description + ' Votes',
-                'data': data,
-                'color': measure_value.color,
-                'dataLabels': {
-                    'enabled': True,
-                    'rotation': -90,
-                    'color': '#FFFFFF',
-                    'align': 'right',
-                    'format': '{point.y}%',
-                    'y': 10,
-                    'style': self.label_style
-                }
-            }]
+            'series': series
         }
 
         return options
 
+    def _base_treemap(self, data):
+        options = {
+            'series': [{
+                'type': 'treemap',
+                'layoutAlgorithm': 'stripes',
+                'alternateStartingDirection': True,
+                'levels': [{
+                    'level': 1,
+                    'layoutAlgorithm': 'sliceAndDice',
+                    'dataLabels': {
+                        'enabled': True,
+                        'align': 'left',
+                        'verticalAlign': 'top',
+                        'style': { 'fontSize': '15px', 'fontWeight': 'bold' }
+                    }
+                }],
+                'data': data
+            }],
+            'exporting': { 'enabled': False },
+            'title': { 'text': '' }
+        }
+        return options
+
+
+    ''' Summary Charts '''
 
     def stakeholders_input_bar_chart(self, meeting):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting)
@@ -120,7 +126,6 @@ class Highcharts(object):
         }
 
         return options
-
 
     def factors_usage_bar_chart(self, meeting):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting)
@@ -173,32 +178,78 @@ class Highcharts(object):
 
         return options
 
-
-    def _base_stacked_chart(self, categories, series, chart='stacked_columns'):
-
-        chart_type = 'bar'
-        stacking = None
-
-        if chart in ['stacked_bars', 'stacked_columns',]:
-            stacking = 'normal'
-
-        if chart in ['stacked_columns', 'basic_columns',]:
-            chart_type = 'column'
+    def value_ranking(self, meeting):
+        categories = meeting.meetingitem_set.all().values_list('decision_item__name', flat=True).order_by('-value_ranking')
+        data = meeting.meetingitem_set.all().values_list('value_ranking', flat=True).order_by('-value_ranking')
+        data = [round(value, 2) for value in data]
 
         options = {
-            'chart': { 'type': chart_type },
-            'title': { 'text': '' },
-            'xAxis': { 'categories': categories },
-            'yAxis': { 'min': 0, 'max': 100, 'title': { 'text': 'Percentage of evaluations' }, 'labels': { 'format': '{value}%' } },
-            'legend': { 'reversed': True },
-            'plotOptions': { 'series': { 'stacking': stacking }},
-            'tooltip': { 'pointFormat': 'Percentage: <strong>{point.y}%</strong>' },
+            'chart': { 'type': 'column' },
+            'title': { 'text': 'Value Ranking' },
             'exporting': { 'enabled': False },
-            'series': series
+            'xAxis': { 
+                'categories': list(categories)
+            },
+            'series': [{
+                'name': 'Ranking',
+                'data': list(data),
+                'color': '#337AB7',
+                'dataLabels': {
+                    'enabled': True
+                }
+            }]
+        }
+        return options
+
+    def feature_comparison_bar_chart(self, meeting, measure_value, stakeholder_ids):
+        stakeholder_ids = list(set(stakeholder_ids))
+        evaluations = Evaluation.get_evaluations_by_meeting(meeting)
+        filtered_evaluations = evaluations.filter(measure_value=measure_value, user_id__in=stakeholder_ids)
+
+        stakeholders_count = len(stakeholder_ids)
+        factors_count = Factor.list().count()
+        max_votes = stakeholders_count * factors_count
+
+        vqs = filtered_evaluations.values('meeting_item__id', 'meeting_item__decision_item__name').annotate(count=Count('meeting_item__id')).order_by('-count')
+
+        data = []
+        for result in vqs:
+            percentage = get_votes_percentage(max_votes, result['count'])
+            data.append([result['meeting_item__decision_item__name'], percentage])
+
+        groups_text = get_stakeholders_group_names(stakeholder_ids)
+        options = {
+            'chart': { 'type': 'column' },
+            'title': { 'text': u'Features Comparison: {0} {1}'.format(measure_value.description, measure_value.measure.name) },
+            'subtitle': { 'text': u'{0} opinion'.format(groups_text) },
+            'xAxis': {
+                'type': 'category',
+                'labels': {
+                    'rotation': -45,
+                    'style': self.label_style
+                }
+            },
+            'yAxis': { 'min': 0, 'title': { 'text': measure_value.description + ' ' + measure_value.measure.name }},
+            'legend': { 'enabled': False },
+            'tooltip': { 'pointFormat': measure_value.description + ' ' + measure_value.measure.name + ': <strong>{point.y}%</strong>' },
+            'exporting': { 'enabled': False },
+            'series': [{
+                'name': measure_value.description + ' Votes',
+                'data': data,
+                'color': measure_value.color,
+                'dataLabels': {
+                    'enabled': True,
+                    'rotation': -90,
+                    'color': '#FFFFFF',
+                    'align': 'right',
+                    'format': '{point.y}%',
+                    'y': 10,
+                    'style': self.label_style
+                }
+            }]
         }
 
         return options
-
 
     def decision_items_overview(self, meeting, chart, stakeholder_ids):
         stakeholder_ids = list(set(stakeholder_ids))
@@ -232,7 +283,11 @@ class Highcharts(object):
         return options
 
 
+    ''' Factors Comparison Charts '''
+
     def _factors_comparison_chart(self, chart_type, evaluations, max_votes):
+        options = dict()
+
         if evaluations:
             evaluations = evaluations.select_related('factor', 'factor__group', 'measure', 'measure_value')
             measure = evaluations[0].measure
@@ -270,10 +325,8 @@ class Highcharts(object):
                 series.append({ 'name': value.description, 'data': serie_data, 'color': value.color })
 
             options = self._base_stacked_chart(categories, series, chart_type)
-            return options
-
-        return {}
-
+        
+        return options
 
     def factors_comparison(self, meeting_id, meeting_item_id, chart_type, stakeholder_ids):
         meeting = Meeting.objects.get(pk=meeting_id)
@@ -287,7 +340,6 @@ class Highcharts(object):
         options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
 
         return options
-
     
     def factors_comparison_scenario(self, meeting, scenario, chart_type, stakeholder_ids):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(meeting_item__in=scenario.meeting_items.all(), user_id__in=stakeholder_ids)
@@ -302,28 +354,9 @@ class Highcharts(object):
         return options
 
 
-    def _base_treemap(self, data):
-        options = {
-            'series': [{
-                'type': 'treemap',
-                'layoutAlgorithm': 'stripes',
-                'alternateStartingDirection': True,
-                'levels': [{
-                    'level': 1,
-                    'layoutAlgorithm': 'sliceAndDice',
-                    'dataLabels': {
-                        'enabled': True,
-                        'align': 'left',
-                        'verticalAlign': 'top',
-                        'style': { 'fontSize': '15px', 'fontWeight': 'bold' }
-                    }
-                }],
-                'data': data
-            }],
-            'exporting': { 'enabled': False },
-            'title': { 'text': '' }
-        }
-        return options
+    ''' Decision Items Acceptance Charts '''
+
+    ''' Simple Treemap '''
 
     def _decision_item_acceptance_simple_treemap(self, evaluations):
         vqs = evaluations.values('measure_value__description', 'measure_value__color').annotate(value=Count('measure_value__description')).order_by()
@@ -351,12 +384,12 @@ class Highcharts(object):
         options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
         return options
 
-    def features_acceptance_detailed_treemap(self, instance_id, item_id, stakeholder_ids):
-        instance = Meeting.objects.get(pk=instance_id)
-        item = MeetingItem.objects.get(pk=item_id)
-        evaluations = Evaluation.get_evaluations_by_meeting(instance).filter(meeting_item=item, user_id__in=stakeholder_ids)
+    ''' Detailed Treemap '''
 
-        vqs = evaluations.order_by('measure_value__description', 'measure_value__id', 'measure_value__color').distinct('measure_value__description', 'measure_value__id', 'measure_value__color').values('measure_value__description', 'measure_value__id', 'measure_value__color')
+    def _decision_item_acceptance_detailed_treemap(self, evaluations):
+        vqs = evaluations.order_by('measure_value__description', 'measure_value__id', 'measure_value__color') \
+            .distinct('measure_value__description', 'measure_value__id', 'measure_value__color') \
+            .values('measure_value__description', 'measure_value__id', 'measure_value__color')
         groups = [kv for kv in vqs]
         for g in groups:
             g['id'] = g['measure_value__description']
@@ -371,19 +404,30 @@ class Highcharts(object):
             d['parent'] = d.pop('measure_value__description')
 
         data = groups + data
-
         options = self._base_treemap(data)
-        options['title'] = { 'text': u'{0} Acceptance'.format(item.decision_item.name) }
-        groups_text = get_stakeholders_group_names(stakeholder_ids)
-        options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
-        
+
         return options
 
-    def features_acceptance_pie_chart_drilldown(self, instance_id, item_id, stakeholder_ids):
-        instance = Meeting.objects.get(pk=instance_id)
-        item = MeetingItem.objects.get(pk=item_id)
-        evaluations = Evaluation.get_evaluations_by_meeting(instance).filter(meeting_item=item, user_id__in=stakeholder_ids)
+    def decision_item_acceptance_detailed_treemap(self, meeting_item, stakeholder_ids):
+        evaluations = Evaluation.get_evaluations_by_meeting(meeting_item.meeting).filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
+        options = self._decision_item_acceptance_detailed_treemap(evaluations)
+        options['title'] = { 'text': u'{0} Acceptance'.format(escape(meeting_item.decision_item.name)) }
+        groups_text = get_stakeholders_group_names(stakeholder_ids)
+        options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
+        return options
 
+    def decision_item_acceptance_scenario_detailed_treemap(self, scenario, stakeholder_ids):
+        evaluations = Evaluation.get_evaluations_by_meeting(scenario.meeting) \
+            .filter(meeting_item__in=scenario.meeting_items.all(), user_id__in=stakeholder_ids)
+        options = self._decision_item_acceptance_detailed_treemap(evaluations)
+        options['title'] = { 'text': u'{0} Acceptance'.format(escape(scenario.name)) }
+        groups_text = get_stakeholders_group_names(stakeholder_ids)
+        options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
+        return options
+
+    ''' Pie Chart Drilldown '''
+
+    def _decision_item_acceptance_pie_chart_drilldown(self, evaluations):
         vqs = evaluations.values('measure_value__description', 'measure_value__color').annotate(y=Count('measure_value__description')).order_by('y')
         series = [kv for kv in vqs]
         for serie in series:
@@ -393,44 +437,56 @@ class Highcharts(object):
             serie['color'] = serie.pop('measure_value__color')
 
         vqs = evaluations.order_by('measure_value__id', 'measure_value__description').distinct('measure_value__id', 'measure_value__description').values('measure_value__id', 'measure_value__description')
-
-        drilldownSeries = []
-
+        drilldown_series = []
         for v in vqs:
             vqs = evaluations.filter(measure_value__id=v['measure_value__id']).values('measure_value__description', 'factor__name').annotate(y=Count('measure_value__description')).order_by('y')
             data = []
             for value in vqs:
                 data.append([value['factor__name'], value['y']])
-
             drilldown = {
                 'data': data,
                 'id': v['measure_value__description'],
                 'name': v['measure_value__description']
             }
-
-            drilldownSeries.append(drilldown)
-
-        groups_text = get_stakeholders_group_names(stakeholder_ids)
+            drilldown_series.append(drilldown)
+        
         options = {
-                'chart': { 'type': 'pie' },
-                'title': { 'text': u'{0} Acceptance'.format(escape(item.decision_item.name)) },
-                'subtitle': { 'text': u'{0} opinion. Click the slices to view value factors.'.format(groups_text) },
-                'plotOptions': { 'series': { 'dataLabels': { 'enabled': True, 'format': '{point.name}: {point.y} votes' } } },
-                'exporting': { 'enabled': False },
-                'tooltip': {
-                    'headerFormat': '<span style="font-size:11px">{series.name}</span><br>',
-                    'pointFormat': '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
-                },
-                'series': [{
-                    'name': 'Votes',
-                    'colorByPoint': True,
-                    'data': series
-                }],
-                'drilldown': {
-                    'series': drilldownSeries
-                }
+            'chart': { 'type': 'pie' },
+            'plotOptions': { 'series': { 'dataLabels': { 'enabled': True, 'format': '{point.name}: {point.y} votes' } } },
+            'exporting': { 'enabled': False },
+            'tooltip': {
+                'headerFormat': '<span style="font-size:11px">{series.name}</span><br>',
+                'pointFormat': '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+            },
+            'series': [{
+                'name': 'Votes',
+                'colorByPoint': True,
+                'data': series
+            }],
+            'drilldown': {
+                'series': drilldown_series
             }
+        }
         return options
+
+    def decision_item_acceptance_pie_chart_drilldown(self, meeting_item, stakeholder_ids):
+        evaluations = Evaluation.get_evaluations_by_meeting(meeting_item.meeting).filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
+        options = self._decision_item_acceptance_pie_chart_drilldown(evaluations)
+        groups_text = get_stakeholders_group_names(stakeholder_ids)
+        options['title'] = { 'text': u'{0} Acceptance'.format(escape(meeting_item.decision_item.name)) }
+        options['subtitle'] = { 'text': u'{0} opinion. Click the slices to view value factors.'.format(groups_text) }
+        return options
+
+    def decision_item_acceptance_scenario_pie_chart_drilldown(self, scenario, stakeholder_ids):
+        evaluations = Evaluation.get_evaluations_by_meeting(scenario.meeting) \
+            .filter(meeting_item__in=scenario.meeting_items.all(), user_id__in=stakeholder_ids)
+        options = self._decision_item_acceptance_pie_chart_drilldown(evaluations)
+        groups_text = get_stakeholders_group_names(stakeholder_ids)
+        options['title'] = { 'text': u'{0} Acceptance'.format(escape(scenario.name)) }
+        options['subtitle'] = { 'text': u'{0} opinion. Click the slices to view value factors.'.format(groups_text) }
+        return options
+
+    ''' Factors Groups Comparison '''
 
     def _factors_groups(self, evaluations, stakeholder_ids, aggregated_max_votes=1):
         categories = evaluations.values_list('factor__group__name', flat=True).distinct().order_by('factor__group__name')
@@ -500,27 +556,4 @@ class Highcharts(object):
         subtitle = u'<strong>Decision Items:</strong> {0}<br><strong>Stakeholders Roles:</strong> {1}'.format(escape(items_text), stakeholders_text)
         options['title'] = { 'text': escape(scenario.name) }
         options['subtitle'] = { 'text': subtitle }
-        return options
-
-    def value_ranking(self, meeting):
-        categories = meeting.meetingitem_set.all().values_list('decision_item__name', flat=True).order_by('-value_ranking')
-        data = meeting.meetingitem_set.all().values_list('value_ranking', flat=True).order_by('-value_ranking')
-        data = [round(value, 2) for value in data]
-
-        options = {
-            'chart': { 'type': 'column' },
-            'title': { 'text': 'Value Ranking' },
-            'exporting': { 'enabled': False },
-            'xAxis': { 
-                'categories': list(categories)
-            },
-            'series': [{
-                'name': 'Ranking',
-                'data': list(data),
-                'color': '#337AB7',
-                'dataLabels': {
-                    'enabled': True
-                }
-            }]
-        }
         return options
