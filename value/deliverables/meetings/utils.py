@@ -41,8 +41,9 @@ def get_or_set_order_session(request, meeting, cookie_name, db_model_order):
 def get_charts_order_dict(measure):
     charts_order = OrderedDict()
     charts_order['-value_ranking'] = 'Value Ranking'
+
     for measure_value in measure.measurevalue_set.all():
-        charts_order[measure_value.pk] = measure_value.description
+        charts_order[measure_value.pk] = u'{0} {1}'.format(measure_value.description, measure_value.measure.name)
 
     for field_key, field_value in DecisionItemLookup.get_visible_fields().iteritems():
         charts_order[u'decision_item__{0}'.format(field_key)] = field_value['label']
@@ -54,7 +55,7 @@ def get_scenario_charts_order_dict(measure):
     charts_order['-value_ranking'] = 'Value Ranking'
 
     for measure_value in measure.measurevalue_set.all():
-        charts_order[measure_value.pk] = measure_value.description
+        charts_order[measure_value.pk] = u'{0} {1}'.format(measure_value.description, measure_value.measure.name)
 
     charts_order['name'] = 'Name'
 

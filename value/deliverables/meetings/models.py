@@ -105,6 +105,12 @@ class Meeting(models.Model):
         return grouped_stakeholders
 
     def _get_ordered(self, _class, objects, order, db_model_order):
+        """
+        Private method to order by database field or evaluation
+        ranking. This method should not be used outside this model
+        class.
+        Used by: get_ordered_meeting_items, get_ordered_scenarios
+        """
         can_order_in_db = order in db_model_order
         if can_order_in_db:
             objects = objects.order_by(order)
@@ -133,7 +139,6 @@ class Meeting(models.Model):
         """
         scenarios = self.scenarios.all()
         db_model_order = ['-value_ranking', 'name']
-        can_order_in_db = order in db_model_order
         return self._get_ordered(Scenario, scenarios, order, db_model_order)
 
 
@@ -334,10 +339,17 @@ class Scenario(models.Model):
 
             self.evaluation_summary.all().delete()
             aggregated_measure_values = dict()
+            
+            # Initialize the aggregated_measure_values dict to make sure 
+            # it's gonna have all possible Measure Value, even if no meeting item
+            # has received a vote for that Measure Value.
+            for measure_value in self.meeting.deliverable.measure.measurevalue_set.all():
+                aggregated_measure_values[measure_value.pk] = 0
+
             for meeting_item in self.meeting_items.all():
                 for ranking in meeting_item.evaluation_summary.all():
                     if ranking.measure_value.pk not in aggregated_measure_values.keys():
-                        aggregated_measure_values[ranking.measure_value.pk] = 0
+                        aggregated_measure_values[measure_value.pk] = 0
                     aggregated_measure_values[ranking.measure_value.pk] += ranking.raw_votes
 
             for measure_value_id, raw_votes in aggregated_measure_values.iteritems():
