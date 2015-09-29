@@ -18,7 +18,6 @@ urlpatterns = patterns('value.deliverables.meetings.views',
 
     # Dashboard URLs
     url(r'^(?P<meeting_id>\d+)/dashboard/$', 'dashboard', name='dashboard'),
-    url(r'^(?P<meeting_id>\d+)/dashboard/download/$', 'download', name='download'),
 
     ## Summary Charts URLs
     url(r'^(?P<meeting_id>\d+)/dashboard/factors-usage/$', 'dashboard_factors_usage_chart', name='dashboard_factors_usage_chart'),

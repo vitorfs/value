@@ -1,7 +1,5 @@
 # coding: utf-8
 
-from reportlab.graphics import renderPDF
-import xml.dom.minidom
 import json
 
 from django.http import HttpResponse
@@ -11,7 +9,6 @@ from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.template.loader import render_to_string
 
-from value.utils.svglib import SvgRenderer
 from value.measures.models import MeasureValue
 from value.deliverables.meetings.models import Meeting, Evaluation
 from value.deliverables.meetings.charts import Highcharts
@@ -167,21 +164,3 @@ def features_comparison_chart(request, deliverable_id, meeting_id, measure_value
             'chart_menu_active': 'features_comparison',
             'chart_page_title': 'Features Comparison'
             })
-
-@login_required
-def download(request, deliverable_id, meeting_id):
-    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    response = HttpResponse(content_type='application/pdf')
-    try:
-        svg = request.POST.get('svg')
-        doc = xml.dom.minidom.parseString(svg.encode('utf-8'))
-        svg = doc.documentElement
-        svgRenderer = SvgRenderer()
-        svgRenderer.render(svg)
-        drawing = svgRenderer.finish()
-        pdf = renderPDF.drawToString(drawing)
-        response.write(pdf)     
-    except:
-        pass
-    response['Content-Disposition'] = 'attachment; filename=dashboard.pdf'
-    return response

@@ -4,7 +4,6 @@
 
 {% block javascript %}
   <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
-  <script src="{% static 'js/highcharts/modules/exporting.js' %}"></script>
   <script src="{% static 'js/meetings/dashboard.js' %}"></script>
   <script type="text/javascript">
     $(function () {
@@ -21,7 +20,6 @@
         {% include 'meetings/dashboard/includes/expand_toolbar.html' with opened=True %}
         {% include 'meetings/dashboard/includes/modal_toolbar.html' with opened=True %}
         {% include 'meetings/dashboard/includes/reload_toolbar.html' with opened=True %}
-        {% include 'meetings/dashboard/includes/download_toolbar.html' with opened=True %}
       </div>
       <p class="panel-title">{{ chart_page_title }}</p>
     </div>

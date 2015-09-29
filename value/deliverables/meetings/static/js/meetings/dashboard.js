@@ -54,13 +54,6 @@ $(function () {
     return false;
   });
 
-  $(document).on("click", ".btn-chart-download", function () {
-    var panel = $(this).closest(".panel");
-    var chart = $(".panel-body", panel).highcharts(), svg = chart.getSVG();
-    $("#id_svg").val(svg);
-    $("#chart-download").submit();
-  });
-
   $(document).on("click", ".btn-chart-expand", function () {
 
     var container = $(this).closest(".panel");
@@ -89,12 +82,12 @@ $(function () {
 
     if ($(target).is(":visible")) {
       $(".btn-chart-toggle .glyphicon", container).removeClass("glyphicon-minus").addClass("glyphicon-plus");
-      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .btn-chart-download, .btn-chart-delete, .btn-chart-edit, .dropdown-toggle", container).prop("disabled", true);
+      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .btn-chart-delete, .btn-chart-edit, .dropdown-toggle", container).prop("disabled", true);
       $(target).slideUp();
     }
     else {
       $(".btn-chart-toggle .glyphicon", container).addClass("glyphicon-minus").removeClass("glyphicon-plus");
-      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .btn-chart-download, .btn-chart-delete, .btn-chart-edit, .dropdown-toggle", container).prop("disabled", false);
+      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .btn-chart-delete, .btn-chart-edit, .dropdown-toggle", container).prop("disabled", false);
       $(target).slideDown(400, function () {
         if (!$(container).hasClass("loaded")) {
           $(container).loadchart();
