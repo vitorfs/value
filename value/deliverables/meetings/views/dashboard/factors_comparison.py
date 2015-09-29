@@ -78,7 +78,7 @@ def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
     options = Highcharts().factors_comparison(meeting_id, meeting_item_id, chart_type, stakeholder_ids)
     dump = json.dumps(options)
     chart = get_features_chart_dict(meeting_item)
-    
+
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
@@ -98,7 +98,7 @@ def features_scenarios(request, deliverable_id, meeting_id):
     chart_types_options = get_bar_chart_types_dict()
 
     chart_order_options = get_scenario_charts_order_dict(meeting.deliverable.measure)
-    order = get_or_set_scenario_chars_order_session(request, meeting, 'factors_comparison_scenario_order')
+    order = get_or_set_scenario_charts_order_session(request, meeting, 'factors_comparison_scenario_order')
 
     charts = map(get_features_scenario_chart_dict, meeting.get_ordered_scenarios(order))
     stakeholder_ids = get_stakeholders_ids(meeting)
@@ -119,8 +119,10 @@ def features_scenarios(request, deliverable_id, meeting_id):
 def features_scenario_chart(request, deliverable_id, meeting_id, scenario_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     scenario = get_object_or_404(Scenario, pk=scenario_id)
+
     chart_type = request.GET.get('chart-type')
     stakeholders = request.GET.getlist('stakeholder')
+    
     stakeholder_ids = get_stakeholders_ids(meeting, stakeholders)
     options = Highcharts().factors_comparison_scenario(meeting, scenario, chart_type, stakeholder_ids)
     dump = json.dumps(options)
