@@ -252,6 +252,7 @@ class Evaluation(models.Model):
     def get_user_evaluations_by_meeting(user, meeting):
         return Evaluation._list(meeting).filter(user=user)
 
+
 class Scenario(models.Model):
     """
     The Scenario class is used to aggregate decision items to generate different 

@@ -76,6 +76,8 @@ def save_evaluation(request, deliverable_id, meeting_id):
     )
 
     meeting_item.calculate_ranking()
+    for scenario in meeting_item.scenarios.all():
+        scenario.calculate_ranking()
     meeting.deliverable.save()
 
     return HttpResponse()
