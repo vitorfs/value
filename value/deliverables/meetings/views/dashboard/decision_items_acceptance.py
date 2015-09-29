@@ -89,9 +89,10 @@ def features_acceptance_chart(request, deliverable_id, meeting_id, meeting_item_
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     meeting_item = meeting.meetingitem_set.get(pk=meeting_item_id)
     
-    chart_type = request.GET.get('chart_type', 'simple')
+    chart_type = request.GET.get('chart_type')
     stakeholder_ids = request.GET.getlist('stakeholder')
 
+    chart_types_options = get_treemap_chart_types_dict()
     stakeholder_ids = get_stakeholders_ids(meeting)
     options = get_features_acceptance_chart_options(meeting_item, stakeholder_ids, chart_type)
     dump = json.dumps(options)
@@ -103,6 +104,7 @@ def features_acceptance_chart(request, deliverable_id, meeting_id, meeting_item_
         return render(request, 'meetings/dashboard/decision_items_acceptance/popup.html', { 
             'meeting': meeting,
             'chart': chart,
+            'chart_types_options': chart_types_options,
             'chart_type': chart_type,
             'stakeholder_ids': stakeholder_ids,
             'dump': dump
@@ -123,7 +125,7 @@ def features_acceptance_scenarios(request, deliverable_id, meeting_id):
 
     return render(request, 'meetings/dashboard/decision_items_acceptance/scenarios.html', { 
         'meeting': meeting,
-        'chart_menu_active': 'features',
+        'chart_menu_active': 'features_acceptance',
         'charts': charts,
         'stakeholder_ids': stakeholder_ids,
         'scenario_category': Scenario.ACCEPTANCE,
@@ -141,6 +143,7 @@ def features_acceptance_scenario_chart(request, deliverable_id, meeting_id, scen
     chart_type = request.GET.get('chart_type')
     stakeholders = request.GET.getlist('stakeholder')
     
+    chart_types_options = get_treemap_chart_types_dict()
     stakeholder_ids = get_stakeholders_ids(meeting, stakeholders)
     options = get_features_acceptance_scenario_chart_options(scenario, stakeholder_ids, chart_type)
     dump = json.dumps(options)
@@ -152,6 +155,7 @@ def features_acceptance_scenario_chart(request, deliverable_id, meeting_id, scen
         return render(request, 'meetings/dashboard/decision_items_acceptance/popup.html', { 
             'meeting': meeting,
             'chart': chart,
+            'chart_types_options': chart_types_options,
             'chart_type': chart_type,
             'stakeholder_ids': stakeholder_ids,
             'dump': dump

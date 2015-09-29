@@ -74,6 +74,7 @@ def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
     chart_type = request.GET.get('chart_type')
     stakeholders = request.GET.getlist('stakeholder')
 
+    chart_types_options = get_bar_chart_types_dict()
     stakeholder_ids = get_stakeholders_ids(meeting, stakeholders)
     options = Highcharts().factors_comparison(meeting_id, meeting_item_id, chart_type, stakeholder_ids)
     dump = json.dumps(options)
@@ -85,6 +86,7 @@ def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
         return render(request, 'meetings/dashboard/factors_comparison/popup.html', { 
             'meeting': meeting,
             'chart': chart,
+            'chart_types_options': chart_types_options,
             'chart_type': chart_type,
             'stakeholder_ids': stakeholder_ids,
             'dump': dump
@@ -123,6 +125,7 @@ def features_scenario_chart(request, deliverable_id, meeting_id, scenario_id):
     chart_type = request.GET.get('chart_type')
     stakeholders = request.GET.getlist('stakeholder')
     
+    chart_types_options = get_bar_chart_types_dict()
     stakeholder_ids = get_stakeholders_ids(meeting, stakeholders)
     options = Highcharts().factors_comparison_scenario(meeting, scenario, chart_type, stakeholder_ids)
     dump = json.dumps(options)
@@ -134,6 +137,7 @@ def features_scenario_chart(request, deliverable_id, meeting_id, scenario_id):
         return render(request, 'meetings/dashboard/factors_comparison/popup.html', { 
             'meeting': meeting,
             'chart': chart,
+            'chart_types_options': chart_types_options,
             'chart_type': chart_type,
             'stakeholder_ids': stakeholder_ids,
             'dump': dump

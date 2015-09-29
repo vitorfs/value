@@ -69,10 +69,10 @@ class Highcharts(object):
                         'style': { 'fontSize': '15px', 'fontWeight': 'bold' }
                     }
                 }],
-                'data': data
+                'data': data,
+                'tooltip': { 'pointFormat': '{point.name} Percentage: <strong>{point.value}%</strong>' }
             }],
-            'exporting': { 'enabled': False },
-            'title': { 'text': '' }
+            'exporting': { 'enabled': False }
         }
         return options
 
@@ -290,7 +290,7 @@ class Highcharts(object):
 
         if evaluations:
             evaluations = evaluations.select_related('factor', 'factor__group', 'measure', 'measure_value')
-            measure = evaluations[0].measure
+            measure = evaluations.first().measure
 
             data = {}
             measure_values = measure.measurevalue_set.values_list('description', flat=True)
@@ -358,35 +358,47 @@ class Highcharts(object):
 
     ''' Simple Treemap '''
 
-    def _decision_item_acceptance_simple_treemap(self, evaluations):
-        vqs = evaluations.values('measure_value__description', 'measure_value__color').annotate(value=Count('measure_value__description')).order_by()
-        data = [kv for kv in vqs]
-        for d in data:
-            d['name'] = d.pop('measure_value__description')
-            d['color'] = d.pop('measure_value__color')
-        options = self._base_treemap(data)
+    def _decision_item_acceptance_simple_treemap(self, evaluations, max_votes):
+        options = dict()
+        if evaluations.exists():
+            vqs = evaluations.values('measure_value__description', 'measure_value__color').annotate(value=Count('measure_value__description')).order_by()
+            data = [kv for kv in vqs]
+            for d in data:
+                d['name'] = d.pop('measure_value__description')
+                d['color'] = d.pop('measure_value__color')
+                d['value'] = get_votes_percentage(max_votes, d.pop('value'))
+            options = self._base_treemap(data)
         return options
 
     def decision_item_acceptance_simple_treemap(self, meeting_item, stakeholder_ids):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting_item.meeting).filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
-        options = self._decision_item_acceptance_simple_treemap(evaluations)
+        factors_count = meeting_item.meeting.deliverable.factors.count()
+        max_votes = factors_count * len(stakeholder_ids)
+
+        options = self._decision_item_acceptance_simple_treemap(evaluations, max_votes)
         groups_text = get_stakeholders_group_names(stakeholder_ids)
         options['title'] = { 'text': u'{0} Acceptance'.format(escape(meeting_item.decision_item.name)) }
         options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
+
         return options
 
     def decision_item_acceptance_scenario_simple_treemap(self, scenario, stakeholder_ids):
         evaluations = Evaluation.get_evaluations_by_meeting(scenario.meeting) \
                 .filter(meeting_item__in=scenario.meeting_items.all(), user_id__in=stakeholder_ids)
-        options = self._decision_item_acceptance_simple_treemap(evaluations)
+        factors_count = scenario.meeting.deliverable.factors.count()
+        meeting_items_count = scenario.meeting_items.count()
+        max_votes = factors_count * len(stakeholder_ids) * meeting_items_count
+
+        options = self._decision_item_acceptance_simple_treemap(evaluations, max_votes)
         groups_text = get_stakeholders_group_names(stakeholder_ids)
         options['title'] = { 'text': u'{0} Acceptance'.format(escape(scenario.name)) }
         options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
+
         return options
 
     ''' Detailed Treemap '''
 
-    def _decision_item_acceptance_detailed_treemap(self, evaluations):
+    def _decision_item_acceptance_detailed_treemap(self, evaluations, max_votes):
         vqs = evaluations.order_by('measure_value__description', 'measure_value__id', 'measure_value__color') \
             .distinct('measure_value__description', 'measure_value__id', 'measure_value__color') \
             .values('measure_value__description', 'measure_value__id', 'measure_value__color')
@@ -402,6 +414,7 @@ class Highcharts(object):
         for d in data:
             d['name'] = d.pop('factor__name')
             d['parent'] = d.pop('measure_value__description')
+            d['value'] = get_votes_percentage(max_votes, d.pop('value'))
 
         data = groups + data
         options = self._base_treemap(data)
@@ -410,24 +423,33 @@ class Highcharts(object):
 
     def decision_item_acceptance_detailed_treemap(self, meeting_item, stakeholder_ids):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting_item.meeting).filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
-        options = self._decision_item_acceptance_detailed_treemap(evaluations)
+        factors_count = meeting_item.meeting.deliverable.factors.count()
+        max_votes = factors_count * len(stakeholder_ids)
+
+        options = self._decision_item_acceptance_detailed_treemap(evaluations, max_votes)
         options['title'] = { 'text': u'{0} Acceptance'.format(escape(meeting_item.decision_item.name)) }
         groups_text = get_stakeholders_group_names(stakeholder_ids)
         options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
+
         return options
 
     def decision_item_acceptance_scenario_detailed_treemap(self, scenario, stakeholder_ids):
         evaluations = Evaluation.get_evaluations_by_meeting(scenario.meeting) \
             .filter(meeting_item__in=scenario.meeting_items.all(), user_id__in=stakeholder_ids)
-        options = self._decision_item_acceptance_detailed_treemap(evaluations)
+        factors_count = scenario.meeting.deliverable.factors.count()
+        meeting_items_count = scenario.meeting_items.count()
+        max_votes = factors_count * len(stakeholder_ids) * meeting_items_count
+
+        options = self._decision_item_acceptance_detailed_treemap(evaluations, max_votes)
         options['title'] = { 'text': u'{0} Acceptance'.format(escape(scenario.name)) }
         groups_text = get_stakeholders_group_names(stakeholder_ids)
         options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
+
         return options
 
     ''' Pie Chart Drilldown '''
 
-    def _decision_item_acceptance_pie_chart_drilldown(self, evaluations):
+    def _decision_item_acceptance_pie_chart_drilldown(self, evaluations, max_votes):
         vqs = evaluations.values('measure_value__description', 'measure_value__color').annotate(y=Count('measure_value__description')).order_by('y')
         series = [kv for kv in vqs]
         for serie in series:
@@ -435,6 +457,7 @@ class Highcharts(object):
             serie['drilldown'] = serie['measure_value__description']
             del serie['measure_value__description']
             serie['color'] = serie.pop('measure_value__color')
+            serie['y'] = get_votes_percentage(max_votes, serie.pop('y'))
 
         vqs = evaluations.order_by('measure_value__id', 'measure_value__description').distinct('measure_value__id', 'measure_value__description').values('measure_value__id', 'measure_value__description')
         drilldown_series = []
@@ -442,7 +465,7 @@ class Highcharts(object):
             vqs = evaluations.filter(measure_value__id=v['measure_value__id']).values('measure_value__description', 'factor__name').annotate(y=Count('measure_value__description')).order_by('y')
             data = []
             for value in vqs:
-                data.append([value['factor__name'], value['y']])
+                data.append([value['factor__name'], get_votes_percentage(max_votes, value['y'])])
             drilldown = {
                 'data': data,
                 'id': v['measure_value__description'],
@@ -452,14 +475,14 @@ class Highcharts(object):
         
         options = {
             'chart': { 'type': 'pie' },
-            'plotOptions': { 'series': { 'dataLabels': { 'enabled': True, 'format': '{point.name}: {point.y} votes' } } },
+            'plotOptions': { 'series': { 'dataLabels': { 'enabled': True, 'format': '{point.name}: {point.y}%' } } },
             'exporting': { 'enabled': False },
             'tooltip': {
                 'headerFormat': '<span style="font-size:11px">{series.name}</span><br>',
-                'pointFormat': '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
+                'pointFormat': '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}%</b><br/>'
             },
             'series': [{
-                'name': 'Votes',
+                'name': 'Acceptance Summary',
                 'colorByPoint': True,
                 'data': series
             }],
@@ -471,19 +494,28 @@ class Highcharts(object):
 
     def decision_item_acceptance_pie_chart_drilldown(self, meeting_item, stakeholder_ids):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting_item.meeting).filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
-        options = self._decision_item_acceptance_pie_chart_drilldown(evaluations)
+        factors_count = meeting_item.meeting.deliverable.factors.count()
+        max_votes = factors_count * len(stakeholder_ids)
+
+        options = self._decision_item_acceptance_pie_chart_drilldown(evaluations, max_votes)
         groups_text = get_stakeholders_group_names(stakeholder_ids)
         options['title'] = { 'text': u'{0} Acceptance'.format(escape(meeting_item.decision_item.name)) }
         options['subtitle'] = { 'text': u'{0} opinion. Click the slices to view value factors.'.format(groups_text) }
+        
         return options
 
     def decision_item_acceptance_scenario_pie_chart_drilldown(self, scenario, stakeholder_ids):
         evaluations = Evaluation.get_evaluations_by_meeting(scenario.meeting) \
             .filter(meeting_item__in=scenario.meeting_items.all(), user_id__in=stakeholder_ids)
-        options = self._decision_item_acceptance_pie_chart_drilldown(evaluations)
+        factors_count = scenario.meeting.deliverable.factors.count()
+        meeting_items_count = scenario.meeting_items.count()
+        max_votes = factors_count * len(stakeholder_ids) * meeting_items_count
+
+        options = self._decision_item_acceptance_pie_chart_drilldown(evaluations, max_votes)
         groups_text = get_stakeholders_group_names(stakeholder_ids)
         options['title'] = { 'text': u'{0} Acceptance'.format(escape(scenario.name)) }
         options['subtitle'] = { 'text': u'{0} opinion. Click the slices to view value factors.'.format(groups_text) }
+        
         return options
 
     ''' Factors Groups Comparison '''

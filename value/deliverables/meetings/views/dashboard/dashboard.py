@@ -23,7 +23,7 @@ def dashboard(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     chart = Highcharts()
     
-    charts = []
+    charts = list()
     charts.append({ 'chart_id': 'factors_usage', 'chart_title': 'Factors Usage', 'chart_uri': reverse('deliverables:meetings:dashboard_factors_usage_chart', args=(deliverable_id, meeting_id,)) })
     charts.append({ 'chart_id': 'stakeholders_input', 'chart_title': 'Stakeholders Input', 'chart_uri': reverse('deliverables:meetings:dashboard_stakeholders_input_chart', args=(deliverable_id, meeting_id,)) })
 
@@ -39,7 +39,11 @@ def dashboard_factors_usage_chart(request, deliverable_id, meeting_id):
     chart = Highcharts()
     options = chart.factors_usage_bar_chart(meeting)
     dump = json.dumps(options)
-    chart_data = { 'chart_id': 'factors_usage', 'chart_title': 'Factors Usage', 'chart_uri': reverse('deliverables:meetings:dashboard_factors_usage_chart', args=(deliverable_id, meeting_id,)) }
+    chart_data = { 
+        'chart_id': 'factors_usage', 
+        'chart_title': 'Factors Usage', 
+        'chart_uri': reverse('deliverables:meetings:dashboard_factors_usage_chart', args=(deliverable_id, meeting_id,)) 
+    }
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
@@ -55,7 +59,11 @@ def dashboard_stakeholders_input_chart(request, deliverable_id, meeting_id):
     chart = Highcharts()
     options = chart.stakeholders_input_bar_chart(meeting)
     dump = json.dumps(options)
-    chart_data = { 'chart_id': 'stakeholders_input', 'chart_title': 'Stakeholders Input', 'chart_uri': reverse('deliverables:meetings:dashboard_stakeholders_input_chart', args=(deliverable_id, meeting_id,)) }
+    chart_data = { 
+        'chart_id': 'stakeholders_input', 
+        'chart_title': 'Stakeholders Input', 
+        'chart_uri': reverse('deliverables:meetings:dashboard_stakeholders_input_chart', args=(deliverable_id, meeting_id,)) 
+    }
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
@@ -71,7 +79,13 @@ def value_ranking(request, deliverable_id, meeting_id):
     chart = Highcharts()
     options = chart.value_ranking(meeting)
     dump = json.dumps(options)
-    return render(request, 'meetings/dashboard/value_ranking.html', { 
+    if 'application/json' in request.META.get('HTTP_ACCEPT'):
+        return HttpResponse(dump, content_type='application/json')
+    else:
+        template_name = 'meetings/dashboard/value_ranking.html'
+        if 'popup' in request.GET:
+            template_name = 'meetings/dashboard/decision_items_overview_popup.html'
+        return render(request, template_name, { 
             'meeting': meeting,
             'chart_page_title': 'Value Ranking',
             'chart_menu_active': 'value_ranking',
