@@ -104,6 +104,16 @@ class Meeting(models.Model):
                 del grouped_stakeholders[name]
         return grouped_stakeholders
 
+    def _get_ordered(self, _class, objects, order, db_model_order):
+        can_order_in_db = order in db_model_order
+        if can_order_in_db:
+            objects = objects.order_by(order)
+        else:
+            content_type = ContentType.objects.get_for_model(_class)
+            ordered_by_ranking = Ranking.objects.filter(content_type=content_type, meeting=self, measure_value__id=order).order_by('-percentage_votes')
+            objects = map(lambda o: o.content_object, ordered_by_ranking)
+        return objects
+
     def get_ordered_meeting_items(self, order):
         """
         Order can represent regular meeting item fields and it's foreign keys.
@@ -113,14 +123,18 @@ class Meeting(models.Model):
         meeting_items = self.meetingitem_set.all()
         db_model_order = map(lambda key: u'decision_item__{0}'.format(key), DecisionItemLookup.get_visible_fields().keys())
         db_model_order.append('-value_ranking')
+        return self._get_ordered(MeetingItem, meeting_items, order, db_model_order)
+
+    def get_ordered_scenarios(self, order):
+        """
+        Order can represent regular scenario fields and it's foreign keys.
+        It's also possible to pass a MeasureValue id as parameter to order
+        by the scenario ranking.
+        """
+        scenarios = self.scenarios.all()
+        db_model_order = ['-value_ranking', 'name']
         can_order_in_db = order in db_model_order
-        if can_order_in_db:
-            meeting_items = meeting_items.order_by(order)
-        else:
-            meeting_item_content_type = ContentType.objects.get_for_model(MeetingItem)
-            ordered_by_ranking = Ranking.objects.filter(content_type=meeting_item_content_type, meeting=self, measure_value__id=order).order_by('-raw_votes')
-            meeting_items = map(lambda item: item.content_object, ordered_by_ranking)
-        return meeting_items
+        return self._get_ordered(Scenario, scenarios, order, db_model_order)
 
 
 class Ranking(models.Model):

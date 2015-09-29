@@ -49,6 +49,17 @@ def get_charts_order_dict(measure):
 
     return charts_order
 
+def get_scenario_charts_order_dict(measure):
+    charts_order = OrderedDict()
+    charts_order['-value_ranking'] = 'Value Ranking'
+
+    for measure_value in measure.measurevalue_set.all():
+        charts_order[measure_value.pk] = measure_value.description
+
+    charts_order['name'] = 'Name'
+
+    return charts_order
+
 def get_or_set_charts_order_session(request, meeting, cookie_name):
     db_model_order = map(lambda key: u'decision_item__{0}'.format(key), DecisionItemLookup.get_visible_fields().keys())
     return get_or_set_order_session(request, meeting, cookie_name, db_model_order)
