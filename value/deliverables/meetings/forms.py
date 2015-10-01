@@ -4,6 +4,7 @@ import datetime
 
 from django import forms
 from django.contrib.auth.models import User
+from django.utils.html import escape
 
 from value.factors.models import Factor, Group as FactorGroup
 from value.deliverables.meetings.models import Meeting, MeetingItem, Scenario
@@ -63,9 +64,15 @@ class ScenarioBuilderForm(forms.Form):
         self.fields['criteria'].queryset = self.initial['meeting'].deliverable.measure.measurevalue_set.all()
 
 
+class FactorMultipleModelChoiceField(forms.ModelMultipleChoiceField):
+    def label_from_instance(self, obj):
+        if obj.group:
+            return u'<strong>{0}</strong>: {1}'.format(escape(obj.group.name), escape(obj.name))
+        return escape(obj.name)
+
 class FactorsScenarioBuilderForm(ScenarioBuilderForm):
     meeting_items_count = forms.ChoiceField(label='Select decision items…', required=True)
-    factors = forms.ModelMultipleChoiceField(
+    factors = FactorMultipleModelChoiceField(
         widget=forms.CheckboxSelectMultiple(),
         label='And build the best scenario related to…', 
         queryset=Factor.list(), 

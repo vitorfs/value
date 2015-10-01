@@ -1,3 +1,8 @@
-<button type="button" class="btn btn-default btn-xs btn-chart-edit"{% if not opened %} disabled{% endif %} title="Edit">
+<button type="button" 
+        class="btn btn-default btn-xs btn-chart-edit"
+        title="Edit" 
+        data-remote-url="{% url 'deliverables:meetings:edit_scenario' meeting.deliverable.pk meeting.pk chart.instance.pk %}"
+        data-toggle="modal"
+        data-target="#modal-edit-scenario">
   <span class="glyphicon glyphicon-pencil"></span>
 </button>

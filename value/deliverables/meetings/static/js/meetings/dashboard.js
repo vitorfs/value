@@ -138,12 +138,12 @@ $(function () {
 
     if ($(target).is(":visible")) {
       $(".btn-chart-toggle .glyphicon", container).removeClass("glyphicon-minus").addClass("glyphicon-plus");
-      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .btn-chart-delete, .btn-chart-edit, .dropdown-toggle", container).prop("disabled", true);
+      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .dropdown-toggle", container).prop("disabled", true);
       $(target).slideUp();
     }
     else {
       $(".btn-chart-toggle .glyphicon", container).addClass("glyphicon-minus").removeClass("glyphicon-plus");
-      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .btn-chart-delete, .btn-chart-edit, .dropdown-toggle", container).prop("disabled", false);
+      $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .dropdown-toggle", container).prop("disabled", false);
       $(target).slideDown(400, function () {
         if (!$(container).hasClass("loaded")) {
           $(container).loadchart();

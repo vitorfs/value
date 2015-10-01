@@ -16,8 +16,8 @@
 </div>
 
 <div class="form-group{% if form.meeting_items.errors %} has-error{% endif %}">
-  <label for="table-decision-items" class="control-label">Select the decision items to create a scenario</label>
-  <table class="table table-check-all table-condensed" id="table-decision-items" style="margin-bottom: 0;">
+  <label for="{{ form.prefix }}-table-decision-items" class="control-label">Select the decision items to create a scenario</label>
+  <table class="table table-check-all table-condensed" id="{{ form.prefix }}-table-decision-items" style="margin-bottom: 0;">
     <thead>
       <tr>
         <th><input type="checkbox"></th>

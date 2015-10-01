@@ -23,13 +23,27 @@ def add_scenario(request, deliverable_id, meeting_id):
     json_context = dict()
     if request.method == 'POST':
         form = ScenarioForm(request.POST, instance=scenario, prefix='add')
-        if form.is_valid():
+        is_valid = json_context['is_valid'] = form.is_valid()
+        if is_valid:
             form.save()
-            json_context['is_valid'] = True
-        else:
-            json_context['is_valid'] = False
     else:
         form = ScenarioForm(instance=scenario, prefix='add')
+    context = RequestContext(request, { 'form': form })
+    json_context['form'] = render_to_string('meetings/dashboard/includes/partial_scenario_form.html', context)
+    return HttpResponse(json.dumps(json_context), content_type='application/json')
+
+@login_required
+def edit_scenario(request, deliverable_id, meeting_id, scenario_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    scenario = get_object_or_404(Scenario, pk=scenario_id)
+    json_context = dict()
+    if request.method == 'POST':
+        form = ScenarioForm(request.POST, instance=scenario, prefix='edit')
+        is_valid = json_context['is_valid'] = form.is_valid()
+        if is_valid:
+            form.save()
+    else:
+        form = ScenarioForm(instance=scenario, prefix='edit')
     context = RequestContext(request, { 'form': form })
     json_context['form'] = render_to_string('meetings/dashboard/includes/partial_scenario_form.html', context)
     return HttpResponse(json.dumps(json_context), content_type='application/json')

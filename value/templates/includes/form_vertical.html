@@ -21,7 +21,7 @@
       {% for checkbox in field %}
         <div class="checkbox">
           <label>
-            {{ checkbox.tag }} {{ checkbox.choice_label }}
+            {{ checkbox.tag }} {{ checkbox.choice_label|safe }}
           </label>
         </div>
       {% endfor %}
