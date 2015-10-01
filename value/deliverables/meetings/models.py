@@ -277,40 +277,14 @@ class Scenario(models.Model):
     The Scenario class is used to aggregate decision items to generate different 
     types of visualization inside the dashboard.
     """
-    FACTORS = 'FACTORS'
-    FACTORS_GROUPS = 'FACTORS_GROUPS'
-    ACCEPTANCE = 'ACCEPTANCE'
-    CATEGORIES = (
-        (FACTORS, 'Factors Comparison'),
-        (FACTORS_GROUPS, 'Factors Groups Comparison'),
-        (ACCEPTANCE, 'Decision Items Acceptance'),
-        )
-
     name = models.CharField(max_length=255)
     meeting = models.ForeignKey(Meeting, related_name='scenarios')
-    category = models.CharField(max_length=14, choices=CATEGORIES, null=True, blank=True)
     meeting_items = models.ManyToManyField(MeetingItem, related_name='scenarios')
     value_ranking = models.FloatField(default=0.0)
     evaluation_summary = GenericRelation(Ranking)
 
     class Meta:
-        unique_together = (('name', 'meeting', 'category',),)
-
-    def _get_factors_group_scenario_items(self, measure_value, limit, factor_group):
-        evaluations = self.meeting.get_evaluations()
-        scenario_items = evaluations.filter(measure_value=measure_value, factor__group=factor_group) \
-            .values_list('meeting_item', flat=True) \
-            .annotate(count=Count('measure_value')) \
-            .order_by('-count')[:limit]
-        return scenario_items
-
-    def _get_factors_scenario_items(self, measure_value, limit, factors):
-        evaluations = self.meeting.get_evaluations()
-        scenario_items = evaluations.filter(measure_value=measure_value, factor__in=factors) \
-            .values_list('meeting_item', flat=True) \
-            .annotate(count=Count('measure_value')) \
-            .order_by('-count')[:limit]
-        return scenario_items
+        unique_together = (('name', 'meeting',),)
 
     def _generate_unique_name(self, base_name):
         name = base_name
@@ -325,13 +299,13 @@ class Scenario(models.Model):
         measure_value = kwargs.get('criteria')
         category = kwargs.get('category')
         name = kwargs.get('name')
+        factors = kwargs.get('factors')
 
-        if category == Scenario.FACTORS_GROUPS:
-            group = kwargs.get('factors_groups')
-            scenario_items = self._get_factors_group_scenario_items(measure_value, limit, group)
-        else:
-            factors = kwargs.get('factors')
-            scenario_items = self._get_factors_scenario_items(measure_value, limit, factors)
+        evaluations = self.meeting.get_evaluations()
+        scenario_items = evaluations.filter(measure_value=measure_value, factor__in=factors) \
+            .values_list('meeting_item', flat=True) \
+            .annotate(count=Count('measure_value')) \
+            .order_by('-count')[:limit]
 
         with transaction.atomic():
             self.name = self._generate_unique_name(name)

@@ -99,7 +99,7 @@ $(function () {
           $.get("", function (data) {
             $("#scenarios").replaceWith($("#scenarios", data));
             $("#scenarios-menu").replaceWith($("#scenarios-menu", data));
-            $(".charts .panel-heading:eq(0)").loadchart();
+            $("#scenarios .panel-heading:eq(0)").loadchart();
           }, "html");
           $("#modal-edit-scenario").modal("hide");
         }
@@ -116,14 +116,10 @@ $(function () {
   /* Scenario builder functions */
 
   $("#modal-scenario-builder").on("shown.bs.modal", function () {
-    var url = $("#btn-scenario-builder").attr("data-remote-url");
-    var category = $("#btn-scenario-builder").attr("data-scenario-builder");
+    var url = $(".js-scenario-builder").attr("data-remote-url");
     $.ajax({
       url: url,
       type: 'get',
-      data: {
-        'category': category
-      },
       dataType: 'json',
       cache: false,
       beforeSend: function () {
@@ -155,7 +151,7 @@ $(function () {
           $.get("", function (data) {
             $("#scenarios").replaceWith($("#scenarios", data));
             $("#scenarios-menu").replaceWith($("#scenarios-menu", data));
-            $(".charts .panel-heading:eq(0)").loadchart();
+            $("#scenarios .panel-heading:eq(0)").loadchart();
           }, "html");
           $("#modal-scenario-builder").modal("hide");
         }

@@ -2,7 +2,7 @@
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add-scenario">
     <span class="glyphicon glyphicon-plus"></span> Add scenario
   </button>
-  <button type="button" class="btn btn-primary" id="btn-scenario-builder" data-toggle="modal" data-target="#modal-scenario-builder" data-remote-url="{% url 'deliverables:meetings:scenario_builder' meeting.deliverable.pk meeting.pk %}" data-scenario-builder="{{ scenario_category }}">
+  <button type="button" class="btn btn-primary js-scenario-builder" data-toggle="modal" data-target="#modal-scenario-builder" data-remote-url="{% url 'deliverables:meetings:scenario_builder' meeting.deliverable.pk meeting.pk %}">
     <span class="fa fa-wrench"></span> Scenario builder
   </button>
 </div>

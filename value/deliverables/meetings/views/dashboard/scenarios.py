@@ -13,7 +13,7 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 
 from value.deliverables.meetings.models import Meeting, Scenario
-from value.deliverables.meetings.forms import ScenarioForm, FactorsScenarioBuilderForm, FactorsGroupsScenarioBuilderForm
+from value.deliverables.meetings.forms import ScenarioForm, ScenarioBuilderForm
 
 
 @login_required
@@ -70,31 +70,19 @@ def delete_scenario(request, deliverable_id, meeting_id):
         messages.error(request, 'An unexpected error ocurred.')
     return redirect(next)
 
-def get_scenario_builder_form(category):
-    ScenarioBuilderForm = forms.Form
-    if category in (Scenario.FACTORS, Scenario.ACCEPTANCE):
-        ScenarioBuilderForm = FactorsScenarioBuilderForm
-    elif category == Scenario.FACTORS_GROUPS:
-        ScenarioBuilderForm = FactorsGroupsScenarioBuilderForm
-    return ScenarioBuilderForm
-
 @login_required
 def scenario_builder(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     json_context = dict()
-    category = request.GET.get('category', request.POST.get('category'))
-    ScenarioBuilderForm = get_scenario_builder_form(category)
 
     if request.method == 'POST':
         form = ScenarioBuilderForm(request.POST, initial={ 'meeting': meeting })
-        if form.is_valid():
-            scenario = Scenario(meeting=meeting, category=category)
+        is_valid = json_context['is_valid'] = form.is_valid()
+        if is_valid:
+            scenario = Scenario(meeting=meeting)
             scenario.build(**form.cleaned_data)
-            json_context['is_valid'] = True
-        else:
-            json_context['is_valid'] = False
     else:
-        form = ScenarioBuilderForm(initial={ 'meeting': meeting, 'category': category })
+        form = ScenarioBuilderForm(initial={ 'meeting': meeting })
 
     context = RequestContext(request, { 'form': form })
     json_context['form'] = render_to_string('includes/form_vertical.html', context)

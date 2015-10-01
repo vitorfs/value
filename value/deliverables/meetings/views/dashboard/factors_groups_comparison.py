@@ -115,7 +115,6 @@ def factors_groups_scenarios(request, deliverable_id, meeting_id):
             'chart_menu_active': 'factors_groups',
             'charts': charts,
             'stakeholder_ids': stakeholder_ids,
-            'scenario_category': Scenario.FACTORS_GROUPS,
             'chart_order_options': chart_order_options,
             'order': order
             })

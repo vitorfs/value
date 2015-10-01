@@ -52,43 +52,30 @@ class ScenarioForm(forms.ModelForm):
         fields = ('name', 'meeting', 'meeting_items')
 
 
-class ScenarioBuilderForm(forms.Form):
-    name = forms.CharField(label='Create a scenario named…', max_length=255, required=True)
-    meeting = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Meeting.objects.all(), required=True)
-    category = forms.CharField(widget=forms.HiddenInput(), required=True)
-
-    def __init__(self, *args, **kwargs):
-        super(ScenarioBuilderForm, self).__init__(*args, **kwargs)
-        items_range = self.initial['meeting'].meetingitem_set.count()
-        self.fields['meeting_items_count'].choices = [(choice, choice) for choice in range(1, items_range+1)]
-        self.fields['criteria'].queryset = self.initial['meeting'].deliverable.measure.measurevalue_set.all()
-
-
 class FactorMultipleModelChoiceField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
         if obj.group:
             return u'<strong>{0}</strong>: {1}'.format(escape(obj.group.name), escape(obj.name))
         return escape(obj.name)
 
-class FactorsScenarioBuilderForm(ScenarioBuilderForm):
+class ScenarioBuilderForm(forms.Form):
+    name = forms.CharField(label='Create a scenario named…', max_length=255, required=True)
+    meeting = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Meeting.objects.all(), required=True)
     meeting_items_count = forms.ChoiceField(label='Select decision items…', required=True)
     factors = FactorMultipleModelChoiceField(
         widget=forms.CheckboxSelectMultiple(),
         label='And build the best scenario related to…', 
-        queryset=Factor.list(), 
+        queryset=Factor.objects.none(), 
         required=True
     )
     criteria = forms.ModelChoiceField(label='Based on…', queryset=None, required=True, empty_label=None)
-    
+
+    def __init__(self, *args, **kwargs):
+        super(ScenarioBuilderForm, self).__init__(*args, **kwargs)
+        items_range = self.initial['meeting'].meetingitem_set.count()
+        self.fields['meeting_items_count'].choices = [(choice, choice) for choice in range(1, items_range+1)]
+        self.fields['criteria'].queryset = self.initial['meeting'].deliverable.measure.measurevalue_set.all()
+        self.fields['factors'].queryset = self.initial['meeting'].deliverable.factors.all()
+
     class Meta:
-        fields = ('meeting', 'category', 'meeting_items_count', 'factors', 'criteria')
-
-
-class FactorsGroupsScenarioBuilderForm(ScenarioBuilderForm):
-    meeting_items_count = forms.ChoiceField(label='Select decision items…', required=True)
-    factors_groups = forms.ModelChoiceField(label='And build the best scenario related to…', queryset=FactorGroup.objects.all(), required=True, empty_label=None)
-    criteria = forms.ModelChoiceField(label='Based on', queryset=None, required=True, empty_label=None)
-    
-    class Meta:
-        fields = ('meeting', 'category', 'meeting_items_count', 'factors_groups', 'criteria')
-
+        fields = ('meeting', 'meeting_items_count', 'factors', 'criteria')

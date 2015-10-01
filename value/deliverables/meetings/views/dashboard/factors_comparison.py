@@ -110,7 +110,6 @@ def features_scenarios(request, deliverable_id, meeting_id):
         'chart_menu_active': 'features',
         'charts': charts,
         'stakeholder_ids': stakeholder_ids,
-        'scenario_category': Scenario.FACTORS,
         'chart_types_options': chart_types_options,
         'chart_type': chart_type,
         'chart_order_options': chart_order_options,

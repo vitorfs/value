@@ -128,7 +128,6 @@ def features_acceptance_scenarios(request, deliverable_id, meeting_id):
         'chart_menu_active': 'features_acceptance',
         'charts': charts,
         'stakeholder_ids': stakeholder_ids,
-        'scenario_category': Scenario.ACCEPTANCE,
         'chart_types_options': chart_types_options,
         'chart_type': chart_type,
         'chart_order_options': chart_order_options,
