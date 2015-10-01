@@ -137,12 +137,12 @@ $(function () {
     var id = $(container).attr("data-chart-id");
 
     if ($(target).is(":visible")) {
-      $(".btn-chart-toggle .glyphicon", container).removeClass("glyphicon-minus").addClass("glyphicon-plus");
+      $(".btn-chart-toggle .glyphicon", container).removeClass("glyphicon-resize-small").addClass("glyphicon-resize-full");
       $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .dropdown-toggle", container).prop("disabled", true);
       $(target).slideUp();
     }
     else {
-      $(".btn-chart-toggle .glyphicon", container).addClass("glyphicon-minus").removeClass("glyphicon-plus");
+      $(".btn-chart-toggle .glyphicon", container).addClass("glyphicon-resize-small").removeClass("glyphicon-resize-full");
       $(".btn-chart-expand, .btn-chart-modal, .btn-chart-reload, .dropdown-toggle", container).prop("disabled", false);
       $(target).slideDown(400, function () {
         if (!$(container).hasClass("loaded")) {
