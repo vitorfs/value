@@ -20,7 +20,7 @@ def meeting_item(meeting_item_id):
 
 @register.simple_tag
 def display_evaluation_summary(instance):
-    html = u'<div class="progress" style="margin-bottom: 0">'
+    html = u'<div class="progress help-cursor" style="margin-bottom: 0" title="Decision Item Evaluation Summary">'
 
     evaluation_summary = instance.evaluation_summary.all().select_related('measure_value')
     for ranking in evaluation_summary:
@@ -42,7 +42,7 @@ def display_ranking_label(ranking):
         label = 'label-danger'
     elif ranking == 0:
         label = 'label-warning'        
-    html = u'<span class="label {0} pull-right" style="margin-right: 10px; margin-top: 2px;">{1}</span>'.format(label, format_percentage(ranking))
+    html = u'<span class="label {0} pull-right help-cursor" style="margin-right: 10px; margin-top: 2px;" title="Value Ranking">{1}</span>'.format(label, format_percentage(ranking))
     return html
 
 @register.simple_tag
