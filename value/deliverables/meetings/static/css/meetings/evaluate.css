@@ -39,3 +39,11 @@
 #factor-description-container .popover {
   min-width: 50px;
 }
+
+.panel-group-evaluation .panel-heading {
+  padding: 5px 10px;
+}
+
+.panel-group-evaluation .panel-heading a {
+  color: #333;
+}

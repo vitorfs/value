@@ -10,10 +10,8 @@
           <body>
             <tr>
               <td style="width: 25%">
-                <p class="panel-title">
-                  <a href="javascript:void(0);" class="btn-toggle">{{ meeting_item.decision_item.name }}</a>
-                  {% display_info_button meeting_item %}
-                </p>
+                <a href="javascript:void(0);" class="btn-toggle">{{ meeting_item.decision_item.name }}</a>
+                {% display_info_button meeting_item %}
               </td>
               <td>
                 <div class="progress" style="margin-bottom: 0">
@@ -29,10 +27,10 @@
         </table>
       </div>
       <div id="collapse-{{ meeting_item.pk }}" class="panel-collapse collapse"{% if forloop.first %} style="display: block;"{% endif %}>
-        <table class="table table-hover table-evaluate" data-meeting-item-id="{{ meeting_item.pk }}">
+        <table class="table table-hover table-condensed table-evaluate" data-meeting-item-id="{{ meeting_item.pk }}">
           <thead>
             <tr>
-              <th style="width: 25%">Factor</th>
+              <th style="width: 25%">Value Factor</th>
               {% for measure_value in measure_values %}
                 <th class="text-center" style="width: {{ relative_col_size }}">{{ measure_value.description }}</th>
               {% endfor %}
