@@ -35,7 +35,44 @@ $.fn.loadchart = function (callback) {
   });
 };
 
+$.fn.selectAllStakeholders = function () {
+  var container = $(this).closest(".js-stakeholders");
+  var group_name = $(this).closest("li").attr("data-target-group-name");
+  $("[data-group-name='" + group_name + "']", container).each(function () {
+    var stakeholder = $(this);
+    if (!$("[name='stakeholder']", this).is(":checked")) {
+      $(stakeholder).click();
+    }
+  });
+};
+
+$.fn.selectNoneStakeholders = function () {
+  var container = $(this).closest(".js-stakeholders");
+  var group_name = $(this).closest("li").attr("data-target-group-name");
+  $("[data-group-name='" + group_name + "']", container).each(function () {
+    var stakeholder = $(this);
+    if ($("[name='stakeholder']", this).is(":checked")) {
+      $(stakeholder).click();
+    }
+  });
+};
+
 $(function () {
+
+  $(document).on("click", ".js-select-all-stakeholders", function (e) {
+    e.preventDefault();
+    var icon = $(".glyphicon", this);
+    var unselectAllStakeholders = $(icon).hasClass("glyphicon-check");
+    if (unselectAllStakeholders) {
+      $(this).selectNoneStakeholders();
+      $(icon).removeClass().addClass("glyphicon glyphicon-unchecked");
+    }
+    else {
+      $(this).selectAllStakeholders();
+      $(icon).removeClass().addClass("glyphicon glyphicon-check");
+    }
+    return false;
+  });
 
   $(document).on("click", ".js-select-stakeholder", function (e) {
     e.preventDefault();
@@ -51,6 +88,25 @@ $(function () {
       $(checkbox).prop("checked", true);
       $(icon).addClass("glyphicon glyphicon-check");
     }
+
+    var groupName = $(this).attr("data-group-name");
+    var allStakeholdersInGroupAreChecked = true;
+    $(".js-stakeholders a[data-group-name='" + groupName + "']").each(function () {
+      var checkbox = $("input[type='checkbox'][name='stakeholder']", this);
+      if (!$(checkbox).is(":checked")) {
+        allStakeholdersInGroupAreChecked = false;
+        return;
+      }
+    });
+
+    var groupIcon = $("[data-target-group-name='" + groupName + "'] .glyphicon");
+    if (allStakeholdersInGroupAreChecked) {
+      $(groupIcon).removeClass().addClass("glyphicon glyphicon-check");
+    }
+    else {
+      $(groupIcon).removeClass().addClass("glyphicon glyphicon-unchecked");
+    }
+
     return false;
   });
 
@@ -127,30 +183,6 @@ $(function () {
     url += "&popup=1";
     var name = uuid();
     var win = window.open(url, name, 'height=500,width=800,resizable=yes,scrollbars=yes');
-  });
-
-  $(document).on("click", ".select-all-stakeholders", function (e) {
-    e.stopPropagation();
-    var container = $(this).closest(".js-stakeholders");
-    var group_name = $(this).closest("li").attr("data-target-group-name");
-    $("[data-group-name='" + group_name + "']", container).each(function () {
-      var stakeholder = $(this);
-      if (!$("[name='stakeholder']", this).is(":checked")) {
-        $(stakeholder).click();
-      }
-    });
-  });
-
-  $(document).on("click", ".select-none-stakeholders", function (e) {
-    e.stopPropagation();
-    var container = $(this).closest(".js-stakeholders");
-    var group_name = $(this).closest("li").attr("data-target-group-name");
-    $("[data-group-name='" + group_name + "']", container).each(function () {
-      var stakeholder = $(this);
-      if ($("[name='stakeholder']", this).is(":checked")) {
-        $(stakeholder).click();
-      }
-    });
   });
 
   $(document).on("click", ".btn-chart-delete", function () {

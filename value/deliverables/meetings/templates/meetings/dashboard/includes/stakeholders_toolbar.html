@@ -3,17 +3,16 @@
     <span class="fa fa-users"></span>
     <span class="caret"></span>
   </button>
-  <ul class="dropdown-menu dropdown-menu-right js-stakeholders" role="menu" style="width: 200px;">
+  <ul class="dropdown-menu dropdown-menu-right js-stakeholders" role="menu">
+    <li role="presentation" class="dropdown-header">
+      Stakeholders
+    </li>
     {% for group_name, stakeholders in meeting.get_stakeholder_groups.iteritems %}
-      <li role="presentation" class="dropdown-header" data-target-group-name="{{ group_name }}">
-        <div class="row">
-          <div class="col-xs-6">
-            {{ group_name }}
-          </div>
-          <div class="col-xs-6 text-right">
-            <a href="javascript:void(0);" class="select-all-stakeholders">All</a> / <a href="javascript:void(0);" class="select-none-stakeholders">None</a>
-          </div>
-        </div>
+      <li role="presentation" data-target-group-name="{{ group_name }}">
+        <a href="javascript:void(0);" tabindex="-1" class="js-select-all-stakeholders">
+          <span class="glyphicon glyphicon-check"></span>
+          <strong>{{ group_name }}</strong>
+        </a>
       </li>
       {% for stakeholder in stakeholders %}
         <li role="presentation">
@@ -23,12 +22,13 @@
               <span class="glyphicon glyphicon-check"></span> 
             {% else %}
               <input type="checkbox" name="stakeholder" value="{{ stakeholder.pk }}" style="display: none;" autocomplete="off">
-              <span class="glyphicon glyphicon-unchecked"></span> 
+              <span class="glyphicon glyphicon-unchecked"></span>
             {% endif %}
             {{ stakeholder.profile.get_display_name }}
           </a>
         </li>
       {% endfor %}
+      <li class="divider" role="separator"></li>
     {% endfor %}
     <li role="presentation">
       <a role="menuitem" tabindex="-1" href="javascript:void(0);">
