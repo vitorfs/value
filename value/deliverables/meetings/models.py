@@ -324,19 +324,17 @@ class Scenario(models.Model):
         limit = int(kwargs.get('meeting_items_count'))
         measure_value = kwargs.get('criteria')
         category = kwargs.get('category')
+        name = kwargs.get('name')
 
         if category == Scenario.FACTORS_GROUPS:
             group = kwargs.get('factors_groups')
             scenario_items = self._get_factors_group_scenario_items(measure_value, limit, group)
-            base_name = u'{0} Scenario {1} {2}'.format(group.name, measure_value.description, measure_value.measure.name)
         else:
             factors = kwargs.get('factors')
-            print factors
             scenario_items = self._get_factors_scenario_items(measure_value, limit, factors)
-            base_name = u'Scenario {0} {1}'.format(measure_value.description, measure_value.measure.name)
 
         with transaction.atomic():
-            self.name = self._generate_unique_name(base_name)
+            self.name = self._generate_unique_name(name)
             self.save()
             self.meeting_items.add(*scenario_items)
 

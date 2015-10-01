@@ -3,8 +3,7 @@
 {% load staticfiles %}
 
 {% block javascript %}
-  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
-  <script src="{% static 'js/meetings/dashboard.js' %}"></script>
+  {{ block.super }}
   <script>
     $(function () {
       $(".charts .panel-heading").each(function () {

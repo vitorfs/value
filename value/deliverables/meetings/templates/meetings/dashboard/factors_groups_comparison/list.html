@@ -3,9 +3,8 @@
 {% load staticfiles %}
 
 {% block javascript %}
-  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
+  {{ block.super }}
   <script src="{% static 'js/highcharts/highcharts-more.js' %}"></script>
-  <script src="{% static 'js/meetings/dashboard.js' %}"></script>
   <script>
     $(function () {
       $(".charts .panel-heading:eq(0)").loadchart();

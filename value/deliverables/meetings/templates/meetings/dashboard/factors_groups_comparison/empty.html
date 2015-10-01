@@ -1,0 +1,32 @@
+{% extends 'meetings/dashboard/base_charts.html' %}
+
+{% block breadcrumb_extra %}
+  <li class="active">Factors Groups Comparison</li>
+{% endblock breadcrumb_extra %}
+
+{% block charts %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        Factors Groups Comparison
+      </h3>
+    </div>
+    <div class="panel-body">
+      <div class="well blank-state" style="margin-bottom: 0;">
+        <span class="fa fa-clone"></span>
+        <h3>The factors groups directory is empty.</h3>
+        <p class="lead">
+          The application is not fully configurated.
+          In order to visualize the <strong>Factors Groups Comparison</strong> charts the Administrator
+          must create value factors groups first.
+        </p>
+        {% if user.is_superuser %}
+          <a href="{% url 'factors:groups' %}" class="btn btn-primary">
+            <span class="glyphicon glyphicon-plus"></span>
+            Add factors groups
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock charts %}

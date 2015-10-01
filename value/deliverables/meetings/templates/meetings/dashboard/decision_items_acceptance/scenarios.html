@@ -3,14 +3,16 @@
 {% load staticfiles %}
 
 {% block javascript %}
-  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
+  {{ block.super }}
   <script src="{% static 'js/highcharts/highcharts-more.js' %}"></script>
   <script src="{% static 'js/highcharts/modules/data.js' %}"></script>
   <script src="{% static 'js/highcharts/modules/treemap.js' %}"></script>
   <script src="{% static 'js/highcharts/modules/drilldown.js' %}"></script>
-  <script src="{% static 'js/meetings/dashboard.js' %}"></script>
-  <script src="{% static 'js/meetings/meetings.js' %}"></script>
-  <script src="{% static 'js/meetings/scenarios.js' %}"></script>
+  <script>
+    $(function () {
+      $(".charts .panel-heading:eq(0)").loadchart();
+    });
+  </script>
 {% endblock javascript %}
 
 {% block breadcrumb_extra %}
@@ -34,35 +36,14 @@
       </ul>
       <div class="panel-group charts" id="scenarios">
         {% if charts %}
-          <div style="margin-bottom: 20px;">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add-scenario">
-              <span class="glyphicon glyphicon-plus"></span> Add scenario
-            </button>
-            <button type="button" class="btn btn-primary" id="btn-scenario-builder" data-toggle="modal" data-target="#modal-scenario-builder" data-remote-url="{% url 'deliverables:meetings:scenario_builder' meeting.deliverable.pk meeting.pk %}" data-scenario-builder="{{ scenario_category }}">
-              <span class="fa fa-wrench"></span> Scenario builder
-            </button>
-          </div>
+          {% include 'meetings/dashboard/includes/partial_scenarios_action_buttons.html' %}
           {% for chart in charts %}
             {% include 'meetings/dashboard/decision_items_acceptance/chart.html' with opened=forloop.first can_edit=True can_delete=True %}
           {% endfor %}
         {% else %}
-          <div class="well blank-state">
-            <span class="fa fa-bar-chart"></span>
-            <h3>You haven't created any scenario yet.</h3>
-            <p class="lead">A scenario can be used to combine different set of decision items.</p>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add-scenario">
-              <span class="glyphicon glyphicon-plus"></span> Add the first scenario
-            </button>
-            <span style="margin: 0 10px;">or</span>
-            <button type="button" class="btn btn-primary" id="btn-scenario-builder" data-toggle="modal" data-target="#modal-scenario-builder" data-remote-url="{% url 'deliverables:meetings:scenario_builder' meeting.deliverable.pk meeting.pk %}"  data-scenario-builder="{{ scenario_category }}">
-              <span class="fa fa-wrench"></span> Build an automatic scenario
-            </button>
-          </div>
+          {% include 'meetings/dashboard/includes/partial_scenarios_empty_state.html' %}
         {% endif %}
       </div>
     </div>
   </div>
-
-  {% include 'meetings/dashboard/includes/scenario_actions.html' %}
-
 {% endblock charts %}

@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import datetime
 
 from django import forms
@@ -50,6 +52,7 @@ class ScenarioForm(forms.ModelForm):
 
 
 class ScenarioBuilderForm(forms.Form):
+    name = forms.CharField(label='Create a scenario named…', max_length=255, required=True)
     meeting = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Meeting.objects.all(), required=True)
     category = forms.CharField(widget=forms.HiddenInput(), required=True)
 
@@ -61,22 +64,22 @@ class ScenarioBuilderForm(forms.Form):
 
 
 class FactorsScenarioBuilderForm(ScenarioBuilderForm):
-    meeting_items_count = forms.ChoiceField(label='Select decision items', required=True)
+    meeting_items_count = forms.ChoiceField(label='Select decision items…', required=True)
     factors = forms.ModelMultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(),
-        label='And build the best scenario related to', 
+        label='And build the best scenario related to…', 
         queryset=Factor.list(), 
         required=True
     )
-    criteria = forms.ModelChoiceField(label='Based on', queryset=None, required=True, empty_label=None)
+    criteria = forms.ModelChoiceField(label='Based on…', queryset=None, required=True, empty_label=None)
     
     class Meta:
         fields = ('meeting', 'category', 'meeting_items_count', 'factors', 'criteria')
 
 
 class FactorsGroupsScenarioBuilderForm(ScenarioBuilderForm):
-    meeting_items_count = forms.ChoiceField(label='Select decision items', required=True)
-    factors_groups = forms.ModelChoiceField(label='And build the best scenario related to', queryset=FactorGroup.objects.all(), required=True, empty_label=None)
+    meeting_items_count = forms.ChoiceField(label='Select decision items…', required=True)
+    factors_groups = forms.ModelChoiceField(label='And build the best scenario related to…', queryset=FactorGroup.objects.all(), required=True, empty_label=None)
     criteria = forms.ModelChoiceField(label='Based on', queryset=None, required=True, empty_label=None)
     
     class Meta:

@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.template.loader import render_to_string
 
+from value.factors.models import Group as FactorGroup
 from value.deliverables.meetings.models import Meeting, Scenario
 from value.deliverables.meetings.charts import Highcharts
 from value.deliverables.meetings.utils import *
@@ -40,27 +41,40 @@ def get_factors_groups_scenario_chart_dict(scenario):
     }
     return chart_data
 
+def application_has_factors_groups():
+    return FactorGroup.objects.exists()
+
 
 ''' Views '''
+
+@login_required
+def factors_groups_empty(request, meeting):
+    return render(request, 'meetings/dashboard/factors_groups_comparison/empty.html', {
+        'meeting': meeting,
+        'chart_menu_active': 'factors_groups'
+        })
 
 @login_required
 def factors_groups(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
 
-    chart_order_options = get_charts_order_dict(meeting.deliverable.measure)
-    order = get_or_set_charts_order_session(request, meeting, 'factors_groups_comparison_order')
+    if application_has_factors_groups():
+        chart_order_options = get_charts_order_dict(meeting.deliverable.measure)
+        order = get_or_set_charts_order_session(request, meeting, 'factors_groups_comparison_order')
 
-    charts = map(get_factors_groups_chart_dict, meeting.get_ordered_meeting_items(order))
-    stakeholder_ids = get_stakeholders_ids(meeting)
+        charts = map(get_factors_groups_chart_dict, meeting.get_ordered_meeting_items(order))
+        stakeholder_ids = get_stakeholders_ids(meeting)
 
-    return render(request, 'meetings/dashboard/factors_groups_comparison/list.html', { 
-        'meeting': meeting,
-        'chart_menu_active': 'factors_groups',
-        'charts': charts,
-        'stakeholder_ids': stakeholder_ids,
-        'chart_order_options': chart_order_options,
-        'order': order
-        })
+        return render(request, 'meetings/dashboard/factors_groups_comparison/list.html', { 
+            'meeting': meeting,
+            'chart_menu_active': 'factors_groups',
+            'charts': charts,
+            'stakeholder_ids': stakeholder_ids,
+            'chart_order_options': chart_order_options,
+            'order': order
+            })
+    else:
+        return factors_groups_empty(request, meeting)
 
 @login_required
 def factors_groups_chart(request, deliverable_id, meeting_id, meeting_item_id):
@@ -89,21 +103,24 @@ def factors_groups_chart(request, deliverable_id, meeting_id, meeting_item_id):
 def factors_groups_scenarios(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
 
-    chart_order_options = get_scenario_charts_order_dict(meeting.deliverable.measure)
-    order = get_or_set_scenario_charts_order_session(request, meeting, 'factors_groups_comparison_scenario_order')
+    if application_has_factors_groups():
+        chart_order_options = get_scenario_charts_order_dict(meeting.deliverable.measure)
+        order = get_or_set_scenario_charts_order_session(request, meeting, 'factors_groups_comparison_scenario_order')
 
-    charts = map(get_factors_groups_scenario_chart_dict, meeting.get_ordered_scenarios(order))
-    stakeholder_ids = get_stakeholders_ids(meeting)
+        charts = map(get_factors_groups_scenario_chart_dict, meeting.get_ordered_scenarios(order))
+        stakeholder_ids = get_stakeholders_ids(meeting)
 
-    return render(request, 'meetings/dashboard/factors_groups_comparison/scenarios.html', { 
-        'meeting': meeting,
-        'chart_menu_active': 'factors_groups',
-        'charts': charts,
-        'stakeholder_ids': stakeholder_ids,
-        'scenario_category': Scenario.FACTORS_GROUPS,
-        'chart_order_options': chart_order_options,
-        'order': order
-        })
+        return render(request, 'meetings/dashboard/factors_groups_comparison/scenarios.html', { 
+            'meeting': meeting,
+            'chart_menu_active': 'factors_groups',
+            'charts': charts,
+            'stakeholder_ids': stakeholder_ids,
+            'scenario_category': Scenario.FACTORS_GROUPS,
+            'chart_order_options': chart_order_options,
+            'order': order
+            })
+    else:
+        return factors_groups_empty(request, meeting)
 
 @login_required
 def factors_groups_scenario_chart(request, deliverable_id, meeting_id, scenario_id):

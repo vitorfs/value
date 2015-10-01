@@ -1,7 +1,5 @@
 $(function () {
 
-  $(".charts .panel-heading:eq(0)").loadchart();
-
   $("#modal-add-scenario").on("shown.bs.modal", function () {
     $.ajax({
       url: $("#form-add-scenario").attr("action"),
@@ -40,9 +38,11 @@ $(function () {
       },
       success: function (data) {
         if (data.is_valid) {
-          $("#scenarios").load(" #scenarios > *", function () {
+          $.get("", function (data) {
+            $("#scenarios").replaceWith($("#scenarios", data));
+            $("#scenarios-menu").replaceWith($("#scenarios-menu", data));
             $(".charts .panel-heading:eq(0)").loadchart();
-          });
+          }, "html");
           $("#modal-add-scenario").modal("hide");
         }
         else {
@@ -92,9 +92,11 @@ $(function () {
       },
       success: function (data) {
         if (data.is_valid) {
-          $("#scenarios").load(" #scenarios > *", function () {
+          $.get("", function (data) {
+            $("#scenarios").replaceWith($("#scenarios", data));
+            $("#scenarios-menu").replaceWith($("#scenarios-menu", data));
             $(".charts .panel-heading:eq(0)").loadchart();
-          });
+          }, "html");
           $("#modal-scenario-builder").modal("hide");
         }
         else {

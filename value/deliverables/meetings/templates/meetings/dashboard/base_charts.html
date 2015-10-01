@@ -6,6 +6,13 @@
   <link href="{% static 'css/meetings/dashboard.css' %}" rel="stylesheet">
 {% endblock stylesheet %}
 
+{% block javascript %}
+  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
+  <script src="{% static 'js/meetings/dashboard.js' %}"></script>
+  <script src="{% static 'js/meetings/meetings.js' %}"></script>
+  <script src="{% static 'js/meetings/scenarios.js' %}"></script>
+{% endblock javascript %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
@@ -48,5 +55,6 @@
   </div>
 
   {% include 'deliverables/decision_items/includes/modal.html' %}
+  {% include 'meetings/dashboard/includes/scenario_actions.html' %}
 
 {% endblock content %}
