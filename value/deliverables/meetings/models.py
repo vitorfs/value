@@ -296,27 +296,50 @@ class Scenario(models.Model):
     class Meta:
         unique_together = (('name', 'meeting', 'category',),)
 
-    def build(self, *args, **kwargs):
-        limit = int(kwargs.get('meeting_items_count'))
-        group = kwargs.get('factors_groups')
-        measure_value = kwargs.get('criteria')
-
+    def _get_factors_group_scenario_items(self, measure_value, limit, factor_group):
         evaluations = self.meeting.get_evaluations()
-        scenario_items = evaluations.filter(measure_value=measure_value, factor__group=group) \
+        scenario_items = evaluations.filter(measure_value=measure_value, factor__group=factor_group) \
             .values_list('meeting_item', flat=True) \
             .annotate(count=Count('measure_value')) \
             .order_by('-count')[:limit]
+        return scenario_items
 
-        base_name = u'{0} Scenario {1} {2}'.format(group.name, measure_value.description, measure_value.measure.name)
+    def _get_factors_scenario_items(self, measure_value, limit, factors):
+        evaluations = self.meeting.get_evaluations()
+        scenario_items = evaluations.filter(measure_value=measure_value, factor__in=factors) \
+            .values_list('meeting_item', flat=True) \
+            .annotate(count=Count('measure_value')) \
+            .order_by('-count')[:limit]
+        return scenario_items
+
+    def _generate_unique_name(self, base_name):
         name = base_name
         name_count = 1
         while Scenario.objects.filter(meeting=self.meeting, name=name).exists():
             name_count += 1
             name = u'{0} ({1})'.format(base_name, name_count)
+        return name
+
+    def build(self, *args, **kwargs):
+        limit = int(kwargs.get('meeting_items_count'))
+        measure_value = kwargs.get('criteria')
+        category = kwargs.get('category')
+
+        if category == Scenario.FACTORS_GROUPS:
+            group = kwargs.get('factors_groups')
+            scenario_items = self._get_factors_group_scenario_items(measure_value, limit, group)
+            base_name = u'{0} Scenario {1} {2}'.format(group.name, measure_value.description, measure_value.measure.name)
+        else:
+            factors = kwargs.get('factors')
+            print factors
+            scenario_items = self._get_factors_scenario_items(measure_value, limit, factors)
+            base_name = u'Scenario {0} {1}'.format(measure_value.description, measure_value.measure.name)
+
         with transaction.atomic():
-            self.name = name
+            self.name = self._generate_unique_name(base_name)
             self.save()
             self.meeting_items.add(*scenario_items)
+
         return self
 
     def get_value_ranking_display(self):

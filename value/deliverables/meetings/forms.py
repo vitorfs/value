@@ -62,7 +62,12 @@ class ScenarioBuilderForm(forms.Form):
 
 class FactorsScenarioBuilderForm(ScenarioBuilderForm):
     meeting_items_count = forms.ChoiceField(label='Select decision items', required=True)
-    factors = forms.ModelChoiceField(label='And build the best scenario related to', queryset=Factor.list(), required=True, empty_label=None)    
+    factors = forms.ModelMultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple(),
+        label='And build the best scenario related to', 
+        queryset=Factor.list(), 
+        required=True
+    )
     criteria = forms.ModelChoiceField(label='Based on', queryset=None, required=True, empty_label=None)
     
     class Meta:
