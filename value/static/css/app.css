@@ -546,3 +546,7 @@ th.headerSortUp:after {
   -o-transform: scale(0.8) rotateY(45deg) translateZ(calc(-140px));
   transform: scale(0.8) rotateY(45deg) translateZ(calc(-140px));
 }
+
+.help-cursor {
+  cursor: help;
+}

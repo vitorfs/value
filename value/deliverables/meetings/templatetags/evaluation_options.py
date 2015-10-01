@@ -21,8 +21,6 @@ def selected(is_evaluated):
 
 @register.simple_tag
 def evaluation_options(evaluations, meeting_item, factor, measure_values):
-
-    
     if meeting_item.meeting.is_closed():
         can_evaluate = 'not-evaluable'
     else:
@@ -51,8 +49,12 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values):
     if factor.group:
         factor_name = u'<strong>{0}</strong>: {1}'.format(escape(factor.group.name), escape(factor.name))
 
+    factor_description = 'No description'
+    if factor.description:
+        factor_description = escape(factor.description)
+
     html += '''<td>
- <a href="javascript:void(0)" class="js-factor-description" data-content="{3}" data-container="#factor-description-container" data-trigger="focus">{0}</a>
+ <span class="js-factor-description help-cursor" data-content="{3}" data-container="#factor-description-container" data-trigger="hover">{0}</span>
  <a href="javascript:void(0);" 
  class="btn-rationale js-rationale {1} pull-right" 
  data-toggle="popover" 
@@ -65,7 +67,7 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values):
         factor_name,
         no_comment,
         escape(rationale_text),
-        escape(factor.description)
+        factor_description
     )
 
     for measure_value in measure_values:
