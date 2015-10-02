@@ -16,7 +16,7 @@ from value.deliverables.meetings.charts import Highcharts
 from value.deliverables.meetings.models import Meeting, Scenario
 from value.deliverables.meetings.forms import ScenarioForm, ScenarioBuilderForm
 from value.deliverables.meetings.views.dashboard.factors_comparison import get_features_scenario_chart_dict
-from value.deliverables.meetings.views.dashboard.factors_groups_comparison import get_factors_groups_scenario_chart_dict
+from value.deliverables.meetings.views.dashboard.factors_groups_comparison import get_factors_groups_scenario_chart_dict, application_has_factors_groups
 from value.deliverables.meetings.views.dashboard.decision_items_acceptance import get_features_acceptance_scenario_chart_dict
 from value.deliverables.meetings.utils import *
 
@@ -28,6 +28,14 @@ def get_scenario_overview_chart_dict(scenario):
         'id': 'scenario-overview',
         'name': 'Scenario Overview',
         'remote': reverse('deliverables:meetings:scenario_overview_chart', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk))
+    }
+    return chart_data
+
+def get_scenario_value_ranking_chart_dict(scenario):
+    chart_data = {
+        'id': 'scenario-value-ranking',
+        'name': 'Scenario Value Ranking',
+        'remote': reverse('deliverables:meetings:scenario_value_ranking_chart', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk))
     }
     return chart_data
 
@@ -78,12 +86,15 @@ def scenario(request, deliverable_id, meeting_id, scenario_id):
     chart_overview = get_scenario_overview_chart_dict(scenario)
     chart_overview_type = 'stacked_bars'
 
+    chart_value_ranking = get_scenario_value_ranking_chart_dict(scenario)
+
     chart_factors = get_features_scenario_chart_dict(scenario)
     chart_factors['name'] = 'Factors Comparison'
     chart_factors_type = 'stacked_columns'
 
     chart_factors_groups = get_factors_groups_scenario_chart_dict(scenario)
     chart_factors_groups['name'] = 'Factors Group Comparison'
+    display_chart_factors_groups = application_has_factors_groups()
 
     chart_acceptance = get_features_acceptance_scenario_chart_dict(scenario)
     chart_acceptance['name'] = 'Decision Items Acceptance'
@@ -91,8 +102,10 @@ def scenario(request, deliverable_id, meeting_id, scenario_id):
 
     return render(request, 'meetings/dashboard/scenarios/list.html', {
         'meeting': meeting,
+        'scenario': scenario,
         'chart_menu_active': scenario.pk,
         'scenario': scenario,
+        'delete_scenario_next': reverse('deliverables:meetings:dashboard', args=(meeting.deliverable.pk, meeting.pk)),
 
         'stakeholder_ids': stakeholder_ids,
         'bar_chart_types_options': bar_chart_types_options,
@@ -101,10 +114,13 @@ def scenario(request, deliverable_id, meeting_id, scenario_id):
         'chart_overview': chart_overview,
         'chart_overview_type': chart_overview_type,
 
+        'chart_value_ranking': chart_value_ranking,
+
         'chart_factors': chart_factors,
         'chart_factors_type': chart_factors_type,
 
         'chart_factors_groups': chart_factors_groups,
+        'display_chart_factors_groups': display_chart_factors_groups,
 
         'chart_acceptance': chart_acceptance,
         'chart_acceptance_type': chart_acceptance_type
@@ -133,6 +149,24 @@ def scenario_overview_chart(request, deliverable_id, meeting_id, scenario_id):
             'chart_types_options': chart_types_options,
             'chart_type': chart_type,
             'stakeholder_ids': stakeholder_ids,
+            'dump': dump
+            })
+
+@login_required
+def scenario_value_ranking_chart(request, deliverable_id, meeting_id, scenario_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    scenario = get_object_or_404(Scenario, pk=scenario_id)
+    
+    options = Highcharts().value_ranking_scenario(scenario)
+    dump = json.dumps(options)
+    chart = get_scenario_value_ranking_chart_dict(scenario)
+
+    if 'application/json' in request.META.get('HTTP_ACCEPT'):
+        return HttpResponse(dump, content_type='application/json')
+    else:
+        return render(request, 'meetings/dashboard/value_ranking/popup.html', { 
+            'meeting': meeting,
+            'chart': chart,
             'dump': dump
             })
 

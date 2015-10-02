@@ -178,9 +178,9 @@ class Highcharts(object):
 
         return options
 
-    def value_ranking(self, meeting):
-        categories = meeting.meetingitem_set.all().values_list('decision_item__name', flat=True).order_by('-value_ranking')
-        data = meeting.meetingitem_set.all().values_list('value_ranking', flat=True).order_by('-value_ranking')
+    def _value_ranking(self, meeting_items):
+        categories = meeting_items.values_list('decision_item__name', flat=True).order_by('-value_ranking')
+        data = meeting_items.values_list('value_ranking', flat=True).order_by('-value_ranking')
         data = [round(value, 2) for value in data]
 
         options = {
@@ -200,6 +200,14 @@ class Highcharts(object):
             }]
         }
         return options
+
+    def value_ranking(self, meeting):
+        meeting_items = meeting.meetingitem_set.all()
+        return self._value_ranking(meeting_items)
+
+    def value_ranking_scenario(self, scenario):
+        meeting_items = scenario.meeting_items.all()
+        return self._value_ranking(meeting_items)
 
     def feature_comparison_bar_chart(self, meeting, measure_value, stakeholder_ids):
         stakeholder_ids = list(set(stakeholder_ids))

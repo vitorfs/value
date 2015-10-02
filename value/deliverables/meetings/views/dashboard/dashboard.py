@@ -70,29 +70,36 @@ def dashboard_stakeholders_input_chart(request, deliverable_id, meeting_id):
             'dump': dump
             })
 
+
+''' Value Ranking '''
+
+def get_value_ranking_chart_dict(meeting):
+    chart_data = {
+        'id': 'value-ranking',
+        'name': 'Value Ranking',
+        'remote': reverse('deliverables:meetings:value_ranking', args=(meeting.deliverable.pk, meeting.pk))
+    }
+    return chart_data
+
 @login_required
 def value_ranking(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    chart = Highcharts()
-    options = chart.value_ranking(meeting)
+    options = Highcharts().value_ranking(meeting)
     dump = json.dumps(options)
-    chart_data = { 
-        'chart_title': 'Value Ranking', 
-    }
+    chart = get_value_ranking_chart_dict(meeting)
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        template_name = 'meetings/dashboard/value_ranking.html'
+        template_name = 'meetings/dashboard/value_ranking/list.html'
         if 'popup' in request.GET:
-            template_name = 'meetings/dashboard/dashboard_popup.html'
+            template_name = 'meetings/dashboard/value_ranking/popup.html'
         return render(request, template_name, { 
             'meeting': meeting,
-            'chart_page_title': 'Value Ranking',
             'chart_menu_active': 'value_ranking',
-            'chart_uri': 'value-ranking',
-            'chart': chart_data,
+            'chart': chart,
             'dump': dump
             })
+
 
 ''' Decision Items Overview '''
 

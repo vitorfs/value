@@ -40,7 +40,9 @@ $(function () {
           $.get("", function (data) {
             $("#scenarios").replaceWith($("#scenarios", data));
             $("#scenarios-menu").replaceWith($("#scenarios-menu", data));
-            $(".charts .panel-heading:eq(0)").loadchart();
+            $(".charts [data-preload='True']").each(function () {
+              $(".panel-heading", this).loadchart();
+            });
           }, "html");
           $("#modal-add-scenario").modal("hide");
         }
@@ -99,7 +101,9 @@ $(function () {
           $.get("", function (data) {
             $("#scenarios").replaceWith($("#scenarios", data));
             $("#scenarios-menu").replaceWith($("#scenarios-menu", data));
-            $("#scenarios .panel-heading:eq(0)").loadchart();
+            $(".charts [data-preload='True']").each(function () {
+              $(".panel-heading", this).loadchart();
+            });
           }, "html");
           $("#modal-edit-scenario").modal("hide");
         }

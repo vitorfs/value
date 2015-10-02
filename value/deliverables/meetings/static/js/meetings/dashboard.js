@@ -132,9 +132,7 @@ $(function () {
   $(document).on("click", ".btn-chart-toggle", function () {
 
     var container = $(this).closest(".panel-heading");
-
     var target = $(container).attr("data-target");
-    var id = $(container).attr("data-chart-id");
 
     if ($(target).is(":visible")) {
       $(".btn-chart-toggle .glyphicon", container).removeClass("glyphicon-resize-small").addClass("glyphicon-resize-full");
@@ -186,9 +184,9 @@ $(function () {
   });
 
   $(document).on("click", ".btn-chart-delete", function () {
-    var container = $(this).closest("form");
+    var container = $(this).closest(".panel");
     var scenario_id = $(container).attr("data-chart-id");
-    var name = $(".panel-title", container).text();
+    var name = $(this).attr("data-chart-name");
 
     $("#delete-scenario").val(scenario_id);
     $(".scenario-name").text(name);

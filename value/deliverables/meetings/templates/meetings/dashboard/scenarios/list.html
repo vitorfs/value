@@ -22,18 +22,40 @@
 {% endblock breadcrumb_extra %}
 
 {% block charts %}
-  <div class="panel panel-default">
+  <div class="panel panel-default" id="scenarios" data-chart-id="{{ scenario.pk }}">
     <div class="panel-heading">
       <h3 class="panel-title">
+        <div class="btn-group btn-group-sm pull-right chart-options" role="group" aria-label="Scenario Options" style="margin-top: -6px;">
+          <button type="button" 
+                  class="btn btn-default btn-sm btn-chart-edit"
+                  title="Edit" 
+                  data-remote-url="{% url 'deliverables:meetings:edit_scenario' meeting.deliverable.pk meeting.pk scenario.pk %}"
+                  data-toggle="modal"
+                  data-target="#modal-edit-scenario">
+            <span class="glyphicon glyphicon-pencil"></span>
+          </button>
+          <button type="button" class="btn btn-default btn-sm btn-chart-delete" title="Delete" data-chart-name="{{ scenario.name }}">
+            <span class="glyphicon glyphicon-trash"></span>
+          </button>
+        </div>
         {{ scenario.name }}
       </h3>
     </div>
     <div class="panel-body">
       <div class="panel-group charts">
-        {% include 'meetings/dashboard/decision_items_overview/chart.html' with chart=chart_overview chart_type=chart_overview_type chart_types_options=bar_chart_types_options opened=True %}
-        {% include 'meetings/dashboard/factors_comparison/chart.html' with chart=chart_factors chart_type=chart_factors_type chart_types_options=bar_chart_types_options opened=True %}
-        {% include 'meetings/dashboard/factors_groups_comparison/chart.html' with chart=chart_factors_groups opened=True %}
-        {% include 'meetings/dashboard/decision_items_acceptance/chart.html' with chart=chart_acceptance chart_type=chart_acceptance_type chart_types_options=treemap_chart_types_options opened=True %}
+        <div class="row">
+          <div class="col-md-6">
+            {% include 'meetings/dashboard/decision_items_overview/chart.html' with chart=chart_overview prefix='overview_' chart_type=chart_overview_type chart_types_options=bar_chart_types_options opened=True %}
+          </div>
+          <div class="col-md-6">
+            {% include 'meetings/dashboard/value_ranking/chart.html' with chart=chart_value_ranking prefix='value_ranking_' opened=True %}
+          </div>
+        </div>
+        {% include 'meetings/dashboard/factors_comparison/chart.html' with chart=chart_factors prefix='factors_' chart_type=chart_factors_type chart_types_options=bar_chart_types_options opened=True %}
+        {% if display_chart_factors_groups %}
+          {% include 'meetings/dashboard/factors_groups_comparison/chart.html' with chart=chart_factors_groups prefix='factors_groups_' opened=True %}
+        {% endif %}
+        {% include 'meetings/dashboard/decision_items_acceptance/chart.html' with chart=chart_acceptance prefix='acceptance_' chart_type=chart_acceptance_type chart_types_options=treemap_chart_types_options opened=True %}
       </div>
     </div>
   </div>

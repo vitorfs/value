@@ -39,7 +39,7 @@
 <form method="post" action="{% url 'deliverables:meetings:delete_scenario' meeting.deliverable.pk meeting.pk %}" id="form-delete-scenario">
   {% csrf_token %}
   <input type="hidden" name="scenario" id="delete-scenario">
-  <input type="hidden" name="next" value="{{ request.path }}">
+  <input type="hidden" name="next" value="{% if delete_scenario_next %}{{ delete_scenario_next }}{% else %}{{ request.path }}{% endif %}">
   <div class="modal fade" id="modal-delete-scenario">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
