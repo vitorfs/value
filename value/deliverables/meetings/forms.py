@@ -4,6 +4,7 @@ import datetime
 
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.utils.html import escape
 
 from value.factors.models import Factor, Group as FactorGroup
@@ -67,7 +68,7 @@ class ScenarioBuilderForm(forms.Form):
         label='Related to', 
         queryset=Factor.objects.none(), 
         required=True
-    )
+        )
     criteria = forms.ModelChoiceField(label='Based on', queryset=None, required=True, empty_label=None)
 
     def __init__(self, *args, **kwargs):
@@ -79,3 +80,25 @@ class ScenarioBuilderForm(forms.Form):
 
     class Meta:
         fields = ('meeting', 'meeting_items_count', 'factors', 'criteria')
+
+def validate_scenarios_selection(value):
+    if len(value) != 2:
+        raise ValidationError('Select exactly two scenarios to compare.')
+
+
+class CompareScenarioForm(forms.Form):
+    meeting = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Meeting.objects.all(), required=True)
+    scenarios = forms.ModelMultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple(), 
+        label='Select two scenarios to compare',
+        queryset=Scenario.objects.none(), 
+        required=True
+        )
+
+    def __init__(self, *args, **kwargs):
+        super(CompareScenarioForm, self).__init__(*args, **kwargs)
+        self.fields['scenarios'].queryset = self.initial['meeting'].scenarios.all()
+        self.fields['scenarios'].validators.append(validate_scenarios_selection)
+
+    class Meta:
+        fields = ('meeting', 'meeting_items')

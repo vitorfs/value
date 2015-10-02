@@ -92,3 +92,10 @@
     </div>
   </div>
 </div>
+
+<form id="form-scenario-compare" method="post" action="{% url 'deliverables:meetings:compare_scenario' meeting.deliverable.pk meeting.pk %}">
+  {% csrf_token %}
+  <div class="modal fade" id="modal-scenario-compare" data-modal-index="1">
+    <div class="modal-dialog"></div>
+  </div>
+</form>

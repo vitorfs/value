@@ -1,0 +1,28 @@
+<div class="row">
+  {% for scenario in scenarios %}
+    <div class="col-md-6">
+      <h4 style="margin-top: 0;">{{ scenario.name }}</h4>
+      {% with 'overview_'|add:scenario.name|slugify as prefix %}
+        {% include 'meetings/dashboard/decision_items_overview/chart.html' with chart=scenario.chart_overview chart_type=scenario.chart_overview_type chart_types_options=bar_chart_types_options opened=True %}
+      {% endwith %}
+
+      {% with 'value_ranking_'|add:scenario.name|slugify as prefix %}
+        {% include 'meetings/dashboard/value_ranking/chart.html' with chart=scenario.chart_value_ranking opened=True %}
+      {% endwith %}
+
+      {% with 'factors_'|add:scenario.name|slugify as prefix %}
+        {% include 'meetings/dashboard/factors_comparison/chart.html' with chart=scenario.chart_factors chart_type=scenario.chart_factors_type chart_types_options=bar_chart_types_options opened=True %}
+      {% endwith %}
+
+      {% if display_chart_factors_groups %}
+        {% with 'factors_groups_'|add:scenario.name|slugify as prefix %}
+          {% include 'meetings/dashboard/factors_groups_comparison/chart.html' with chart=scenario.chart_factors_groups opened=True %}
+        {% endwith %}
+      {% endif %}
+
+      {% with 'acceptance_'|add:scenario.name|slugify as prefix %}
+        {% include 'meetings/dashboard/decision_items_acceptance/chart.html' with chart=scenario.chart_acceptance chart_type=scenario.chart_acceptance_type chart_types_options=treemap_chart_types_options opened=True %}
+      {% endwith %}
+    </div>
+  {% endfor %}
+</div>

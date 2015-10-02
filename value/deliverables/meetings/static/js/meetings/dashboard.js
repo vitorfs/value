@@ -119,13 +119,12 @@ $(function () {
     $("#expand-chart .modal-body").html("<div id='modal-chart-container' style='min-height: 500px'></div>")
 
     var chart = $(".panel-body", container).highcharts();
-    
 
     $("#expand-chart").modal();
-
-    $("#expand-chart").on("shown.bs.modal", function () {
+    setTimeout(function () {
       $("#modal-chart-container").highcharts(chart.options);
-    })
+    }, 250);
+    
 
   });
 

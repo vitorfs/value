@@ -18,17 +18,13 @@
       <span class="help-block">{{ field.help_text }}</span>
     {% elif field|fieldtype == 'CheckboxSelectMultiple' %}
       <label for="{{ field.id_for_label }}" class="control-label" style="margin-bottom: 0;">{{ field.label }}</label>
-      <div class="row">
-        {% for checkbox in field %}
-        <div class="col-xs-6">
-          <div class="checkbox">
-            <label>
-              {{ checkbox.tag }} {{ checkbox.choice_label|safe }}
-            </label>
-          </div>
-        </div>
-        {% endfor %}
+      {% for checkbox in field %}
+      <div class="checkbox">
+        <label>
+          {{ checkbox.tag }} {{ checkbox.choice_label|safe }}
+        </label>
       </div>
+      {% endfor %}
       {% for error in field.errors %}
         <p class="help-block">{{ error }}</p>
       {% endfor %}

@@ -1,13 +1,7 @@
 {% extends 'meetings/dashboard/base_charts.html' %}
 
-{% load staticfiles %}
-
 {% block javascript %}
   {{ block.super }}
-  <script src="{% static 'js/highcharts/highcharts-more.js' %}"></script>
-  <script src="{% static 'js/highcharts/modules/data.js' %}"></script>
-  <script src="{% static 'js/highcharts/modules/treemap.js' %}"></script>
-  <script src="{% static 'js/highcharts/modules/drilldown.js' %}"></script>
   <script>
     $(function () {
       $(".charts .panel-heading").each(function () {
@@ -33,9 +27,11 @@
                   data-toggle="modal"
                   data-target="#modal-edit-scenario">
             <span class="glyphicon glyphicon-pencil"></span>
+            Edit
           </button>
           <button type="button" class="btn btn-default btn-sm btn-chart-delete" title="Delete" data-chart-name="{{ scenario.name }}">
             <span class="glyphicon glyphicon-trash"></span>
+            Delete
           </button>
         </div>
         {{ scenario.name }}

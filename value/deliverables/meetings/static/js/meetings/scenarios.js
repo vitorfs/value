@@ -177,5 +177,45 @@ $(function () {
     });
     return false;
   });
+
+  /* Scenario compare functions */
+
+  $(".js-scenario-compare").click(function () {
+    var url = $("#form-scenario-compare").attr("action");
+    $.get(url, function (data) {
+      $("#modal-scenario-compare .modal-dialog").html(data.form);
+    }, "json");
+  });
+
+  $("#form-scenario-compare").submit(function () {
+    var form = $(this);
+    $.ajax({
+      url: $(form).attr("action"),
+      type: $(form).attr("method"),
+      data: $(form).serialize(),
+      cache: false,
+      success: function (data) {
+        if (data.is_valid) {
+          $("#modal-scenario-compare").modal("hide");
+          $("#expand-chart .modal-title").text("Scenarios comparison");
+          $("#expand-chart .modal-body").html("");
+          setTimeout(function () {
+            $("#expand-chart").modal("show");
+            setTimeout(function () {
+              $("#expand-chart .modal-body").html(data.html);
+              $("#expand-chart .btn-chart-expand, #expand-chart .btn-chart-info").remove();
+              $("#expand-chart [data-preload='True']").each(function () {
+                $(".panel-heading", this).loadchart();
+              });
+            }, 250);
+          }, 500)
+        }
+        else {
+          $("#modal-scenario-compare .modal-dialog").html(data.form);
+        }
+      }
+    });
+    return false;
+  });
       
 });

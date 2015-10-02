@@ -286,6 +286,9 @@ class Scenario(models.Model):
     class Meta:
         unique_together = (('name', 'meeting',),)
 
+    def __unicode__(self):
+        return self.name
+
     def _generate_unique_name(self, base_name):
         name = base_name
         name_count = 1

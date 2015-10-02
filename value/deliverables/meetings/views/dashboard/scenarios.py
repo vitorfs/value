@@ -14,7 +14,7 @@ from django.template.loader import render_to_string
 
 from value.deliverables.meetings.charts import Highcharts
 from value.deliverables.meetings.models import Meeting, Scenario
-from value.deliverables.meetings.forms import ScenarioForm, ScenarioBuilderForm
+from value.deliverables.meetings.forms import ScenarioForm, ScenarioBuilderForm, CompareScenarioForm
 from value.deliverables.meetings.views.dashboard.factors_comparison import get_features_scenario_chart_dict
 from value.deliverables.meetings.views.dashboard.factors_groups_comparison import get_factors_groups_scenario_chart_dict, application_has_factors_groups
 from value.deliverables.meetings.views.dashboard.decision_items_acceptance import get_features_acceptance_scenario_chart_dict
@@ -38,6 +38,39 @@ def get_scenario_value_ranking_chart_dict(scenario):
         'remote': reverse('deliverables:meetings:scenario_value_ranking_chart', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk))
     }
     return chart_data
+
+def get_scenario_charts(scenario):
+    chart_overview = get_scenario_overview_chart_dict(scenario)
+    chart_overview_type = 'stacked_bars'
+
+    chart_value_ranking = get_scenario_value_ranking_chart_dict(scenario)
+
+    chart_factors = get_features_scenario_chart_dict(scenario)
+    chart_factors['name'] = 'Factors Comparison'
+    chart_factors_type = 'stacked_columns'
+
+    chart_factors_groups = get_factors_groups_scenario_chart_dict(scenario)
+    chart_factors_groups['name'] = 'Factors Group Comparison'
+
+    chart_acceptance = get_features_acceptance_scenario_chart_dict(scenario)
+    chart_acceptance['name'] = 'Decision Items Acceptance'
+    chart_acceptance_type = 'simple'
+
+    charts_data = {
+        'chart_overview': chart_overview,
+        'chart_overview_type': chart_overview_type,
+
+        'chart_value_ranking': chart_value_ranking,
+
+        'chart_factors': chart_factors,
+        'chart_factors_type': chart_factors_type,
+
+        'chart_factors_groups': chart_factors_groups,
+
+        'chart_acceptance': chart_acceptance,
+        'chart_acceptance_type': chart_acceptance_type
+    }
+    return charts_data
 
 
 ''' Views '''
@@ -85,49 +118,22 @@ def scenario(request, deliverable_id, meeting_id, scenario_id):
     stakeholder_ids = get_stakeholders_ids(meeting)
     bar_chart_types_options = get_bar_chart_types_dict()
     treemap_chart_types_options = get_treemap_chart_types_dict()
-    
-    chart_overview = get_scenario_overview_chart_dict(scenario)
-    chart_overview_type = 'stacked_bars'
-
-    chart_value_ranking = get_scenario_value_ranking_chart_dict(scenario)
-
-    chart_factors = get_features_scenario_chart_dict(scenario)
-    chart_factors['name'] = 'Factors Comparison'
-    chart_factors_type = 'stacked_columns'
-
-    chart_factors_groups = get_factors_groups_scenario_chart_dict(scenario)
-    chart_factors_groups['name'] = 'Factors Group Comparison'
     display_chart_factors_groups = application_has_factors_groups()
-
-    chart_acceptance = get_features_acceptance_scenario_chart_dict(scenario)
-    chart_acceptance['name'] = 'Decision Items Acceptance'
-    chart_acceptance_type = 'simple'
-
-    return render(request, 'meetings/dashboard/scenarios/list.html', {
+    
+    charts_data = get_scenario_charts(scenario)
+    context = {
         'meeting': meeting,
         'scenario': scenario,
         'chart_menu_active': scenario.pk,
         'scenario': scenario,
         'delete_scenario_next': reverse('deliverables:meetings:dashboard', args=(meeting.deliverable.pk, meeting.pk)),
-
         'stakeholder_ids': stakeholder_ids,
         'bar_chart_types_options': bar_chart_types_options,
         'treemap_chart_types_options': treemap_chart_types_options,
-
-        'chart_overview': chart_overview,
-        'chart_overview_type': chart_overview_type,
-
-        'chart_value_ranking': chart_value_ranking,
-
-        'chart_factors': chart_factors,
-        'chart_factors_type': chart_factors_type,
-
-        'chart_factors_groups': chart_factors_groups,
-        'display_chart_factors_groups': display_chart_factors_groups,
-
-        'chart_acceptance': chart_acceptance,
-        'chart_acceptance_type': chart_acceptance_type
-        })
+        'display_chart_factors_groups': display_chart_factors_groups
+        }
+    context.update(charts_data)
+    return render(request, 'meetings/dashboard/scenarios/list.html', context)
 
 @login_required
 def scenario_overview_chart(request, deliverable_id, meeting_id, scenario_id):
@@ -214,4 +220,38 @@ def scenario_builder(request, deliverable_id, meeting_id):
 
     context = RequestContext(request, { 'form': form })
     json_context['form'] = render_to_string('includes/form_vertical.html', context)
+    return HttpResponse(json.dumps(json_context), content_type='application/json')
+
+@login_required
+def compare_scenario(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    json_context = dict()
+
+    if request.method == 'POST':
+        form = CompareScenarioForm(request.POST, initial={ 'meeting': meeting })
+        is_valid = json_context['is_valid'] = form.is_valid()
+        if is_valid:
+            stakeholder_ids = get_stakeholders_ids(meeting)
+            bar_chart_types_options = get_bar_chart_types_dict()
+            treemap_chart_types_options = get_treemap_chart_types_dict()
+            display_chart_factors_groups = application_has_factors_groups()
+            scenarios = list()
+            for scenario in form.cleaned_data['scenarios']:
+                charts_data = get_scenario_charts(scenario)
+                charts_data['name'] = scenario.name
+                scenarios.append(charts_data)
+            context = RequestContext(request, { 
+                'meeting': meeting,
+                'stakeholder_ids': stakeholder_ids,
+                'bar_chart_types_options': bar_chart_types_options,
+                'treemap_chart_types_options': treemap_chart_types_options,
+                'display_chart_factors_groups': display_chart_factors_groups,
+                'scenarios': scenarios
+            })
+            json_context['html'] = render_to_string('meetings/dashboard/scenarios/partial_compare.html', context)
+    else:
+        form = CompareScenarioForm(initial={ 'meeting': meeting })
+
+    context = RequestContext(request, { 'meeting': meeting, 'form': form })
+    json_context['form'] = render_to_string('meetings/dashboard/scenarios/partial_compare_form.html', context)
     return HttpResponse(json.dumps(json_context), content_type='application/json')
