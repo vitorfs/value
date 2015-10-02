@@ -1,8 +1,8 @@
 <div style="margin-bottom: 20px;">
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-add-scenario">
+  <button type="button" class="btn btn-primary js-scenario-add" data-toggle="modal" data-target="#modal-add-scenario" data-next="{{ request.path }}">
     <span class="glyphicon glyphicon-plus"></span> Add scenario
   </button>
-  <button type="button" class="btn btn-primary js-scenario-builder" data-toggle="modal" data-target="#modal-scenario-builder" data-remote-url="{% url 'deliverables:meetings:scenario_builder' meeting.deliverable.pk meeting.pk %}">
+  <button type="button" class="btn btn-primary js-scenario-builder" data-toggle="modal" data-target="#modal-scenario-builder" data-remote-url="{% url 'deliverables:meetings:scenario_builder' meeting.deliverable.pk meeting.pk %}" data-next="{{ request.path }}">
     <span class="fa fa-wrench"></span> Scenario builder
   </button>
 </div>

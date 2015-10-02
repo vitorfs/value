@@ -2,6 +2,10 @@ $(function () {
 
   /* Add scenario functions */
 
+  $(document).on("click", ".js-scenario-add", function () {
+    $("#add-next").val($(this).attr("data-next"));
+  });
+
   $("#modal-add-scenario").on("shown.bs.modal", function () {
     $.ajax({
       url: $("#form-add-scenario").attr("action"),
@@ -37,6 +41,9 @@ $(function () {
       dataType: 'json',
       success: function (data) {
         if (data.is_valid) {
+          if ("redirect_to" in data) {
+            location.href = data["redirect_to"];
+          }
           $.get("", function (data) {
             $("#scenarios").replaceWith($("#scenarios", data));
             $("#scenarios-menu").replaceWith($("#scenarios-menu", data));
@@ -119,6 +126,10 @@ $(function () {
 
   /* Scenario builder functions */
 
+  $(document).on("click", ".js-scenario-builder", function () {
+    $("#build-next").val($(this).attr("data-next"));
+  });
+
   $("#modal-scenario-builder").on("shown.bs.modal", function () {
     var url = $(".js-scenario-builder").attr("data-remote-url");
     $.ajax({
@@ -147,11 +158,11 @@ $(function () {
       url: $(form).attr("action"),
       type: $(form).attr("method"),
       data: $(form).serialize(),
-      beforeSend: function () {
-
-      },
       success: function (data) {
         if (data.is_valid) {
+          if ("redirect_to" in data) {
+            location.href = data["redirect_to"];
+          }
           $.get("", function (data) {
             $("#scenarios").replaceWith($("#scenarios", data));
             $("#scenarios-menu").replaceWith($("#scenarios-menu", data));

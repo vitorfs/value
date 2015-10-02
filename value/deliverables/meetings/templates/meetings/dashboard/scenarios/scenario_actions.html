@@ -1,5 +1,6 @@
 <form id="form-add-scenario" method="post" action="{% url 'deliverables:meetings:add_scenario' meeting.deliverable.pk meeting.pk %}">
   {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.path }}" id="add-next">
   <div class="modal fade" id="modal-add-scenario" data-modal-index="1">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -60,6 +61,7 @@
 
 <form id="form-scenario-builder" method="post" action="{% url 'deliverables:meetings:scenario_builder' meeting.deliverable.pk meeting.pk %}">
   {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.path }}" id="build-next">
   <div class="modal fade" id="modal-scenario-builder">
     <div class="modal-dialog">
       <div class="modal-content">

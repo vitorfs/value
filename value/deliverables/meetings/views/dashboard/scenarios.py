@@ -51,7 +51,10 @@ def add_scenario(request, deliverable_id, meeting_id):
         form = ScenarioForm(request.POST, instance=scenario, prefix='add')
         is_valid = json_context['is_valid'] = form.is_valid()
         if is_valid:
-            form.save()
+            scenario = form.save()
+            next = request.POST.get('next')
+            if next == 'scenario_charts':
+                json_context['redirect_to'] = reverse('deliverables:meetings:scenario', args=(meeting.deliverable.pk, meeting.pk, scenario.pk))
     else:
         form = ScenarioForm(instance=scenario, prefix='add')
     context = RequestContext(request, { 'form': form })
@@ -202,7 +205,10 @@ def scenario_builder(request, deliverable_id, meeting_id):
         is_valid = json_context['is_valid'] = form.is_valid()
         if is_valid:
             scenario = Scenario(meeting=meeting)
-            scenario.build(**form.cleaned_data)
+            scenario = scenario.build(**form.cleaned_data)
+            next = request.POST.get('next')
+            if next == 'scenario_charts':
+                json_context['redirect_to'] = reverse('deliverables:meetings:scenario', args=(meeting.deliverable.pk, meeting.pk, scenario.pk))
     else:
         form = ScenarioBuilderForm(initial={ 'meeting': meeting })
 

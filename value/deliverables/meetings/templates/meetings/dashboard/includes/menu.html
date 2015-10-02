@@ -26,10 +26,10 @@
 <div class="panel panel-default panel-menu" id="scenarios-menu">
   <div class="panel-heading">
     <div class="btn-group pull-right">      
-      <button type="button" class="btn btn-xs btn-default" title="Add a scenario" data-toggle="modal" data-target="#modal-add-scenario">
+      <button type="button" class="btn btn-xs btn-default js-scenario-add" title="Add a scenario" data-toggle="modal" data-target="#modal-add-scenario" data-next="scenario_charts">
         <span class="glyphicon glyphicon-plus"></span>
       </button>
-      <button type="button" class="btn btn-xs btn-default js-scenario-builder" title="Build a scenario" data-toggle="modal" data-target="#modal-scenario-builder" data-remote-url="{% url 'deliverables:meetings:scenario_builder' meeting.deliverable.pk meeting.pk %}">
+      <button type="button" class="btn btn-xs btn-default js-scenario-builder" title="Build a scenario" data-toggle="modal" data-target="#modal-scenario-builder" data-remote-url="{% url 'deliverables:meetings:scenario_builder' meeting.deliverable.pk meeting.pk %}" data-next="scenario_charts">
         <span class="fa fa-wrench"></span>
       </button>
       <button type="button" class="btn btn-xs btn-default" title="Compare scenarios">
