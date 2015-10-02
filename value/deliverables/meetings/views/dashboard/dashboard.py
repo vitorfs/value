@@ -94,6 +94,16 @@ def value_ranking(request, deliverable_id, meeting_id):
             'dump': dump
             })
 
+''' Decision Items Overview '''
+
+def get_decision_items_overview_chart_dict(meeting):
+    chart_data = {
+        'id': 'meeting-overview',
+        'name': 'Decision Items Overview',
+        'remote': reverse('deliverables:meetings:decision_items_overview', args=(meeting.deliverable.pk, meeting.pk))
+    }
+    return chart_data
+
 @login_required
 def decision_items_overview(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
@@ -109,22 +119,22 @@ def decision_items_overview(request, deliverable_id, meeting_id):
 
     options = Highcharts().decision_items_overview(meeting, chart_type, stakeholder_ids)
     dump = json.dumps(options)
+    chart = get_decision_items_overview_chart_dict(meeting)
 
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        template_name = 'meetings/dashboard/decision_items_overview.html'
+        template_name = 'meetings/dashboard/decision_items_overview/list.html'
         if 'popup' in request.GET:
-            template_name = 'meetings/dashboard/decision_items_overview_popup.html'
+            template_name = 'meetings/dashboard/decision_items_overview/popup.html'
         return render(request, template_name, { 
             'meeting': meeting, 
+            'chart_menu_active': 'decision_items_overview',
             'dump': dump,
             'stakeholder_ids': stakeholder_ids,
             'chart_type': chart_type,
             'chart_types_options': chart_types_options,
-            'chart_uri': 'decision-items-overview',
-            'chart_menu_active': 'decision_items_overview',
-            'chart_page_title': 'Decision Items Overview'
+            'chart': chart
             })
 
 @login_required

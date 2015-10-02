@@ -251,37 +251,49 @@ class Highcharts(object):
 
         return options
 
-    def decision_items_overview(self, meeting, chart, stakeholder_ids):
-        stakeholder_ids = list(set(stakeholder_ids))
-        evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(user_id__in=stakeholder_ids)
+    def _decision_items_overview(self, meeting, chart_type, stakeholder_ids, evaluations, meeting_items):
         options = dict()
         if evaluations.exists():
             measure = meeting.deliverable.measure
             stakeholders_count = len(stakeholder_ids)
-            factors_count = Factor.list().count()
+            factors_count = meeting.deliverable.factors.count()
             max_votes = stakeholders_count * factors_count
 
             categories = []
             series = []
 
-            for meeting_item in meeting.meetingitem_set.all():
+            for meeting_item in meeting_items:
                 categories.append(meeting_item.decision_item.name)
 
             for measure_value in measure.measurevalue_set.all():
                 serie_data = []
-                for meeting_item in meeting.meetingitem_set.all():
+                for meeting_item in meeting_items:
                     votes = evaluations.filter(measure_value=measure_value, meeting_item=meeting_item).count()
                     percentage = get_votes_percentage(max_votes, votes)
                     serie_data.append(percentage)
                 series.append({ 'name': measure_value.description, 'data': serie_data, 'color': measure_value.color })
 
-            options = self._base_stacked_chart(categories, series, chart)
+            options = self._base_stacked_chart(categories, series, chart_type)
             groups_text = get_stakeholders_group_names(stakeholder_ids)
             options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
+        return options
 
+    def decision_items_overview(self, meeting, chart_type, stakeholder_ids):
+        stakeholder_ids = list(set(stakeholder_ids))
+        evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(user_id__in=stakeholder_ids)
+        meeting_items = meeting.meetingitem_set.all()
+        options = self._decision_items_overview(meeting, chart_type, stakeholder_ids, evaluations, meeting_items)
         options['title'] = { 'text': u'Decision Items Overview' }
         return options
 
+    def decision_items_overview_scenario(self, scenario, chart_type, stakeholder_ids):
+        stakeholder_ids = list(set(stakeholder_ids))
+        evaluations = Evaluation.get_evaluations_by_meeting(scenario.meeting)\
+            .filter(user_id__in=stakeholder_ids, meeting_item__in=scenario.meeting_items.all())
+        meeting_items = scenario.meeting_items.all()
+        options = self._decision_items_overview(scenario.meeting, chart_type, stakeholder_ids, evaluations, meeting_items)
+        options['title'] = { 'text': u'Scenario Overview' }
+        return options
 
     ''' Factors Comparison Charts '''
 

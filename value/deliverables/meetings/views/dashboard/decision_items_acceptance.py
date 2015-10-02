@@ -34,7 +34,7 @@ def get_features_acceptance_scenario_chart_dict(scenario):
         'instance': scenario,
         'instance_type': 'scenario',
         'remote': reverse('deliverables:meetings:features_acceptance_scenario_chart', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk)),
-        'info_remote': reverse('deliverables:meetings:details_scenario', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk))
+        'info_remote': reverse('deliverables:meetings:scenario_details', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk))
     }
     return chart_data
 

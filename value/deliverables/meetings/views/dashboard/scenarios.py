@@ -12,9 +12,27 @@ from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.template.loader import render_to_string
 
+from value.deliverables.meetings.charts import Highcharts
 from value.deliverables.meetings.models import Meeting, Scenario
 from value.deliverables.meetings.forms import ScenarioForm, ScenarioBuilderForm
+from value.deliverables.meetings.views.dashboard.factors_comparison import get_features_scenario_chart_dict
+from value.deliverables.meetings.views.dashboard.factors_groups_comparison import get_factors_groups_scenario_chart_dict
+from value.deliverables.meetings.views.dashboard.decision_items_acceptance import get_features_acceptance_scenario_chart_dict
+from value.deliverables.meetings.utils import *
 
+
+''' Support functions '''
+
+def get_scenario_overview_chart_dict(scenario):
+    chart_data = {
+        'id': 'scenario-overview',
+        'name': 'Scenario Overview',
+        'remote': reverse('deliverables:meetings:scenario_overview_chart', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk))
+    }
+    return chart_data
+
+
+''' Views '''
 
 @login_required
 def add_scenario(request, deliverable_id, meeting_id):
@@ -29,7 +47,7 @@ def add_scenario(request, deliverable_id, meeting_id):
     else:
         form = ScenarioForm(instance=scenario, prefix='add')
     context = RequestContext(request, { 'form': form })
-    json_context['form'] = render_to_string('meetings/dashboard/includes/partial_scenario_form.html', context)
+    json_context['form'] = render_to_string('meetings/dashboard/scenarios/partial_scenario_form.html', context)
     return HttpResponse(json.dumps(json_context), content_type='application/json')
 
 @login_required
@@ -45,14 +63,84 @@ def edit_scenario(request, deliverable_id, meeting_id, scenario_id):
     else:
         form = ScenarioForm(instance=scenario, prefix='edit')
     context = RequestContext(request, { 'form': form })
-    json_context['form'] = render_to_string('meetings/dashboard/includes/partial_scenario_form.html', context)
+    json_context['form'] = render_to_string('meetings/dashboard/scenarios/partial_scenario_form.html', context)
     return HttpResponse(json.dumps(json_context), content_type='application/json')
 
 @login_required
-def details_scenario(request, deliverable_id, meeting_id, scenario_id):
+def scenario(request, deliverable_id, meeting_id, scenario_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     scenario = get_object_or_404(Scenario, pk=scenario_id)
-    return render(request, 'meetings/dashboard/includes/scenario_details.html', {
+    
+    stakeholder_ids = get_stakeholders_ids(meeting)
+    bar_chart_types_options = get_bar_chart_types_dict()
+    treemap_chart_types_options = get_treemap_chart_types_dict()
+    
+    chart_overview = get_scenario_overview_chart_dict(scenario)
+    chart_overview_type = 'stacked_bars'
+
+    chart_factors = get_features_scenario_chart_dict(scenario)
+    chart_factors['name'] = 'Factors Comparison'
+    chart_factors_type = 'stacked_columns'
+
+    chart_factors_groups = get_factors_groups_scenario_chart_dict(scenario)
+    chart_factors_groups['name'] = 'Factors Group Comparison'
+
+    chart_acceptance = get_features_acceptance_scenario_chart_dict(scenario)
+    chart_acceptance['name'] = 'Decision Items Acceptance'
+    chart_acceptance_type = 'simple'
+
+    return render(request, 'meetings/dashboard/scenarios/list.html', {
+        'meeting': meeting,
+        'chart_menu_active': scenario.pk,
+        'scenario': scenario,
+
+        'stakeholder_ids': stakeholder_ids,
+        'bar_chart_types_options': bar_chart_types_options,
+        'treemap_chart_types_options': treemap_chart_types_options,
+
+        'chart_overview': chart_overview,
+        'chart_overview_type': chart_overview_type,
+
+        'chart_factors': chart_factors,
+        'chart_factors_type': chart_factors_type,
+
+        'chart_factors_groups': chart_factors_groups,
+
+        'chart_acceptance': chart_acceptance,
+        'chart_acceptance_type': chart_acceptance_type
+        })
+
+@login_required
+def scenario_overview_chart(request, deliverable_id, meeting_id, scenario_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    scenario = get_object_or_404(Scenario, pk=scenario_id)
+
+    chart_type = request.GET.get('chart_type')
+    stakeholders = request.GET.getlist('stakeholder')
+    
+    chart_types_options = get_bar_chart_types_dict()
+    stakeholder_ids = get_stakeholders_ids(meeting, stakeholders)
+    options = Highcharts().decision_items_overview_scenario(scenario, chart_type, stakeholder_ids)
+    dump = json.dumps(options)
+    chart = get_scenario_overview_chart_dict(scenario)
+
+    if 'application/json' in request.META.get('HTTP_ACCEPT'):
+        return HttpResponse(dump, content_type='application/json')
+    else:
+        return render(request, 'meetings/dashboard/decision_items_overview/popup.html', { 
+            'meeting': meeting,
+            'chart': chart,
+            'chart_types_options': chart_types_options,
+            'chart_type': chart_type,
+            'stakeholder_ids': stakeholder_ids,
+            'dump': dump
+            })
+
+@login_required
+def scenario_details(request, deliverable_id, meeting_id, scenario_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    scenario = get_object_or_404(Scenario, pk=scenario_id)
+    return render(request, 'meetings/dashboard/scenarios/scenario_details.html', {
         'meeting': meeting,
         'scenario': scenario
         })

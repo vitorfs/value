@@ -32,12 +32,12 @@
       </ul>
       <div class="panel-group charts" id="scenarios">
         {% if charts %}
-          {% include 'meetings/dashboard/includes/partial_scenarios_action_buttons.html' %}
+          {% include 'meetings/dashboard/scenarios/partial_scenarios_action_buttons.html' %}
           {% for chart in charts %}
             {% include 'meetings/dashboard/factors_groups_comparison/chart.html' with opened=forloop.first can_edit=True can_delete=True %}
           {% endfor %}
         {% else %}
-          {% include 'meetings/dashboard/includes/partial_scenarios_empty_state.html' %}
+          {% include 'meetings/dashboard/scenarios/partial_scenarios_empty_state.html' %}
         {% endif %}
       </div>
     </div>

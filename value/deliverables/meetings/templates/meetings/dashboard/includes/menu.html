@@ -38,7 +38,7 @@
   </div>
   <div class="list-group">
     {% for scenario in meeting.scenarios.all %}
-      <a href="#" class="list-group-item">{{ scenario.name }}</a>
+      <a href="{% url 'deliverables:meetings:scenario' meeting.deliverable.pk meeting.pk scenario.pk %}" class="list-group-item{% if active == scenario.pk %} active{% endif %}">{{ scenario.name }}</a>
     {% endfor %}
   </div>
 </div>

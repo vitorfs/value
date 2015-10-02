@@ -59,16 +59,16 @@ class FactorMultipleModelChoiceField(forms.ModelMultipleChoiceField):
         return escape(obj.name)
 
 class ScenarioBuilderForm(forms.Form):
-    name = forms.CharField(label='Create a scenario named…', max_length=255, required=True)
+    name = forms.CharField(label='Name', max_length=255, required=True)
     meeting = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Meeting.objects.all(), required=True)
-    meeting_items_count = forms.ChoiceField(label='Select decision items…', required=True)
+    meeting_items_count = forms.ChoiceField(label='Number of decision items to compose the scenario', required=True)
     factors = FactorMultipleModelChoiceField(
         widget=forms.CheckboxSelectMultiple(),
-        label='And build the best scenario related to…', 
+        label='Related to', 
         queryset=Factor.objects.none(), 
         required=True
     )
-    criteria = forms.ModelChoiceField(label='Based on…', queryset=None, required=True, empty_label=None)
+    criteria = forms.ModelChoiceField(label='Based on', queryset=None, required=True, empty_label=None)
 
     def __init__(self, *args, **kwargs):
         super(ScenarioBuilderForm, self).__init__(*args, **kwargs)
