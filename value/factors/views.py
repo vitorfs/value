@@ -82,7 +82,7 @@ def toggle_active(request):
 def groups(request):
     groups = Group.objects.all()
     try:
-        available_factors = Factor.list().filter(group=None)
+        available_factors = Factor.objects.filter(is_active=True, group=None)
     except Exception, e:
         available_factors = list()
     form = GroupForm()

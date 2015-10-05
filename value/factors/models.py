@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from value.measures.models import Measure
-from value.core.exceptions import FactorsImproperlyConfigured
 
 
 class Group(models.Model):
@@ -23,11 +22,3 @@ class Factor(models.Model):
 
     def __unicode__(self):
         return self.name
-
-    @staticmethod
-    def list():
-        factors = Factor.objects.filter(is_active=True).exclude(measure=None)
-        if not factors:
-            raise FactorsImproperlyConfigured('There is no active factor in the application.')
-        return factors
-

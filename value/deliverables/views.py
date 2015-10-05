@@ -16,7 +16,6 @@ from django.db import transaction
 from django.db.models.functions import Lower
 
 from value.application_settings.models import ApplicationSetting
-from value.core.exceptions import MeasureImproperlyConfigured, FactorsImproperlyConfigured
 from value.factors.models import Factor
 from value.measures.models import Measure
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
@@ -41,36 +40,22 @@ def new(request):
     fields = DecisionItemLookup.get_visible_fields()
     DecisionItemFormSet = modelformset_factory(DecisionItem, fields=fields.keys())
 
-    measure = None
-    try:
-        measure = Measure.get()
-    except MeasureImproperlyConfigured, e:
-        measure_exception = u'{0} {1}'.format(e.message, u'Please configure it properly on Management » Measures.')
-        messages.warning(request, measure_exception)
+    has_measure = Measure.objects.filter(is_active=True).exists()
+    if not has_measure:
+        messages.warning(request, u'There is not active measure. Please configure it properly on Management » Measures.')
 
-    factors = None
-    try:
-        factors = Factor.list()
-    except FactorsImproperlyConfigured, e:
-        factors_exception = u'{0} {1}'.format(e.message, u'Please configure it properly on Management » Factors.')
-        messages.warning(request, factors_exception)
+    has_factors = Factor.objects.filter(is_active=True).exists()
+    if not has_factors:
+        messages.warning(request, u'There is not active value factor. Please configure it properly on Management » Factors.')
 
     if request.method == 'POST':
         form = DeliverableForm(request.POST)
         formset = DecisionItemFormSet(request.POST, prefix='decision_item')
 
-        if not measure:
-            form.add_error(None, measure_exception)
-
-        if not factors:
-            form.add_error(None, factors_exception)
-
         if form.is_valid() and formset.is_valid():
-            form.instance.measure = measure
             form.instance.manager = request.user
             form.instance.created_by = request.user
             deliverable = form.save()
-            deliverable.factors = factors
 
             for form in formset:
                 form.instance.deliverable = deliverable
@@ -84,7 +69,7 @@ def new(request):
         else:
             messages.error(request, u'Please correct the error below.')
     else:
-        form = DeliverableForm()
+        form = DeliverableForm(initial={'factors': Factor.objects.filter(is_active=True)})
         formset = DecisionItemFormSet(prefix='decision_item', queryset=DecisionItem.objects.none())
     return render(request, 'deliverables/new.html', { 
             'fields': fields,

@@ -41,10 +41,20 @@ class DeliverableForm(forms.ModelForm):
         queryset=User.objects.filter(is_active=True).order_by('first_name', 'last_name', 'username'), 
         required=False
         )
+    factors = FactorModelMultipleChoiceField(
+        label='Select value factors to be used within the decision-making meetings',
+        widget=forms.CheckboxSelectMultiple(), 
+        queryset=Factor.objects.filter(is_active=True), 
+        required=True
+        )
+    measure = forms.ModelChoiceField(label='Select the measure to be used within the decision-making meetings', 
+        queryset=Measure.objects.filter(is_active=True),
+        required=True,
+        empty_label=None)
 
     class Meta:
         model = Deliverable
-        fields = ['name', 'description', 'stakeholders',]
+        fields = ['name', 'description', 'stakeholders', 'factors', 'measure']
 
 
 class DeliverableBasicDataForm(forms.ModelForm):

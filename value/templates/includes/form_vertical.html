@@ -19,11 +19,11 @@
     {% elif field|fieldtype == 'CheckboxSelectMultiple' %}
       <label for="{{ field.id_for_label }}" class="control-label" style="margin-bottom: 0;">{{ field.label }}</label>
       {% for checkbox in field %}
-      <div class="checkbox">
-        <label>
-          {{ checkbox.tag }} {{ checkbox.choice_label|safe }}
-        </label>
-      </div>
+        <div class="checkbox">
+          <label>
+            {{ checkbox.tag }} {{ checkbox.choice_label|safe }}
+          </label>
+        </div>
       {% endfor %}
       {% for error in field.errors %}
         <p class="help-block">{{ error }}</p>

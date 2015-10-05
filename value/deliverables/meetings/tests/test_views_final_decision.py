@@ -27,8 +27,8 @@ class FinalDecisionTestCase(TestCase):
         User.objects.create_user(username='stakeholder_1', email='stakeholder_1@company.com', password='123')
         User.objects.create_user(username='stakeholder_2', email='stakeholder_2@company.com', password='123')
 
-        deliverable = Deliverable.objects.create(name='Product 1', measure=Measure.get(), manager=user, created_by=user)
-        deliverable.factors = Factor.list()
+        deliverable = Deliverable.objects.create(name='Product 1', measure=Measure.objects.all().first(), manager=user, created_by=user)
+        deliverable.factors = Factor.objects.filter(is_active=True)
         deliverable.stakeholders = User.objects.all()
         DecisionItem.objects.create(deliverable=deliverable, name='Feature 1')
         DecisionItem.objects.create(deliverable=deliverable, name='Feature 2')
