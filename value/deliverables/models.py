@@ -160,7 +160,7 @@ class DecisionItemLookup(models.Model):
         return ordered_fields
 
 class Rationale(models.Model):
-    text = models.TextField(max_length=2000, null=True, blank=True)
+    text = models.TextField(max_length=4000, null=True, blank=True)
     user = models.ForeignKey(User)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

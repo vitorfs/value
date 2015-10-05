@@ -4,7 +4,9 @@
   {{ block.super }}
   <script>
     $(function () {
-      $(".charts .panel-heading:eq(0)").loadchart();
+      $(".charts .panel-heading").each(function () {
+        $(this).loadchart();
+      });
     });
   </script>
 {% endblock javascript %}
@@ -12,7 +14,7 @@
 {% block charts %}
   <div class="panel-group charts">
     {% for chart in charts %}
-      {% include 'meetings/dashboard/decision_items_comparison/chart.html' with opened=forloop.first %}
+      {% include 'meetings/dashboard/decision_items_comparison/chart.html' with opened=True %}
     {% endfor %}
   </div>
 {% endblock charts %}
