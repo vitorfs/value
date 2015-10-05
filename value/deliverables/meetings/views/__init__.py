@@ -3,6 +3,7 @@
 from .meetings import *
 from .evaluate import *
 from .final_decision import *
+from .rationales import *
 
 from .dashboard.dashboard import *
 from .dashboard.scenarios import *

@@ -1,0 +1,24 @@
+{% load avatar %}
+
+{% if meeting_item.has_rationales %}
+  <ul class="list-group">
+    {% for evaluation in meeting_item.get_evaluations_with_rationale %}
+    <div class="media">
+      <div class="media-left">
+        <img src="{% avatar evaluation.user 32 %}" alt="{{ evaluation.user.get_display_name }}" class="img-circle">
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading">{{ evaluation.user.profile.get_display_name }}</h4>
+        <p>Evaluated <strong>{{ evaluation.factor.name }}</strong> as <span style="background-color: {{ evaluation.measure_value.color }}; height: 12px; width: 12px; display: inline-block; border-radius: 2px;"></span> {{ evaluation.measure_value.description }}</p>
+        <p>{{ evaluation.rationale.text }}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </ul>
+{% else %}
+  <div class="well blank-state">
+    <span class="fa fa-comments"></span>
+    <h3>No rationale recorded for this item.</h3>
+    <button type="button" class="btn btn-primary">Add a note</button>
+  </div>
+{% endif %}

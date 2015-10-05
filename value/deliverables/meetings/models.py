@@ -227,6 +227,19 @@ class MeetingItem(models.Model):
             self.value_ranking = highest.percentage_votes - lowest.percentage_votes
             self.save()
 
+    def get_evaluations_with_rationale(self):
+        return self.meeting.get_evaluations().filter(meeting_item=self).exclude(rationale=None)
+
+    def has_rationales(self):
+        has_evaluation_rationales = self.get_evaluations_with_rationale().exists()
+        has_meeting_item_rationales = self.rationales.exists()
+        return has_evaluation_rationales or has_meeting_item_rationales
+
+    def get_all_rationales(self):
+        evaluations = self.get_evaluations_with_rationale()
+        evaluation_rationales = Rationale.objects.filter(evaluation__in=evaluations)
+        return evaluation_rationales | self.rationales.all()
+
 
 class MeetingStakeholder(models.Model):
     meeting = models.ForeignKey(Meeting)
@@ -283,6 +296,7 @@ class Scenario(models.Model):
     meeting_items = models.ManyToManyField(MeetingItem, related_name='scenarios')
     value_ranking = models.FloatField(default=0.0)
     evaluation_summary = GenericRelation(Ranking)
+    rationales = models.ManyToManyField(Rationale)
 
     class Meta:
         unique_together = (('name', 'meeting',),)

@@ -226,4 +226,18 @@ $(function () {
 
   });
 
+  $(document).on("click", ".btn-chart-rationale", function () {
+    $("#modal-rationale").modal("show");
+    var url = $(this).attr("data-remote-url");
+    $.ajax({
+      url: url,
+      type: 'get',
+      cache: false,
+      dataType: 'html',
+      success: function (data) {
+        $("#modal-rationale .modal-body").html(data);
+      }
+    });
+  });
+
 });

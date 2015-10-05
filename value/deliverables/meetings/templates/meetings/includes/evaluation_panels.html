@@ -9,9 +9,11 @@
         <table style="width: 100%">
           <body>
             <tr>
-              <td style="width: 25%">
+              <td style="width: 25%;">
+                <span class="pull-right" style="padding: 0 15px;">
+                  {% display_info_button meeting_item %}
+                </span>
                 <a href="javascript:void(0);" class="btn-toggle">{{ meeting_item.decision_item.name }}</a>
-                {% display_info_button meeting_item %}
               </td>
               <td>
                 <div class="progress" style="margin-bottom: 0">

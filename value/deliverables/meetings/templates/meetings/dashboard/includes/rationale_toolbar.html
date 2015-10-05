@@ -1,0 +1,6 @@
+<button type="button" 
+        class="btn btn-default btn-xs btn-chart-rationale" 
+        title="View evaluation rationale" 
+        data-remote-url="{{ chart.rationales_remote }}">
+  <span class="fa fa-comments"{% if chart.has_rationales %} style="color: #337ab7"{% endif %}></span>
+</button>
