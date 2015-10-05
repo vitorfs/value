@@ -16,8 +16,8 @@
               <td>
                 <div class="progress" style="margin-bottom: 0">
                   {% for measure_value in measure_values %}
-                    <div class="progress-bar" style="width: {% evaluation_percent evaluations=evaluations meeting_item=meeting_item factors=factors measure_value=measure_value %}%; background-color: {{ measure_value.color }}">
-                      <span class="measure-percent" data-measure-id="{{ measure_value.pk }}">{% evaluation_percent_display evaluations=evaluations meeting_item=meeting_item factors=factors measure_value=measure_value %}</span>%
+                    <div class="progress-bar" style="width: {% evaluation_percent evaluations=evaluations meeting_item=meeting_item factors=factors measure=measure measure_value=measure_value %}%; background-color: {{ measure_value.color }}">
+                      <span class="measure-percent" data-measure-id="{{ measure_value.pk }}">{% evaluation_percent_display evaluations=evaluations meeting_item=meeting_item factors=factors measure=measure measure_value=measure_value %}</span>%
                     </div>
                   {% endfor %}
                 </div>
@@ -41,7 +41,7 @@
 
             {% for group in group_list %}
               {% for factor in group.list %}
-                {% evaluation_options evaluations=evaluations meeting_item=meeting_item factor=factor measure_values=measure_values %}
+                {% evaluation_options evaluations=evaluations meeting_item=meeting_item factor=factor measure=measure measure_values=measure_values %}
               {% endfor %}
             {% endfor %}
           </tbody>

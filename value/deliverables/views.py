@@ -22,7 +22,8 @@ from value.measures.models import Measure
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
 from value.deliverables.models import Deliverable, DecisionItem, DecisionItemAttachment, DecisionItemLookup
 from value.deliverables.meetings.models import Evaluation
-from value.deliverables.forms import UploadFileForm, DeliverableForm, DeliverableBasicDataForm
+from value.deliverables.forms import UploadFileForm, DeliverableForm, DeliverableBasicDataForm, \
+        DeliverableFactorsForm, DeliverableMeasureForm
 
 
 @login_required
@@ -337,10 +338,56 @@ def settings(request, deliverable_id):
             return redirect(reverse('deliverables:settings', args=(deliverable.pk,)))
     else:
         form = DeliverableBasicDataForm(instance=deliverable)
-    return render(request, 'deliverables/settings.html', { 
+    return render(request, 'deliverables/settings/details.html', { 
             'deliverable': deliverable,
             'form': form,
             'users': users
+            })
+
+@login_required
+@user_is_manager
+def factors_settings(request, deliverable_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+
+    if request.method == 'POST':
+        form = DeliverableFactorsForm(request.POST, instance=deliverable)
+        if form.is_valid():
+            deliverable = form.save()
+            for meeting in deliverable.meeting_set.all():
+                #meeting.evaluation_set.exclude(factor__in=deliverable.factors.all()).delete()
+                meeting.calculate_all_rankings()
+
+            messages.success(request, u'The deliverable {0} was saved successfully.'.format(deliverable.name))
+            # redirect after post to avoid form re-submition
+            return redirect(reverse('deliverables:factors_settings', args=(deliverable.pk,)))
+    else:
+        form = DeliverableFactorsForm(instance=deliverable)
+
+    return render(request, 'deliverables/settings/factors.html', { 
+            'deliverable': deliverable,
+            'form': form
+            })
+
+@login_required
+@user_is_manager
+def measure_settings(request, deliverable_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+
+    if request.method == 'POST':
+        form = DeliverableMeasureForm(request.POST, instance=deliverable)
+        if form.is_valid():
+            deliverable = form.save()
+            for meeting in deliverable.meeting_set.all():
+                meeting.calculate_all_rankings()
+            messages.success(request, u'The deliverable {0} was saved successfully.'.format(deliverable.name))
+            # redirect after post to avoid form re-submition
+            return redirect(reverse('deliverables:measure_settings', args=(deliverable.pk,)))
+    else:
+        form = DeliverableMeasureForm(instance=deliverable)
+
+    return render(request, 'deliverables/settings/measure.html', { 
+            'deliverable': deliverable,
+            'form': form
             })
 
 @login_required

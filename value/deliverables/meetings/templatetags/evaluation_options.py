@@ -20,7 +20,7 @@ def selected(is_evaluated):
     return ''
 
 @register.simple_tag
-def evaluation_options(evaluations, meeting_item, factor, measure_values):
+def evaluation_options(evaluations, meeting_item, factor, measure, measure_values):
     if meeting_item.meeting.is_closed():
         can_evaluate = 'not-evaluable'
     else:
@@ -30,9 +30,9 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values):
     rationale_text = ''
     no_comment = 'no-comment'
     for evaluation in evaluations:
-        if meeting_item.pk == evaluation.meeting_item.pk \
-                and factor.pk == evaluation.factor.pk \
-                and evaluation.measure.pk == evaluation.factor.measure.pk:
+        if meeting_item == evaluation.meeting_item \
+                and measure == evaluation.measure \
+                and factor == evaluation.factor:
             if evaluation.measure_value != None:
                 is_evaluated = True
             if evaluation.rationale and evaluation.rationale.text != '':
@@ -42,7 +42,7 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values):
     html = '<tr{0} data-factor-id="{1}" data-measure-id="{2}">'.format(
             selected(is_evaluated), 
             factor.pk, 
-            factor.measure.pk
+            measure.pk
         )
 
     factor_name = factor.name
@@ -77,7 +77,7 @@ def evaluation_options(evaluations, meeting_item, factor, measure_values):
                 if evaluation.meeting.pk == meeting_item.meeting.pk \
                         and evaluation.meeting_item.pk == meeting_item.pk \
                         and evaluation.factor.pk == factor.pk \
-                        and evaluation.measure.pk == factor.measure.pk \
+                        and evaluation.measure == measure \
                         and evaluation.measure_value.pk == measure_value.pk:
                     is_checked = True
         html += '''<td class="text-center {0}" data-color="{1}" data-measure-value-id="{2}"{3}>{4}</td>'''.format(

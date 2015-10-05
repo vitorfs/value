@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from django.db import models, transaction
-from django.db.models import F, Count, Min, Sum
+from django.db.models import Count, Min, Sum
 from django.db.models.signals import m2m_changed
 from django.contrib.auth.models import User, Group
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
@@ -70,7 +70,7 @@ class Meeting(models.Model):
         """
         stakeholders_count = self.meetingstakeholder_set.count()
         meeting_items_count = self.meetingitem_set.count()
-        factors_count = Factor.list().count()
+        factors_count = self.deliverable.factors.count()
 
         max_evaluations = stakeholders_count * meeting_items_count * factors_count
         total_evaluations = self.get_evaluations().count()
@@ -84,8 +84,11 @@ class Meeting(models.Model):
 
     def calculate_all_rankings(self):
         with transaction.atomic():
+            self.ranking_set.all().delete()
             for item in self.meetingitem_set.all():
                 item.calculate_ranking()
+            for scenario in self.scenarios.all():
+                scenario.calculate_ranking()
 
     def get_stakeholder_groups(self):
         groups = Group.objects.all().order_by('name')
@@ -201,7 +204,7 @@ class MeetingItem(models.Model):
 
         measure = self.meeting.deliverable.measure
         stakeholders_count = self.meeting.meetingstakeholder_set.count()
-        factors_count = Factor.list().count()
+        factors_count = self.meeting.deliverable.factors.count()
         max_evaluations = stakeholders_count * factors_count
 
         rankings = item_evaluations.values('measure_value__id').annotate(votes=Count('measure_value'))
@@ -211,14 +214,14 @@ class MeetingItem(models.Model):
             meeting_item_content_type = ContentType.objects.get_for_model(MeetingItem)
 
             for measure_value in measure.measurevalue_set.all():
-                Ranking.objects.get_or_create(content_type=meeting_item_content_type, object_id=self.pk, measure_value=measure_value)
+                Ranking.objects.get_or_create(meeting=self.meeting, content_type=meeting_item_content_type, object_id=self.pk, measure_value=measure_value)
 
             for ranking in rankings:
                 votes = int(ranking['votes'])
                 percentage = get_votes_percentage(max_evaluations, votes, round_value=False)
-                Ranking.objects.filter(content_type=meeting_item_content_type, object_id=self.pk, measure_value__id=ranking['measure_value__id']).update(raw_votes=votes, percentage_votes=percentage)
+                Ranking.objects.filter(meeting=self.meeting, content_type=meeting_item_content_type, object_id=self.pk, measure_value__id=ranking['measure_value__id']).update(raw_votes=votes, percentage_votes=percentage)
 
-            rankings = Ranking.objects.filter(content_type=meeting_item_content_type, object_id=self.pk).order_by('measure_value__order')
+            rankings = Ranking.objects.filter(meeting=self.meeting, content_type=meeting_item_content_type, object_id=self.pk).order_by('measure_value__order')
             highest = rankings.first()
             lowest = rankings.last()
             self.value_ranking = highest.percentage_votes - lowest.percentage_votes
@@ -255,13 +258,11 @@ class Evaluation(models.Model):
 
     @staticmethod
     def _list(meeting):
-        qs = Evaluation.objects.filter(
+        return Evaluation.objects.filter(
             meeting=meeting, 
-            factor__is_active=True, 
-            measure__is_active=True).exclude(
-            factor__measure=None).filter(
-            factor__measure_id=F('measure_id'))
-        return qs
+            factor__in=meeting.deliverable.factors.all(),
+            measure=meeting.deliverable.measure
+            )
 
     @staticmethod
     def get_evaluations_by_meeting(meeting):

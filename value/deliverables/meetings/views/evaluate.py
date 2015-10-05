@@ -18,9 +18,9 @@ from value.deliverables.meetings.models import Meeting, MeetingItem, Evaluation
 def evaluate(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     
-    factors = Factor.list().select_related('measure')
-
-    measure_values = factors[0].measure.measurevalue_set.all()
+    factors = meeting.deliverable.factors.select_related('measure')
+    measure = meeting.deliverable.measure
+    measure_values = measure.measurevalue_set.all()
 
     count = measure_values.count()
     if count > 0:
@@ -39,6 +39,7 @@ def evaluate(request, deliverable_id, meeting_id):
     return render(request, 'meetings/evaluate.html', { 
         'meeting': meeting, 
         'factors': factors,
+        'measure': measure,
         'measure_values': measure_values,
         'relative_col_size': relative_col_size,
         'evaluations': evaluations,

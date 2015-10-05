@@ -82,7 +82,7 @@ class Highcharts(object):
     def stakeholders_input_bar_chart(self, meeting):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting)
         meeting_stakeholders = meeting.meetingstakeholder_set.all()
-        factors = Factor.list()
+        factors = meeting.deliverable.factors.all()
 
         data = []
 
@@ -129,7 +129,7 @@ class Highcharts(object):
 
     def factors_usage_bar_chart(self, meeting):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting)
-        factors = Factor.list()
+        factors = meeting.deliverable.factors.all()
         data = []
 
         meeting_items_count = meeting.meetingitem_set.count()
@@ -215,7 +215,7 @@ class Highcharts(object):
         filtered_evaluations = evaluations.filter(measure_value=measure_value, user_id__in=stakeholder_ids)
 
         stakeholders_count = len(stakeholder_ids)
-        factors_count = Factor.list().count()
+        factors_count = meeting.deliverable.factors.count()
         max_votes = stakeholders_count * factors_count
 
         vqs = filtered_evaluations.values('meeting_item__id', 'meeting_item__decision_item__name').annotate(count=Count('meeting_item__id')).order_by('-count')
