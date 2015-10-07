@@ -1,5 +1,8 @@
+# coding: utf-8
+
 from django.db import models
 from django.contrib.auth.models import User
+
 
 class Article(models.Model):
     ADMIN = u'A'
@@ -18,6 +21,9 @@ class Article(models.Model):
     created_by = models.ForeignKey(User, related_name='article_creation_user')
     updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(User, null=True, related_name='article_update_user')
+    
+    class Meta:
+        db_table = 'help_articles'
 
     def __unicode__(self):
         return self.name

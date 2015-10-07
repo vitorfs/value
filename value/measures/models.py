@@ -10,6 +10,9 @@ class Measure(models.Model):
     """
     name = models.CharField(max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
+    
+    class Meta:
+        db_table = 'measures'
 
     def __unicode__(self):
         return self.name
@@ -73,6 +76,7 @@ class MeasureValue(models.Model):
     color = models.CharField(max_length=7, choices=COLORS, default=PRIMARY_BLUE)
 
     class Meta:
+        db_table = 'measure_values'
         ordering = ('order',)
 
     def __unicode__(self):

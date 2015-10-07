@@ -24,6 +24,9 @@ class Deliverable(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(User, null=True, related_name='deliverable_update_user')
 
+    class Meta:
+        db_table = 'deliverables'
+
     def __unicode__(self):
         return self.name
 
@@ -72,6 +75,9 @@ class DecisionItem(models.Model):
     column_29 = models.CharField(max_length=255, null=True, blank=True)
     column_30 = models.CharField(max_length=255, null=True, blank=True)
 
+    class Meta:
+        db_table = 'decision_items'
+
     def __unicode__(self):
         return self.name
 
@@ -111,6 +117,9 @@ class DecisionItemLookup(models.Model):
     column_label = models.CharField(max_length=255, null=True, blank=True)
     column_type = models.CharField(max_length=1, choices=COLUMN_TYPES, default=STRING)
     column_display = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = 'decision_items_lookup'
 
     def __unicode__(self):
         return self.column_name
@@ -164,6 +173,9 @@ class Rationale(models.Model):
     user = models.ForeignKey(User)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'rationales'
 
     def __unicode__(self):
         return self.text

@@ -1,12 +1,18 @@
 # coding: utf-8
 
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
 from django.db import models
+from django.db.models.signals import post_save
+from django.contrib.auth.models import User
 
 
 class Profile(models.Model):
     user = models.OneToOneField(User)
+
+    class Meta:
+        db_table = 'auth_user_profile'
+
+    def __unicode__(self):
+        return self.get_display_name()
 
     def get_display_name(self):
         if self.user.first_name and self.user.last_name:

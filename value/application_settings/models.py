@@ -31,6 +31,9 @@ class ApplicationSetting(models.Model):
     name = models.CharField(max_length=255, primary_key=True, choices=APPLICATION_SETTINGS)
     value = models.CharField(max_length=255, null=True, blank=True)
 
+    class Meta:
+        db_table = 'application_settings'
+
     def __unicode__(self):
         return '{0}:{1}'.format(self.name, self.value)
 

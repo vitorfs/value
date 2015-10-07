@@ -7,6 +7,9 @@ from value.measures.models import Measure
 class Group(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
+    class Meta:
+        db_table = 'factors_groups'
+
     def __unicode__(self):
         return self.name
 
@@ -18,6 +21,7 @@ class Factor(models.Model):
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
 
     class Meta:
+        db_table = 'factors'
         ordering = ('group', 'name',)
 
     def __unicode__(self):

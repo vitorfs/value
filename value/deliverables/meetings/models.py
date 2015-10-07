@@ -40,6 +40,7 @@ class Meeting(models.Model):
     updated_by = models.ForeignKey(User, null=True, related_name='meeting_update_user')    
     
     class Meta:
+        db_table = 'meetings'
         ordering = ('-updated_at',)
 
     def __unicode__(self):
@@ -161,6 +162,7 @@ class Ranking(models.Model):
     percentage_votes = models.FloatField(default=0.0)
 
     class Meta:
+        db_table = 'rankings'
         unique_together = (('content_type', 'object_id', 'measure_value',),)
         ordering = ('measure_value__order',)
 
@@ -181,6 +183,7 @@ class MeetingItem(models.Model):
     evaluation_summary = GenericRelation(Ranking)
 
     class Meta:
+        db_table = 'meeting_items'
         ordering = ('decision_item__name',)
 
     def __unicode__(self):
@@ -247,6 +250,7 @@ class MeetingStakeholder(models.Model):
     meeting_input = models.FloatField(default=0.0)
 
     class Meta:
+        db_table = 'meeting_stakeholders'
         ordering = ('stakeholder__first_name', 'stakeholder__last_name', 'stakeholder__username',)
 
     def __unicode__(self):
@@ -264,6 +268,7 @@ class Evaluation(models.Model):
     rationale = models.OneToOneField(Rationale, null=True)
 
     class Meta:
+        db_table = 'evaluations'
         unique_together = (('meeting', 'meeting_item', 'user', 'factor', 'measure'),)
 
     def __unicode__(self):
@@ -299,6 +304,7 @@ class Scenario(models.Model):
     rationales = models.ManyToManyField(Rationale)
 
     class Meta:
+        db_table = 'scenarios'
         unique_together = (('name', 'meeting',),)
 
     def __unicode__(self):
