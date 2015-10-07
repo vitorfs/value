@@ -91,6 +91,9 @@ def attachment_file_upload_to(instance, filename):
 class DecisionItemAttachment(models.Model):
     decision_item = models.ForeignKey(DecisionItem, related_name='attachments')
     attachment = models.FileField(upload_to=attachment_file_upload_to)
+    
+    class Meta:
+        db_table = 'decision_items_attachments'
 
 @receiver(post_delete, sender=DecisionItemAttachment)
 def attachment_post_delete_handler(sender, **kwargs):

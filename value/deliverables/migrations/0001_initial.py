@@ -63,6 +63,9 @@ class Migration(migrations.Migration):
                 ('attachment', models.FileField(upload_to=value.deliverables.models.attachment_file_upload_to)),
                 ('decision_item', models.ForeignKey(related_name='attachments', to='deliverables.DecisionItem')),
             ],
+            options={
+                'db_table': 'decision_items_attachments',
+            },
         ),
         migrations.CreateModel(
             name='DecisionItemLookup',
