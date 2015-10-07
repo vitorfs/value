@@ -26,6 +26,7 @@ def main(argv=sys.argv):
         measure = meeting.deliverable.measure
         measure_values = list(measure.measurevalue_set.all())
 
+        pseudo_random_push = None
         if len(argv) > 2:
             pseudo_random_push = int(argv[2])
 
