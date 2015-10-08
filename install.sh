@@ -1,14 +1,14 @@
 #!/bin/bash
 
 sudo apt-get update
-sudo apt-get upgrade
+sudo apt-get -y upgrade
 
-sudo apt-get install pwgen
-sudo apt-get install postgresql postgresql-contrib
-sudo apt-get install libpq-dev python-dev
-sudo apt-get install supervisor
-sudo apt-get install nginx
-sudo apt-get install python-virtualenv
+sudo apt-get -y install pwgen
+sudo apt-get -y install postgresql postgresql-contrib
+sudo apt-get -y install libpq-dev python-dev
+sudo apt-get -y install supervisor
+sudo apt-get -y install nginx
+sudo apt-get -y install python-virtualenv
 
 IP_ADDRESS="$(curl ipecho.net/plain)"
 DATABASE_PASSWORD="$(pwgen 32 1)"
@@ -26,7 +26,7 @@ sudo chown value /webapps/value_tool/
 su value -c "virtualenv /webapps/value_tool/"
 su value -c "source /webapps/value_tool/bin/activate"
 
-cp value /webapps/value_tool/value
+cp -r value/ /webapps/value_tool/value
 
 cp /webapps/value_tool/value/conf/gunicorn_start.bash /webapps/value_tool/bin/gunicorn_start
 
