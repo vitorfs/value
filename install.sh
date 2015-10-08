@@ -21,9 +21,9 @@ printf "\n$LB GENERATING RANDOM DATABASE PASSWORD $LB"
 DATABASE_PASSWORD="$(pwgen 32 1)"
 
 printf "\n$LB CREATING POSTGRESQL DATABASE $LB"
-su postgres -c "createuser u_value"
-su postgres -c "psql -c \"ALTER USER u_value WITH PASSWORD '${DATABASE_PASSWORD}';\""
-su postgres -c "createdb --owner u_value value"
+su - postgres -c "createuser u_value"
+su - postgres -c "psql -c \"ALTER USER u_value WITH PASSWORD '${DATABASE_PASSWORD}';\""
+su - postgres -c "createdb --owner u_value value"
 
 printf "\n$LB CREATING APPLICATION GROUP AND USER $LB"
 sudo groupadd --system webapps
@@ -54,13 +54,13 @@ printf "\n$LB INSTALLING PROJECT DEPENDENCIES $LB"
 pip install -r /webapps/value_tool/value/requirements_prod.txt
 
 printf "\n$LB GENERATING APPLICATION SECRET KEY $LB"
-SECRET_KEY="$(python /webapps/value_tool/value/scripts/generate_secret_key.py)"
+APP_SECRET_KEY="$(python /webapps/value_tool/value/scripts/generate_secret_key.py)"
 
 printf "\n$LB CREATING APPLICATION ENV FILE $LB"
 cp /webapps/value_tool/value/conf/app_env /webapps/value_tool/value/.env
 
 printf "\n$LB ADD INSTANCE SPECIFIC SECRET KEY, IP ADDRESS, DATABASE PASSWORD $LB"
-sed -i "s/{SECRET_KEY}/$SECRET_KEY/" /webapps/value_tool/value/.env
+sed -i "s/{APP_SECRET_KEY}/$APP_SECRET_KEY/" /webapps/value_tool/value/.env
 sed -i "s/{IP_ADDRESS}/$IP_ADDRESS/" /webapps/value_tool/value/.env
 sed -i "s/{DATABASE_PASSWORD}/$DATABASE_PASSWORD/" /webapps/value_tool/value/.env
 
@@ -103,6 +103,9 @@ sudo ln -s /etc/nginx/sites-available/value /etc/nginx/sites-enabled/value
 
 printf "\n$LB RESTARTING NGINX $LB"
 sudo service nginx restart
+
+printf "\n$LB CREATE THE ADMIN USER: $LB"
+python /webapps/value_tool/value/manage.py createsuperuser
 
 printf "\n$LB SUCCESS! $LB"
 
