@@ -13,11 +13,9 @@ sudo apt-get -y install python-virtualenv
 IP_ADDRESS="$(curl ipecho.net/plain)"
 DATABASE_PASSWORD="$(pwgen 32 1)"
 
-sudo -u postgres bash << EOF
-createuser u_value
-psql -c "ALTER USER u_value WITH PASSWORD '${DATABASE_PASSWORD}';"
-createdb --owner u_value value
-EOF
+su postgres -c "createuser u_value"
+su postgres -c "psql -c \"ALTER USER u_value WITH PASSWORD '${DATABASE_PASSWORD}';\""
+su postgres -c "createdb --owner u_value value"
 
 sudo groupadd --system webapps
 sudo useradd --system --gid webapps --shell /bin/bash --home /webapps/value_tool value
@@ -25,13 +23,10 @@ sudo useradd --system --gid webapps --shell /bin/bash --home /webapps/value_tool
 sudo mkdir -p /webapps/value_tool/
 sudo chown value /webapps/value_tool/
 
-sudo -u value bash << EOF
 virtualenv /webapps/value_tool/
-EOF
 
 cp -r value/ /webapps/value_tool/value
 
-sudo -u value bash << EOF
 source /webapps/value_tool/bin/activate
 cp /webapps/value_tool/value/conf/gunicorn_start.bash /webapps/value_tool/bin/gunicorn_start
 sudo chmod u+x bin/gunicorn_start
@@ -64,7 +59,5 @@ sudo cp /webapps/value_tool/value/conf/value.nginxconf /etc/nginx/sites-availabl
 sed -i -e 's@{IP_ADDRESS}@${IP_ADDRESS}@g' /etc/nginx/sites-available/value
 sudo ln -s /etc/nginx/sites-available/value /etc/nginx/sites-enabled/value
 sudo service nginx restart
-
-EOF
 
 exit 0
