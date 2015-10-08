@@ -1,0 +1,43 @@
+upstream value_app_server {
+  # fail_timeout=0 means we always retry an upstream even if it failed
+  # to return a good HTTP response (in case the Unicorn master nukes a
+  # single worker for timing out).
+
+  server unix:/webapps/value_tool/run/gunicorn.sock fail_timeout=0;
+}
+
+server {
+
+    listen   80;
+    server_name {IP_ADDRESS};
+
+    client_max_body_size 4G;
+
+    access_log /webapps/value_tool/logs/nginx-access.log;
+    error_log /webapps/value_tool/logs/nginx-error.log;
+ 
+    location /static/ {
+        alias   /webapps/value_tool/static/;
+    }
+    
+    location /media/ {
+        alias   /webapps/value_tool/media/;
+    }
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        # enable this if and only if you use HTTPS, this helps Rack
+        # set the proper protocol for doing redirects:
+        # proxy_set_header X-Forwarded-Proto https;
+
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+
+        if (!-f $request_filename) {
+            proxy_pass http://value_app_server;
+            break;
+        }
+    }
+
+}

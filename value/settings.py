@@ -88,7 +88,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-STATIC_ROOT = PROJECT_DIR.parent.parent.child('staticfiles')
+STATIC_ROOT = PROJECT_DIR.parent.parent.child('static')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
