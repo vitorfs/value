@@ -29,7 +29,7 @@ cp -r value/ /webapps/value_tool/value
 
 source /webapps/value_tool/bin/activate
 cp /webapps/value_tool/value/conf/gunicorn_start.bash /webapps/value_tool/bin/gunicorn_start
-sudo chmod u+x bin/gunicorn_start
+sudo chmod u+x /webapps/value_tool/bin/gunicorn_start
 sudo chown -R value:users /webapps/value_tool
 sudo chmod -R g+w /webapps/value_tool
 
