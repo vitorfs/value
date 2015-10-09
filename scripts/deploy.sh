@@ -41,7 +41,7 @@ printf "\n$LB STARTING VIRTUAL ENV $LB"
 virtualenv /webapps/value_tool/
 
 printf "\n$LB COPYING SOURCE CODE TO VIRTUAL ENV $LB"
-cp -r ../value/ /webapps/value_tool/value
+cp -r ../../value/ /webapps/value_tool/value
 
 printf "\n$LB STARTING VIRTUAL ENV $LB"
 source /webapps/value_tool/bin/activate
@@ -53,7 +53,7 @@ printf "\n$LB ADD EXECUTE BIT TO GUNICORN_START $LB"
 sudo chmod u+x /webapps/value_tool/bin/gunicorn_start
 
 printf "\n$LB INSTALLING PROJECT DEPENDENCIES $LB"
-pip install -r /webapps/value_tool/value/requirements_prod.txt
+pip install -r /webapps/value_tool/value/requirements/production.txt
 
 printf "\n$LB GENERATING APPLICATION SECRET KEY $LB"
 APP_SECRET_KEY="$(python /webapps/value_tool/value/scripts/generate_secret_key.py)"
