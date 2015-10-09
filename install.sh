@@ -40,8 +40,8 @@ sudo chown value /webapps/value_tool/
 printf "\n$LB STARTING VIRTUAL ENV $LB"
 virtualenv /webapps/value_tool/
 
-printf "\n$LB COPING SOURCE CODE TO VIRTUAL ENV $LB"
-cp -r value/ /webapps/value_tool/value
+printf "\n$LB COPYING SOURCE CODE TO VIRTUAL ENV $LB"
+cp -r ../value/ /webapps/value_tool/value
 
 printf "\n$LB STARTING VIRTUAL ENV $LB"
 source /webapps/value_tool/bin/activate
