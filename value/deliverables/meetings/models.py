@@ -231,7 +231,7 @@ class MeetingItem(models.Model):
             self.save()
 
     def get_evaluations_with_rationale(self):
-        return self.meeting.get_evaluations().filter(meeting_item=self).exclude(rationale=None)
+        return self.meeting.get_evaluations().filter(meeting_item=self).exclude(rationale=None).order_by('factor__name')
 
     def has_rationales(self):
         has_evaluation_rationales = self.get_evaluations_with_rationale().exists()
