@@ -25,7 +25,9 @@ def get_factors_groups_chart_dict(meeting_item):
         'instance': meeting_item,
         'instance_type': 'meeting_item',
         'remote': reverse('deliverables:meetings:factors_groups_chart', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)),
-        'info_remote': reverse('deliverables:details_decision_item', args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk))
+        'info_remote': reverse('deliverables:details_decision_item', args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk)),
+        'has_rationales': meeting_item.has_rationales(),
+        'rationales_remote': reverse('deliverables:meetings:meeting_item_rationale', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk))
     }
     return chart_data
 

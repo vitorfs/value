@@ -1,24 +1,11 @@
 {% extends 'meetings/dashboard/base_popup.html' %}
 
-{% load staticfiles %}
-
 {% block title %}{{ chart.description }} {{ chart.measure.name }}{% endblock %}
 
-{% block stylesheet %}
-  <style>.panel { margin-bottom: 0; }</style>
-{% endblock %}
-
 {% block javascript %}
-  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
-  <script src="{% static 'js/highcharts/modules/data.js' %}"></script>
-  <script src="{% static 'js/highcharts/modules/treemap.js' %}"></script>
-  <script src="{% static 'js/highcharts/modules/drilldown.js' %}"></script>
-  <script src="{% static 'js/meetings/dashboard.js' %}"></script>
-  <script type="text/javascript">
+  <script>
     $(function () {
-      $(".chart-options .btn-chart-toggle, .chart-options .btn-chart-expand, .chart-options .btn-chart-modal").remove();
-      $(".btn-chart-toggle").unbind();
-      $(".panel-body").highcharts({{ dump|safe }});
+      $(".panel-body").loadpopupchart({{ dump|safe }});
     });
   </script>
 {% endblock %}

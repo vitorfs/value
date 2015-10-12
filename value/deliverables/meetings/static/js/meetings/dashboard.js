@@ -35,6 +35,24 @@ $.fn.loadchart = function (callback) {
   });
 };
 
+$.fn.loadpopupchart = function (options, removeExtra) {
+  removeExtra = removeExtra || function () {};
+
+  $(".chart-options .btn-chart-info").remove();
+  $(".chart-options .btn-chart-rationale").remove();
+  $(".chart-options .btn-chart-toggle").remove();
+  $(".chart-options .btn-chart-expand").remove();
+  $(".chart-options .btn-chart-modal").remove();
+  
+  removeExtra();
+
+  // Remove "a" element from panel title to avoid hover effect
+  // and chart toggle action, preserving the text only. 
+  $(".panel-title").text($(".panel-title").text());
+
+  $(this).highcharts(options);
+};
+
 $.fn.selectAllStakeholders = function () {
   var container = $(this).closest(".js-stakeholders");
   var group_name = $(this).closest("li").attr("data-target-group-name");
@@ -228,12 +246,18 @@ $(function () {
 
   $(document).on("click", ".btn-chart-rationale", function () {
     $("#modal-rationale").modal("show");
+    var panel = $(this).closest(".panel");
+    var title = $(".panel-title", panel).text();
+    title = "Discussion: ".concat(title);
     var url = $(this).attr("data-remote-url");
     $.ajax({
       url: url,
       type: 'get',
       cache: false,
       dataType: 'html',
+      beforeSend: function () {
+        $("#modal-rationale .modal-title").text(title);
+      },
       success: function (data) {
         $("#modal-rationale .modal-body").html(data);
       }

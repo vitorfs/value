@@ -1,17 +1,9 @@
 {% extends 'meetings/dashboard/base_popup.html' %}
 
-{% block title %}{{ chart.name }}{% endblock %}
-
-{% load staticfiles %}
-
 {% block javascript %}
-  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
-  <script src="{% static 'js/meetings/dashboard.js' %}"></script>
-  <script type="text/javascript">
+  <script>
     $(function () {
-      $(".panel-body").highcharts({{ dump|safe }});
-      $(".chart-options .btn-chart-info, .chart-options .btn-chart-toggle, .chart-options .btn-chart-expand, .chart-options .btn-chart-modal").remove();
-      $(".btn-chart-toggle").unbind();
+      $(".panel-body").loadpopupchart({{ dump|safe }});
     });
   </script>
 {% endblock javascript %}
