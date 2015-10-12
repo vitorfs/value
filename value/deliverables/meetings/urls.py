@@ -26,10 +26,10 @@ urlpatterns = patterns('value.deliverables.meetings.views',
     ## Summary Charts URLs
     url(r'^(?P<meeting_id>\d+)/dashboard/factors-usage/$', 'dashboard_factors_usage_chart', name='dashboard_factors_usage_chart'),
     url(r'^(?P<meeting_id>\d+)/dashboard/stakeholders-input/$', 'dashboard_stakeholders_input_chart', name='dashboard_stakeholders_input_chart'),
-    url(r'^(?P<meeting_id>\d+)/dashboard/value-ranking/$', 'value_ranking', name='value_ranking'),
-    url(r'^(?P<meeting_id>\d+)/dashboard/decision-items-overview/$', 'decision_items_overview', name='decision_items_overview'),
-    url(r'^(?P<meeting_id>\d+)/dashboard/features-comparison/$', 'features_comparison', name='features_comparison'),
-    url(r'^(?P<meeting_id>\d+)/dashboard/features-comparison/(?P<measure_value_id>\d+)/$', 'features_comparison_chart', name='features_comparison_chart'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/ranking/$', 'value_ranking', name='value_ranking'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/items/$', 'decision_items_overview', name='decision_items_overview'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/measures/$', 'features_comparison', name='features_comparison'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/measures/(?P<measure_value_id>\d+)/$', 'features_comparison_chart', name='features_comparison_chart'),
 
     ## Detailed Charts URLs
     ### Factors Comparison URLs

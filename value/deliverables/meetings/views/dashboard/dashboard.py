@@ -155,7 +155,7 @@ def features_comparison(request, deliverable_id, meeting_id):
         'meeting': meeting, 
         'charts': charts,
         'stakeholder_ids': stakeholder_ids,
-        'chart_uri': 'features-comparison',
+        'chart_uri': 'measures',
         'chart_menu_active': 'features_comparison',
         'chart_page_title': 'Features Comparison'
         })
@@ -181,7 +181,7 @@ def features_comparison_chart(request, deliverable_id, meeting_id, measure_value
             'dump': dump,
             'chart': chart,
             'stakeholder_ids': stakeholder_ids,
-            'chart_uri': 'features-comparison',
+            'chart_uri': 'measures',
             'chart_menu_active': 'features_comparison',
             'chart_page_title': 'Features Comparison'
             })
