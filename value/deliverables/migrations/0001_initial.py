@@ -98,19 +98,6 @@ class Migration(migrations.Migration):
                 'db_table': 'deliverables',
             },
         ),
-        migrations.CreateModel(
-            name='Rationale',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('text', models.TextField(max_length=4000, null=True, blank=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
-            ],
-            options={
-                'db_table': 'rationales',
-            },
-        ),
         migrations.AddField(
             model_name='decisionitem',
             name='deliverable',

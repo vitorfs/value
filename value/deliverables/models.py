@@ -170,15 +170,3 @@ class DecisionItemLookup(models.Model):
             if key in fields.keys():
                 ordered_fields[key] = fields[key]
         return ordered_fields
-
-class Rationale(models.Model):
-    text = models.TextField(max_length=4000, null=True, blank=True)
-    user = models.ForeignKey(User)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        db_table = 'rationales'
-
-    def __unicode__(self):
-        return self.text

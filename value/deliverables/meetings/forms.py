@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 from django.utils.html import escape
 
 from value.factors.models import Factor, Group as FactorGroup
-from value.deliverables.meetings.models import Meeting, MeetingItem, Scenario
+from value.deliverables.meetings.models import Meeting, MeetingItem, Scenario, Rationale
 
 
 class MeetingForm(forms.ModelForm):
@@ -102,3 +102,9 @@ class CompareScenarioForm(forms.Form):
 
     class Meta:
         fields = ('meeting', 'meeting_items')
+
+
+class RationaleForm(forms.ModelForm):
+    class Meta:
+        model = Rationale
+        fields = ['text',]

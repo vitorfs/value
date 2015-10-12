@@ -1,0 +1,29 @@
+<div>
+  <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 20px;">
+    <li role="presentation" class="active">
+      <a href="#tab-meeting-notes" aria-controls="tab-meeting-notes" role="tab" data-toggle="tab">
+        Meeting Notes
+        <span class="badge">{{ meeting.rationales.count }}</span>
+      </a>
+    </li>
+    <li role="presentation">
+      <a href="#tab-meeting-items-notes" aria-controls="tab-meeting-items-notes" role="tab" data-toggle="tab">
+        Meeting Items Notes
+        <span class="badge">{{ meeting.get_meeting_items_rationales_count }}</span>
+      </a>
+    </li>
+    <li role="presentation">
+      <a href="#tab-scenarios-notes" aria-controls="tab-scenarios-notes" role="tab" data-toggle="tab">
+        Scenarios Notes
+        <span class="badge">{{ meeting.get_scenarios_rationales_count }}</span>
+      </a>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="tab-meeting-notes">
+    </div>
+    <div role="tabpanel" class="tab-pane" id="tab-meeting-items-notes">
+    </div>
+    <div role="tabpanel" class="tab-pane" id="tab-scenarios-notes">
+    </div>
+</div>

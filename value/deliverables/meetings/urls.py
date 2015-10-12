@@ -6,10 +6,7 @@ urlpatterns = patterns('value.deliverables.meetings.views',
     url(r'^(?P<meeting_id>\d+)/$', 'meeting', name='meeting'),
     url(r'^(?P<meeting_id>\d+)/close/$', 'close_meeting', name='close_meeting'),
     url(r'^(?P<meeting_id>\d+)/open/$', 'open_meeting', name='open_meeting'),
-    url(r'^(?P<meeting_id>\d+)/remove-stakeholder/$', 'remove_stakeholder', name='remove_stakeholder'),
-    url(r'^(?P<meeting_id>\d+)/add-stakeholders/$', 'add_stakeholders', name='add_stakeholders'),
-    url(r'^(?P<meeting_id>\d+)/remove-decision-items/$', 'remove_decision_items', name='remove_decision_items'),
-    url(r'^(?P<meeting_id>\d+)/add-decision-items/$', 'add_decision_items', name='add_decision_items'),
+    url(r'^(?P<meeting_id>\d+)/rationales/$', 'rationales', name='rationales'),
 
     # Evaluate URLs
     url(r'^(?P<meeting_id>\d+)/evaluate/$', 'evaluate', name='evaluate'),
@@ -67,7 +64,11 @@ urlpatterns = patterns('value.deliverables.meetings.views',
 
     #Meeting Settings URLs
     url(r'^(?P<meeting_id>\d+)/settings/$', 'settings', name='settings'),
-    url(r'^(?P<meeting_id>\d+)/settings/items/$', 'decision_items', name='decision_items'),
-    url(r'^(?P<meeting_id>\d+)/settings/stakeholders/$', 'stakeholders', name='stakeholders'),
     url(r'^(?P<meeting_id>\d+)/settings/delete/$', 'delete', name='delete'),
+    url(r'^(?P<meeting_id>\d+)/settings/items/$', 'decision_items', name='decision_items'),
+    url(r'^(?P<meeting_id>\d+)/settings/items/add/$', 'add_decision_items', name='add_decision_items'),
+    url(r'^(?P<meeting_id>\d+)/settings/items/remove/$', 'remove_decision_items', name='remove_decision_items'),
+    url(r'^(?P<meeting_id>\d+)/settings/stakeholders/$', 'stakeholders', name='stakeholders'),
+    url(r'^(?P<meeting_id>\d+)/settings/stakeholders/add/$', 'add_stakeholders', name='add_stakeholders'),
+    url(r'^(?P<meeting_id>\d+)/settings/stakeholders/remove/$', 'remove_stakeholder', name='remove_stakeholder')
 )

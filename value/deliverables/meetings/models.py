@@ -2,15 +2,29 @@
 
 from django.db import models, transaction
 from django.db.models import Count, Min, Sum
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import m2m_changed, post_save
 from django.contrib.auth.models import User, Group
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
-from value.deliverables.models import Deliverable, DecisionItem, DecisionItemLookup, Rationale
+from value.deliverables.models import Deliverable, DecisionItem, DecisionItemLookup
 from value.deliverables.meetings.utils import format_percentage, get_votes_percentage
+
+
+class Rationale(models.Model):
+    text = models.TextField(max_length=4000, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, related_name='rationales_created')
+    updated_by = models.ForeignKey(User, null=True, related_name='rationales_updated')
+
+    class Meta:
+        db_table = 'rationales'
+
+    def __unicode__(self):
+        return self.text
 
 
 class Meeting(models.Model):
@@ -35,9 +49,11 @@ class Meeting(models.Model):
     started_at = models.DateTimeField()
     ended_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, related_name='meeting_creation_user')
+    created_by = models.ForeignKey(User, related_name='meetings_created')
     updated_at = models.DateTimeField(auto_now=True)
-    updated_by = models.ForeignKey(User, null=True, related_name='meeting_update_user')    
+    updated_by = models.ForeignKey(User, null=True, related_name='meetings_updated')
+    rationales = models.ManyToManyField(Rationale)
+    rationales_count = models.PositiveIntegerField(default=0)
     
     class Meta:
         db_table = 'meetings'
@@ -144,6 +160,27 @@ class Meeting(models.Model):
         scenarios = self.scenarios.all()
         db_model_order = ['-value_ranking', 'name']
         return self._get_ordered(Scenario, scenarios, order, db_model_order)
+
+    def get_meeting_items_rationales_count(self):
+        count = 0
+        for meeting_item in self.meetingitem_set.all():
+            count += meeting_item.get_all_rationales().count()
+        return count
+
+    def get_scenarios_rationales_count(self):
+        count = 0
+        for scenario in self.scenarios.all():
+            count += scenario.rationales.count()
+        return count
+
+    def calculate_meeting_related_rationales_count(self):
+        count = 0
+        count += self.get_meeting_items_rationales_count()
+        count += self.get_scenarios_rationales_count()
+        count += self.rationales.count()
+        self.rationales_count = count
+        self.save()
+        return count
 
 
 class Ranking(models.Model):
@@ -381,3 +418,16 @@ def calculate_scenario_ranking(sender, instance, action, **kwargs):
         instance.calculate_ranking()
 
 m2m_changed.connect(calculate_scenario_ranking, sender=Scenario.meeting_items.through)
+
+
+def calculate_rationales_count(sender, instance, action, **kwargs):
+    if action in ['post_add', 'post_remove']:
+        if isinstance(instance, Meeting):
+            meeting = instance
+        else:
+            meeting = instance.meeting
+        meeting.calculate_meeting_related_rationales_count()
+
+m2m_changed.connect(calculate_rationales_count, sender=Meeting.rationales.through)
+m2m_changed.connect(calculate_rationales_count, sender=MeetingItem.rationales.through)
+m2m_changed.connect(calculate_rationales_count, sender=Scenario.rationales.through)

@@ -41,9 +41,8 @@ class Migration(migrations.Migration):
                 ('ended_at', models.DateTimeField(null=True, blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('created_by', models.ForeignKey(related_name='meeting_creation_user', to=settings.AUTH_USER_MODEL)),
+                ('created_by', models.ForeignKey(related_name='meetings_created', to=settings.AUTH_USER_MODEL)),
                 ('deliverable', models.ForeignKey(to='deliverables.Deliverable')),
-                ('updated_by', models.ForeignKey(related_name='meeting_update_user', to=settings.AUTH_USER_MODEL, null=True)),
             ],
             options={
                 'ordering': ('-updated_at',),
@@ -59,7 +58,6 @@ class Migration(migrations.Migration):
                 ('meeting_ranking', models.FloatField(default=0.0)),
                 ('decision_item', models.ForeignKey(to='deliverables.DecisionItem')),
                 ('meeting', models.ForeignKey(to='meetings.Meeting')),
-                ('rationales', models.ManyToManyField(to='deliverables.Rationale')),
             ],
             options={
                 'ordering': ('decision_item__name',),
@@ -96,6 +94,20 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
+            name='Rationale',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('text', models.TextField(max_length=4000, null=True, blank=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('updated_at', models.DateTimeField(auto_now=True)),
+                ('created_by', models.ForeignKey(related_name='rationales_created', to=settings.AUTH_USER_MODEL)),
+                ('updated_by', models.ForeignKey(related_name='rationales_updated', to=settings.AUTH_USER_MODEL, null=True)),
+            ],
+            options={
+                'db_table': 'rationales',
+            },
+        ),
+        migrations.CreateModel(
             name='Scenario',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -103,11 +115,26 @@ class Migration(migrations.Migration):
                 ('value_ranking', models.FloatField(default=0.0)),
                 ('meeting', models.ForeignKey(related_name='scenarios', to='meetings.Meeting')),
                 ('meeting_items', models.ManyToManyField(related_name='scenarios', to='meetings.MeetingItem')),
-                ('rationales', models.ManyToManyField(to='deliverables.Rationale')),
+                ('rationales', models.ManyToManyField(to='meetings.Rationale')),
             ],
             options={
                 'db_table': 'scenarios',
             },
+        ),
+        migrations.AddField(
+            model_name='meetingitem',
+            name='rationales',
+            field=models.ManyToManyField(to='meetings.Rationale'),
+        ),
+        migrations.AddField(
+            model_name='meeting',
+            name='rationales',
+            field=models.ManyToManyField(to='meetings.Rationale'),
+        ),
+        migrations.AddField(
+            model_name='meeting',
+            name='updated_by',
+            field=models.ForeignKey(related_name='meetings_updated', to=settings.AUTH_USER_MODEL, null=True),
         ),
         migrations.AddField(
             model_name='evaluation',
@@ -122,7 +149,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='evaluation',
             name='rationale',
-            field=models.OneToOneField(null=True, to='deliverables.Rationale'),
+            field=models.OneToOneField(null=True, to='meetings.Rationale'),
         ),
         migrations.AddField(
             model_name='evaluation',

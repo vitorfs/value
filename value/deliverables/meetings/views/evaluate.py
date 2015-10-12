@@ -9,9 +9,8 @@ from django.utils import timezone
 
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
-from value.deliverables.models import Rationale
-from value.deliverables.forms import RationaleForm
-from value.deliverables.meetings.models import Meeting, MeetingItem, Evaluation
+from value.deliverables.meetings.forms import RationaleForm
+from value.deliverables.meetings.models import Meeting, MeetingItem, Evaluation, Rationale
 
 
 @login_required
@@ -107,14 +106,17 @@ def save_rationale(request, deliverable_id, meeting_id):
         
         if evaluation.rationale:
             form = RationaleForm(request.POST, instance=evaluation.rationale)
+            form.instance.updated_by = request.user
         else:
             form = RationaleForm(request.POST)
-            form.instance.user = request.user
+            form.instance.created_by = request.user
+            form.instance.meeting = meeting
 
         if form.is_valid():
             evaluation.rationale = form.save()
             evaluation.save()
             meeting.deliverable.save()
+            meeting.calculate_meeting_related_rationales_count()
             return HttpResponse()
         else:
             return HttpResponseBadRequest(form['text'].errors.as_text())

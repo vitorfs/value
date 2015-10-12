@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from value.factors.models import Factor
 from value.measures.models import Measure
-from value.deliverables.models import Deliverable, Rationale
+from value.deliverables.models import Deliverable
 
 
 class StakeholderPanelGroupMultipleModelChoiceField(forms.ModelMultipleChoiceField):
@@ -64,12 +64,6 @@ class DeliverableBasicDataForm(forms.ModelForm):
     class Meta:
         model = Deliverable
         fields = ['name', 'description',]
-
-        
-class RationaleForm(forms.ModelForm):
-    class Meta:
-        model = Rationale
-        fields = ['text',]
 
 
 class DeliverableFactorsForm(forms.ModelForm):
