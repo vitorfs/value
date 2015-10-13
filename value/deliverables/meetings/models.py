@@ -34,11 +34,13 @@ class Meeting(models.Model):
     can have many meeting. A meeting has a collection of stakeholders and a collection of
     decision items, defined by the classes MeetingItem and MeetingStakeholder.
     """
-    ONGOING = u'O'
-    CLOSED = u'C'
+    ONGOING = 'O'
+    ANALYSING = 'A'
+    CLOSED = 'C'
     STATUS = (
-        (ONGOING, u'Ongoing'),
-        (CLOSED, u'Closed'),
+        (ONGOING, 'Ongoing'),
+        (ANALYSING, 'Analysing'),
+        (CLOSED, 'Closed'),
         )
 
     name = models.CharField(max_length=255)
@@ -66,9 +68,11 @@ class Meeting(models.Model):
         return self.status == Meeting.CLOSED
 
     def get_status_label_html(self):
-        if self.status == self.ONGOING:
+        if self.status == Meeting.ONGOING:
             return u'<span class="label {0}"><span class="fa fa-refresh"></span> {1}</span>'.format("label-success", self.get_status_display().upper())
-        elif self.status == self.CLOSED:
+        elif self.status == Meeting.ANALYSING:
+            return u'<span class="label {0}"><span class="fa fa-bar-chart-o"></span> {1}</span>'.format("label-warning", self.get_status_display().upper())
+        elif self.status == Meeting.CLOSED:
             return u'<span class="label {0}"><span class="fa fa-lock"></span> {1}</span>'.format("label-danger", self.get_status_display().upper())
         else:
             return u'<span class="label {0}">{1}</span>'.format("label-default", self.get_status_display().upper())
