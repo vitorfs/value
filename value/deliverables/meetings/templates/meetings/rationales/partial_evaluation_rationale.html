@@ -1,0 +1,16 @@
+{% load avatar %}
+
+<div class="well" style="margin-bottom: 5px;">
+  <div class="media">
+    <div class="media-left">
+      <img src="{% avatar evaluation.user 32 %}" alt="{{ evaluation.user.get_display_name }}" class="img-circle">
+    </div>
+    <div class="media-body">
+      <h5 class="media-heading">
+        {{ evaluation.user.profile.get_display_name }}
+        <span class="text-muted" style="font-weight: 400;">evaluated <strong>{{ evaluation.factor.name }}</strong> as <span style="background-color: {{ evaluation.measure_value.color }}; height: 12px; width: 12px; display: inline-block; border-radius: 2px;"></span> <strong>{{ evaluation.measure_value.description }}</strong></span>
+      </h5>
+      {{ evaluation.rationale.text }}
+    </div>
+  </div>
+</div>

@@ -46,10 +46,13 @@ $(function () {
       url: url,
       cache: false,
       beforeSend: function () {
-        $("#modal-meeting-notes .modal-body").html("");
+        $("#modal-meeting-notes .modal-body").loading(160);
       },
       success: function (data) {
         $("#modal-meeting-notes .modal-body").html(data);
+      },
+      complete: function () {
+        $("#modal-meeting-notes .modal-body").loading();
       }
     });
   });

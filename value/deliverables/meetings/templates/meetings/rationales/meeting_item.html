@@ -1,59 +1,46 @@
-{% load avatar %}
-
 {% if meeting_item.has_rationales %}
+  <div>
+    <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 20px;">
+      <li role="presentation" class="active">
+        <a href="#notes-{{ meeting_item.pk }}" aria-controls="notes-{{ meeting_item.pk }}" role="tab" data-toggle="tab">
+          Notes
+          <span class="badge">{{ meeting_item.rationales.count }}</span>
+        </a>
+      </li>
+      <li role="presentation">
+        <a href="#evaluations-{{ meeting_item.pk }}" aria-controls="evaluations-{{ meeting_item.pk }}" role="tab" data-toggle="tab">
+          Evaluation Notes
+          <span class="badge">{{ meeting_item.get_evaluations_with_rationale.count }}</span>
+        </a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="notes-{{ meeting_item.pk }}">
+        {% if meeting_item.rationales.exists %}
 
-<div>
-  <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 20px;">
-    <li role="presentation" class="active">
-      <a href="#notes" aria-controls="notes" role="tab" data-toggle="tab">
-        Notes
-        <span class="badge">{{ meeting_item.rationales.count }}</span>
-      </a>
-    </li>
-    <li role="presentation">
-      <a href="#evaluations" aria-controls="evaluations" role="tab" data-toggle="tab">
-        Evaluation Notes
-        <span class="badge">{{ meeting_item.get_evaluations_with_rationale.count }}</span>
-      </a>
-    </li>
-  </ul>
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="notes">
-      {% if meeting_item.rationales.exists %}
-
-      {% else %}
-        <div class="well blank-state">
-          <span class="fa fa-comments"></span>
-          <h3>No notes recorded for this item.</h3>
-          <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add a note</button>
-        </div>
-      {% endif %}
-    </div>
-    <div role="tabpanel" class="tab-pane" id="evaluations">
-      {% for evaluation in meeting_item.get_evaluations_with_rationale %}
-        <div class="well" style="margin-bottom: 5px;">
-          <div class="media">
-            <div class="media-left">
-              <img src="{% avatar evaluation.user 32 %}" alt="{{ evaluation.user.get_display_name }}" class="img-circle">
-            </div>
-            <div class="media-body">
-              <h5 class="media-heading">
-                {{ evaluation.user.profile.get_display_name }}
-                <span class="text-muted" style="font-weight: 400;">evaluated <strong>{{ evaluation.factor.name }}</strong> as <span style="background-color: {{ evaluation.measure_value.color }}; height: 12px; width: 12px; display: inline-block; border-radius: 2px;"></span> <strong>{{ evaluation.measure_value.description }}</strong></span>
-              </h5>
-              {{ evaluation.rationale.text }}
-            </div>
+        {% else %}
+          <div class="well blank-state">
+            <span class="fa fa-comments"></span>
+            <h3>No notes recorded for this item.</h3>
+            <button type="button" class="btn btn-primary js-add-meeting-item-note" data-item-id="{{ meeting_item.pk }}">
+              <span class="glyphicon glyphicon-plus"></span> Add a note
+            </button>
           </div>
-        </div>
-      {% endfor %}
+        {% endif %}
+      </div>
+      <div role="tabpanel" class="tab-pane" id="evaluations-{{ meeting_item.pk }}">
+        {% for evaluation in meeting_item.get_evaluations_with_rationale %}
+          {% include 'meetings/rationales/partial_evaluation_rationale.html' with evaluation=evaluation %}
+        {% endfor %}
+      </div>
     </div>
   </div>
-</div>
-  
 {% else %}
   <div class="well blank-state">
     <span class="fa fa-comments"></span>
     <h3>No rationale recorded for this item.</h3>
-    <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add a note</button>
+    <button type="button" class="btn btn-primary js-add-meeting-item-note" data-item-id="{{ meeting_item.pk }}">
+      <span class="glyphicon glyphicon-plus"></span> Add a note
+    </button>
   </div>
 {% endif %}

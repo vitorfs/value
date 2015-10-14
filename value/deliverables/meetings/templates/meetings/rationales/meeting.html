@@ -21,9 +21,72 @@
   </ul>
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="tab-meeting-notes">
+      {% if meeting.rationales.exists %}
+
+      {% else %}
+        <div class="well blank-state">
+          <span class="fa fa-comments"></span>
+          <h3>No rationale recorded for this meeting.</h3>
+          <button type="button" class="btn btn-primary js-add-meeting-note">
+            <span class="glyphicon glyphicon-plus"></span> Add a note
+          </button>
+        </div>
+      {% endif %}
     </div>
     <div role="tabpanel" class="tab-pane" id="tab-meeting-items-notes">
+      <div class="panel-group" id="meeting-items-rationales-panel-group" role="tablist" aria-multiselectable="true">
+        {% for item in meeting.meetingitem_set.all %}
+          {% with rationales_count=item.get_all_rationales.count %}
+            <div class="panel {% if rationales_count > 0 %}panel-info{% else %}panel-default{% endif %}">
+              <div class="panel-heading" role="tab" id="meeting-item-rational-panel-{{ item.pk }}" style="padding: 7px 10px;">
+                <h5 class="panel-title" style="font-size: 14px;">
+                  <span class="badge pull-right">{{ rationales_count }}</span>
+                  <a role="button" data-toggle="collapse" data-parent="#meeting-items-rationales-panel-group" href="#meeting-item-rationale-collapse-{{ item.pk }}" aria-expanded="true" aria-controls="meeting-item-rationale-collapse-{{ item.pk }}">
+                    {{ item.decision_item.name }}
+                  </a>
+                </h5>
+              </div>
+              <div id="meeting-item-rationale-collapse-{{ item.pk }}" class="panel-collapse collapse{% if forloop.first == 1 %} in{% endif %}" role="tabpanel" aria-labelledby="meeting-item-rational-panel-{{ item.pk }}">
+                <div class="panel-body">
+                  {% include 'meetings/rationales/meeting_item.html' with meeting_item=item %}
+                </div>
+              </div>
+            </div>
+          {% endwith %}
+        {% endfor %}
+      </div>
     </div>
     <div role="tabpanel" class="tab-pane" id="tab-scenarios-notes">
+      <div class="panel-group" id="scenarios-rationales-panel-group" role="tablist" aria-multiselectable="true">
+        {% for scenario in meeting.scenarios.all %}
+          {% with rationales_count=scenario.rationales.count %}
+            <div class="panel {% if rationales_count > 0 %}panel-info{% else %}panel-default{% endif %}">
+              <div class="panel-heading" role="tab" id="scenario-rational-panel-{{ item.pk }}" style="padding: 7px 10px;">
+                <h5 class="panel-title" style="font-size: 14px;">
+                  <span class="badge pull-right">{{ rationales_count }}</span>
+                  <a role="button" data-toggle="collapse" data-parent="#scenarios-rationales-panel-group" href="#scenario-rationale-collapse-{{ scenario.pk }}" aria-expanded="true" aria-controls="scenario-rationale-collapse-{{ scenario.pk }}">
+                    {{ scenario.name }}
+                  </a>
+                </h5>
+              </div>
+              <div id="scenario-rationale-collapse-{{ scenario.pk }}" class="panel-collapse collapse{% if forloop.first == 1 %} in{% endif %}" role="tabpanel" aria-labelledby="scenario-rational-panel-{{ scenario.pk }}">
+                <div class="panel-body">
+                  {% if scenario.rationales.exists %}
+
+                  {% else %}
+                    <div class="well blank-state">
+                      <span class="fa fa-comments"></span>
+                      <h3>No rationale recorded for this scenario.</h3>
+                      <button type="button" class="btn btn-primary js-add-scenario-note" data-scenario-id="{{ scenario.pk }}">
+                        <span class="glyphicon glyphicon-plus"></span> Add a note
+                      </button>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endwith %}
+        {% endfor %}
+      </div>
     </div>
 </div>
