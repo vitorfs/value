@@ -16,7 +16,7 @@ class Group(models.Model):
 class Factor(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField(max_length=2000, null=True, blank=True)
-    measure = models.ForeignKey(Measure, null=True, blank=True)
+    measure = models.ForeignKey(Measure, null=True, blank=True, on_delete=models.SET_NULL)
     is_active = models.BooleanField(default=True)
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
 
