@@ -42,4 +42,29 @@ $(function () {
       }
     });
   });
+
+  var updateMeetingProgress = function () {
+    var url = $("#meeting-progress").attr("data-remote-url");
+    var status = $("#meeting-progress").attr("data-meeting-status");
+    if (status !== "C") {
+      $.ajax({
+        url: url,
+        cache: false,
+        dataType: 'json',
+        success: function (data) {
+          if (data.meeting_closed) {
+            location.reload();
+          }
+          else {
+            $("#meeting-progress").replaceWith(data.html);
+          }
+        },
+        complete: function () {
+          window.setTimeout(updateMeetingProgress, 10000);
+        }
+      });
+    }
+  };
+  updateMeetingProgress();
+
 });

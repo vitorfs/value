@@ -1,11 +1,15 @@
 # coding: utf-8
 
+import json
+
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.template import RequestContext
+from django.template.loader import render_to_string
 
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
@@ -80,7 +84,11 @@ def save_evaluation(request, deliverable_id, meeting_id):
         scenario.calculate_ranking()
     meeting.deliverable.save()
 
-    return HttpResponse()
+    json_context = dict()
+    context = RequestContext(request, { 'meeting': meeting })
+    json_context['html'] = render_to_string('meetings/includes/partial_meeting_progress.html', context)
+    json_context['meeting_closed'] = meeting.is_closed()
+    return HttpResponse(json.dumps(json_context), content_type='application/json')
 
 @login_required
 @require_POST

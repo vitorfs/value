@@ -1,11 +1,3 @@
-var simulate = function () {
-  // :TODO Remove from prodution server
-  $(".table-evaluate tbody tr").each(function () {
-    var i = Math.floor(Math.random() * 3) + 1;
-    $("td:eq(" + i + ")", this).click();
-  });
-};
-
 $(function () {
 
   $(".js-factor-description").popover();
@@ -200,7 +192,7 @@ $(function () {
     }
 
     var url = $(this).closest("form").attr("action");
-    var csrf = $("[name='csrfmiddlewaretoken']").val();
+    var csrf = getCSRF();
 
     var meeting_item_id = $(this).closest("table").attr("data-meeting-item-id");
 
@@ -220,7 +212,12 @@ $(function () {
       },
       type: 'post',
       success: function (data) {
-
+        if (data.meeting_closed) {
+          location.reload();
+        }
+        else {
+          $("#meeting-progress").replaceWith(data.html);
+        }
       }
     });
 
