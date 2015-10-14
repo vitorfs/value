@@ -6,8 +6,6 @@ from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.template import RequestContext
-from django.template.loader import render_to_string
 
 from value.factors.models import Group as FactorGroup
 from value.deliverables.meetings.models import Meeting, Scenario

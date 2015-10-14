@@ -21,73 +21,86 @@
 {% block content %}
   {% include 'meetings/includes/menu.html' with active='decision' meeting=meeting %}
 
-  <div class="row">
-    <div class="col-lg-8 col-md-10 col-sm-12 col-lg-offset-2 col-md-offset-1">
-
-      <form id="form-final-decision" method="post" action="{% url 'deliverables:meetings:save_final_decision' meeting.deliverable.pk meeting.pk %}">
-        {% csrf_token %}
-        {{ formset.management_form }}
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Final Decision</h3>
-          </div>
-          <table class="table table-bordered" id="table-final-decision">
-            <thead>
-              <th>Name</th>
-              <th>Summary</th>
-              <th style="width: 140px;">Value Ranking</th>
-              <th style="width: 100px;">Decision</th>
-              {% comment %}<th style="width: 150px;">Meeting Ranking</th>{% endcomment %}
-            </thead>
-            <tbody>
-              {% for form in formset %}
-                <tr data-item-id="{{ form.instance.pk }}"{% if meeting.is_closed %} class="{% if form.instance.meeting_decision %}bg-success{% else %}bg-danger{% endif %}"{% endif %}>
-                  <td style="vertical-align: middle;">
-                    {{ form.instance.decision_item.name }}
-                    {% display_info_button form.instance %}
-                    {% for hidden in form.hidden_fields %}
-                      {{ hidden }}
-                    {% endfor %}
-                  </td>
-                  <td style="vertical-align: middle;">
-                    {% display_evaluation_summary form.instance %}
-                  </td>
-                  <td style="vertical-align: middle; text-align: right;">{{ form.instance.value_ranking_as_html|safe }}</td>
-                  <td style="vertical-align: middle; text-align: center;">
-                    <div class="checkbox">
-                      <label>
-                        {% if not meeting.is_closed %}
-                          {{ form.meeting_decision }}
-                        {% endif %}
-                        <span class="decision-text">
-                          {% if form.instance.meeting_decision %}
-                            Yes
-                          {% else %}
-                            No
-                          {% endif %}
-                        </span>
-                      </label>
-                    </div>
-                  </td>
-                  {% comment %}
-                  <td style="vertical-align: middle; text-align: center;">
-                    {% if not meeting.is_closed %}
-                      <span class="hide">{{ form.meeting_ranking.value }}</span>
-                      {{ form.meeting_ranking }}
-                    {% else %}
-                      {{ form.meeting_ranking.value }}
-                    {% endif %}
-                  </td>
-                  {% endcomment %}
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </form>
-
+  {% if meeting.is_ongoing %}
+    <div class="well blank-state">
+      <span class="fa fa-refresh"></span>
+      <h3>The meeting is still ongoing!</h3>
+      <p class="lead">In order to record the final decision the meeting manager must change its status to <strong>Analysing</strong>.</p>
+      {% if user == meeting.deliverable.manager %}
+        <button type="button" class="btn btn-primary js-change-meeting-status" data-option="{{ meeting.ANALYSING }}">
+          <span class="fa fa-bar-chart-o"></span> Change status to Analysing
+        </button>
+      {% endif %}
     </div>
-  </div>
+  {% else %}
+    <div class="row">
+      <div class="col-lg-8 col-md-10 col-sm-12 col-lg-offset-2 col-md-offset-1">
+
+        <form id="form-final-decision" method="post" action="{% url 'deliverables:meetings:save_final_decision' meeting.deliverable.pk meeting.pk %}">
+          {% csrf_token %}
+          {{ formset.management_form }}
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Final Decision</h3>
+            </div>
+            <table class="table table-bordered" id="table-final-decision">
+              <thead>
+                <th>Name</th>
+                <th>Summary</th>
+                <th style="width: 140px;">Value Ranking</th>
+                <th style="width: 100px;">Decision</th>
+                {% comment %}<th style="width: 150px;">Meeting Ranking</th>{% endcomment %}
+              </thead>
+              <tbody>
+                {% for form in formset %}
+                  <tr data-item-id="{{ form.instance.pk }}"{% if meeting.is_closed %} class="{% if form.instance.meeting_decision %}bg-success{% else %}bg-danger{% endif %}"{% endif %}>
+                    <td style="vertical-align: middle;">
+                      {{ form.instance.decision_item.name }}
+                      {% display_info_button form.instance %}
+                      {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                      {% endfor %}
+                    </td>
+                    <td style="vertical-align: middle;">
+                      {% display_evaluation_summary form.instance %}
+                    </td>
+                    <td style="vertical-align: middle; text-align: right;">{{ form.instance.value_ranking_as_html|safe }}</td>
+                    <td style="vertical-align: middle; text-align: center;">
+                      <div class="checkbox">
+                        <label>
+                          {% if not meeting.is_closed %}
+                            {{ form.meeting_decision }}
+                          {% endif %}
+                          <span class="decision-text">
+                            {% if form.instance.meeting_decision %}
+                              Yes
+                            {% else %}
+                              No
+                            {% endif %}
+                          </span>
+                        </label>
+                      </div>
+                    </td>
+                    {% comment %}
+                    <td style="vertical-align: middle; text-align: center;">
+                      {% if not meeting.is_closed %}
+                        <span class="hide">{{ form.meeting_ranking.value }}</span>
+                        {{ form.meeting_ranking }}
+                      {% else %}
+                        {{ form.meeting_ranking.value }}
+                      {% endif %}
+                    </td>
+                    {% endcomment %}
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  {% endif %}
 
   {% include 'deliverables/decision_items/includes/modal.html' %}
 

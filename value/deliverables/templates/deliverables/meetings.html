@@ -28,20 +28,20 @@
     {% endif %}
 
     {% if has_meetings %}
-      {% if deliverable.get_ongoing_meetings.exists %}
+      {% if deliverable.get_meetings_in_progress.exists %}
         <div class="panel panel-success">
           <div class="panel-heading">
-            <h3 class="panel-title">Ongoing meeting</h3>
+            <h3 class="panel-title">Meetings in progress</h3>
           </div>
-          {% include 'deliverables/includes/meetings_table.html' with meetings=deliverable.get_ongoing_meetings %}
+          {% include 'deliverables/includes/meetings_table.html' with meetings=deliverable.get_meetings_in_progress %}
         </div>
       {% endif %}
-      {% if deliverable.get_closed_meetings.exists %}
+      {% if deliverable.get_past_meetings.exists %}
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">Past meetings</h3>
           </div>
-          {% include 'deliverables/includes/meetings_table.html' with meetings=deliverable.get_closed_meetings %}
+          {% include 'deliverables/includes/meetings_table.html' with meetings=deliverable.get_past_meetings %}
         </div>
       {% endif %}
     {% else %}

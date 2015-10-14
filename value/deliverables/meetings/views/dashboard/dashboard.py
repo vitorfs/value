@@ -6,8 +6,6 @@ from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.template import RequestContext
-from django.template.loader import render_to_string
 
 from value.measures.models import MeasureValue
 from value.deliverables.meetings.models import Meeting, Evaluation
@@ -24,11 +22,17 @@ def dashboard(request, deliverable_id, meeting_id):
     charts.append({ 'chart_id': 'factors_usage', 'chart_title': 'Factors Usage', 'chart_uri': reverse('deliverables:meetings:dashboard_factors_usage_chart', args=(deliverable_id, meeting_id,)) })
     charts.append({ 'chart_id': 'stakeholders_input', 'chart_title': 'Stakeholders Input', 'chart_uri': reverse('deliverables:meetings:dashboard_stakeholders_input_chart', args=(deliverable_id, meeting_id,)) })
 
-    return render(request, 'meetings/dashboard/dashboard_list.html', { 
-        'meeting': meeting,
-        'charts': charts,
-        'chart_menu_active': 'overview'
-        })
+    if meeting.is_ongoing():
+        return render(request, 'meetings/dashboard/dashboard_closed.html', { 
+            'meeting': meeting,
+            'charts': charts
+            })
+    else:
+        return render(request, 'meetings/dashboard/dashboard_list.html', { 
+            'meeting': meeting,
+            'charts': charts,
+            'chart_menu_active': 'overview'
+            })
 
 @login_required
 def dashboard_factors_usage_chart(request, deliverable_id, meeting_id):

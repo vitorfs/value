@@ -33,10 +33,10 @@ class Deliverable(models.Model):
     def get_decision_items_fields(self):
         return DecisionItemLookup.get_visible_fields()
 
-    def get_ongoing_meetings(self):
-        return self.meeting_set.filter(status='O')
+    def get_meetings_in_progress(self):
+        return self.meeting_set.filter(status__in=['O', 'A'])
 
-    def get_closed_meetings(self):
+    def get_past_meetings(self):
         return self.meeting_set.filter(status='C')
 
 

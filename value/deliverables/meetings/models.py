@@ -64,18 +64,34 @@ class Meeting(models.Model):
     def __unicode__(self):
         return self.name
 
+    def is_ongoing(self):
+        return self.status == Meeting.ONGOING
+
+    def is_analysing(self):
+        return self.status == Meeting.ANALYSING
+    
     def is_closed(self):
         return self.status == Meeting.CLOSED
 
-    def get_status_label_html(self):
+    def get_status_icon_html(self):
         if self.status == Meeting.ONGOING:
-            return u'<span class="label {0}"><span class="fa fa-refresh"></span> {1}</span>'.format("label-success", self.get_status_display().upper())
+            return u'<span class="fa fa-refresh"></span> {0}'.format(self.get_status_display())
         elif self.status == Meeting.ANALYSING:
-            return u'<span class="label {0}"><span class="fa fa-bar-chart-o"></span> {1}</span>'.format("label-warning", self.get_status_display().upper())
+            return u'<span class="fa fa-bar-chart-o"></span> {0}'.format(self.get_status_display())
         elif self.status == Meeting.CLOSED:
-            return u'<span class="label {0}"><span class="fa fa-lock"></span> {1}</span>'.format("label-danger", self.get_status_display().upper())
+            return u'<span class="fa fa-lock"></span> {0}'.format(self.get_status_display())
         else:
-            return u'<span class="label {0}">{1}</span>'.format("label-default", self.get_status_display().upper())
+            return self.get_status_display().upper()
+
+    def get_status_label_html(self):
+        label = 'label-default'
+        if self.status == Meeting.ONGOING:
+            label = 'label-success'
+        elif self.status == Meeting.ANALYSING:
+            label = 'label-warning'
+        elif self.status == Meeting.CLOSED:
+            label = 'label-danger'
+        return u'<span class="label {0}"><span style="text-transform: uppercase;">{1}</span></span>'.format(label, self.get_status_icon_html())
 
     def get_evaluations(self):
         return Evaluation.get_evaluations_by_meeting(self)

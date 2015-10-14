@@ -1,0 +1,7 @@
+{% with progress=meeting.get_progress %}
+  <div class="progress" style="margin-bottom: 0; width: 150px; display: inline-block;" data-meeting-status="{{ meeting.status }}" data-remote-url="{% url 'deliverables:meetings:update_meeting_progress' meeting.deliverable.pk meeting.pk %}">
+    <div class="progress-bar{% if progress == 100.0 %} progress-bar-success{% else %} progress-bar-warning{% endif %}" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%;">
+      {{ progress }}%
+    </div>
+  </div>
+{% endwith %}

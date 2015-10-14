@@ -14,6 +14,21 @@ $(function () {
     });
   });
 
+  $(".js-change-meeting-status").click(function () {
+    var option = $(this).attr("data-option");
+    $("#meeting-status").val(option);
+    if (option === "C") {
+      $("#close-meeting").modal("show");
+    }
+    else {
+      $("#form-meeting-status").submit();
+    }
+  });
+
+  $("#confirm-close-meeting").click(function () {
+    $("#form-meeting-status").submit();
+  });
+
   $(".js-meeting-notes").click(function () {
     var url = $(this).attr("data-remote-url");
     $.ajax({

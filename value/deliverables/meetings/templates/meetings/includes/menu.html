@@ -1,56 +1,22 @@
-{% if user == meeting.deliverable.manager %}
-  {% if not meeting.is_closed %}
-    <form method="post" action="{% url 'deliverables:meetings:close_meeting' meeting.deliverable.pk meeting.pk %}">
-      {% csrf_token %}
-      <div class="modal fade" id="close-meeting" tabindex="-1" role="dialog" aria-labelledby="close-meeting-title" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="close-meeting-title">Close the meeting?</h4>
-            </div>
-            <div class="modal-body">
-              <p>After closing the meeting the evaluation session will be finished. You won't be able to change the meeting details.</p>
-              <p>It is strongly advised to only close a decision making meeting after the progress reach 100%.</p>
-              <p>Current progress:</p>
-              {% with progress=meeting.get_progress %}
-                <div class="progress">
-                  <div class="progress-bar{% if progress == 100.0 %} progress-bar-success{% else %} progress-bar-warning{% endif %}" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%;">
-                    {{ progress }}%
-                  </div>
-                </div>
-              {% endwith %}
-              <p>You can re-open the meeting anytime.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-danger btn-block">Close the meeting</button>
-            </div>
-          </div>
-        </div>
+{% include 'meetings/includes/partial_status.html' %}
+
+<div class="modal fade" id="modal-meeting-notes">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Meeting notes</h4>
       </div>
-    </form>
-    <button type="button" class="btn btn-danger pull-right" data-toggle="modal" data-target="#close-meeting" style="margin-left: 10px;">
-      <span class="glyphicon glyphicon-ban-circle"></span> Close meeting
-    </button>
-  {% else %}
-    <form method="post" action="{% url 'deliverables:meetings:open_meeting' meeting.deliverable.pk meeting.pk %}" style="display: inline;">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-success pull-right" style="margin-left: 10px;">
-        <span class="glyphicon glyphicon-ok"></span> Re-open meeting
-      </button>
-    </form>
-  {% endif %}
-  <div class="modal fade" id="modal-meeting-notes">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Meeting notes</h4>
-        </div>
-        <div class="modal-body"></div>
-      </div>
+      <div class="modal-body"></div>
     </div>
   </div>
+</div>
+
+{% if meeting.is_ongoing %}
+  <button type="button" class="btn btn-default pull-right disabled" disabled>
+    <span class="fa fa-comments"></span> Meeting notes <span class="fa fa-lock" style="margin-left: 5px;"></span>
+  </button>
+{% else %}
   <button type="button" class="btn btn-default pull-right js-meeting-notes" data-toggle="modal" data-target="#modal-meeting-notes" data-remote-url="{% url 'deliverables:meetings:rationales' meeting.deliverable.pk meeting.pk %}">
     <span class="fa fa-comments"></span> Meeting notes <span class="badge">{{ meeting.rationales_count }}</span>
   </button>
@@ -62,19 +28,47 @@
   <a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">
     {{ meeting.name }}
   </a>
-  <span style="font-size: 14px; vertical-align: 5px; margin-left: 10px;">
-    {{ meeting.get_status_label_html|safe }}
-  </span>
+  {% include 'meetings/includes/partial_meeting_progress.html' %}
   <span style="font-size: 12px; vertical-align: 4px;">
     <span class="fa fa-calendar" style="margin-left: 10px;"></span> {{ meeting.started_at }}{% if meeting.location %}, <span class="fa fa-map-marker" style="margin-left: 10px;"></span> {{ meeting.location }}{% endif %}
   </span>
 </h3>
 
 <ul class="nav nav-tabs" style="margin-bottom: 20px">
-  <li role="presentation"{% if active == 'evaluate' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:evaluate' meeting.deliverable.pk meeting.pk %}"><span class="fa fa-balance-scale"></span> Evaluate</a></li>
-  <li role="presentation"{% if active == 'dashboard' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:dashboard' meeting.deliverable.pk meeting.pk %}"><span class="fa fa-bar-chart"></span> Dashboard</a></li>
-  <li role="presentation"{% if active == 'decision' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:final_decision' meeting.deliverable.pk meeting.pk %}"><span class="fa fa-gavel"></span> Final Decision</a></li>
+  
+  <li role="presentation"{% if active == 'evaluate' %} class="active"{% endif %}>
+    <a href="{% url 'deliverables:meetings:evaluate' meeting.deliverable.pk meeting.pk %}">
+      <span class="fa fa-balance-scale"></span> Evaluate
+      {% if meeting.is_closed %}
+        <span class="fa fa-lock text-muted" style="margin-left: 5px;"></span>
+      {% endif %}
+    </a>
+  </li>
+
+  <li role="presentation"{% if active == 'dashboard' %} class="active"{% endif %}>
+    <a href="{% url 'deliverables:meetings:dashboard' meeting.deliverable.pk meeting.pk %}">
+      <span class="fa fa-bar-chart"></span> Dashboard
+      {% if meeting.is_ongoing %}
+        <span class="fa fa-lock text-muted" style="margin-left: 5px;"></span>
+      {% endif %}
+    </a>
+  </li>
+
+  <li role="presentation"{% if active == 'decision' %} class="active"{% endif %}>
+    <a href="{% url 'deliverables:meetings:final_decision' meeting.deliverable.pk meeting.pk %}">
+      <span class="fa fa-gavel"></span> Final Decision
+      {% if meeting.is_ongoing %}
+        <span class="fa fa-lock text-muted" style="margin-left: 5px;"></span>
+      {% endif %}
+    </a>
+  </li>
+
   {% if user == meeting.deliverable.manager %}
-    <li role="presentation"{% if active == 'settings' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:settings' meeting.deliverable.pk meeting.pk %}"><span class="fa fa-wrench"></span> Settings</a></li>
+    <li role="presentation"{% if active == 'settings' %} class="active"{% endif %}>
+      <a href="{% url 'deliverables:meetings:settings' meeting.deliverable.pk meeting.pk %}">
+        <span class="fa fa-wrench"></span> Settings
+      </a>
+    </li>
   {% endif %}
+
 </ul>

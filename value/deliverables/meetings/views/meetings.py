@@ -10,11 +10,13 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.db import transaction
+from django.template import RequestContext
+from django.template.loader import render_to_string
 
 from value.deliverables.models import Deliverable, DecisionItemLookup, DecisionItem
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
 from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
-from value.deliverables.meetings.forms import MeetingForm
+from value.deliverables.meetings.forms import MeetingForm, MeetingStatusForm
 
 
 @login_required
@@ -84,32 +86,38 @@ def new(request, deliverable_id):
 @login_required
 def meeting(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    if meeting.is_closed():
+    if meeting.status == Meeting.CLOSED:
         return redirect(reverse('deliverables:meetings:final_decision', args=(deliverable_id, meeting_id)))
+    elif meeting.status == Meeting.ANALYSING:
+        return redirect(reverse('deliverables:meetings:dashboard', args=(deliverable_id, meeting_id)))
     else:
         return redirect(reverse('deliverables:meetings:evaluate', args=(deliverable_id, meeting_id)))
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 @require_POST
-def close_meeting(request, deliverable_id, meeting_id):
+def change_meeting_status(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    meeting.status = Meeting.CLOSED
-    meeting.save()
-    meeting.deliverable.save()
-    messages.success(request, u'The meeting {0} was closed successfully.'.format(meeting.name))
-    return redirect(reverse('deliverables:meetings:meeting', args=(meeting.deliverable.pk, meeting.pk)))
+    old_status = meeting.get_status_display()
+    form = MeetingStatusForm(request.POST, instance=meeting)
+    if form.is_valid():
+        meeting = form.save()
+        meeting.deliverable.save()
+        new_status = meeting.get_status_display()
+        messages.success(request, u'The meeting status was changed from {0} to {1}.'.format(old_status, new_status))
+    else:
+        messages.error(request, u'An error ocurred while trying to change meeting status.'.format(meeting.name))
+    redirect_to = request.POST.get('next', reverse('deliverables:meetings:meeting', args=(meeting.deliverable.pk, meeting.pk)))
+    return redirect(redirect_to)
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
-@require_POST
-def open_meeting(request, deliverable_id, meeting_id):
+def update_meeting_progress(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    meeting.status = Meeting.ONGOING
-    meeting.save()
-    meeting.deliverable.save()
-    messages.success(request, u'The meeting {0} was opened successfully.'.format(meeting.name))
-    return redirect(reverse('deliverables:meetings:meeting', args=(meeting.deliverable.pk, meeting.pk)))
+    json_context = dict()
+    context = RequestContext(request, { 'meeting': meeting })
+    json_context['html'] = render_to_string('meetings/includes/partial_meeting_progress.html', context)
+    json_context['meeting_closed'] = meeting.is_closed()
+    return HttpResponse(json.dumps(json_context), content_type='application/json')
 
 @login_required
 @require_POST

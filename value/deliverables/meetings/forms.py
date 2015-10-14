@@ -26,6 +26,10 @@ class MeetingForm(forms.ModelForm):
         model = Meeting
         fields = ['name', 'started_at', 'location', 'description',]
 
+class MeetingStatusForm(forms.ModelForm):
+    class Meta:
+        model = Meeting
+        fields = ['status']
 
 class MeetingItemFinalDecisionForm(forms.ModelForm):
     meeting_decision = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class' : 'final-decision'}), required=False)
