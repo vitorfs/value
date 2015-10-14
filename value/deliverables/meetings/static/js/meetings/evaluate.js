@@ -47,6 +47,7 @@ $(function () {
           $(container).siblings(".js-rationale").addClass("no-comment"); 
         }
         $(container).popover("hide");
+        updateMeetingProgress(data);
       },
       error: function (jqXHR, textStatus, errorThrown) {
         toastr.error(jqXHR.responseText);
@@ -211,14 +212,7 @@ $(function () {
         'measure_value_id': measure_value_id
       },
       type: 'post',
-      success: function (data) {
-        if (data.meeting_closed) {
-          location.reload();
-        }
-        else {
-          $("#meeting-progress").replaceWith(data.html);
-        }
-      }
+      success: updateMeetingProgress
     });
 
   });

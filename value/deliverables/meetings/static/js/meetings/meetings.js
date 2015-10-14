@@ -1,4 +1,15 @@
+var updateMeetingProgress = function (data) {
+  if (data.meeting_closed) {
+    location.reload();
+  }
+  else {
+    $("#meeting-progress").replaceWith(data.progress);
+    $(".js-meeting-notes-count").text(data.rationales_count);
+  }
+};
+
 $(function () {
+  
   $(document).on("click", ".js-decision-item-details", function () {
     $(this).tooltip("hide");
     var url = $(this).attr("data-remote-url");
@@ -43,7 +54,7 @@ $(function () {
     });
   });
 
-  var updateMeetingProgress = function () {
+  var checkMeetingProgress = function () {
     var url = $("#meeting-progress").attr("data-remote-url");
     var status = $("#meeting-progress").attr("data-meeting-status");
     if (status !== "C") {
@@ -51,20 +62,13 @@ $(function () {
         url: url,
         cache: false,
         dataType: 'json',
-        success: function (data) {
-          if (data.meeting_closed) {
-            location.reload();
-          }
-          else {
-            $("#meeting-progress").replaceWith(data.html);
-          }
-        },
+        success: updateMeetingProgress,
         complete: function () {
-          window.setTimeout(updateMeetingProgress, 10000);
+          window.setTimeout(checkMeetingProgress, 10000);
         }
       });
     }
   };
-  updateMeetingProgress();
+  checkMeetingProgress();
 
 });

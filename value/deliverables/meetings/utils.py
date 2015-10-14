@@ -2,6 +2,8 @@
 
 from collections import OrderedDict
 
+from django.template.loader import render_to_string
+
 from value.deliverables.models import DecisionItemLookup
 
 
@@ -102,3 +104,10 @@ def get_votes_percentage(max_value, value, round_value=True):
         if round_value:
             percentage = round(percentage, 2)
     return percentage
+
+def get_meeting_progress(meeting):
+    context = dict()
+    context['progress'] = render_to_string('meetings/includes/partial_meeting_progress.html', { 'meeting': meeting })
+    context['meeting_closed'] = meeting.is_closed()
+    context['rationales_count'] = meeting.rationales_count
+    return context

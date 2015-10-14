@@ -8,13 +8,12 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from django.template import RequestContext
-from django.template.loader import render_to_string
 
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
 from value.deliverables.meetings.forms import RationaleForm
 from value.deliverables.meetings.models import Meeting, MeetingItem, Evaluation, Rationale
+from value.deliverables.meetings.utils import get_meeting_progress
 
 
 @login_required
@@ -84,11 +83,8 @@ def save_evaluation(request, deliverable_id, meeting_id):
         scenario.calculate_ranking()
     meeting.deliverable.save()
 
-    json_context = dict()
-    context = RequestContext(request, { 'meeting': meeting })
-    json_context['html'] = render_to_string('meetings/includes/partial_meeting_progress.html', context)
-    json_context['meeting_closed'] = meeting.is_closed()
-    return HttpResponse(json.dumps(json_context), content_type='application/json')
+    context = get_meeting_progress(meeting)
+    return HttpResponse(json.dumps(context), content_type='application/json')
 
 @login_required
 @require_POST
@@ -122,10 +118,14 @@ def save_rationale(request, deliverable_id, meeting_id):
 
         if form.is_valid():
             evaluation.rationale = form.save()
+            if len(evaluation.rationale.text) == 0:
+                evaluation.rationale.delete()
+                evaluation.rationale = None
             evaluation.save()
             meeting.deliverable.save()
             meeting.calculate_meeting_related_rationales_count()
-            return HttpResponse()
+            context = get_meeting_progress(meeting)
+            return HttpResponse(json.dumps(context), content_type='application/json')
         else:
             return HttpResponseBadRequest(form['text'].errors.as_text())
 

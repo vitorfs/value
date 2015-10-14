@@ -11,13 +11,12 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.db import transaction
-from django.template import RequestContext
-from django.template.loader import render_to_string
 
 from value.deliverables.models import Deliverable, DecisionItemLookup, DecisionItem
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
 from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
 from value.deliverables.meetings.forms import MeetingForm, MeetingStatusForm
+from value.deliverables.meetings.utils import get_meeting_progress
 
 
 @login_required
@@ -114,11 +113,8 @@ def change_meeting_status(request, deliverable_id, meeting_id):
 @login_required
 def update_meeting_progress(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    json_context = dict()
-    context = RequestContext(request, { 'meeting': meeting })
-    json_context['html'] = render_to_string('meetings/includes/partial_meeting_progress.html', context)
-    json_context['meeting_closed'] = meeting.is_closed()
-    return HttpResponse(json.dumps(json_context), content_type='application/json')
+    context = get_meeting_progress(meeting)
+    return HttpResponse(json.dumps(context), content_type='application/json')
 
 @login_required
 @require_POST
