@@ -23,10 +23,10 @@
     <table class="table table-striped">
       <thead>
         <tr>
+          <th>Group</th>
           <th>Name</th>
           <th>Description</th>
           <th>Measure</th>
-          <th>Group</th>
           <th>Active</th>
           <th></th>
         </tr>
@@ -34,10 +34,10 @@
       <tbody>
         {% for factor in factors %}
           <tr>
+            <td>{{ factor.group.name }}</td>
             <td><a href="{% url 'factors:edit' factor.pk %}">{{ factor.name }}</a></td>
             <td>{{ factor.description }}</td>
             <td>{{ factor.measure.name }}</td>
-            <td>{{ factor.group.name }}</td>
             <td>{% toggle_boolean factor %}</td>
             <td class="text-right text-nowrap">
               <a href="{% url 'factors:edit' factor.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
