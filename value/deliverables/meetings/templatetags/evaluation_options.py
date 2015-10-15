@@ -55,7 +55,7 @@ def evaluation_options(evaluations, meeting_item, factor, measure, measure_value
     if factor.description:
         factor_description = escape(factor.description)
 
-    html += '''<td>
+    html += u'''<td>
  <span class="js-factor-description help-cursor" data-content="{3}" data-container="#factor-description-container" data-trigger="hover">{0}</span>
  <a href="javascript:void(0);" 
  class="btn-rationale js-rationale {1} pull-right" 
