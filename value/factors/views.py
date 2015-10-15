@@ -14,7 +14,7 @@ from value.factors.forms import CreateFactorForm, ChangeFactorForm, GroupForm
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def index(request):
-    factors = Factor.objects.all().order_by('name')
+    factors = Factor.objects.all()
     return render(request, 'factors/index.html', { 'factors': factors })
 
 @login_required
