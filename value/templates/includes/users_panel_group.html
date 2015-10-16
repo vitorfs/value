@@ -1,46 +1,10 @@
-{% load avatar %}
-
 <div class="panel-group panel-group-stakeholders {{ group_actions }}" style="margin-bottom: 0">
   {% for stakeholder in stakeholders|dictsort:"first_name" %}
     {% with display_name=stakeholder.profile.get_display_name %}
       {% if stakeholder in selected_stakeholders %}
-        <div class="panel panel-success" data-stakeholder-id="{{ stakeholder.pk }}" data-stakeholder-name="{{ display_name }}">
-          <div class="panel-body bg-success text-success">
-            <div class="row">
-              <div class="col-md-11">
-                <img src="{% avatar stakeholder 32 %}" alt="{{ display_name }}" class="img-circle" style="margin-right: 10px">
-                {{ display_name }}
-                {% if stakeholder.groups.exists %}
-                  <small class="text-muted text-success">({% for group in stakeholder.groups.all %}{{ group.name }}{% if not forloop.last %}, {% endif %}{% endfor %})</small>
-                {% endif %}
-                <input type="checkbox" name="stakeholders" value="{{ stakeholder.pk }}" style="display: none;" checked>
-              </div>
-              <div class="col-md-1 text-right panel-action-icon">
-                <span class="glyphicon glyphicon-ok text-success" style="line-height: 28px;"></span>
-                <span class="glyphicon glyphicon-remove text-danger" style="line-height: 28px; display: none;"></span>
-              </div>
-            </div>
-          </div>
-        </div>
+        {% include 'includes/user_panel.html' with is_selected=True %}
       {% else %}
-        <div class="panel panel-default" data-stakeholder-id="{{ stakeholder.pk }}" data-stakeholder-name="{{ display_name }}">
-          <div class="panel-body">
-            <div class="row">
-              <div class="col-md-11">
-                <img src="{% avatar stakeholder 32 %}" alt="{{ display_name }}" class="img-circle" style="margin-right: 10px">
-                {{ display_name }}
-                {% if stakeholder.groups.exists %}
-                  <small class="text-muted">({% for group in stakeholder.groups.all %}{{ group.name }}{% if not forloop.last %}, {% endif %}{% endfor %})</small>
-                {% endif %}
-                <input type="checkbox" name="stakeholders" value="{{ stakeholder.pk }}" style="display: none;">
-              </div>
-              <div class="col-md-1 text-right panel-action-icon">
-                <span class="glyphicon glyphicon-ok text-success" style="line-height: 28px; display: none;"></span>
-                <span class="glyphicon glyphicon-remove text-danger" style="line-height: 28px; display: none;"></span>
-              </div>
-            </div>
-          </div>
-        </div>
+        {% include 'includes/user_panel.html' with is_selected=False %}
       {% endif %}
     {% endwith %}
   {% endfor %}

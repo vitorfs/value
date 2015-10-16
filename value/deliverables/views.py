@@ -23,6 +23,7 @@ from value.deliverables.models import Deliverable, DecisionItem, DecisionItemAtt
 from value.deliverables.meetings.models import Evaluation
 from value.deliverables.forms import UploadFileForm, DeliverableForm, DeliverableBasicDataForm, \
         DeliverableFactorsForm, DeliverableMeasureForm
+from value.deliverables.utils import excel_column_map
 
 
 @login_required
@@ -77,22 +78,6 @@ def new(request):
             'formset': formset
             })
 
-def excel_column_map():
-    column_map = {}
-    i = 0
-    for c in ascii_uppercase:
-        column_map[c] = i
-        i = i + 1
-    for c in ascii_uppercase:
-        c = 'A{0}'.format(c)
-        column_map[c] = i
-        i = i + 1
-    for c in ascii_uppercase:
-        c = 'B{0}'.format(c)
-        column_map[c] = i
-        i = i + 1
-    return column_map
-
 @login_required
 @require_POST
 def import_decision_items(request):
@@ -141,7 +126,7 @@ def stakeholders(request, deliverable_id):
 @user_is_manager
 def load_available_stakeholders(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    available_stakeholders = User.objects.filter(is_active=True).exclude(pk__in=deliverable.stakeholders.all())
+    available_stakeholders = User.objects.filter(is_active=True).exclude(pk__in=deliverable.get_stakeholders())
     html = render_to_string('deliverables/includes/add_stakeholders.html', { 'available_stakeholders': available_stakeholders })
     return HttpResponse(html)
 
@@ -166,10 +151,11 @@ def add_stakeholders(request, deliverable_id):
 @require_POST
 def remove_stakeholder(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    user_id = request.POST.get('user_id')
-    user = User.objects.get(pk=user_id)
-    deliverable.stakeholders.remove(user)
-    return HttpResponse(u'{0} was removed successfully.'.format(user.profile.get_display_name()))
+    user_ids = request.POST.getlist('stakeholders')
+    users = User.objects.filter(pk__in=user_ids)
+    deliverable.stakeholders.remove(*users)
+    messages.success(request, u'The stakeholders were removed successfully.')
+    return redirect('deliverables:stakeholders', deliverable.pk)
 
 @login_required
 @require_POST
@@ -393,6 +379,7 @@ def transfer(request, deliverable_id):
     try:
         user_id = request.POST.get('user')
         user = User.objects.get(pk=user_id)
+        deliverable.stakeholders.add(deliverable.manager)
         deliverable.manager = user
         deliverable.save()
         messages.success(request, u'The deliverable {0} was successfully transferred to {1}.'.format(deliverable.name, user.profile.get_display_name()))

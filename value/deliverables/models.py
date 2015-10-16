@@ -39,6 +39,10 @@ class Deliverable(models.Model):
     def get_past_meetings(self):
         return self.meeting_set.filter(status='C')
 
+    def get_stakeholders(self):
+        stakeholders = self.stakeholders.all() | User.objects.filter(pk=self.manager.pk)
+        return stakeholders
+
 
 class DecisionItem(models.Model):
     deliverable = models.ForeignKey(Deliverable)

@@ -17,29 +17,13 @@ $(function () {
     });
   });
 
-  $("#formRemoveStakeholder .panel").click(function () {
+  $("#formRemoveStakeholder input[name='stakeholders']").change(function () {
+    var has_selection = $("#formRemoveStakeholder input[name='stakeholders']:checked").length > 0;
+    $("#btn-remove-stakeholders").prop("disabled", !has_selection);
+  });
 
-    var form = $(this).closest("form");
-    var panel = $(this);
-    var user_id = $("[name='stakeholders']", this).val();
-    var csrf_token = $("[name='csrfmiddlewaretoken']", form).val();
-    
-    $.ajax({
-      url: $(form).attr("action"),
-      type: 'post',
-      cache: false,
-      data: {
-        'csrfmiddlewaretoken': csrf_token,
-        'user_id': user_id
-      },
-      success: function (data) {
-        $(panel).fadeOut(400, function () {
-          $(this).remove();
-        });
-        toastr.success(data);
-      }
-    });
-
+  $("#btn-remove-stakeholders").click(function () {
+    $("#formRemoveStakeholder").submit();
   });
 
 });

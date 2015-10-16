@@ -141,14 +141,14 @@ $(function () {
       $(this).removeClass("panel-success").addClass("panel-default");
       $(".panel-body small", this).removeClass("text-success");
       $(".panel-action-icon .glyphicon-ok", this).hide();
-      $("[name='stakeholders']", this).prop("checked", false);
+      $("[name='stakeholders']", this).prop("checked", false).change();
     }
     else {
       $(".panel-body", this).addClass("bg-success text-success");
       $(this).removeClass("panel-default").addClass("panel-success");
       $(".panel-body small", this).addClass("text-success");
       $(".panel-action-icon .glyphicon-ok", this).show();
-      $("[name='stakeholders']", this).prop("checked", true);
+      $("[name='stakeholders']", this).prop("checked", true).change();
     }
   });
 
