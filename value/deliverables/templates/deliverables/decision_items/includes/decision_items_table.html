@@ -3,7 +3,7 @@
   <table class="table table-hover table-bordered table-striped table-check-all" id="decision-items-table">
     <thead>
       <tr>
-        <th><input type="checkbox"></th>
+        <th><input type="checkbox" autocomplete="off"></th>
         {% for name, field in fields.items %}
         <th>{{ field.label }}</th>
         {% endfor %}
@@ -19,7 +19,9 @@
     <tbody>
       {% for item in deliverable.decisionitem_set.all %}
       <tr data-href="{% url 'deliverables:edit_decision_item' deliverable.pk item.pk %}">
-        <td><input type="checkbox" name="decision_item_id" value="{{ item.pk }}"></td>
+        <td>
+          <input type="checkbox" name="decision_item_id" value="{{ item.pk }}" autocomplete="off">
+        </td>
         {% for name, field in fields.items %}
           {% if forloop.first and deliverable.manager = user %}
             <td><a href="{% url 'deliverables:edit_decision_item' deliverable.pk item.pk %}">{{ item|attr:name }}</a></td>

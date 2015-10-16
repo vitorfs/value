@@ -12,13 +12,7 @@ $(function () {
 
   $(".js-delete-selected").click(function () {
     $("#id_action").val("delete_selected");
-    var can_submit = false;
-    $("table tbody tr td input[type='checkbox']").each(function () {
-      if ($(this).is(":checked")) {
-        can_submit = true;
-        return;
-      }
-    });
+    var can_submit = $("#decision-items-table tbody tr td input[type='checkbox']:checked").length > 0;
     if (can_submit) {
       $(this).closest("form").submit();
     }
@@ -59,6 +53,11 @@ $(function () {
         page_loading();
       }
     });
+  });
+
+  $("#decision-items-table input[type='checkbox']").change(function () {
+    var has_selection = $("#decision-items-table input[type='checkbox']:checked").length > 0;
+    $(".js-delete-selected").prop("disabled", !has_selection);
   });
 
 });

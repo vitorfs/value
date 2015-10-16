@@ -38,14 +38,10 @@
         <span id="import-decision-items-container" data-save-import-url="{% url 'deliverables:save_imported_decision_items' deliverable.pk %}" data-csrf-token="{{ csrf_token }}">
           {% include 'deliverables/includes/import_decision_items.html' %}
         </span>
-        <div class="btn-group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            <span class="glyphicon glyphicon-check"></span> Actions <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="javascript:void(0);" class="js-delete-selected">Delete selected items</a></li>
-          </ul>
-        </div>
+        <button type="button" class="btn btn-default js-delete-selected" disabled="disabled">
+          <span class="glyphicon glyphicon-trash"></span>
+          Remove selected items
+        </button>
       </div>
     {% endif %}
     {% include 'deliverables/decision_items/includes/decision_items_table.html' with deliverable=deliverable %}
