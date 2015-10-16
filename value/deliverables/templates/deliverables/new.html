@@ -64,6 +64,7 @@
             </ul>
           </div>
         </div>
+        {% include 'includes/user_panel_manager.html' with stakeholder=user %}
         <div class="panel-group panel-group-stakeholders selectable" id="stakeholders" style="margin-bottom: 0">
           {% for checkbox in form.stakeholders %}
             <div class="panel {% if checkbox.is_checked %}panel-success{% else %}panel-default{% endif %}">

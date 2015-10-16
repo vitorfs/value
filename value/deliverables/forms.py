@@ -38,7 +38,7 @@ class DeliverableForm(forms.ModelForm):
     description = forms.CharField(widget=forms.Textarea(attrs={'class' : 'form-control expanding', 'rows': '1'}), max_length=2000, required=False)
     stakeholders = StakeholderPanelGroupMultipleModelChoiceField(
         widget=forms.CheckboxSelectMultiple(),
-        queryset=User.objects.filter(is_active=True).order_by('first_name', 'last_name', 'username'), 
+        queryset=User.objects.none(), 
         required=False
         )
     factors = FactorModelMultipleChoiceField(
@@ -64,6 +64,17 @@ class DeliverableBasicDataForm(forms.ModelForm):
     class Meta:
         model = Deliverable
         fields = ['name', 'description',]
+
+class DeliverableRemoveStakeholdersForm(forms.Form):
+    clear_user_related_data = forms.BooleanField(
+        widget=forms.HiddenInput(),
+        required=False
+        )
+    stakeholders = forms.ModelMultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple(),
+        queryset=User.objects.all(),
+        required=True
+        )
 
 
 class DeliverableFactorsForm(forms.ModelForm):

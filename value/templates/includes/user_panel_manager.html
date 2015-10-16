@@ -8,11 +8,12 @@
           <img src="{% avatar stakeholder 32 %}" alt="{{ display_name }}" class="img-circle" style="margin-right: 10px">
           {{ display_name }}
           {% if stakeholder.groups.exists %}
-            <small class="text-muted">({% for group in stakeholder.groups.all %}{{ group.name }}{% if not forloop.last %}, {% endif %}{% endfor %})</small>
+            <small class="text-muted text-warning">({% for group in stakeholder.groups.all %}{{ group.name }}{% if not forloop.last %}, {% endif %}{% endfor %})</small>
           {% endif %}
+          <span class="label label-warning">Manager</span>
         </div>
         <div class="col-md-1 text-right panel-action-icon">
-          <span class="fa fa-trophy text-warning" style="line-height: 28px;"></span>
+          <span class="glyphicon glyphicon-tower text-warning" style="line-height: 28px;"></span>
         </div>
       </div>
     </div>

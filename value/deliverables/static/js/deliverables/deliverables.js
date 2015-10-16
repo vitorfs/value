@@ -1,6 +1,6 @@
 $(function () {
 
-  $("#addStakeholder").on("show.bs.modal", function () {
+  $("#add-stakeholder").on("show.bs.modal", function () {
     var url = $(this).attr("data-url");
     var modal = $(this);
     $.ajax({
@@ -17,13 +17,19 @@ $(function () {
     });
   });
 
-  $("#formRemoveStakeholder input[name='stakeholders']").change(function () {
-    var has_selection = $("#formRemoveStakeholder input[name='stakeholders']:checked").length > 0;
+  $("#form-remove-stakeholder input[name='stakeholders']").change(function () {
+    var has_selection = $("#form-remove-stakeholder input[name='stakeholders']:checked").length > 0;
     $("#btn-remove-stakeholders").prop("disabled", !has_selection);
   });
 
-  $("#btn-remove-stakeholders").click(function () {
-    $("#formRemoveStakeholder").submit();
+  $("#btn-confirm-remove-stakeholders").click(function () {
+    var clear_data = $("#confirm-clear-data").is(":checked");
+    if (clear_data) {
+      $("#form-remove-stakeholder input[name='clear_user_related_data']").val("True");
+      $(this).text("Please wait, this can take a few minutes…")
+    }
+    $(this).prop("disabled", true);
+    $("#form-remove-stakeholder").submit();
   });
 
 });

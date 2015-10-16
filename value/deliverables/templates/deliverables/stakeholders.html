@@ -20,47 +20,55 @@
   {% include 'deliverables/includes/menu.html' with active='stakeholders' deliverable=deliverable %}
 
   {% if deliverable.stakeholders.exists %}
-    {% if deliverable.manager = user %}
+
+    {% if deliverable.manager == user %}
+
       <div style="margin-bottom: 20px;" class="clearfix">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStakeholder">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-stakeholder">
           <span class="glyphicon glyphicon-plus"></span> Add stakeholder
         </button>
-        <button type="button" class="btn btn-default" id="btn-remove-stakeholders" disabled="disabled">
+        <button type="button" class="btn btn-default" id="btn-remove-stakeholders" data-toggle="modal" data-target="#modal-confirm-delete-stakeholder" disabled="disabled">
           <span class="glyphicon glyphicon-trash"></span> Remove selected
         </button>
       </div>
-      <form id="formRemoveStakeholder" method="post" action="{% url 'deliverables:remove_stakeholder' deliverable.pk %}" style="margin-bottom: 20px">
+
+      <form id="form-remove-stakeholder" method="post" action="{% url 'deliverables:remove_stakeholder' deliverable.pk %}" style="margin-bottom: 20px">
         {% csrf_token %}
+        <input type="hidden" name="clear_user_related_data">
         {% include 'includes/user_panel_manager.html' with stakeholder=deliverable.manager %}
         {% include 'includes/users_panel_group.html' with stakeholders=deliverable.stakeholders.all group_actions='selectable' %}
       </form>
+
     {% else %}
+
       {% include 'includes/user_panel_manager.html' with stakeholder=deliverable.manager %}
       {% include 'includes/users_panel_group.html' with stakeholders=deliverable.stakeholders.all %}
+
     {% endif %}
+
   {% else %}
-    <div class="well">
-      <div class="text-center" style="padding: 2em 0;">
-        <span class="fa fa-users text-muted" style="font-size: 2.5em"></span>
-        <h4 style="margin: 1em 0;">There is no stakeholder associated to the deliverable.</h4>
-        {% if deliverable.manager = user %}
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStakeholder">
-            <span class="glyphicon glyphicon-plus"></span> Add stakeholder
-          </button>
-        {% endif %}
-      </div>
+
+    <div class="well blank-state">
+      <span class="fa fa-users"></span>
+      <h3>There is no stakeholder associated to the deliverable.</h3>
+      {% if deliverable.manager = user %}
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-stakeholder">
+          <span class="glyphicon glyphicon-plus"></span> Add stakeholder
+        </button>
+      {% endif %}
     </div>
+
   {% endif %}
 
 
-  <form id="formSelectStakeholder" method="post" action="{% url 'deliverables:add_stakeholders' deliverable.pk %}">
+  <form id="form-select-stakeholder" method="post" action="{% url 'deliverables:add_stakeholders' deliverable.pk %}">
     {% csrf_token %}
-    <div class="modal fade" id="addStakeholder" tabindex="-1" role="dialog" aria-labelledby="addStakeholderTitle" aria-hidden="true" data-url="{% url 'deliverables:load_available_stakeholders' deliverable.pk %}">
+    <div class="modal fade" id="add-stakeholder" tabindex="-1" role="dialog" aria-labelledby="add-stakeholder-title" aria-hidden="true" data-url="{% url 'deliverables:load_available_stakeholders' deliverable.pk %}">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="addStakeholderTitle">Add stakeholder</h4>
+            <h4 class="modal-title" id="add-stakeholder-title">Add stakeholder</h4>
           </div>
           <div class="modal-body"></div>
           <div class="modal-footer">
@@ -71,5 +79,33 @@
       </div>
     </div>
   </form>
+
+  <div class="modal fade" id="modal-confirm-delete-stakeholder">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Are you sure?</h4>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-dismissible alert-warning" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-warning-sign"></span> <strong>Attention!</strong>
+            Read carefully the instructions below.
+          </div>
+          <p>Removing the selected stakeholders will basically remove their access to the deliverable <strong>{{ deliverable.name }}</strong>. They will no longer be able to access its data.</p>
+          <p>If you want also to remove all meeting related data (evaluations and rationales recorded by the selected stakeholders), please check the input below.</p>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" id="confirm-clear-data" autocomplete="off"> Remove all meeting <strong>evaluations</strong> and <strong>rationales</strong> related to the selected stakeholders. Please note this action <strong>CANNOT</strong> be undone.
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger btn-block" id="btn-confirm-remove-stakeholders">Remove selected stakeholders</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 {% endblock content %}

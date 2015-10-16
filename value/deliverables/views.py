@@ -20,9 +20,9 @@ from value.factors.models import Factor
 from value.measures.models import Measure
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
 from value.deliverables.models import Deliverable, DecisionItem, DecisionItemAttachment, DecisionItemLookup
-from value.deliverables.meetings.models import Evaluation
+from value.deliverables.meetings.models import Evaluation, MeetingStakeholder
 from value.deliverables.forms import UploadFileForm, DeliverableForm, DeliverableBasicDataForm, \
-        DeliverableFactorsForm, DeliverableMeasureForm
+        DeliverableFactorsForm, DeliverableMeasureForm, DeliverableRemoveStakeholdersForm
 from value.deliverables.utils import excel_column_map
 
 
@@ -49,8 +49,11 @@ def new(request):
     if not has_factors:
         messages.warning(request, u'There is not active value factor. Please configure it properly on Management » Factors.')
 
+    stakeholders_queryset = User.objects.filter(is_active=True).order_by('first_name', 'last_name', 'username').exclude(pk=request.user.pk)
+
     if request.method == 'POST':
         form = DeliverableForm(request.POST)
+        form.fields['stakeholders'].queryset = stakeholders_queryset
         formset = DecisionItemFormSet(request.POST, prefix='decision_item')
 
         if form.is_valid() and formset.is_valid():
@@ -71,7 +74,9 @@ def new(request):
             messages.error(request, u'Please correct the error below.')
     else:
         form = DeliverableForm(initial={'factors': Factor.objects.filter(is_active=True)})
+        form.fields['stakeholders'].queryset = stakeholders_queryset
         formset = DecisionItemFormSet(prefix='decision_item', queryset=DecisionItem.objects.none())
+
     return render(request, 'deliverables/new.html', { 
             'fields': fields,
             'form': form,
@@ -148,13 +153,47 @@ def add_stakeholders(request, deliverable_id):
 
 @login_required
 @user_is_manager
+@transaction.atomic
 @require_POST
 def remove_stakeholder(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    user_ids = request.POST.getlist('stakeholders')
-    users = User.objects.filter(pk__in=user_ids)
-    deliverable.stakeholders.remove(*users)
-    messages.success(request, u'The stakeholders were removed successfully.')
+    form = DeliverableRemoveStakeholdersForm(request.POST)
+    if form.is_valid():
+        users = form.cleaned_data['stakeholders']
+        deliverable.stakeholders.remove(*users)
+
+        clear_user_data = form.cleaned_data['clear_user_related_data']
+        if clear_user_data:
+            for user in users:
+                for meeting in deliverable.meeting_set.all():
+                    Evaluation.objects.filter(user=user, meeting=meeting).delete()
+                    MeetingStakeholder.objects.filter(stakeholder=user, meeting=meeting).delete()
+
+                    # Remove all meeting related rationales
+                    for rationale in meeting.rationales.all():
+                        if rationale.created_by == user:
+                            rationale.delete()
+
+                    # Remove all meeting item related rationales
+                    for meeting_item in meeting.meetingitem_set.all():
+                        for rationale in meeting_item.rationales.all():
+                            if rationale.created_by == user:
+                                rationale.delete()
+
+                    # Remove all scenario related rationales
+                    for scenario in meeting.scenarios.all():
+                        for rationale in scenario.rationales.all():
+                            if rationale.created_by == user:
+                                rationale.delete()
+
+            # Update rankings and rationales count
+            for meeting in deliverable.meeting_set.all():
+                meeting.calculate_all_rankings()
+                meeting.calculate_meeting_related_rationales_count()
+
+        messages.success(request, u'The stakeholders were removed successfully.')
+    else:
+        messages.error(request, 'An error ocurred while trying to remove the selected stakeholders.')
     return redirect('deliverables:stakeholders', deliverable.pk)
 
 @login_required
@@ -373,6 +412,7 @@ def delete(request, deliverable_id):
 
 @login_required
 @user_is_manager
+@transaction.atomic
 @require_POST
 def transfer(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
@@ -380,6 +420,7 @@ def transfer(request, deliverable_id):
         user_id = request.POST.get('user')
         user = User.objects.get(pk=user_id)
         deliverable.stakeholders.add(deliverable.manager)
+        deliverable.stakeholders.remove(user)
         deliverable.manager = user
         deliverable.save()
         messages.success(request, u'The deliverable {0} was successfully transferred to {1}.'.format(deliverable.name, user.profile.get_display_name()))
