@@ -45,6 +45,8 @@ def new(request, deliverable_id):
             form.instance.created_by = request.user
             meeting = form.save()
 
+            MeetingStakeholder.objects.create(meeting=meeting, stakeholder=request.user)
+            
             for stakeholder in selected_stakeholders:
                 meeting_stakeholder = MeetingStakeholder()
                 meeting_stakeholder.meeting = meeting

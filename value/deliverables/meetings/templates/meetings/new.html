@@ -108,6 +108,10 @@
               </div>              
             {% endif %}
 
+            <div style="margin-bottom: 20px">
+              {% include 'includes/user_panel_manager.html' with stakeholder=user %}
+            </div>
+
             <div class="deliverable-stakeholders">
               {% include 'includes/users_panel_group.html' with stakeholders=meeting_stakeholders selected_stakeholders=selected_stakeholders group_actions='selectable' %}
             </div>
