@@ -1,5 +1,7 @@
 # coding: utf-8
 
+from string import ascii_uppercase
+
 def excel_column_map():
     column_map = {}
     i = 0

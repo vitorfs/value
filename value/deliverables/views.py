@@ -1,7 +1,6 @@
 # coding: utf-8
 
 import xlrd
-from string import ascii_uppercase
 
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
