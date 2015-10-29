@@ -239,6 +239,7 @@ def compare_scenario(request, deliverable_id, meeting_id):
             for scenario in form.cleaned_data['scenarios']:
                 charts_data = get_scenario_charts(scenario)
                 charts_data['name'] = scenario.name
+                charts_data['scenario'] = scenario
                 scenarios.append(charts_data)
             context = RequestContext(request, { 
                 'meeting': meeting,

@@ -100,6 +100,7 @@ def value_ranking(request, deliverable_id, meeting_id):
         return render(request, template_name, { 
             'meeting': meeting,
             'chart_menu_active': 'value_ranking',
+            'chart_page_title': 'Value Ranking',
             'chart': chart,
             'dump': dump
             })
@@ -141,6 +142,7 @@ def decision_items_overview(request, deliverable_id, meeting_id):
         return render(request, template_name, { 
             'meeting': meeting, 
             'chart_menu_active': 'decision_items_overview',
+            'chart_page_title': 'Decision Items Overview',
             'dump': dump,
             'stakeholder_ids': stakeholder_ids,
             'chart_type': chart_type,
@@ -161,7 +163,7 @@ def features_comparison(request, deliverable_id, meeting_id):
         'stakeholder_ids': stakeholder_ids,
         'chart_uri': 'measures',
         'chart_menu_active': 'features_comparison',
-        'chart_page_title': 'Features Comparison'
+        'chart_page_title': 'Decision Items Comparison'
         })
 
 @login_required

@@ -1,7 +1,53 @@
 <div class="row">
+  <div class="col-md-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{ scenarios.0.name }} Items</h3>
+      </div>
+      <ul class="list-group">
+        {% for meeting_item in scenarios.0.scenario.meeting_items.all %}
+          {% if meeting_item not in scenarios.1.scenario.meeting_items.all %}
+            <li class="list-group-item">{{ meeting_item.decision_item.name }} <span class="badge">{{ meeting_item.get_value_ranking_display }}</span></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h3 class="panel-title">Common Items</h3>
+      </div>
+      <ul class="list-group">
+        {% for meeting_item in scenarios.0.scenario.meeting_items.all %}
+          {% if meeting_item in scenarios.1.scenario.meeting_items.all %}
+            <li class="list-group-item">{{ meeting_item.decision_item.name }} <span class="badge">{{ meeting_item.get_value_ranking_display }}</span></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{ scenarios.1.name }} Items</h3>
+      </div>
+      <ul class="list-group">
+        {% for meeting_item in scenarios.1.scenario.meeting_items.all %}
+          {% if meeting_item not in scenarios.0.scenario.meeting_items.all %}
+            <li class="list-group-item">{{ meeting_item.decision_item.name }} <span class="badge">{{ meeting_item.get_value_ranking_display }}</span></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="row">
   {% for scenario in scenarios %}
     <div class="col-md-6">
-      <h4 style="margin-top: 0;">{{ scenario.name }}</h4>
+      <h4>{{ scenario.name }}</h4>
+
       {% with 'overview_'|add:scenario.name|slugify as prefix %}
         {% include 'meetings/dashboard/decision_items_overview/chart.html' with chart=scenario.chart_overview chart_type=scenario.chart_overview_type chart_types_options=bar_chart_types_options opened=True %}
       {% endwith %}

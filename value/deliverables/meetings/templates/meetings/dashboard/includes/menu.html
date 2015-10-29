@@ -5,9 +5,9 @@
   </div>
   <div class="list-group">
     <a class="list-group-item{% if active == 'overview' %} active{% endif %}" href="{% url 'deliverables:meetings:dashboard' meeting.deliverable.pk meeting.pk %}">Overview</a>
-    <a class="list-group-item{% if active == 'value_ranking' %} active{% endif %}" href="{% url 'deliverables:meetings:value_ranking' meeting.deliverable.pk meeting.pk %}">Value Ranking</a>
     <a class="list-group-item{% if active == 'decision_items_overview' %} active{% endif %}" href="{% url 'deliverables:meetings:decision_items_overview' meeting.deliverable.pk meeting.pk %}">Decision Items Overview</a>
     <a class="list-group-item{% if active == 'features_comparison' %} active{% endif %}" href="{% url 'deliverables:meetings:features_comparison' meeting.deliverable.pk meeting.pk %}">Decision Items Comparison</a>
+    <a class="list-group-item{% if active == 'value_ranking' %} active{% endif %}" href="{% url 'deliverables:meetings:value_ranking' meeting.deliverable.pk meeting.pk %}">Value Ranking</a>
   </div>
 </div>
 
