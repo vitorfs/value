@@ -24,6 +24,9 @@ $(function () {
     }
     else if (target === "collapse-stakeholders") {
       $("#heading-stakeholders .panel-info").html("");
+
+      $("#heading-stakeholders .panel-info").append('<img src="' + $(".deliverable-manager .img-circle").attr("src").replace("32", "20") + '" alt="' + $(".deliverable-manager .img-circle").attr("alt") + '" class="img-circle" style="margin-left: 5px;">');
+
       $("#collapse-stakeholders .panel-group-stakeholders .panel.panel-success .img-circle").each(function () {
         $("#heading-stakeholders .panel-info").append('<img src="' + $(this).attr("src").replace("32", "20") + '" alt="' + $(this).attr("alt") + '" class="img-circle" style="margin-left: 5px;">');
       });
@@ -31,15 +34,6 @@ $(function () {
     else if (target === "collapse-decision-items") {
       $("#heading-decision-items .panel-info .selected-items-count").html($("#decisionItemsTable tbody tr td input[type='checkbox']:checked").length);
     }
-  });
-
-  $(".js-add-invited-stakeholders").click(function () {
-
-    $("#inviteStakeholder .panel-group-stakeholders .panel.panel-success").each(function () {
-      $(this).appendTo(".deliverable-stakeholders .panel-group-stakeholders");
-      $("#inviteStakeholder").modal("hide");
-    });
-
   });
 
 });

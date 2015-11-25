@@ -28,12 +28,6 @@
     <div class="panel-group" id="meeting-setup" role="tablist" aria-multiselectable="true">
       <div class="panel {% if not form.errors %}panel-default{% else %}panel-danger{% endif %}">
         <div class="panel-heading" role="tab" id="heading-basic-data">
-          <!--div class="pull-right panel-info" style="display: none">
-            <span class="fa fa-tag" style="margin-right: 3px"></span> Meeting #1
-            <span class="fa fa-calendar" style="margin-left: 10px; margin-right: 3px"></span> 13/05/2015
-            <span class="fa fa-clock-o" style="margin-left: 10px; margin-right: 3px"></span> 18:17 - 19:17
-            <span class="fa fa-map-marker" style="margin-left: 10px; margin-right: 3px"></span> Oulu
-          </div-->
           <h4 class="panel-title">
             <a data-toggle="collapse" data-parent="#meeting-setup" href="#collapse-basic-data" aria-expanded="true" aria-controls="collapse-basic-data">
               1. Provide the meeting details
@@ -85,6 +79,7 @@
       <div class="panel {% if selected_stakeholders.exists %}panel-default{% else %}panel-danger{% endif %}">
         <div class="panel-heading" role="tab" id="heading-stakeholders">
           <div class="pull-right panel-info" style="margin-top: -2px">
+            <img src="{% avatar user 20 %}" alt="{{ user.profile.get_display_name }}" class="img-circle" style="margin-left: 5px">
             {% for stakeholder in selected_stakeholders %}
               <img src="{% avatar stakeholder 20 %}" alt="{{ stakeholder.profile.get_display_name }}" class="img-circle" style="margin-left: 5px">
             {% endfor %}
@@ -108,17 +103,13 @@
               </div>              
             {% endif %}
 
-            <div style="margin-bottom: 20px">
+            <div class="deliverable-manager" style="margin-bottom: 20px">
               {% include 'includes/user_panel_manager.html' with stakeholder=user %}
             </div>
 
             <div class="deliverable-stakeholders">
               {% include 'includes/users_panel_group.html' with stakeholders=meeting_stakeholders selected_stakeholders=selected_stakeholders group_actions='selectable' %}
             </div>
-            
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteStakeholder" style="margin-top: 20px">
-              <span class="glyphicon glyphicon-envelope"></span> Invite
-            </button>
           </div>
         </div>
       </div>
@@ -178,37 +169,5 @@
     </div>
 
   </form>
-
-  <div class="modal fade" id="inviteStakeholder" tabindex="-1" role="dialog" aria-labelledby="inviteStakeholderTitle" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="inviteStakeholderTitle">Invite stakeholder</h4>
-        </div>
-        <div class="modal-body">
-          {% if available_stakeholders %}
-            <div class="alert alert-info alert-dismissible fade in" role="alert">
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              Click to add a stakeholder to the meeting.
-            </div>
-            {% include 'includes/users_panel_group.html' with stakeholders=available_stakeholders group_actions='selectable' %}
-          {% else %}
-            <div class="well" style="margin-bottom: 0">
-              <div class="text-center" style="padding: 2em 0;">
-                <span class="fa fa-users text-muted" style="font-size: 2.5em"></span>
-                <h4 style="margin: 1em 0;">There is no stakeholder available.</h4>
-                <a href="{% url 'users:add' %}" class="btn btn-primary">Create new user</a>
-              </div>
-            </div>
-          {% endif %}
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary js-add-invited-stakeholders"><span class="glyphicon glyphicon-ok"></span> Confirm</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
 {% endblock content %}
