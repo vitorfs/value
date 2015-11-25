@@ -86,9 +86,22 @@ class OngoingMeetingFinalDecisionTest(FinalDecisionTestCase):
         self.response = self.client.get(r('deliverables:meetings:final_decision', args=(self.meeting.deliverable.pk, self.meeting.pk)))
 
     def test_html(self):
+        self.assertContains(self.response, 'The meeting is still ongoing!')
+
+
+class AnalysingMeetingFinalDecisionTest(FinalDecisionTestCase):
+    '''
+    Specific testing for Final Decision View having meeting status as ANALYSING
+    '''
+    def setUp(self):
+        super(AnalysingMeetingFinalDecisionTest, self).setUp()
+        self.meeting.status = Meeting.ANALYSING
+        self.meeting.save()
+        self.response = self.client.get(r('deliverables:meetings:final_decision', args=(self.meeting.deliverable.pk, self.meeting.pk)))
+
+    def test_html(self):
         self.assertContains(self.response, '<form')
         self.assertContains(self.response, 'type="checkbox"', self.meeting.meetingitem_set.count())
-        #self.assertContains(self.response, 'type="text"', self.meeting.meetingitem_set.count())
 
     def test_csrf(self):
         self.assertContains(self.response, 'csrfmiddlewaretoken')
