@@ -36,15 +36,5 @@
     },
     "model":"measures.measurevalue",
     "pk":3
-  },
-  {  
-    "fields":{  
-      "color":"#929191",
-      "order":3,
-      "description":"N/A",
-      "measure":1
-    },
-    "model":"measures.measurevalue",
-    "pk":4
   }
 ]
