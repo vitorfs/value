@@ -66,20 +66,17 @@
                     </td>
                     <td style="vertical-align: middle; text-align: right;">{{ form.instance.value_ranking_as_html|safe }}</td>
                     <td style="vertical-align: middle; text-align: center;">
-                      <div class="checkbox">
-                        <label>
-                          {% if not meeting.is_closed %}
-                            {{ form.meeting_decision }}
+                      {% if not meeting.is_closed %}
+                        {{ form.meeting_decision }}
+                      {% else %}
+                        <span class="decision-text">
+                          {% if form.instance.meeting_decision %}
+                            Yes
+                          {% else %}
+                            No
                           {% endif %}
-                          <span class="decision-text">
-                            {% if form.instance.meeting_decision %}
-                              Yes
-                            {% else %}
-                              No
-                            {% endif %}
-                          </span>
-                        </label>
-                      </div>
+                        </span>
+                      {% endif %}
                     </td>
                     {% comment %}
                     <td style="vertical-align: middle; text-align: center;">

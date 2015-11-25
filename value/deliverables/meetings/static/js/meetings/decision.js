@@ -1,15 +1,6 @@
 $(function () {
   $("#table-final-decision").tablesorter();
 
-  $(".final-decision").change(function () {
-    if ($(this).is(":checked")) {
-      $(this).siblings(".decision-text").text("Yes");
-    }
-    else {
-      $(this).siblings(".decision-text").text("No");
-    }
-  });
-
   $("#form-final-decision").change(function () {
     var form = $(this);
     $.ajax({
