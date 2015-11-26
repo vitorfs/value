@@ -36,4 +36,9 @@ $(function () {
     }
   });
 
+  $("#new-meeting").submit(function () {
+    $(".btn-start-meeting").prop("disabled", true);
+    $(".btn-start-meeting").text("Starting the meeting…");
+  });
+
 });

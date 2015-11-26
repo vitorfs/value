@@ -11,6 +11,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.db import transaction
+from django.utils import timezone
 
 from value.deliverables.models import Deliverable, DecisionItemLookup, DecisionItem
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
@@ -31,8 +32,10 @@ def new(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     decision_items_fields = DecisionItemLookup.get_visible_fields()
     decision_items = deliverable.decisionitem_set.all()
+
+    meeting = Meeting(deliverable=deliverable)
     if request.method == 'POST':
-        form = MeetingForm(request.POST)
+        form = MeetingForm(request.POST, instance=meeting)
         stakeholder_ids = request.POST.getlist('stakeholders')
         selected_stakeholders = User.objects.filter(id__in=stakeholder_ids)
         meeting_stakeholders = User.objects.filter(Q(id__in=selected_stakeholders) | Q(id__in=deliverable.stakeholders.all())).filter(is_active=True).distinct()
@@ -60,12 +63,18 @@ def new(request, deliverable_id):
                 meeting_item.save()
 
             deliverable.save()
+
+            initial_measure_value = form.cleaned_data.get('default_evaluation')
+            if initial_measure_value:
+                meeting.initial_data(initial_measure_value)
+
             messages.success(request, u'The meeting {0} was created successfully.'.format(meeting.name))
             return redirect(reverse('deliverables:meetings:meeting', args=(deliverable.pk, meeting.pk,)))
         else:
+            print form.errors
             messages.error(request, u'Please correct the error below.')
     else:
-        form = MeetingForm()
+        form = MeetingForm(instance=meeting, initial={ 'started_at': timezone.now() })
         meeting_stakeholders = deliverable.stakeholders.filter(is_active=True).order_by('first_name', 'last_name', 'username')
         selected_stakeholders = meeting_stakeholders
         selected_decision_items = decision_items

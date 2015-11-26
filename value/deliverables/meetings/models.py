@@ -6,6 +6,7 @@ from django.db.models.signals import m2m_changed, post_save
 from django.contrib.auth.models import User, Group
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
+from django.utils import timezone
 
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
@@ -201,6 +202,21 @@ class Meeting(models.Model):
         self.rationales_count = count
         self.save()
         return count
+
+    def initial_data(self, measure_value):
+        for stakeholder in self.meetingstakeholder_set.all():
+            for meeting_item in self.meetingitem_set.all():
+                for factor in self.deliverable.factors.all():
+                    Evaluation.objects.create(
+                        meeting=self,
+                        meeting_item=meeting_item,
+                        user=stakeholder.stakeholder,
+                        factor=factor,
+                        measure=measure_value.measure,
+                        measure_value=measure_value,
+                        evaluated_at=timezone.now()
+                        )
+                meeting_item.calculate_ranking()
 
 
 class Ranking(models.Model):

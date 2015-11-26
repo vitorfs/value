@@ -1,30 +1,39 @@
 # coding: utf-8
 
-import datetime
-
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils.html import escape
 
 from value.factors.models import Factor, Group as FactorGroup
+from value.measures.models import MeasureValue
+from value.deliverables.models import Deliverable
 from value.deliverables.meetings.models import Meeting, MeetingItem, Scenario, Rationale
 
 
 class MeetingForm(forms.ModelForm):
+    deliverable = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Deliverable.objects.all(), required=True)
     name = forms.CharField(widget=forms.TextInput(attrs={ 'class': 'form-control' }), max_length=255)
     started_at = forms.DateTimeField(
         widget=forms.DateTimeInput(format='%d/%m/%Y %H:%M', attrs={ 'class': 'form-control' }), 
         label='Starting at', 
-        input_formats=['%d/%m/%Y %H:%M',],
-        initial=datetime.datetime.now().strftime('%d/%m/%Y %H:%M')
+        input_formats=['%d/%m/%Y %H:%M',]
         )
     description = forms.CharField(widget=forms.Textarea(attrs={'class' : 'form-control expanding', 'rows': '1'}), max_length=2000, required=False)
     location = forms.CharField(widget=forms.TextInput(attrs={'class' : 'form-control'}), max_length=50, required=False)
+    default_evaluation = forms.ModelChoiceField(
+        widget=forms.Select(attrs={ 'class': 'form-control' }),
+        queryset=MeasureValue.objects.none(), 
+        required=False
+        )
 
     class Meta:
         model = Meeting
-        fields = ['name', 'started_at', 'location', 'description',]
+        fields = ['deliverable', 'name', 'started_at', 'location', 'description', 'default_evaluation',]
+
+    def __init__(self, *args, **kwargs):
+        super(MeetingForm, self).__init__(*args, **kwargs)
+        self.fields['default_evaluation'].queryset = self.instance.deliverable.measure.measurevalue_set.all()
 
 class MeetingStatusForm(forms.ModelForm):
     class Meta:

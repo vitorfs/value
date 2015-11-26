@@ -21,9 +21,13 @@
 
   <h2>New meeting</h2>
 
-  <form method="post">
+  <form method="post" id="new-meeting">
 
     {% csrf_token %}
+
+    {% for hidden in form.hidden_fields %}
+      {{ hidden }}
+    {% endfor %}
 
     <div class="panel-group" id="meeting-setup" role="tablist" aria-multiselectable="true">
       <div class="panel {% if not form.errors %}panel-default{% else %}panel-danger{% endif %}">
@@ -161,10 +165,36 @@
 
         </div>
       </div>
+
+      <div class="panel {% if form.default_evaluation.errors %}panel-danger{% else %}panel-default{% endif %}">
+        <div class="panel-heading" role="tab" id="heading-advanced">
+          <h4 class="panel-title">
+            <a class="collapsed" data-toggle="collapse" data-parent="#meeting-setup" href="#collapse-advanced" aria-expanded="false" aria-controls="collapse-advanced">
+              4. Advanced settings
+            </a>
+          </h4>
+        </div>
+        <div id="collapse-advanced" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-advanced">
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group{% if form.default_evaluation.errors %} has-error{% endif %}">
+                  <label for="{{ form.default_evaluation.id_for_label }}">{{ form.default_evaluation.label }}</label>
+                  {{ form.default_evaluation }}
+                  {% for error in form.default_evaluation.errors %}
+                    <span class="help-block">{{ error }}</span>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <div class="form-group">
-      <button type="submit" class="btn btn-primary">Start the meeting</button>
+      <button type="submit" class="btn btn-primary btn-start-meeting">Start the meeting</button>
       <a href="{% url 'deliverables:deliverable' deliverable.pk %}" class="btn btn-default">Cancel</a>
     </div>
 
