@@ -40,8 +40,8 @@
         </td>
         <td>{{ meeting.get_status_label_html|safe }}</td>
         <td>{{ meeting.location }}</td>
-        <td>{{ meeting.created_at|date:"D, d M, Y" }}</td>
-        <td>{{ meeting.created_at|date:"P" }}</td>
+        <td>{{ meeting.started_at|date:"D, d M, Y" }}</td>
+        <td>{{ meeting.started_at|date:"P" }}</td>
       </tr>
     {% empty %}
       <tr>
