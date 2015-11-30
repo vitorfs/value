@@ -105,7 +105,7 @@ def meeting(request, deliverable_id, meeting_id):
         return redirect(reverse('deliverables:meetings:evaluate', args=(deliverable_id, meeting_id)))
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
+@user_is_manager
 @require_POST
 def change_meeting_status(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
@@ -210,7 +210,7 @@ def settings(request, deliverable_id, meeting_id):
             })
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
+@user_is_manager
 def decision_items(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     decision_items_in_use = meeting.meetingitem_set.values('decision_item__id')
@@ -221,7 +221,7 @@ def decision_items(request, deliverable_id, meeting_id):
         })
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
+@user_is_manager
 def stakeholders(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     stakeholders = [meeting_stakeholder.stakeholder for meeting_stakeholder in meeting.meetingstakeholder_set.select_related('stakeholder')]
@@ -236,7 +236,7 @@ def stakeholders(request, deliverable_id, meeting_id):
         })
 
 @login_required
-@user_passes_test(lambda user: user.is_superuser)
+@user_is_manager
 def delete(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     if request.method == 'POST':
