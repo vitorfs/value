@@ -33,7 +33,7 @@ def evaluate(request, deliverable_id, meeting_id):
 
     evaluations = Evaluation.get_user_evaluations_by_meeting(user=request.user, meeting=meeting) \
             .select_related('meeting', 'meeting_item', 'user', 'factor', 'factor__measure', 'measure', 'measure_value', 'rationale')
-    meeting_items = meeting.meetingitem_set.select_related('decision_item').all().order_by('column_1')
+    meeting_items = meeting.meetingitem_set.select_related('decision_item').all().order_by('decision_item__column_1')
     total_items = meeting_items.count()
     search_query = request.GET.get('search')
     if search_query:
