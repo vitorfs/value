@@ -14,7 +14,7 @@
   {% include 'deliverables/includes/menu.html' with active='meetings' deliverable=deliverable %}
 
   {% if deliverable.description %}
-    <p class="lead">{{ deliverable.description }}</p>
+    <p class="lead">{{ deliverable.description|linebreaksbr }}</p>
   {% endif %}
 
   {% with has_meetings=deliverable.meeting_set.exists %}
