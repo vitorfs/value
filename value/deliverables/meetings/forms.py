@@ -11,7 +11,7 @@ from value.deliverables.models import Deliverable
 from value.deliverables.meetings.models import Meeting, MeetingItem, Scenario, Rationale
 
 
-class MeetingForm(forms.ModelForm):
+class AbstractMeetingForm(forms.ModelForm):
     deliverable = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Deliverable.objects.all(), required=True)
     name = forms.CharField(widget=forms.TextInput(attrs={ 'class': 'form-control' }), max_length=255)
     started_at = forms.DateTimeField(
@@ -21,6 +21,8 @@ class MeetingForm(forms.ModelForm):
         )
     description = forms.CharField(widget=forms.Textarea(attrs={'class' : 'form-control expanding', 'rows': '1'}), max_length=2000, required=False)
     location = forms.CharField(widget=forms.TextInput(attrs={'class' : 'form-control'}), max_length=50, required=False)
+
+class NewMeetingForm(AbstractMeetingForm):
     default_evaluation = forms.ModelChoiceField(
         widget=forms.Select(attrs={ 'class': 'form-control' }),
         queryset=MeasureValue.objects.none(), 
@@ -32,8 +34,13 @@ class MeetingForm(forms.ModelForm):
         fields = ['deliverable', 'name', 'started_at', 'location', 'description', 'default_evaluation',]
 
     def __init__(self, *args, **kwargs):
-        super(MeetingForm, self).__init__(*args, **kwargs)
+        super(NewMeetingForm, self).__init__(*args, **kwargs)
         self.fields['default_evaluation'].queryset = self.instance.deliverable.measure.measurevalue_set.all()
+
+class MeetingForm(AbstractMeetingForm):
+    class Meta:
+        model = Meeting
+        fields = ['deliverable', 'name', 'started_at', 'location', 'description',]
 
 class MeetingStatusForm(forms.ModelForm):
     class Meta:

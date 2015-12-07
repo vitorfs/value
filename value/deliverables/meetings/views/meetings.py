@@ -16,7 +16,7 @@ from django.utils import timezone
 from value.deliverables.models import Deliverable, DecisionItemLookup, DecisionItem
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
 from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
-from value.deliverables.meetings.forms import MeetingForm, MeetingStatusForm
+from value.deliverables.meetings.forms import NewMeetingForm, MeetingForm, MeetingStatusForm
 from value.deliverables.meetings.utils import get_meeting_progress
 
 
@@ -35,7 +35,7 @@ def new(request, deliverable_id):
 
     meeting = Meeting(deliverable=deliverable)
     if request.method == 'POST':
-        form = MeetingForm(request.POST, instance=meeting)
+        form = NewMeetingForm(request.POST, instance=meeting)
         stakeholder_ids = request.POST.getlist('stakeholders')
         selected_stakeholders = User.objects.filter(id__in=stakeholder_ids)
         meeting_stakeholders = User.objects.filter(Q(id__in=selected_stakeholders) | Q(id__in=deliverable.stakeholders.all())).filter(is_active=True).distinct()
@@ -74,7 +74,7 @@ def new(request, deliverable_id):
             print form.errors
             messages.error(request, u'Please correct the error below.')
     else:
-        form = MeetingForm(instance=meeting, initial={ 'started_at': timezone.now() })
+        form = NewMeetingForm(instance=meeting, initial={ 'started_at': timezone.now() })
         meeting_stakeholders = deliverable.stakeholders.filter(is_active=True).order_by('first_name', 'last_name', 'username')
         selected_stakeholders = meeting_stakeholders
         selected_decision_items = decision_items

@@ -4,12 +4,14 @@ import json
 
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from value.measures.models import MeasureValue
 from value.deliverables.meetings.models import Meeting, Evaluation
 from value.deliverables.meetings.charts import Highcharts
+from value.deliverables.decorators import user_is_manager
+from value.deliverables.meetings.decorators import meeting_is_analysing_or_closed, user_is_meeting_stakeholder
 from value.deliverables.meetings.utils import *
 
 
@@ -28,13 +30,10 @@ def dashboard(request, deliverable_id, meeting_id):
             'charts': charts
             })
     else:
-        return render(request, 'meetings/dashboard/dashboard_list.html', { 
-            'meeting': meeting,
-            'charts': charts,
-            'chart_menu_active': 'overview'
-            })
+        return redirect('deliverables:meetings:decision_items_overview', meeting.deliverable.pk, meeting.pk)
 
 @login_required
+@user_is_manager
 def dashboard_factors_usage_chart(request, deliverable_id, meeting_id):
     meeting = Meeting.objects.get(pk=meeting_id)
     chart = Highcharts()
@@ -55,6 +54,7 @@ def dashboard_factors_usage_chart(request, deliverable_id, meeting_id):
             })
 
 @login_required
+@user_is_manager
 def dashboard_stakeholders_input_chart(request, deliverable_id, meeting_id):
     meeting = Meeting.objects.get(pk=meeting_id)
     chart = Highcharts()
@@ -86,6 +86,7 @@ def get_value_ranking_chart_dict(meeting):
     return chart_data
 
 @login_required
+@meeting_is_analysing_or_closed
 def value_ranking(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     options = Highcharts().value_ranking(meeting)
@@ -117,6 +118,7 @@ def get_decision_items_overview_chart_dict(meeting):
     return chart_data
 
 @login_required
+@meeting_is_analysing_or_closed
 def decision_items_overview(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
 
@@ -151,6 +153,7 @@ def decision_items_overview(request, deliverable_id, meeting_id):
             })
 
 @login_required
+@meeting_is_analysing_or_closed
 def features_comparison(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     stakeholder_ids = get_stakeholders_ids(meeting)
@@ -167,6 +170,7 @@ def features_comparison(request, deliverable_id, meeting_id):
         })
 
 @login_required
+@meeting_is_analysing_or_closed
 def features_comparison_chart(request, deliverable_id, meeting_id, measure_value_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     measure_value = MeasureValue.objects.get(pk=measure_value_id)
