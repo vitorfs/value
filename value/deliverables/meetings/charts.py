@@ -579,7 +579,7 @@ class Highcharts(object):
                 },
                 'tooltip': {
                     'shared': True,
-                    'pointFormat': '<span style="color:{series.color}">{series.name}: <b>{point.y} votes</b><br/>'
+                    'pointFormat': '<span style="color:{series.color}">{series.name}: <b>{point.y}%</b><br/>',
                 },
                 'exporting': { 'enabled': False },
                 'series': series
