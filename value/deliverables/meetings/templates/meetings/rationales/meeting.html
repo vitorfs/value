@@ -1,3 +1,4 @@
+{% comment %}
 <div>
   <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 20px;">
     <li role="presentation" class="active">
@@ -89,4 +90,27 @@
         {% endfor %}
       </div>
     </div>
+</div>
+{% endcomment %}
+
+<div class="panel-group" id="meeting-items-rationales-panel-group" role="tablist" aria-multiselectable="true">
+  {% for item in meeting.meetingitem_set.all %}
+    {% with rationales_count=item.get_all_rationales.count %}
+      <div class="panel {% if rationales_count > 0 %}panel-info{% else %}panel-default{% endif %}">
+        <div class="panel-heading" role="tab" id="meeting-item-rational-panel-{{ item.pk }}" style="padding: 7px 10px;">
+          <h5 class="panel-title" style="font-size: 14px;">
+            <span class="badge pull-right">{{ rationales_count }}</span>
+            <a role="button" data-toggle="collapse" data-parent="#meeting-items-rationales-panel-group" href="#meeting-item-rationale-collapse-{{ item.pk }}" aria-expanded="true" aria-controls="meeting-item-rationale-collapse-{{ item.pk }}">
+              {{ item.decision_item.name }}
+            </a>
+          </h5>
+        </div>
+        <div id="meeting-item-rationale-collapse-{{ item.pk }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="meeting-item-rational-panel-{{ item.pk }}">
+          <div class="panel-body">
+            {% include 'meetings/rationales/meeting_item.html' with meeting_item=item %}
+          </div>
+        </div>
+      </div>
+    {% endwith %}
+  {% endfor %}
 </div>

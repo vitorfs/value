@@ -1,4 +1,5 @@
 {% if meeting_item.has_rationales %}
+  {% comment %}
   <div>
     <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 20px;">
       <li role="presentation" class="active">
@@ -35,12 +36,22 @@
       </div>
     </div>
   </div>
+  {% endcomment %}
+
+  <!-- REMOVE THAT LATER ON -->
+  {% for evaluation in meeting_item.get_evaluations_with_rationale %}
+    {% include 'meetings/rationales/partial_evaluation_rationale.html' with evaluation=evaluation %}
+  {% endfor %}
+  <!-- REMOVE THAT LATER ON -->
+
 {% else %}
   <div class="well blank-state">
     <span class="fa fa-comments"></span>
     <h3>No rationale recorded for this item.</h3>
+    {% comment %}
     <button type="button" class="btn btn-primary js-add-meeting-item-note" data-item-id="{{ meeting_item.pk }}">
       <span class="glyphicon glyphicon-plus"></span> Add a note
     </button>
+    {% endcomment %}
   </div>
 {% endif %}
