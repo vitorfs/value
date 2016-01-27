@@ -1,6 +1,6 @@
 # VALUE
 
-[![Build Status](https://magnum.travis-ci.com/UniOULU-TOL/value.svg?token=MbJaKuStkb4gdMsR68Cq)](https://magnum.travis-ci.com/UniOULU-TOL)
+[![Build Status](https://travis-ci.com/M3SOulu/value.svg?token=MbJaKuStkb4gdMsR68Cq)](https://magnum.travis-ci.com/M3SOulu)
 
 This repository stores the source code of the first generation of the **VALUE** tool.
 
@@ -16,6 +16,6 @@ The base project dependencies:
 * jQuery 2.1.3
 * Bootstrap 3.3.4
 
-The complete list of Python dependencies can be found at [requirements.txt](https://github.com/UniOULU-TOL/value/blob/master/requirements.txt)
+The complete list of Python dependencies can be found at [requirements](https://github.com/M3SOulu/value/tree/master/requirements)
 
 ## Running locally
