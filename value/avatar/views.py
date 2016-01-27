@@ -17,8 +17,8 @@ def avatar(request, initials):
     initials = initials[:2]
     initials = initials.upper()
 
-    avatar_dir = '{0}/avatar/{1}'.format(settings.MEDIA_ROOT, size)
-    avatar_path = '{0}/{1}.png'.format(avatar_dir, initials)
+    avatar_dir = u'{0}/avatar/{1}'.format(settings.MEDIA_ROOT, size)
+    avatar_path = u'{0}/{1}.png'.format(avatar_dir, initials)
 
     if os.path.isfile(avatar_path):
         im = Image.open(avatar_path)

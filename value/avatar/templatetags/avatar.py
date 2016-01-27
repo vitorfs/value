@@ -16,7 +16,7 @@ def avatar(user, size=128):
     initials = ''
 
     if user.first_name and user.last_name:
-        initials = '{0}{1}'.format(user.first_name[:1], user.last_name[:1])
+        initials = u'{0}{1}'.format(user.first_name[:1], user.last_name[:1])
     elif user.first_name and len(user.first_name) > 1:
         initials = user.first_name[:2]
     elif user.last_name and len(user.last_name) > 1:
@@ -55,12 +55,12 @@ def avatar(user, size=128):
         'z': 'AA3C39'
     }
 
-    avatar_path = '{0}/avatar/{1}/{2}.png'.format(settings.MEDIA_ROOT, size, initials)
+    avatar_path = u'{0}/avatar/{1}/{2}.png'.format(settings.MEDIA_ROOT, size, initials)
 
     if os.path.isfile(avatar_path):
-        return '{0}avatar/{1}/{2}.png'.format(settings.MEDIA_URL, size, initials)
+        return u'{0}avatar/{1}/{2}.png'.format(settings.MEDIA_URL, size, initials)
     else:
-        url = '{0}?{1}'.format(
+        url = u'{0}?{1}'.format(
           reverse('avatar', args=(initials,)),
           urllib.urlencode({ 'size' : size, 'bg' : colors[initials[:1].lower()], 'fg' : 'ffffff' })
           )
