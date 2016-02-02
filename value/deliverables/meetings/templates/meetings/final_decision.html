@@ -49,7 +49,7 @@
                 <th>Summary</th>
                 <th style="width: 140px;">Value Ranking</th>
                 <th style="width: 100px;">Decision</th>
-                {% comment %}<th style="width: 150px;">Meeting Ranking</th>{% endcomment %}
+                <th style="width: 150px;">Meeting Ranking</th>
               </thead>
               <tbody>
                 {% for form in formset %}
@@ -78,7 +78,7 @@
                         </span>
                       {% endif %}
                     </td>
-                    {% comment %}
+
                     <td style="vertical-align: middle; text-align: center;">
                       {% if not meeting.is_closed %}
                         <span class="hide">{{ form.meeting_ranking.value }}</span>
@@ -87,7 +87,7 @@
                         {{ form.meeting_ranking.value }}
                       {% endif %}
                     </td>
-                    {% endcomment %}
+
                   </tr>
                 {% endfor %}
               </tbody>

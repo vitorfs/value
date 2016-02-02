@@ -53,7 +53,7 @@ class MeetingItemFinalDecisionForm(forms.ModelForm):
 
     class Meta:
         model = MeetingItem
-        fields = ['meeting_decision',]
+        fields = ['meeting_decision', 'meeting_ranking']
 
 
 class ScenarioForm(forms.ModelForm):
