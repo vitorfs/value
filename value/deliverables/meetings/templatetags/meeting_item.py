@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from django import template
-from django.utils.html import escape
+from django.utils.html import escape, mark_safe
 from django.core.urlresolvers import reverse
 
 from value.deliverables.meetings.models import MeetingItem, Scenario
@@ -33,7 +33,7 @@ def display_evaluation_summary(instance):
         html += progress_bar
 
     html += u'</div>'
-    return html
+    return mark_safe(html)
 
 @register.simple_tag
 def display_ranking_label(ranking):
@@ -43,7 +43,7 @@ def display_ranking_label(ranking):
     elif ranking == 0:
         label = 'label-warning'        
     html = u'<span class="label {0} pull-right help-cursor" style="margin-right: 10px; margin-top: 2px;" title="Value Ranking">{1}</span>'.format(label, format_percentage(ranking))
-    return html
+    return mark_safe(html)
 
 @register.simple_tag
 def display_info_button(meeting_item):
@@ -53,4 +53,4 @@ def display_info_button(meeting_item):
               <span class="glyphicon glyphicon-info-sign"></span>
             </a>
           </span>'''.format(remote)
-    return html
+    return mark_safe(html)

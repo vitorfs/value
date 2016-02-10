@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from django import template
-from django.utils.html import escape
+from django.utils.html import escape, mark_safe
 
 register = template.Library()
 
@@ -12,4 +12,4 @@ def toggle_boolean(obj):
     if obj.is_active:
         icon = '<span class="glyphicon glyphicon-ok-sign text-success"></span>'
     component = '<span class="js-toggle-active btn-active" data-id="{0}" data-is-active="{1}">{2}</span>'.format(obj.pk, obj.is_active, icon)
-    return component
+    return mark_safe(component)

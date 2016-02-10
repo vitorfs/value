@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from django import template
-from django.utils.html import escape
+from django.utils.html import escape, mark_safe
 
 register = template.Library()
 
@@ -91,4 +91,4 @@ def evaluation_options(evaluations, meeting_item, factor, measure, measure_value
 
     html += '</tr>'
 
-    return html
+    return mark_safe(html)
