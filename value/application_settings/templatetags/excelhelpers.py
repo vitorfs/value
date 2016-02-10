@@ -1,5 +1,9 @@
+# coding: utf-8
+
 from string import ascii_uppercase
+
 from django import template
+from django.utils.html import mark_safe
 
 register = template.Library()
 
@@ -45,7 +49,7 @@ def excel_columns(name, index, settings):
     else:
         html = select.format(name, 'disabled', options)
 
-    return html
+    return mark_safe(html)
 
 @register.simple_tag
 def excel_is_checked(name, settings):
@@ -75,4 +79,4 @@ def excel_rows(name, index, settings):
             txt_selected = ' selected'
         options += option.format(c, txt_selected)
 
-    return select.format(name, options)
+    return mark_safe(select.format(name, options))
