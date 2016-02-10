@@ -1,5 +1,9 @@
+# coding: utf-8
+
 from django.conf.urls import patterns, include, url
 
-urlpatterns = patterns('value.help.views',
-    url(r'^$', 'index', name='index'),
-)
+from value.help import views
+
+urlpatterns = [
+    url(r'^$', views.index, name='index'),
+]

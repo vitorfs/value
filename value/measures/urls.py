@@ -1,9 +1,14 @@
+# coding: utf-8
+
 from django.conf.urls import patterns, include, url
 
-urlpatterns = patterns('value.measures.views',
-    url(r'^$', 'index', name='index'),
-    url(r'^add/$', 'add', name='add'),
-    url(r'^(\d+)/$', 'edit', name='edit'),
-    url(r'^(\d+)/delete/$', 'delete', name='delete'),
-    url(r'^active/$', 'toggle_active', name='toggle_active'),
-)
+from value.measures import views
+
+
+urlpatterns = [
+    url(r'^$', views.index, name='index'),
+    url(r'^add/$', views.add, name='add'),
+    url(r'^(\d+)/$', views.edit, name='edit'),
+    url(r'^(\d+)/delete/$', views.delete, name='delete'),
+    url(r'^active/$', views.toggle_active, name='toggle_active'),
+]

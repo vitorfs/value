@@ -1,5 +1,10 @@
+# coding: utf-8
+
 from django.conf.urls import patterns, include, url
 
-urlpatterns = patterns('value.avatar.views',
-    url(r'^(?P<initials>[^/]+)$', 'avatar', name='avatar'),
-)
+from value.avatar import views
+
+
+urlpatterns = [
+    url(r'^(?P<initials>[^/]+)$', views.avatar, name='avatar'),
+]
