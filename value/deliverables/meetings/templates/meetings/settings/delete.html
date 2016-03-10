@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block javascript %}
+  <script src="{% static 'js/meetings/meetings.js' %}"></script>
   <script>
     $(function () {
       $("#enable-confirm-deletion").click(function () {

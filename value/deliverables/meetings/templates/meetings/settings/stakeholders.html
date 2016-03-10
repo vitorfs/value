@@ -1,19 +1,20 @@
 {% extends 'base.html' %}
 
-{% load avatar %}
+{% load avatar static %}
 
 {% block javascript %}
-<script type="text/javascript">
-  $(function () {
-    $(".panel-group-stakeholders.removeable .panel").click(function () {
-      var stakeholder_id = $(this).attr("data-stakeholder-id");
-      var stakeholder_name = $(this).attr("data-stakeholder-name");
-      $("#remove-stakeholder-id").val(stakeholder_id);
-      $("#remove-stakeholder .remove-stakeholder-name").text(stakeholder_name);
-      $("#remove-stakeholder").modal("show");
+  <script src="{% static 'js/meetings/meetings.js' %}"></script>
+  <script type="text/javascript">
+    $(function () {
+      $(".panel-group-stakeholders.removeable .panel").click(function () {
+        var stakeholder_id = $(this).attr("data-stakeholder-id");
+        var stakeholder_name = $(this).attr("data-stakeholder-name");
+        $("#remove-stakeholder-id").val(stakeholder_id);
+        $("#remove-stakeholder .remove-stakeholder-name").text(stakeholder_name);
+        $("#remove-stakeholder").modal("show");
+      });
     });
-  });
-</script>
+  </script>
 {% endblock javascript %}
 
 {% block breadcrumb %}

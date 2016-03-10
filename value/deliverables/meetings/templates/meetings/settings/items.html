@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
 
-{% load attr fieldtype %}
+{% load static attr fieldtype %}
 
 {% block javascript %}
-<script type="text/javascript">
-  $(function () {
-    $(".table-sortable").tablesorter({ headers: { 0: { sorter: false }}});
+  <script src="{% static 'js/meetings/meetings.js' %}"></script>
+  <script type="text/javascript">
+    $(function () {
+      $(".table-sortable").tablesorter({ headers: { 0: { sorter: false }}});
 
-    $(".js-remove-selected").click(function () {
-      $("#form-remove-decision-items").submit();
+      $(".js-remove-selected").click(function () {
+        $("#form-remove-decision-items").submit();
+      });
     });
-  });
-</script>
+  </script>
 {% endblock javascript %}
 
 {% block breadcrumb %}
