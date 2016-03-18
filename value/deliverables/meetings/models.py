@@ -286,7 +286,8 @@ class MeetingItem(models.Model):
         rankings = item_evaluations.values('measure_value__id').annotate(votes=Count('measure_value'))
 
         with transaction.atomic():
-
+            self.evaluation_summary.all().delete()
+            
             meeting_item_content_type = ContentType.objects.get_for_model(MeetingItem)
 
             for measure_value in measure.measurevalue_set.all():
