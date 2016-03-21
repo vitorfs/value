@@ -53,16 +53,12 @@ def edit(request, factor_id):
 @user_passes_test(lambda user: user.is_superuser)
 def delete(request, factor_id):
     factor = get_object_or_404(Factor, pk=factor_id)
-    factor_has_relations = factor.deliverables.exists()
-    if factor_has_relations:
-        associated_deliverables = factor.deliverables.values_list('name', flat=True)
-        str_associated_deliverables = ', '.join(associated_deliverables)
-        messages.warning(request, u'The factor {0} is associated with deliverables. Deleting this factor will lead to data loss. If you really want to delete this factor from the system, please delete the associated deliverables first: {1}.'.format(factor.name, str_associated_deliverables))
-    if request.method == 'POST' and not factor_has_relations:
+    can_delete = (not factor.deliverables.exists() and not factor.meetings.exists())
+    if request.method == 'POST' and can_delete:
         factor.delete()
         messages.success(request, u'The factor {0} was deleted successfully.'.format(factor.name))
         return redirect(reverse('factors:index'))
-    return render(request, 'factors/delete.html', { 'factor': factor })
+    return render(request, 'factors/delete.html', { 'factor': factor, 'can_delete': can_delete })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)

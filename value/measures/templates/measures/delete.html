@@ -10,16 +10,28 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-  <h1 class="lead">Are you sure you want to delete the measure {{ measure.name }}?</h1>
 
-  <form method="post" class="form-horizontal">
-    {% csrf_token %}
-    <div class="form-group">
-      <div class="col-sm-12">
-        <button type="submit" class="btn btn-primary">Confirm</button>
-        <a href="{% url 'measures:index' %}" class="btn btn-default">Cancel</a>
+  {% if can_delete %}
+    <h1 class="lead">Are you sure you want to delete the measure {{ measure.name }}?</h1>
+
+    <form method="post" class="form-horizontal">
+      {% csrf_token %}
+      <div class="form-group">
+        <div class="col-sm-12">
+          <button type="submit" class="btn btn-primary">Confirm</button>
+          <a href="{% url 'measures:index' %}" class="btn btn-default">Cancel</a>
+        </div>
       </div>
+    </form>
+  {% else %}
+    <div class="well blank-state">
+      <span class="glyphicon glyphicon-ban-circle"></span>
+      <h3>The measure <strong>{{ measure.name }}</strong> cannot be deleted.</h3>
+      <p class="lead">There's already deliverables and meetings associated with this measure. Change its status to <strong>inactive</strong> instead.</p>
+      <a href="{% url 'measures:index' %}" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span> Back
+      </a>
     </div>
-  </form>
+  {% endif %}
 
 {% endblock content %}

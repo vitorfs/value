@@ -3,21 +3,32 @@
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'factors:index' %}">Users</a></li>
+    <li><a href="{% url 'factors:index' %}">Factors</a></li>
     <li><a href="{% url 'factors:edit' factor.pk %}">{{ factor.name }}</a></li>
     <li class="active">Delete</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
-  <h1 class="lead">Are you sure you want to delete the factor {{ factor.name }}?</h1>
-  <form method="post" class="form-horizontal">
-    {% csrf_token %}
-    <div class="form-group">
-      <div class="col-sm-12">
-        <button type="submit" class="btn btn-primary">Confirm</button>
-        <a href="{% url 'factors:index' %}" class="btn btn-default">Cancel</a>
+  {% if can_delete %}
+    <h1 class="lead">Are you sure you want to delete the factor {{ factor.name }}?</h1>
+    <form method="post" class="form-horizontal">
+      {% csrf_token %}
+      <div class="form-group">
+        <div class="col-sm-12">
+          <button type="submit" class="btn btn-primary">Confirm</button>
+          <a href="{% url 'factors:index' %}" class="btn btn-default">Cancel</a>
+        </div>
       </div>
+    </form>
+  {% else %}
+    <div class="well blank-state">
+      <span class="glyphicon glyphicon-ban-circle"></span>
+      <h3>The value factor <strong>{{ factor.name }}</strong> cannot be deleted.</h3>
+      <p class="lead">There's already deliverables and meetings associated with this value factor. Change its status to <strong>inactive</strong> instead.</p>
+      <a href="{% url 'factors:index' %}" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span> Back
+      </a>
     </div>
-  </form>
+  {% endif %}
 {% endblock content %}

@@ -9,6 +9,7 @@
         <th style="width: 60px">Delete</th>
       </tr>
     </thead>
+    {% if can_edit %}
     <tfoot>
       <tr>
         <td colspan="4">
@@ -18,6 +19,7 @@
         </td>
       </tr>
     </tfoot>
+    {% endif %}
     <tbody>
       {% for form in formset.forms %}
         <tr>
@@ -30,7 +32,7 @@
             {% for hidden in form.hidden_fields %}
               {{ hidden }}
             {% endfor %}
-            <input type="text" class="form-control" value="{{ form.description.value|default_if_none:'' }}" id="{{ form.description.id_for_label }}" name="{{ form.description.html_name }}" maxlength="{{ form.description.field.max_length }}">
+            <input type="text" class="form-control" value="{{ form.description.value|default_if_none:'' }}" id="{{ form.description.id_for_label }}" name="{{ form.description.html_name }}" maxlength="{{ form.description.field.max_length }}" {% if not can_edit %} readonly{% endif %}>
             {% for error in form.description.errors %}
               <p class="help-block">{{ error }}</p>
             {% endfor %}
