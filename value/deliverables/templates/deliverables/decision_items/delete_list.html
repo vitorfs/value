@@ -15,24 +15,56 @@
 {% endblock tabs %}
 
 {% block content %}
-  <h1 class="lead">Are you sure you want to delete the selected decision items? All of the following objects and their related items will be deleted:</h1>
-  <ul style="margin-bottom: 20px">
-    {% for decision_item in decision_items %}
-      <li><a href="{% url 'deliverables:edit_decision_item' deliverable.pk decision_item.pk %}">{{ decision_item.name }}</a></li>
-    {% endfor %}
-  </ul>
-  <form method="post" class="form-horizontal">
-    {% csrf_token %}
-    {% for decision_item in decision_items %}
-      <input type="hidden" name="decision_item_id" value="{{ decision_item.pk }}">
-    {% endfor %}
-    <input type="hidden" name="action" value="{{ action }}">
-    <input type="hidden" name="confirm_action" value="yes">
-    <div class="form-group">
-      <div class="col-sm-12">
-        <button type="submit" class="btn btn-primary">Confirm</button>
-        <a href="{% url 'deliverables:decision_items' deliverable.pk %}" class="btn btn-default">Cancel</a>
-      </div>
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      {% if decision_items.can_delete %}
+        <h1 class="lead">Are you sure you want to delete the selected decision items?</h1>
+        <form method="post" class="form-horizontal">
+          {% csrf_token %}
+          {% for decision_item in decision_items.can_delete %}
+            <input type="hidden" name="decision_item_id" value="{{ decision_item.pk }}">
+          {% endfor %}
+          <input type="hidden" name="action" value="{{ action }}">
+          <input type="hidden" name="confirm_action" value="yes">
+          <div class="form-group">
+            <div class="col-sm-12">
+              <button type="submit" class="btn btn-primary">Confirm</button>
+              <a href="{% url 'deliverables:decision_items' deliverable.pk %}" class="btn btn-default">Cancel</a>
+            </div>
+          </div>
+        </form>
+      
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            Marked for deletion
+          </div>
+          <ul class="list-group">
+            {% for decision_item in decision_items.can_delete %}
+              <li class="list-group-item"><a href="{% url 'deliverables:edit_decision_item' deliverable.pk decision_item.pk %}">{{ decision_item.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      {% if decision_items.cannot_delete %}
+        <div class="panel panel-danger">
+          <div class="panel-heading">
+            Cannot be deleted
+          </div>
+          <div class="panel-body">
+            The following decision items cannot be deleted because they are already associated with meetings. The deletion of those decision items would lead to data loss.
+          </div>
+          <ul class="list-group">
+            {% for decision_item in decision_items.cannot_delete %}
+              <li class="list-group-item"><a href="{% url 'deliverables:edit_decision_item' deliverable.pk decision_item.pk %}">{{ decision_item.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="form-group">
+          <a href="{% url 'deliverables:decision_items' deliverable.pk %}" class="btn btn-default">Cancel</a>
+        </div>
+      {% endif %}
+
     </div>
-  </form>
+  </div>
 {% endblock content %}

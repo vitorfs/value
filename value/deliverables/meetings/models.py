@@ -48,6 +48,8 @@ class Meeting(models.Model):
     description = models.CharField(max_length=2000, null=True, blank=True)
     location = models.CharField(max_length=50, null=True, blank=True)
     deliverable = models.ForeignKey(Deliverable)
+    measure = models.ForeignKey(Measure, related_name='meetings', null=True)
+    factors = models.ManyToManyField(Factor, related_name='meetings')
     status = models.CharField(max_length=1, choices=STATUS, default=ONGOING)
     started_at = models.DateTimeField()
     ended_at = models.DateTimeField(null=True, blank=True)

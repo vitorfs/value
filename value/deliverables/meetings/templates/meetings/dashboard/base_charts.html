@@ -36,10 +36,10 @@
   {% include 'meetings/includes/menu.html' with active='dashboard' meeting=meeting %}
 
   <div class="row">
-    <div class="col-lg-2 col-md-3 col-sm-4">
+    <div class="col-md-3 col-sm-4">
       {% include 'meetings/dashboard/includes/menu.html' with active=chart_menu_active meeting=meeting %}
     </div>
-    <div class="col-lg-10 col-md-9 col-sm-8">
+    <div class="col-md-9 col-sm-8">
       {% block charts %}{% endblock %}
     </div>
   </div>

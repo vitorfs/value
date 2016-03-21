@@ -203,16 +203,24 @@ def process_decision_items_list_actions(request, deliverable_id):
     if action == 'delete_selected':
         decision_items_ids = request.POST.getlist('decision_item_id')
         decision_items = DecisionItem.objects.filter(pk__in=decision_items_ids)
+
+        decision_items_list = { 'can_delete': list(), 'cannot_delete': list() }
+        decision_items_list['can_delete'] = filter(lambda i: not i.meetingitem_set.exists(), decision_items)
+        decision_items_list['cannot_delete'] = filter(lambda i: i.meetingitem_set.exists(), decision_items)
+
         if 'confirm_action' in request.POST:
-            decision_items.delete()
+            for decision_item in decision_items:
+                if not decision_item.meetingitem_set.exists():
+                    decision_item.delete()
             deliverable.save()
             messages.success(request, 'The selected decision items were deleted successfully.')
         else:
             return render(request, 'deliverables/decision_items/delete_list.html', { 
                     'deliverable': deliverable, 
-                    'decision_items': decision_items, 
+                    'decision_items': decision_items_list, 
                     'action': action 
                     })
+
     return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
 
 @login_required
@@ -398,16 +406,6 @@ def measure_settings(request, deliverable_id):
             'deliverable': deliverable,
             'form': form
             })
-
-@login_required
-@user_is_manager
-@transaction.atomic
-@require_POST
-def delete(request, deliverable_id):
-    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    deliverable.delete()
-    messages.success(request, u'The deliverable {0} was completly deleted successfully.'.format(deliverable.name))
-    return redirect(reverse('deliverables:index'))
 
 @login_required
 @user_is_manager

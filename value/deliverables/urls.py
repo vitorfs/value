@@ -9,7 +9,6 @@ urlpatterns = [
     url(r'^new/$', views.new, name='new'),
     url(r'^import-decision-items/$', views.import_decision_items, name='import_decision_items'),
     url(r'^(?P<deliverable_id>\d+)/$', views.deliverable, name='deliverable'),
-    url(r'^(?P<deliverable_id>\d+)/delete/$', views.delete, name='delete'),
     url(r'^(?P<deliverable_id>\d+)/transfer/$', views.transfer, name='transfer'),
     url(r'^(?P<deliverable_id>\d+)/stakeholders/$', views.stakeholders, name='stakeholders'),
     url(r'^(?P<deliverable_id>\d+)/stakeholders/load-available/$', views.load_available_stakeholders, name='load_available_stakeholders'),
