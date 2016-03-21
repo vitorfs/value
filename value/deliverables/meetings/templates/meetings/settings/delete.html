@@ -35,46 +35,54 @@
 
 {% block content %}
   <div class="row">
-    <div class="col-lg-2 col-md-3 col-sm-4">
+    <div class="col-md-3 col-sm-4">
       {% include 'meetings/settings/includes/menu.html' with meeting=meeting active='delete' %}
     </div>
-    <div class="col-lg-10 col-md-9 col-sm-8">
-      <div class="panel panel-danger">
-        <div class="panel-heading">
-          <h3 class="panel-title">Danger zone</h3>
+    <div class="col-md-9 col-sm-8">
+      {% if can_delete %}
+        <div class="panel panel-danger">
+          <div class="panel-heading">
+            <h3 class="panel-title">Danger zone</h3>
+          </div>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <button type="button" class="btn btn-danger pull-right" data-toggle="modal" data-target="#delete-meeting">Delete</button>
+              <p><strong>Delete this meeting</strong></p>
+              <p style="margin-bottom: 0;">Once you delete a meeting, there is no going back. Please be certain.</p>
+            </li>
+          </ul>
         </div>
-        <ul class="list-group">
-          <li class="list-group-item">
-            <button type="button" class="btn btn-danger pull-right" data-toggle="modal" data-target="#delete-meeting">Delete</button>
-            <p><strong>Delete this meeting</strong></p>
-            <p style="margin-bottom: 0;">Once you delete a meeting, there is no going back. Please be certain.</p>
-          </li>
-        </ul>
-      </div>
-      <form method="post" action="{% url 'deliverables:meetings:delete' meeting.deliverable.pk meeting.pk %}">
-        {% csrf_token %}
-        <div class="modal fade" id="delete-meeting" tabindex="-1" role="dialog" aria-labelledby="delete-meeting-title" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="delete-meeting-title">Are you sure?</h4>
-              </div>
-              <div class="modal-body">
-                <p>This action <strong>CANNOT</strong> be undone. This will permanently delete the meeting <strong>{{ meeting.name }}</strong>, evaluations, dashboards, and remove all stakeholders and decision items associations.</p>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" id="enable-confirm-deletion"> I understand the consequences.
-                  </label>
+        <form method="post" action="{% url 'deliverables:meetings:delete' meeting.deliverable.pk meeting.pk %}">
+          {% csrf_token %}
+          <div class="modal fade" id="delete-meeting" tabindex="-1" role="dialog" aria-labelledby="delete-meeting-title" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="delete-meeting-title">Are you sure?</h4>
                 </div>
-              </div>
-              <div class="modal-footer">
-                <button type="submit" id="confirm-deletion" class="btn btn-danger btn-block" disabled>Delete this meeting</button>
+                <div class="modal-body">
+                  <p>This action <strong>CANNOT</strong> be undone. This will permanently delete the meeting <strong>{{ meeting.name }}</strong>.</p>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" id="enable-confirm-deletion"> I understand the consequences.
+                    </label>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" id="confirm-deletion" class="btn btn-danger btn-block" disabled>Delete this meeting</button>
+                </div>
               </div>
             </div>
           </div>
+        </form>
+      {% else %}
+        <div class="well blank-state">
+          <span class="glyphicon glyphicon-ban-circle"></span>
+          <h3>This meeting cannot be deleted.</h3>
+          <p class="lead">There's already evaluation data associated with this decision making meeting.</p>
         </div>
-      </form>
+      {% endif %}
     </div>
   </div>
 {% endblock content %}

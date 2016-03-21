@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.db import transaction
 from django.utils import timezone
+from django.utils.html import mark_safe
 
 from value.deliverables.models import Deliverable, DecisionItemLookup, DecisionItem
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
@@ -135,10 +136,12 @@ def remove_stakeholder(request, deliverable_id, meeting_id):
     user = User.objects.get(pk=stakeholder_id)
     if user != request.user:
         meeting_stakeholder = MeetingStakeholder.objects.get(stakeholder=user, meeting=meeting)
-        meeting_stakeholder.delete()
-        Evaluation.get_user_evaluations_by_meeting(user, meeting).delete()
-        meeting.calculate_all_rankings()
-        messages.success(request, u'{0} was successfully removed from the meeting!'.format(user.profile.get_display_name()))
+        if meeting_stakeholder.stakeholder.evaluation_set.filter(meeting=meeting).exists():
+            messages.warning(request, u'The stakeholder {0} cannot be removed from this meeting because he has already provided evaluation input.'.format(user.profile.get_display_name()))
+        else:
+            meeting_stakeholder.delete()
+            meeting.calculate_all_rankings()
+            messages.success(request, u'{0} was successfully removed from the meeting!'.format(user.profile.get_display_name()))
     else:
         messages.warning(request, 'You cannot remove yourself from the meeting.')
     return redirect(reverse('deliverables:meetings:stakeholders', args=(deliverable_id, meeting_id)))
@@ -167,9 +170,28 @@ def remove_decision_items(request, deliverable_id, meeting_id):
     meeting = Meeting.objects.get(pk=meeting_id, deliverable__id=deliverable_id)
     meeting_items_ids = request.POST.getlist('meeting_items')
     if any(meeting_items_ids):
-        meeting.meetingitem_set.filter(id__in=meeting_items_ids).delete()
-        meeting.calculate_all_rankings()
-        messages.success(request, u'Decision items sucessfully removed from the meeting!')
+        items = meeting.meetingitem_set.filter(id__in=meeting_items_ids)
+        can_delete = filter(lambda i: not i.evaluation_set.exists(), items)
+        cannot_delete = filter(lambda i: i.evaluation_set.exists(), items)
+        if can_delete:
+            for item in can_delete:
+                item.delete()
+            meeting.calculate_all_rankings()
+            pretty_names = map(lambda i: u'<strong>{0}</strong>'.format(i.decision_item.name) , can_delete) 
+            messages.success(
+                request, 
+                mark_safe(
+                    u'The following decision items was sucessfully removed from the meeting: <ul><li>{0}</li></ul>'.format(u'</li><li>'.join(pretty_names))
+                    )
+            )
+        if cannot_delete:
+            pretty_names = map(lambda i: u'<strong>{0}</strong>'.format(i.decision_item.name) , cannot_delete) 
+            messages.warning(
+                request, 
+                mark_safe(
+                    u'The following decision items wasn\'t removed from the meeting because they were already in use: <ul><li>{0}</li></ul>'.format(u'</li><li>'.join(pretty_names))
+                    )
+                )
     else:
         messages.warning(request, u'Select at least one decision item to remove.')
     return redirect(reverse('deliverables:meetings:decision_items', args=(deliverable_id, meeting_id)))
@@ -239,9 +261,9 @@ def stakeholders(request, deliverable_id, meeting_id):
 @user_is_manager
 def delete(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    if request.method == 'POST':
+    can_delete = (not meeting.evaluation_set.exists())
+    if request.method == 'POST' and can_delete:
         meeting.delete()
         messages.success(request, u'The meeeting {0} was completly deleted successfully.'.format(meeting.name))
         return redirect(reverse('deliverables:deliverable', args=(meeting.deliverable.pk,)))
-    else:
-        return render(request, 'meetings/settings/delete.html', { 'meeting': meeting })
+    return render(request, 'meetings/settings/delete.html', { 'meeting': meeting, 'can_delete': can_delete })

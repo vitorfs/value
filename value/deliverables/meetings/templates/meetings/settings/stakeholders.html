@@ -34,10 +34,10 @@
 
 {% block content %}
   <div class="row">
-    <div class="col-lg-2 col-md-3 col-sm-4">
+    <div class="col-md-3 col-sm-4">
       {% include 'meetings/settings/includes/menu.html' with meeting=meeting active='stakeholders' %}
     </div>
-    <div class="col-lg-10 col-md-9 col-sm-8">
+    <div class="col-md-9 col-sm-8">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">Stakeholders</h3>
@@ -110,7 +110,7 @@
             <h4 class="modal-title">Are you sure?</h4>
           </div>
           <div class="modal-body">
-            <p>Removing the stakeholder <strong class="remove-stakeholder-name"></strong> from the meeting will also remove all related evaluations.</p>
+            <p>Remove the stakeholder <strong class="remove-stakeholder-name"></strong>.</p>
           </div>
           <div class="modal-footer">
             <button type="submit" id="confirm-deletion" class="btn btn-danger btn-block">Remove <span class="remove-stakeholder-name"></span></button>

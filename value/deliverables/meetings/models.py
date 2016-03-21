@@ -18,8 +18,8 @@ class Rationale(models.Model):
     text = models.TextField(max_length=4000, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, related_name='rationales_created')
-    updated_by = models.ForeignKey(User, null=True, related_name='rationales_updated')
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name='rationales_created')
+    updated_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name='rationales_updated')
 
     class Meta:
         db_table = 'rationales'
@@ -47,16 +47,16 @@ class Meeting(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=2000, null=True, blank=True)
     location = models.CharField(max_length=50, null=True, blank=True)
-    deliverable = models.ForeignKey(Deliverable)
-    measure = models.ForeignKey(Measure, related_name='meetings', null=True)
+    deliverable = models.ForeignKey(Deliverable, on_delete=models.PROTECT)
+    measure = models.ForeignKey(Measure, on_delete=models.PROTECT, related_name='meetings', null=True)
     factors = models.ManyToManyField(Factor, related_name='meetings')
     status = models.CharField(max_length=1, choices=STATUS, default=ONGOING)
     started_at = models.DateTimeField()
     ended_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, related_name='meetings_created')
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name='meetings_created')
     updated_at = models.DateTimeField(auto_now=True)
-    updated_by = models.ForeignKey(User, null=True, related_name='meetings_updated')
+    updated_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name='meetings_updated')
     rationales = models.ManyToManyField(Rationale)
     rationales_count = models.PositiveIntegerField(default=0)
     
@@ -228,9 +228,9 @@ class Ranking(models.Model):
     Saves for each MeetingItem, separeted by MeasureValue, the total number of votes and
     also the calculated percentage.
     """
-    meeting = models.ForeignKey(Meeting)
-    measure_value = models.ForeignKey(MeasureValue)
-    content_type = models.ForeignKey(ContentType)
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    measure_value = models.ForeignKey(MeasureValue, on_delete=models.CASCADE)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
     raw_votes = models.IntegerField(default=0)
@@ -249,8 +249,8 @@ class Ranking(models.Model):
 
 
 class MeetingItem(models.Model):
-    meeting = models.ForeignKey(Meeting)
-    decision_item = models.ForeignKey(DecisionItem)
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    decision_item = models.ForeignKey(DecisionItem, on_delete=models.PROTECT)
     meeting_decision = models.BooleanField(default=False)
     rationales = models.ManyToManyField(Rationale)
     value_ranking = models.FloatField(default=0.0)
@@ -321,8 +321,8 @@ class MeetingItem(models.Model):
 
 
 class MeetingStakeholder(models.Model):
-    meeting = models.ForeignKey(Meeting)
-    stakeholder = models.ForeignKey(User)
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    stakeholder = models.ForeignKey(User, on_delete=models.PROTECT)
     meeting_input = models.FloatField(default=0.0)
 
     class Meta:
@@ -334,14 +334,14 @@ class MeetingStakeholder(models.Model):
 
 
 class Evaluation(models.Model):
-    meeting = models.ForeignKey(Meeting)
-    meeting_item = models.ForeignKey(MeetingItem)
-    user = models.ForeignKey(User)
-    factor = models.ForeignKey(Factor)
-    measure = models.ForeignKey(Measure)
-    measure_value = models.ForeignKey(MeasureValue, null=True, blank=True)
+    meeting = models.ForeignKey(Meeting, on_delete=models.PROTECT)
+    meeting_item = models.ForeignKey(MeetingItem, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    factor = models.ForeignKey(Factor, on_delete=models.PROTECT)
+    measure = models.ForeignKey(Measure, on_delete=models.PROTECT)
+    measure_value = models.ForeignKey(MeasureValue, on_delete=models.SET_NULL, null=True, blank=True)
     evaluated_at = models.DateTimeField(null=True, blank=True)
-    rationale = models.OneToOneField(Rationale, null=True)
+    rationale = models.OneToOneField(Rationale, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         db_table = 'evaluations'
@@ -373,7 +373,7 @@ class Scenario(models.Model):
     types of visualization inside the dashboard.
     """
     name = models.CharField(max_length=255)
-    meeting = models.ForeignKey(Meeting, related_name='scenarios')
+    meeting = models.ForeignKey(Meeting, on_delete=models.PROTECT, related_name='scenarios')
     meeting_items = models.ManyToManyField(MeetingItem, related_name='scenarios')
     value_ranking = models.FloatField(default=0.0)
     evaluation_summary = GenericRelation(Ranking)
