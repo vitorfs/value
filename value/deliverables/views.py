@@ -160,36 +160,6 @@ def remove_stakeholder(request, deliverable_id):
     if form.is_valid():
         users = form.cleaned_data['stakeholders']
         deliverable.stakeholders.remove(*users)
-
-        clear_user_data = form.cleaned_data['clear_user_related_data']
-        if clear_user_data:
-            for user in users:
-                for meeting in deliverable.meeting_set.all():
-                    Evaluation.objects.filter(user=user, meeting=meeting).delete()
-                    MeetingStakeholder.objects.filter(stakeholder=user, meeting=meeting).delete()
-
-                    # Remove all meeting related rationales
-                    for rationale in meeting.rationales.all():
-                        if rationale.created_by == user:
-                            rationale.delete()
-
-                    # Remove all meeting item related rationales
-                    for meeting_item in meeting.meetingitem_set.all():
-                        for rationale in meeting_item.rationales.all():
-                            if rationale.created_by == user:
-                                rationale.delete()
-
-                    # Remove all scenario related rationales
-                    for scenario in meeting.scenarios.all():
-                        for rationale in scenario.rationales.all():
-                            if rationale.created_by == user:
-                                rationale.delete()
-
-            # Update rankings and rationales count
-            for meeting in deliverable.meeting_set.all():
-                meeting.calculate_all_rankings()
-                meeting.calculate_meeting_related_rationales_count()
-
         messages.success(request, u'The stakeholders were removed successfully.')
     else:
         messages.error(request, 'An error ocurred while trying to remove the selected stakeholders.')
@@ -370,10 +340,6 @@ def factors_settings(request, deliverable_id):
         form = DeliverableFactorsForm(request.POST, instance=deliverable)
         if form.is_valid():
             deliverable = form.save()
-            for meeting in deliverable.meeting_set.all():
-                #meeting.evaluation_set.exclude(factor__in=deliverable.factors.all()).delete()
-                meeting.calculate_all_rankings()
-
             messages.success(request, u'The deliverable {0} was saved successfully.'.format(deliverable.name))
             # redirect after post to avoid form re-submition
             return redirect(reverse('deliverables:factors_settings', args=(deliverable.pk,)))

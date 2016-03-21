@@ -82,7 +82,7 @@ class Highcharts(object):
     def stakeholders_input_bar_chart(self, meeting):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting)
         meeting_stakeholders = meeting.meetingstakeholder_set.all()
-        factors = meeting.deliverable.factors.all()
+        factors = meeting.factors.all()
 
         data = []
 
@@ -129,7 +129,7 @@ class Highcharts(object):
 
     def factors_usage_bar_chart(self, meeting):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting)
-        factors = meeting.deliverable.factors.all()
+        factors = meeting.factors.all()
         data = []
 
         meeting_items_count = meeting.meetingitem_set.count()
@@ -215,7 +215,7 @@ class Highcharts(object):
         filtered_evaluations = evaluations.filter(measure_value=measure_value, user_id__in=stakeholder_ids)
 
         stakeholders_count = len(stakeholder_ids)
-        factors_count = meeting.deliverable.factors.count()
+        factors_count = meeting.factors.count()
         max_votes = stakeholders_count * factors_count
 
         vqs = filtered_evaluations.values('meeting_item__id', 'meeting_item__decision_item__name').annotate(count=Count('meeting_item__id')).order_by('-count')
@@ -262,9 +262,9 @@ class Highcharts(object):
     def _decision_items_overview(self, meeting, chart_type, stakeholder_ids, evaluations, meeting_items):
         options = dict()
         if evaluations.exists():
-            measure = meeting.deliverable.measure
+            measure = meeting.measure
             stakeholders_count = len(stakeholder_ids)
-            factors_count = meeting.deliverable.factors.count()
+            factors_count = meeting.factors.count()
             max_votes = stakeholders_count * factors_count
 
             categories = []
@@ -392,7 +392,7 @@ class Highcharts(object):
 
     def decision_item_acceptance_simple_treemap(self, meeting_item, stakeholder_ids):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting_item.meeting).filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
-        factors_count = meeting_item.meeting.deliverable.factors.count()
+        factors_count = meeting_item.meeting.factors.count()
         max_votes = factors_count * len(stakeholder_ids)
 
         options = self._decision_item_acceptance_simple_treemap(evaluations, max_votes)
@@ -405,7 +405,7 @@ class Highcharts(object):
     def decision_item_acceptance_scenario_simple_treemap(self, scenario, stakeholder_ids):
         evaluations = Evaluation.get_evaluations_by_meeting(scenario.meeting) \
                 .filter(meeting_item__in=scenario.meeting_items.all(), user_id__in=stakeholder_ids)
-        factors_count = scenario.meeting.deliverable.factors.count()
+        factors_count = scenario.meeting.factors.count()
         meeting_items_count = scenario.meeting_items.count()
         max_votes = factors_count * len(stakeholder_ids) * meeting_items_count
 
@@ -443,7 +443,7 @@ class Highcharts(object):
 
     def decision_item_acceptance_detailed_treemap(self, meeting_item, stakeholder_ids):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting_item.meeting).filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
-        factors_count = meeting_item.meeting.deliverable.factors.count()
+        factors_count = meeting_item.meeting.factors.count()
         max_votes = factors_count * len(stakeholder_ids)
 
         options = self._decision_item_acceptance_detailed_treemap(evaluations, max_votes)
@@ -456,7 +456,7 @@ class Highcharts(object):
     def decision_item_acceptance_scenario_detailed_treemap(self, scenario, stakeholder_ids):
         evaluations = Evaluation.get_evaluations_by_meeting(scenario.meeting) \
             .filter(meeting_item__in=scenario.meeting_items.all(), user_id__in=stakeholder_ids)
-        factors_count = scenario.meeting.deliverable.factors.count()
+        factors_count = scenario.meeting.factors.count()
         meeting_items_count = scenario.meeting_items.count()
         max_votes = factors_count * len(stakeholder_ids) * meeting_items_count
 
@@ -514,7 +514,7 @@ class Highcharts(object):
 
     def decision_item_acceptance_pie_chart_drilldown(self, meeting_item, stakeholder_ids):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting_item.meeting).filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
-        factors_count = meeting_item.meeting.deliverable.factors.count()
+        factors_count = meeting_item.meeting.factors.count()
         max_votes = factors_count * len(stakeholder_ids)
 
         options = self._decision_item_acceptance_pie_chart_drilldown(evaluations, max_votes)
@@ -527,7 +527,7 @@ class Highcharts(object):
     def decision_item_acceptance_scenario_pie_chart_drilldown(self, scenario, stakeholder_ids):
         evaluations = Evaluation.get_evaluations_by_meeting(scenario.meeting) \
             .filter(meeting_item__in=scenario.meeting_items.all(), user_id__in=stakeholder_ids)
-        factors_count = scenario.meeting.deliverable.factors.count()
+        factors_count = scenario.meeting.factors.count()
         meeting_items_count = scenario.meeting_items.count()
         max_votes = factors_count * len(stakeholder_ids) * meeting_items_count
 

@@ -110,7 +110,7 @@ class Meeting(models.Model):
         """
         stakeholders_count = self.meetingstakeholder_set.count()
         meeting_items_count = self.meetingitem_set.count()
-        factors_count = self.deliverable.factors.count()
+        factors_count = self.factors.count()
 
         max_evaluations = stakeholders_count * meeting_items_count * factors_count
         total_evaluations = self.get_evaluations().count()
@@ -208,7 +208,7 @@ class Meeting(models.Model):
     def initial_data(self, measure_value):
         for stakeholder in self.meetingstakeholder_set.all():
             for meeting_item in self.meetingitem_set.all():
-                for factor in self.deliverable.factors.all():
+                for factor in self.factors.all():
                     Evaluation.objects.create(
                         meeting=self,
                         meeting_item=meeting_item,
@@ -280,9 +280,9 @@ class MeetingItem(models.Model):
         item_evaluations = Evaluation.get_evaluations_by_meeting(self.meeting) \
                 .filter(meeting_item=self)
 
-        measure = self.meeting.deliverable.measure
+        measure = self.meeting.measure
         stakeholders_count = self.meeting.meetingstakeholder_set.count()
-        factors_count = self.meeting.deliverable.factors.count()
+        factors_count = self.meeting.factors.count()
         max_evaluations = stakeholders_count * factors_count
 
         rankings = item_evaluations.values('measure_value__id').annotate(votes=Count('measure_value'))
@@ -354,8 +354,8 @@ class Evaluation(models.Model):
     def _list(meeting):
         return Evaluation.objects.filter(
             meeting=meeting, 
-            factor__in=meeting.deliverable.factors.all(),
-            measure=meeting.deliverable.measure
+            factor__in=meeting.factors.all(),
+            measure=meeting.measure
             )
 
     @staticmethod
@@ -420,7 +420,7 @@ class Scenario(models.Model):
     def calculate_ranking(self):
         meeting_items_count = self.meeting_items.count()
         stakeholders_count = self.meeting.meetingstakeholder_set.count()
-        factors_count = self.meeting.deliverable.factors.count()
+        factors_count = self.meeting.factors.count()
         max_evaluations = stakeholders_count * factors_count * meeting_items_count
 
         with transaction.atomic():
@@ -438,7 +438,7 @@ class Scenario(models.Model):
             # Initialize the aggregated_measure_values dict to make sure 
             # it's gonna have all possible Measure Value, even if no meeting item
             # has received a vote for that Measure Value.
-            for measure_value in self.meeting.deliverable.measure.measurevalue_set.all():
+            for measure_value in self.meeting.measure.measurevalue_set.all():
                 aggregated_measure_values[measure_value.pk] = 0
 
             for meeting_item in self.meeting_items.all():

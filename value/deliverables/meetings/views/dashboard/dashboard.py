@@ -158,7 +158,7 @@ def features_comparison(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     stakeholder_ids = get_stakeholders_ids(meeting)
     evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(user_id__in=stakeholder_ids)
-    measure = meeting.deliverable.measure
+    measure = meeting.measure
     charts = measure.measurevalue_set.all()
     return render(request, 'meetings/dashboard/decision_items_comparison/list.html', { 
         'meeting': meeting, 

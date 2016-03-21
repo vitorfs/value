@@ -59,7 +59,7 @@ def factors_groups(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
 
     if application_has_factors_groups():
-        chart_order_options = get_charts_order_dict(meeting.deliverable.measure)
+        chart_order_options = get_charts_order_dict(meeting.measure)
         order = get_or_set_charts_order_session(request, meeting, 'factors_groups_comparison_order')
 
         charts = map(get_factors_groups_chart_dict, meeting.get_ordered_meeting_items(order))
@@ -104,7 +104,7 @@ def factors_groups_scenarios(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
 
     if application_has_factors_groups():
-        chart_order_options = get_scenario_charts_order_dict(meeting.deliverable.measure)
+        chart_order_options = get_scenario_charts_order_dict(meeting.measure)
         order = get_or_set_scenario_charts_order_session(request, meeting, 'factors_groups_comparison_scenario_order')
 
         charts = map(get_factors_groups_scenario_chart_dict, meeting.get_ordered_scenarios(order))

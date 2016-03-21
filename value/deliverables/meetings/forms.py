@@ -35,7 +35,7 @@ class NewMeetingForm(AbstractMeetingForm):
 
     def __init__(self, *args, **kwargs):
         super(NewMeetingForm, self).__init__(*args, **kwargs)
-        self.fields['default_evaluation'].queryset = self.instance.deliverable.measure.measurevalue_set.all()
+        self.fields['default_evaluation'].queryset = self.instance.measure.measurevalue_set.all()
 
 class MeetingForm(AbstractMeetingForm):
     class Meta:
@@ -95,8 +95,8 @@ class ScenarioBuilderForm(forms.Form):
         super(ScenarioBuilderForm, self).__init__(*args, **kwargs)
         items_range = self.initial['meeting'].meetingitem_set.count()
         self.fields['meeting_items_count'].choices = [(choice, choice) for choice in range(1, items_range+1)]
-        self.fields['criteria'].queryset = self.initial['meeting'].deliverable.measure.measurevalue_set.all()
-        self.fields['factors'].queryset = self.initial['meeting'].deliverable.factors.all()
+        self.fields['criteria'].queryset = self.initial['meeting'].measure.measurevalue_set.all()
+        self.fields['factors'].queryset = self.initial['meeting'].factors.all()
 
     class Meta:
         fields = ('meeting', 'meeting_items_count', 'factors', 'criteria')

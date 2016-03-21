@@ -45,23 +45,20 @@ def new(request, deliverable_id):
         selected_decision_items = deliverable.decisionitem_set.filter(id__in=decision_item_ids)
 
         if form.is_valid() and selected_stakeholders.exists() and selected_decision_items.exists():
-            form.instance.deliverable = deliverable
-            form.instance.created_by = request.user
-            meeting = form.save()
+            meeting = form.save(commit=False)
+            meeting.deliverable = deliverable
+            meeting.measure = deliverable.measure
+            meeting.factors = deliverable.factors.filter(is_active=True)
+            meeting.created_by = request.user
+            meeting.save()
 
             MeetingStakeholder.objects.create(meeting=meeting, stakeholder=request.user)
             
             for stakeholder in selected_stakeholders:
-                meeting_stakeholder = MeetingStakeholder()
-                meeting_stakeholder.meeting = meeting
-                meeting_stakeholder.stakeholder = stakeholder
-                meeting_stakeholder.save()
+                MeetingStakeholder.objects.create(meeting=meeting, stakeholder=stakeholder)
 
             for decision_item in selected_decision_items:
-                meeting_item = MeetingItem()
-                meeting_item.meeting = meeting
-                meeting_item.decision_item = decision_item
-                meeting_item.save()
+                MeetingItem.objects.create(meeting=meeting, decision_item=decision_item)
 
             deliverable.save()
 

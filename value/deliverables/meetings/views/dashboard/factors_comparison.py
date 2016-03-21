@@ -51,7 +51,7 @@ def features(request, deliverable_id, meeting_id):
     chart_type = get_or_set_bar_chart_type_session(request, 'factors_comparison_chart_type')
     chart_types_options = get_bar_chart_types_dict()
 
-    chart_order_options = get_charts_order_dict(meeting.deliverable.measure)
+    chart_order_options = get_charts_order_dict(meeting.measure)
     order = get_or_set_charts_order_session(request, meeting, 'factors_comparison_order')
 
     charts = map(get_features_chart_dict, meeting.get_ordered_meeting_items(order))
@@ -101,7 +101,7 @@ def features_scenarios(request, deliverable_id, meeting_id):
     chart_type = get_or_set_bar_chart_type_session(request, 'factors_comparison_scenario_chart_type')
     chart_types_options = get_bar_chart_types_dict()
 
-    chart_order_options = get_scenario_charts_order_dict(meeting.deliverable.measure)
+    chart_order_options = get_scenario_charts_order_dict(meeting.measure)
     order = get_or_set_scenario_charts_order_session(request, meeting, 'factors_comparison_scenario_order')
 
     charts = map(get_features_scenario_chart_dict, meeting.get_ordered_scenarios(order))

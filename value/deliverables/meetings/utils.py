@@ -42,7 +42,7 @@ def get_or_set_treemap_chart_type_session(request, cookie_name, default_chart_ty
 def _get_or_set_order_session(request, meeting, cookie_name, db_model_order):
     order = '-value_ranking'
     db_model_order.append('-value_ranking')
-    ranking_order = map(str, meeting.deliverable.measure.measurevalue_set.values_list('id', flat=True))
+    ranking_order = map(str, meeting.measure.measurevalue_set.values_list('id', flat=True))
     valid_orders = db_model_order + ranking_order
     if 'order' in request.GET:
         order = request.GET.get('order')

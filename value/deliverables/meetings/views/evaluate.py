@@ -20,8 +20,8 @@ from value.deliverables.meetings.utils import get_meeting_progress
 def evaluate(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     
-    factors = meeting.deliverable.factors.select_related('measure')
-    measure = meeting.deliverable.measure
+    factors = meeting.factors.select_related('measure')
+    measure = meeting.measure
     measure_values = measure.measurevalue_set.all()
 
     count = measure_values.count()

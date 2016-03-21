@@ -88,18 +88,10 @@
           <h4 class="modal-title">Are you sure?</h4>
         </div>
         <div class="modal-body">
-          <div class="alert alert-dismissible alert-warning" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <span class="glyphicon glyphicon-warning-sign"></span> <strong>Attention!</strong>
-            Read carefully the instructions below.
-          </div>
-          <p>Removing the selected stakeholders will basically remove their access to the deliverable <strong>{{ deliverable.name }}</strong>. They will no longer be able to access its data.</p>
-          <p>If you want also to remove all meeting related data (evaluations and rationales recorded by the selected stakeholders), please check the input below.</p>
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" id="confirm-clear-data" autocomplete="off"> Remove all meeting <strong>evaluations</strong> and <strong>rationales</strong> related to the selected stakeholders. Please note this action <strong>CANNOT</strong> be undone.
-            </label>
-          </div>
+          <p>
+            Removing the selected stakeholders will basically remove their access to the deliverable <strong>{{ deliverable.name }}</strong>. 
+            They will no longer be able to access its data.
+          </p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger btn-block" id="btn-confirm-remove-stakeholders">Remove selected stakeholders</button>

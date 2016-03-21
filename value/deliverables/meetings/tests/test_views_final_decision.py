@@ -34,8 +34,10 @@ class FinalDecisionTestCase(TestCase):
         DecisionItem.objects.create(deliverable=deliverable, name='Feature 2')
         DecisionItem.objects.create(deliverable=deliverable, name='Feature 3')
 
-        meeting = Meeting.objects.create(name='Meeting 1', deliverable=deliverable, started_at=timezone.now(), created_by=user)
-
+        meeting = Meeting.objects.create(name='Meeting 1', deliverable=deliverable, started_at=timezone.now(), created_by=user, measure=deliverable.measure)
+        meeting.factors = deliverable.factors.all()
+        meeting.save()
+        
         for decision_item in deliverable.decisionitem_set.all():
             MeetingItem.objects.create(meeting=meeting, decision_item=decision_item)
 
