@@ -1,6 +1,9 @@
 # coding: utf-8
 
-import cPickle as pickle
+try:
+    import cPickle as pickle
+except:
+    import pickle
 
 from django.db import transaction
 from django.db.models.functions import Lower

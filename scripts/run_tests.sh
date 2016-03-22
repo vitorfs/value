@@ -1,4 +1,5 @@
 #!/bin/bash
 
-pep8 --exclude=migrations value
-coverage run --source=. --omit='*migrations*' manage.py test --settings=value.test_settings --verbosity=2
+flake8 value
+coverage run manage.py test --settings=value.test_settings --verbosity=2
+coverage html
