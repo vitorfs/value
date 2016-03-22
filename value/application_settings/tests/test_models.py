@@ -10,7 +10,7 @@ from django.test import TestCase
 from value.application_settings.models import ApplicationSetting
 
 
-class ApplicationSettingTest(TestCase):
+class ApplicationSettingTests(TestCase):
 
     def setUp(self):
         ApplicationSetting.objects.create(

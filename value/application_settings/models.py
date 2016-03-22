@@ -2,7 +2,7 @@
 
 try:
     import cPickle as pickle
-except:
+except: # pragma: no cover
     import pickle
 
 from django.db import models
