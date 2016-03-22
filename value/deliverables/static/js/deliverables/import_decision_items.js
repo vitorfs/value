@@ -27,7 +27,7 @@ $(function () {
           $("#import-modal").modal("show");
         },
         error: function () {
-          toastr.warning("The file you imported is not valid, please just import Excel files. Supported extensions are: .xls or xlsx.");
+          toastr.warning("Please just import Excel files. Supported extensions are: .xls or xlsx.", "The file you imported is not valid");
         },
         complete: function () {
           page_loading();
