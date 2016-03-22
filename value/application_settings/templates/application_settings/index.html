@@ -1,82 +1,108 @@
 {% extends 'application_settings/base.html' %}
 
-{% load avatar staticfiles %}
+{% load static %}
 
 {% block javascript %}
-  <script type="text/javascript">
+  <script>
     $(function () {
-      var options = [
-      {% for stakeholder in users %}
-        { 
-          name: "{{ stakeholder.profile.get_display_name }}", 
-          pk: {{ stakeholder.pk }}, 
-          img: "{% avatar stakeholder 20 %}" 
-        }{% if not forloop.last %}, {% endif %}
-      {% endfor %}
-      ];
-      $("#id_administrators").selectizeUsers(options, {{ users.count }});
+      $("#form-permissions").submit(function () {
+        var removeYourself = false;
+        $("[name='revoke_user']:checked").each(function () {
+          if ($(this).hasClass("you")) {
+            removeYourself = true;
+          }
+        });
+
+        if (removeYourself) {
+          return confirm("You are about to remove yourself as a system administrator.\n You will no longer be able to access the admin panel.\n Are you sure you want to proceed?");
+        }
+        return true;
+      });
     });
   </script>
-{% endblock javascript %}
+{% endblock %}
 
-{% block settings_content %}
-  
-  {% comment %}
-  <form method="post" class="form-horizontal">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">General</h3>
-      </div>
-      <div class="panel-body">
-        <div class="form-group">
-          <label class="control-label col-sm-2">Value Ranking</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control">
-            <span class="help-block">The value ranking is based on the active measure.</span>
-          </div>
-        </div>
-      </div>
-      <div class="panel-footer">
-        <button type="submit" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </form>
-  {% endcomment %}
-
-  <form method="post" action="{% url 'settings:admins' %}">
+{% block settings_content %}  
+  <form method="post" action="{% url 'settings:admins' %}" id="form-permissions">
     {% csrf_token %}
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Administrators</h3>
+        <h3 class="panel-title">Permissions</h3>
       </div>
       <div class="panel-body">
-        <p>Select the users you want to grant administrator permissions.</p>
-        <select id="id_administrators" name="grant_user"></select>
+        <p class="lead">Select the users you want to grant/revoke administrator permissions.</p>
+
+        <div class="row">
+          <div class="col-md-6">
+            <table class="table table-striped table-condensed">
+              <thead>
+                <tr>
+                  <th>Administrators</th>
+                  <th style="width: 120px;">Revoke access?</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for user in admins %}
+                  <tr>
+                    <td>
+                      {{ user.username }}
+                      {% if user.get_full_name %}
+                        <small class="text-muted">({{ user.get_full_name }})</small>
+                      {% endif %}
+                      {% if user == request.user %}
+                        <span class="label label-info">you</span>
+                      {% endif %}
+                    </td>
+                    <td class="text-center">
+                      <input type="checkbox" name="revoke_user" value="{{ user.pk }}" autocomplete="off"{% if user == request.user %} class="you"{% endif %}>
+                    </td>
+                  </tr>
+                {% empty %}
+                  <tr>
+                    <td colspan="2" class="text-center">
+                      <strong>No available users</strong>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+            <table class="table table-striped table-condensed">
+              <thead>
+                <tr>
+                  <th>Other users</th>
+                  <th style="width: 120px;">Grant access?</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for user in users %}
+                  <tr>
+                    <td>
+                      {{ user.username }}
+                      {% if user.get_full_name %}
+                        <small class="text-muted">({{ user.get_full_name }})</small>
+                      {% endif %}
+                    </td>
+                    <td class="text-center">
+                      <input type="checkbox" name="grant_user" value="{{ user.pk }}" autocomplete="off">
+                    </td>
+                  </tr>
+                {% empty %}
+                  <tr>
+                    <td colspan="2" class="text-center">
+                      <strong>No available users</strong>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th style="width: 150px;">Revoke access?</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for user in admins %}
-            <tr>
-              <td>{{ user.profile.get_display_name }}</td>
-              <td>{{ user.email }}</td>
-              <td class="text-center">
-                <input type="checkbox" name="revoke_user" value="{{ user.pk }}" autocomplete="off">
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
       <div class="panel-footer">
         <button type="submit" class="btn btn-primary">Save changes</button>
       </div>
     </form>
   </div>
-
 {% endblock settings_content %}

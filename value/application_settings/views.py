@@ -4,6 +4,7 @@ except:
     import pickle
 
 from django.db import transaction
+from django.db.models.functions import Lower
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -18,11 +19,9 @@ from value.application_settings.models import ApplicationSetting
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def index(request):
-    admins = User.objects.filter(is_superuser=True).order_by('first_name')
-    users = User.objects.filter(is_active=True, is_superuser=False).order_by('first_name')
-    return render(request, 'application_settings/index.html', { 
-            'admins': admins, 
-            'users': users })
+    users = User.objects.filter(is_active=True, is_superuser=False).order_by(Lower('username'))
+    admins = User.objects.filter(is_active=True, is_superuser=True).order_by(Lower('username'))
+    return render(request, 'application_settings/index.html', { 'admins': admins, 'users': users })
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
