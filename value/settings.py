@@ -24,10 +24,15 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 TEMPLATE_DEBUG = DEBUG
 
 
-MESSAGE_LEVEL = config('MESSAGE_LEVEL', default=message_constants.INFO, cast=int)
+MESSAGE_LEVEL = config(
+    'MESSAGE_LEVEL',
+    default=message_constants.INFO, cast=int)
 
 
-EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
+EMAIL_BACKEND = config(
+    'EMAIL_BACKEND',
+    default='django.core.mail.backends.smtp.EmailBackend')
+
 EMAIL_FILE_PATH = PROJECT_DIR.parent.parent.child('maildumps')
 
 
@@ -73,7 +78,7 @@ WSGI_APPLICATION = 'value.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default = config('DATABASE_URL')
+        default=config('DATABASE_URL')
     )
 }
 

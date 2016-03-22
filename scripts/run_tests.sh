@@ -1,3 +1,4 @@
 #!/bin/bash
 
-python manage.py test --settings=value.test_settings --verbosity=1
+pep8 --exclude=migrations value
+coverage run --source=. --omit='*migrations*' manage.py test --settings=value.test_settings --verbosity=2
