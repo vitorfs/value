@@ -48,9 +48,10 @@ def new(request, deliverable_id):
             meeting = form.save(commit=False)
             meeting.deliverable = deliverable
             meeting.measure = deliverable.measure
-            meeting.factors = deliverable.factors.filter(is_active=True)
             meeting.created_by = request.user
             meeting.save()
+            
+            meeting.factors = deliverable.factors.filter(is_active=True)
 
             MeetingStakeholder.objects.create(meeting=meeting, stakeholder=request.user)
             

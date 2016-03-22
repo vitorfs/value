@@ -35,7 +35,7 @@ class NewMeetingForm(AbstractMeetingForm):
 
     def __init__(self, *args, **kwargs):
         super(NewMeetingForm, self).__init__(*args, **kwargs)
-        self.fields['default_evaluation'].queryset = self.instance.measure.measurevalue_set.all()
+        self.fields['default_evaluation'].queryset = self.instance.deliverable.measure.measurevalue_set.all()
 
 class MeetingForm(AbstractMeetingForm):
     class Meta:
