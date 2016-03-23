@@ -59,6 +59,7 @@ class Meeting(models.Model):
     updated_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name='meetings_updated')
     rationales = models.ManyToManyField(Rationale)
     rationales_count = models.PositiveIntegerField(default=0)
+    progress = models.FloatField(default=0.0)
     
     class Meta:
         db_table = 'meetings'
@@ -99,7 +100,7 @@ class Meeting(models.Model):
     def get_evaluations(self):
         return Evaluation.get_evaluations_by_meeting(self)
 
-    def get_progress(self):
+    def calculate_progress(self):
         """
         Returns the relative progress of a meeting, based on the count of the meeting's stakeholders,
         decision items and the deliverable's factors.
@@ -120,7 +121,9 @@ class Meeting(models.Model):
         else:
             percentage = 0.0
 
-        return percentage
+        self.progress = percentage
+        self.save()
+        return self.progress
 
     def calculate_all_rankings(self):
         with transaction.atomic():

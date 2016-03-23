@@ -30,7 +30,7 @@
           <p>After closing the meeting the evaluation session will be finished. You won't be able to change the meeting details.</p>
           <p>It is strongly advised to only close a decision making meeting after the progress reach 100%.</p>
           <p>Current progress:</p>
-          {% with progress=meeting.get_progress %}
+          {% with progress=meeting.progress %}
             <div class="progress">
               <div class="progress-bar{% if progress == 100.0 %} progress-bar-success{% else %} progress-bar-warning{% endif %}" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%;">
                 {{ progress }}%

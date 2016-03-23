@@ -34,14 +34,26 @@ class Deliverable(models.Model):
         return DecisionItemLookup.get_visible_fields()
 
     def get_meetings_in_progress(self):
-        return self.meeting_set.filter(status__in=['O', 'A'])
+        return self.meeting_set \
+            .filter(status__in=['O', 'A']) \
+            .prefetch_related(
+                'meetingstakeholder_set__stakeholder__profile', 
+                'meetingitem_set', 
+                'factors'
+            ).select_related('deliverable', 'deliverable__manager__profile', 'measure')
 
     def get_past_meetings(self):
-        return self.meeting_set.filter(status='C')
+        return self.meeting_set \
+            .filter(status='C') \
+            .prefetch_related(
+                'meetingstakeholder_set__stakeholder__profile', 
+                'meetingitem_set', 
+                'factors'
+            ).select_related('deliverable', 'deliverable__manager__profile', 'measure')
 
     def get_all_stakeholders(self):
-        stakeholders = self.stakeholders.all().select_related('profile') | User.objects.filter(pk=self.manager.pk).select_related('profile')
-        return stakeholders
+        stakeholders = self.stakeholders.all() | User.objects.filter(pk=self.manager.pk)
+        return stakeholders.select_related('profile')
 
 
 class DecisionItem(models.Model):

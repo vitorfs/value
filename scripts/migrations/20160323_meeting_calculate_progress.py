@@ -17,10 +17,8 @@ from value.deliverables.meetings.models import Meeting
 def main():
     meetings = Meeting.objects.all()
     for m in meetings:
-        m.measure = m.deliverable.measure
-        m.factors = m.deliverable.factors.all()
-        m.save()
-    print 'Migrate measure and factors done.'
+        m.calculate_progress()
+    print 'Calculate progress done.'
 
 if __name__ == '__main__':
     main()

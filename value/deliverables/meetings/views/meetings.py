@@ -2,7 +2,7 @@
 
 import json
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.views.decorators.http import require_POST
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -24,7 +24,10 @@ from value.deliverables.meetings.utils import get_meeting_progress
 @login_required
 @user_is_stakeholder
 def index(request, deliverable_id):
-    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    try:
+        deliverable = Deliverable.objects.select_related('manager__profile').get(pk=deliverable_id)
+    except Deliverable.DoesNotExist:
+        raise Http404
     return render(request, 'deliverables/meetings.html', { 'deliverable': deliverable })
 
 @login_required
@@ -138,6 +141,7 @@ def remove_stakeholder(request, deliverable_id, meeting_id):
             messages.warning(request, u'The stakeholder {0} cannot be removed from this meeting because he has already provided evaluation input.'.format(user.profile.get_display_name()))
         else:
             meeting_stakeholder.delete()
+            meeting.calculate_progress()
             meeting.calculate_all_rankings()
             messages.success(request, u'{0} was successfully removed from the meeting!'.format(user.profile.get_display_name()))
     else:
@@ -155,6 +159,7 @@ def add_stakeholders(request, deliverable_id, meeting_id):
             user = User.objects.get(pk=stakeholder_id)
             meeting_stakeholder = MeetingStakeholder(stakeholder=user, meeting=meeting)
             meeting_stakeholder.save()
+        meeting.calculate_progress()
         meeting.calculate_all_rankings()
         messages.success(request, u'Stakeholders sucessfully added to the meeting!')
     else:
@@ -174,6 +179,7 @@ def remove_decision_items(request, deliverable_id, meeting_id):
         if can_delete:
             for item in can_delete:
                 item.delete()
+            meeting.calculate_progress()
             meeting.calculate_all_rankings()
             pretty_names = map(lambda i: u'<strong>{0}</strong>'.format(i.decision_item.name) , can_delete) 
             messages.success(
@@ -205,6 +211,7 @@ def add_decision_items(request, deliverable_id, meeting_id):
             decision_item = DecisionItem.objects.get(pk=decision_item_id)
             meeting_item = MeetingItem(meeting=meeting, decision_item=decision_item)
             meeting_item.save()
+        meeting.calculate_progress()
         meeting.calculate_all_rankings()
         messages.success(request, u'Decision items sucessfully added to the meeting!')
     else:

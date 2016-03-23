@@ -82,7 +82,7 @@ def save_evaluation(request, deliverable_id, meeting_id):
     for scenario in meeting_item.scenarios.all():
         scenario.calculate_ranking()
     meeting.deliverable.save()
-
+    meeting.calculate_progress()
     context = get_meeting_progress(meeting)
     return HttpResponse(json.dumps(context), content_type='application/json')
 
