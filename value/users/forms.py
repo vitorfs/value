@@ -2,11 +2,6 @@ from django import forms
 from django.contrib.auth.models import User
 
 
-class StakeholderMultipleModelChoiceField(forms.ModelMultipleChoiceField):
-    def label_from_instance(self, obj):
-        return obj.profile.get_display_name()
-
-
 class AccountForm(forms.ModelForm):
     first_name = forms.CharField(label='First name',
         widget=forms.TextInput(attrs={'class' : 'form-control'}), 
