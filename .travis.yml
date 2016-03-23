@@ -1,7 +1,7 @@
 language: python
 python:
   - "2.7"
-install: "pip install -r requirements/production.txt"
+install: "pip install -r requirements/development.txt"
 before_script:
   - cp .env.example .env
   - python manage.py migrate
