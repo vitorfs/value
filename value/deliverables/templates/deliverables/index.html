@@ -11,11 +11,11 @@
 
 {% block content %}
 
-  {% if manager_deliverables.exists or stakeholder_deliverables %}
+  {% if manager_deliverables or stakeholder_deliverables %}
     <div style="margin-bottom: 20px">
       <a class="btn btn-primary" href="{% url 'deliverables:new' %}"><span class="glyphicon glyphicon-plus"></span> New deliverable</a>
     </div>
-    {% if manager_deliverables.exists %}
+    {% if manager_deliverables %}
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">Deliverables <span class="badge">Manager</span></h3>
@@ -49,7 +49,7 @@
       </div>
     {% endif %}
 
-    {% if stakeholder_deliverables.exists %}
+    {% if stakeholder_deliverables %}
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">Deliverables <span class="badge">Stakeholder</span></h3>

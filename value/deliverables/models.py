@@ -39,8 +39,8 @@ class Deliverable(models.Model):
     def get_past_meetings(self):
         return self.meeting_set.filter(status='C')
 
-    def get_stakeholders(self):
-        stakeholders = self.stakeholders.all() | User.objects.filter(pk=self.manager.pk)
+    def get_all_stakeholders(self):
+        stakeholders = self.stakeholders.all().select_related('profile') | User.objects.filter(pk=self.manager.pk).select_related('profile')
         return stakeholders
 
 

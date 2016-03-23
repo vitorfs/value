@@ -20,7 +20,7 @@ def user_is_meeting_stakeholder(function):
     def wrap(request, *args, **kwargs):
         try:
             meeting = Meeting.objects.get(pk=kwargs['meeting_id'])
-            if request.user in meeting.deliverable.get_stakeholders() \
+            if request.user in meeting.deliverable.get_all_stakeholders() \
                     and meeting.meetingstakeholder_set.filter(stakeholder=request.user).exists():
                 return function(request, *args, **kwargs)
             else:

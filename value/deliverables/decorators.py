@@ -34,7 +34,7 @@ def user_is_stakeholder(function):
     def wrap(request, *args, **kwargs):
         try:
             deliverable = Deliverable.objects.get(pk=kwargs['deliverable_id'])
-            if request.user in deliverable.get_stakeholders():
+            if request.user in deliverable.get_all_stakeholders():
                 return function(request, *args, **kwargs)
             else:
                 return permission_denied(request)

@@ -27,8 +27,19 @@ from value.deliverables.utils import excel_column_map
 
 @login_required
 def index(request):
-    manager_deliverables = Deliverable.objects.filter(manager=request.user).order_by('-updated_at')
-    stakeholder_deliverables = Deliverable.objects.filter(stakeholders__in=[request.user]).exclude(manager=request.user).order_by('-updated_at')
+    manager_deliverables = Deliverable.objects \
+        .filter(manager=request.user) \
+        .select_related('manager', 'manager__profile') \
+        .prefetch_related('meeting_set', 'stakeholders__profile') \
+        .order_by('-updated_at')
+
+    stakeholder_deliverables = Deliverable.objects \
+        .filter(stakeholders__in=[request.user]) \
+        .exclude(manager=request.user) \
+        .select_related('manager', 'manager__profile') \
+        .prefetch_related('meeting_set') \
+        .order_by('-updated_at')
+
     return render(request, 'deliverables/index.html', { 
             'manager_deliverables': manager_deliverables,
             'stakeholder_deliverables': stakeholder_deliverables
@@ -130,7 +141,7 @@ def stakeholders(request, deliverable_id):
 @user_is_manager
 def load_available_stakeholders(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    available_stakeholders = User.objects.filter(is_active=True).exclude(pk__in=deliverable.get_stakeholders())
+    available_stakeholders = User.objects.filter(is_active=True).exclude(pk__in=deliverable.get_all_stakeholders())
     html = render_to_string('deliverables/includes/add_stakeholders.html', { 'available_stakeholders': available_stakeholders })
     return HttpResponse(html)
 
