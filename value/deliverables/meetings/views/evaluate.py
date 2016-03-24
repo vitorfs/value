@@ -2,7 +2,7 @@
 
 import json
 
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, Http404
 from django.views.decorators.http import require_POST
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, get_object_or_404
@@ -18,9 +18,15 @@ from value.deliverables.meetings.utils import get_meeting_progress
 
 @login_required
 def evaluate(request, deliverable_id, meeting_id):
-    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    try:
+        meeting = Meeting.objects \
+            .select_related('deliverable', 'measure') \
+            .prefetch_related('factors__group', 'factors__measure') \
+            .get(pk=meeting_id, deliverable__id=deliverable_id)
+    except Meeting.DoesNotExist:
+        raise Http404
     
-    factors = meeting.factors.select_related('measure')
+    factors = meeting.factors.all()
     measure = meeting.measure
     measure_values = measure.measurevalue_set.all()
 
@@ -32,7 +38,17 @@ def evaluate(request, deliverable_id, meeting_id):
         relative_col_size = 'auto'
 
     evaluations = Evaluation.get_user_evaluations_by_meeting(user=request.user, meeting=meeting) \
-            .select_related('meeting', 'meeting_item', 'user', 'factor', 'factor__measure', 'measure', 'measure_value', 'rationale')
+            .select_related(
+                'meeting', 
+                'meeting_item', 
+                'user', 
+                'factor', 
+                'factor__measure', 
+                'factor__group',
+                'measure', 
+                'measure_value', 
+                'rationale'
+            )
     meeting_items = meeting.meetingitem_set.select_related('decision_item')
     total_items = meeting_items.count()
     search_query = request.GET.get('search')

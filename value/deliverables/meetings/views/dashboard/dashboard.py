@@ -19,16 +19,31 @@ from value.deliverables.meetings.utils import *
 def dashboard(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     chart = Highcharts()
-    
+
     charts = list()
-    charts.append({ 'chart_id': 'factors_usage', 'chart_title': 'Factors Usage', 'chart_uri': reverse('deliverables:meetings:dashboard_factors_usage_chart', args=(deliverable_id, meeting_id,)) })
-    charts.append({ 'chart_id': 'stakeholders_input', 'chart_title': 'Stakeholders Input', 'chart_uri': reverse('deliverables:meetings:dashboard_stakeholders_input_chart', args=(deliverable_id, meeting_id,)) })
+    charts.append({
+        'chart_id': 'factors_usage',
+        'chart_title': 'Factors Usage',
+        'chart_uri': reverse('deliverables:meetings:dashboard_factors_usage_chart', args=(
+            deliverable_id,
+            meeting_id,)
+        )
+    })
+
+    charts.append({
+        'chart_id': 'stakeholders_input',
+        'chart_title': 'Stakeholders Input',
+        'chart_uri': reverse('deliverables:meetings:dashboard_stakeholders_input_chart', args=(
+            deliverable_id,
+            meeting_id,)
+        )
+    })
 
     if meeting.is_ongoing():
-        return render(request, 'meetings/dashboard/dashboard_closed.html', { 
+        return render(request, 'meetings/dashboard/dashboard_closed.html', {
             'meeting': meeting,
             'charts': charts
-            })
+        })
     else:
         return redirect('deliverables:meetings:decision_items_overview', meeting.deliverable.pk, meeting.pk)
 
@@ -39,15 +54,15 @@ def dashboard_factors_usage_chart(request, deliverable_id, meeting_id):
     chart = Highcharts()
     options = chart.factors_usage_bar_chart(meeting)
     dump = json.dumps(options)
-    chart_data = { 
-        'chart_id': 'factors_usage', 
-        'chart_title': 'Factors Usage', 
-        'chart_uri': reverse('deliverables:meetings:dashboard_factors_usage_chart', args=(deliverable_id, meeting_id,)) 
+    chart_data = {
+        'chart_id': 'factors_usage',
+        'chart_title': 'Factors Usage',
+        'chart_uri': reverse('deliverables:meetings:dashboard_factors_usage_chart', args=(deliverable_id, meeting_id,))
     }
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        return render(request, 'meetings/dashboard/dashboard_popup.html', { 
+        return render(request, 'meetings/dashboard/dashboard_popup.html', {
             'meeting': meeting,
             'chart': chart_data,
             'dump': dump
@@ -60,15 +75,15 @@ def dashboard_stakeholders_input_chart(request, deliverable_id, meeting_id):
     chart = Highcharts()
     options = chart.stakeholders_input_bar_chart(meeting)
     dump = json.dumps(options)
-    chart_data = { 
-        'chart_id': 'stakeholders_input', 
-        'chart_title': 'Stakeholders Input', 
-        'chart_uri': reverse('deliverables:meetings:dashboard_stakeholders_input_chart', args=(deliverable_id, meeting_id,)) 
+    chart_data = {
+        'chart_id': 'stakeholders_input',
+        'chart_title': 'Stakeholders Input',
+        'chart_uri': reverse('deliverables:meetings:dashboard_stakeholders_input_chart', args=(deliverable_id, meeting_id,))
     }
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        return render(request, 'meetings/dashboard/dashboard_popup.html', { 
+        return render(request, 'meetings/dashboard/dashboard_popup.html', {
             'meeting': meeting,
             'chart': chart_data,
             'dump': dump
@@ -98,7 +113,7 @@ def value_ranking(request, deliverable_id, meeting_id):
         template_name = 'meetings/dashboard/value_ranking/list.html'
         if 'popup' in request.GET:
             template_name = 'meetings/dashboard/value_ranking/popup.html'
-        return render(request, template_name, { 
+        return render(request, template_name, {
             'meeting': meeting,
             'chart_menu_active': 'value_ranking',
             'chart_page_title': 'Value Ranking',
@@ -141,8 +156,8 @@ def decision_items_overview(request, deliverable_id, meeting_id):
         template_name = 'meetings/dashboard/decision_items_overview/list.html'
         if 'popup' in request.GET:
             template_name = 'meetings/dashboard/decision_items_overview/popup.html'
-        return render(request, template_name, { 
-            'meeting': meeting, 
+        return render(request, template_name, {
+            'meeting': meeting,
             'chart_menu_active': 'decision_items_overview',
             'chart_page_title': 'Decision Items Overview',
             'dump': dump,
@@ -160,8 +175,8 @@ def features_comparison(request, deliverable_id, meeting_id):
     evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(user_id__in=stakeholder_ids)
     measure = meeting.measure
     charts = measure.measurevalue_set.all()
-    return render(request, 'meetings/dashboard/decision_items_comparison/list.html', { 
-        'meeting': meeting, 
+    return render(request, 'meetings/dashboard/decision_items_comparison/list.html', {
+        'meeting': meeting,
         'charts': charts,
         'stakeholder_ids': stakeholder_ids,
         'chart_uri': 'measures',
@@ -174,7 +189,7 @@ def features_comparison(request, deliverable_id, meeting_id):
 def features_comparison_chart(request, deliverable_id, meeting_id, measure_value_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     measure_value = MeasureValue.objects.get(pk=measure_value_id)
-    
+
     stakeholders = request.GET.getlist('stakeholder')
 
     stakeholder_ids = get_stakeholders_ids(meeting, stakeholders)
@@ -186,8 +201,8 @@ def features_comparison_chart(request, deliverable_id, meeting_id, measure_value
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        return render(request, 'meetings/dashboard/decision_items_comparison/popup.html', { 
-            'meeting': meeting, 
+        return render(request, 'meetings/dashboard/decision_items_comparison/popup.html', {
+            'meeting': meeting,
             'dump': dump,
             'chart': chart,
             'stakeholder_ids': stakeholder_ids,

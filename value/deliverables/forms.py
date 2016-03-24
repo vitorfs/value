@@ -44,7 +44,7 @@ class DeliverableForm(forms.ModelForm):
     factors = FactorModelMultipleChoiceField(
         label='Select value factors to be used within the decision-making meetings',
         widget=forms.CheckboxSelectMultiple(), 
-        queryset=Factor.objects.filter(is_active=True), 
+        queryset=Factor.objects.select_related('group').filter(is_active=True), 
         required=True
         )
     measure = forms.ModelChoiceField(label='Select the measure to be used within the decision-making meetings', 
@@ -81,7 +81,7 @@ class DeliverableFactorsForm(forms.ModelForm):
     factors = FactorModelMultipleChoiceField(
         label='Select value factors to be used within the decision-making meetings',
         widget=forms.CheckboxSelectMultiple(), 
-        queryset=Factor.objects.all(), 
+        queryset=Factor.objects.select_related('group').all(), 
         required=True
         )
 
