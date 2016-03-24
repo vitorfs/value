@@ -11,11 +11,9 @@ The **VALUE** tool is supposed to be used within a company, during decision-maki
 The base project dependencies:
 
 * Python 2.7.10
-* Django 1.8.2
+* Django 1.9.4
 * PostgreSQL 9.3
 * jQuery 2.1.3
 * Bootstrap 3.3.4
 
 The complete list of Python dependencies can be found at [requirements](https://github.com/M3SOulu/value/tree/master/requirements)
-
-## Running locally
