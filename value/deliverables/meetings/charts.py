@@ -357,7 +357,7 @@ class Highcharts(object):
         meeting = Meeting.objects.get(pk=meeting_id)
         meeting_item = MeetingItem.objects.get(pk=meeting_item_id)
         evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
-        max_votes = len(stakeholder_ids)
+        max_votes = len(set(stakeholder_ids))
 
         options = self._factors_comparison_chart(chart_type, evaluations, max_votes)
         groups_text = get_stakeholders_group_names(stakeholder_ids)
