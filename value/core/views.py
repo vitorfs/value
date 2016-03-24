@@ -1,11 +1,9 @@
 # coding: utf-8
 
-from django.shortcuts import render, redirect
-from django.core.urlresolvers import reverse as r
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
 
+@login_required
 def home(request):
-    if request.user.is_authenticated():
-        return render(request, 'core/home.html')
-    else:
-        return redirect(r('signin'))
+    return render(request, 'core/home.html')
