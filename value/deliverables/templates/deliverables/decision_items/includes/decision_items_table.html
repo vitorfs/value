@@ -23,7 +23,7 @@
           <input type="checkbox" name="decision_item_id" value="{{ item.pk }}" autocomplete="off">
         </td>
         {% for name, field in fields.items %}
-          {% if forloop.first and deliverable.manager = user %}
+          {% if forloop.first and deliverable.manager == user %}
             <td><a href="{% url 'deliverables:edit_decision_item' deliverable.pk item.pk %}">{{ item|attr:name }}</a></td>
           {% else %}
             <td>{{ item|attr:name }}</td>

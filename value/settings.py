@@ -2,7 +2,6 @@ from decouple import config, Csv
 from unipath import Path
 import dj_database_url
 from django.contrib.messages import constants as message_constants
-from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 PROJECT_DIR = Path(__file__).parent
 
@@ -21,7 +20,6 @@ MANAGERS = ADMINS
 SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = config('DEBUG', default=False, cast=bool)
-TEMPLATE_DEBUG = DEBUG
 
 
 MESSAGE_LEVEL = config(
@@ -104,13 +102,28 @@ STATICFILES_DIRS = (
 MEDIA_ROOT = PROJECT_DIR.parent.parent.child('media')
 MEDIA_URL = '/media/'
 
-
-TEMPLATE_DIRS = (
-    PROJECT_DIR.child('templates'),
-)
-
-TEMPLATE_CONTEXT_PROCESSORS += ('django.core.context_processors.request',)
-
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'DIRS': (
+            PROJECT_DIR.child('templates'),
+        ),
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
+            ],
+            'debug': DEBUG
+        }
+    },
+]
 
 LOGIN_URL = '/signin/'
 LOGOUT_URL = '/signout/'

@@ -2,7 +2,7 @@
 
 import xlrd
 
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, Http404
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -134,7 +134,13 @@ def deliverable(request, deliverable_id):
 @login_required
 @user_is_stakeholder
 def stakeholders(request, deliverable_id):
-    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    try:
+        deliverable = Deliverable.objects \
+            .select_related('manager__profile') \
+            .prefetch_related('stakeholders__profile', 'stakeholders__groups', 'manager__groups') \
+            .get(pk=deliverable_id)
+    except Deliverable.DoesNotExist:
+        raise Http404
     return render(request, 'deliverables/stakeholders.html', { 'deliverable': deliverable })
 
 @login_required
@@ -326,7 +332,14 @@ def details_decision_item(request, deliverable_id, decision_item_id):
 @user_is_manager
 def settings(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    users = User.objects.exclude(pk=request.user.id).order_by(Lower('first_name').asc(), Lower('last_name').asc(), Lower('username').asc())
+    users = User.objects \
+        .exclude(pk=request.user.id) \
+        .select_related('profile') \
+        .order_by(
+            Lower('first_name').asc(), 
+            Lower('last_name').asc(), 
+            Lower('username').asc()
+        )
     if request.method == 'POST':
         form = DeliverableBasicDataForm(request.POST, instance=deliverable)
         if form.is_valid():

@@ -31,7 +31,7 @@
 {% block content %}
   <form method="post">
     {% csrf_token %}
-    {% if deliverable.manager = user %}
+    {% if deliverable.manager == user %}
       <input type="hidden" name="action" id="id_action">
       <div style="margin-bottom: 20px;">
         <a href="{% url 'deliverables:add_decision_item' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add item</a>

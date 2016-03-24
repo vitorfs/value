@@ -1,10 +1,10 @@
 <div class="btn-group pull-right" style="margin-top: -6px; margin-left: 5px;">
   <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    <span class="glyphicon glyphicon-sort"></span> Order by {% for key, label in chart_order_options.iteritems %}{% if order = key|slugify %}<strong>{{ label }}</strong>{% endif %}{% endfor %} <span class="caret"></span>
+    <span class="glyphicon glyphicon-sort"></span> Order by {% for key, label in chart_order_options.iteritems %}{% if order == key|slugify %}<strong>{{ label }}</strong>{% endif %}{% endfor %} <span class="caret"></span>
   </button>
   <ul class="dropdown-menu dropdown-menu-right">
     {% for key, label in chart_order_options.iteritems %}
-      <li{% if order = key|slugify %} class="active"{% endif %}><a href="?order={{ key }}">{{ label }}</a></li>
+      <li{% if order == key|slugify %} class="active"{% endif %}><a href="?order={{ key }}">{{ label }}</a></li>
     {% endfor %}
   </ul>
 </div>
