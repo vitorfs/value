@@ -2,7 +2,7 @@
 
 import operator
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.db.models import Count
 from django.utils.html import escape
 
@@ -12,7 +12,8 @@ from value.deliverables.meetings.utils import get_votes_percentage
 
 
 def get_stakeholders_group_names(stakeholder_ids):
-    stakeholders = User.objects.filter(id__in=stakeholder_ids)
+    stakeholders = User.objects.filter(id__in=stakeholder_ids) \
+        .prefetch_related('groups')
     groups = set()
     for stakeholder in stakeholders:
         for group in stakeholder.groups.all():
@@ -130,7 +131,7 @@ class Highcharts(object):
     def factors_usage_bar_chart(self, meeting):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting)
         factors = meeting.factors.all()
-        data = []
+        data = list()
 
         meeting_items_count = meeting.meetingitem_set.count()
         stakeholders_count = meeting.meetingstakeholder_set.count()
@@ -187,7 +188,7 @@ class Highcharts(object):
             'chart': { 'type': 'column' },
             'title': { 'text': 'Value Ranking' },
             'exporting': { 'enabled': False },
-            'xAxis': { 
+            'xAxis': {
                 'categories': list(categories)
             },
             'series': [{
@@ -267,19 +268,23 @@ class Highcharts(object):
             factors_count = meeting.factors.count()
             max_votes = stakeholders_count * factors_count
 
-            categories = []
-            series = []
+            categories = categories = map(lambda mi: mi.decision_item.name, meeting_items)
+            series = list()
 
-            for meeting_item in meeting_items:
-                categories.append(meeting_item.decision_item.name)
+            evaluations_list = list(evaluations.select_related('measure_value', 'meeting_item'))
 
             for measure_value in measure.measurevalue_set.all():
-                serie_data = []
+                serie_data = list()
                 for meeting_item in meeting_items:
-                    votes = evaluations.filter(measure_value=measure_value, meeting_item=meeting_item).count()
+                    votes = len(filter(lambda e: e.measure_value == measure_value \
+                            and e.meeting_item == meeting_item, evaluations_list))
                     percentage = get_votes_percentage(max_votes, votes)
                     serie_data.append(percentage)
-                series.append({ 'name': measure_value.description, 'data': serie_data, 'color': measure_value.color })
+                series.append({
+                    'name': measure_value.description,
+                    'data': serie_data,
+                    'color': measure_value.color
+                })
 
             options = self._base_stacked_chart(categories, series, chart_type)
             groups_text = get_stakeholders_group_names(stakeholder_ids)
@@ -289,7 +294,7 @@ class Highcharts(object):
     def decision_items_overview(self, meeting, chart_type, stakeholder_ids):
         stakeholder_ids = list(set(stakeholder_ids))
         evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(user_id__in=stakeholder_ids)
-        meeting_items = meeting.meetingitem_set.all()
+        meeting_items = meeting.meetingitem_set.select_related('decision_item').all()
         options = self._decision_items_overview(meeting, chart_type, stakeholder_ids, evaluations, meeting_items)
         options['title'] = { 'text': u'Decision Items Overview' }
         return options
@@ -345,7 +350,7 @@ class Highcharts(object):
                 series.append({ 'name': value.description, 'data': serie_data, 'color': value.color })
 
             options = self._base_stacked_chart(categories, series, chart_type)
-        
+
         return options
 
     def factors_comparison(self, meeting_id, meeting_item_id, chart_type, stakeholder_ids):
@@ -360,7 +365,7 @@ class Highcharts(object):
         options['subtitle'] = { 'text': u'{0} opinion'.format(groups_text) }
 
         return options
-    
+
     def factors_comparison_scenario(self, meeting, scenario, chart_type, stakeholder_ids):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(meeting_item__in=scenario.meeting_items.all(), user_id__in=stakeholder_ids)
         items_count = scenario.meeting_items.count()
@@ -492,7 +497,7 @@ class Highcharts(object):
                 'name': v['measure_value__description']
             }
             drilldown_series.append(drilldown)
-        
+
         options = {
             'chart': { 'type': 'pie' },
             'plotOptions': { 'series': { 'dataLabels': { 'enabled': True, 'format': '{point.name}: {point.y}%' } } },
@@ -521,7 +526,7 @@ class Highcharts(object):
         groups_text = get_stakeholders_group_names(stakeholder_ids)
         options['title'] = { 'text': u'{0} Acceptance'.format(escape(meeting_item.decision_item.name)) }
         options['subtitle'] = { 'text': u'{0} opinion. Click the slices to view value factors.'.format(groups_text) }
-        
+
         return options
 
     def decision_item_acceptance_scenario_pie_chart_drilldown(self, scenario, stakeholder_ids):
@@ -535,7 +540,7 @@ class Highcharts(object):
         groups_text = get_stakeholders_group_names(stakeholder_ids)
         options['title'] = { 'text': u'{0} Acceptance'.format(escape(scenario.name)) }
         options['subtitle'] = { 'text': u'{0} opinion. Click the slices to view value factors.'.format(groups_text) }
-        
+
         return options
 
     ''' Factors Groups Comparison '''
@@ -547,10 +552,10 @@ class Highcharts(object):
             measure = evaluations.first().measure
             series = []
             for measure_value in measure.measurevalue_set.all():
-                serie = { 
-                        'name': measure_value.description, 
-                        'color': measure_value.color, 
-                        'pointPlacement': 'on', 
+                serie = {
+                        'name': measure_value.description,
+                        'color': measure_value.color,
+                        'pointPlacement': 'on',
                         'data': list()
                     }
                 for category in categories:

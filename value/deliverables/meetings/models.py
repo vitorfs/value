@@ -60,7 +60,7 @@ class Meeting(models.Model):
     rationales = models.ManyToManyField(Rationale)
     rationales_count = models.PositiveIntegerField(default=0)
     progress = models.FloatField(default=0.0)
-    
+
     class Meta:
         db_table = 'meetings'
         ordering = ('-updated_at',)
@@ -73,7 +73,7 @@ class Meeting(models.Model):
 
     def is_analysing(self):
         return self.status == Meeting.ANALYSING
-    
+
     def is_closed(self):
         return self.status == Meeting.CLOSED
 
@@ -104,7 +104,7 @@ class Meeting(models.Model):
         """
         Returns the relative progress of a meeting, based on the count of the meeting's stakeholders,
         decision items and the deliverable's factors.
-        The maximum number of possible evaluations is the product of multiplying 
+        The maximum number of possible evaluations is the product of multiplying
         TotalEvaluations = MeetingStakeholders * MeetingItems * DeliverableFactors
         The total value is divided by the current number of evaluations, which can't be greater
         then TotalEvaluations.
@@ -134,11 +134,16 @@ class Meeting(models.Model):
                 scenario.calculate_ranking()
 
     def get_stakeholder_groups(self):
-        groups = Group.objects.all().order_by('name')
-        grouped_stakeholders = { 'No group': [] }
+        groups = Group.objects.values_list('name', flat=True).order_by('name')
+
+        grouped_stakeholders = { 'No group': list() }
         for group in groups:
-            grouped_stakeholders[group.name] = []
-        for meeting_stakeholder in self.meetingstakeholder_set.all().order_by('stakeholder__first_name'):
+            grouped_stakeholders[group] = list()
+
+        for meeting_stakeholder in self.meetingstakeholder_set \
+                .select_related('stakeholder', 'stakeholder__profile') \
+                .all() \
+                .order_by('stakeholder__first_name'):
             groups = meeting_stakeholder.stakeholder.groups.all()
             if not groups.exists():
                 grouped_stakeholders['No group'].append(meeting_stakeholder.stakeholder)
@@ -292,7 +297,7 @@ class MeetingItem(models.Model):
 
         with transaction.atomic():
             self.evaluation_summary.all().delete()
-            
+
             meeting_item_content_type = ContentType.objects.get_for_model(MeetingItem)
 
             for measure_value in measure.measurevalue_set.all():
@@ -356,7 +361,7 @@ class Evaluation(models.Model):
     @staticmethod
     def _list(meeting):
         return Evaluation.objects.filter(
-            meeting=meeting, 
+            meeting=meeting,
             factor__in=meeting.factors.all(),
             measure=meeting.measure
             )
@@ -372,7 +377,7 @@ class Evaluation(models.Model):
 
 class Scenario(models.Model):
     """
-    The Scenario class is used to aggregate decision items to generate different 
+    The Scenario class is used to aggregate decision items to generate different
     types of visualization inside the dashboard.
     """
     name = models.CharField(max_length=255)
@@ -437,8 +442,8 @@ class Scenario(models.Model):
 
             self.evaluation_summary.all().delete()
             aggregated_measure_values = dict()
-            
-            # Initialize the aggregated_measure_values dict to make sure 
+
+            # Initialize the aggregated_measure_values dict to make sure
             # it's gonna have all possible Measure Value, even if no meeting item
             # has received a vote for that Measure Value.
             for measure_value in self.meeting.measure.measurevalue_set.all():

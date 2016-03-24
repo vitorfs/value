@@ -18,7 +18,6 @@ from value.deliverables.meetings.utils import *
 @login_required
 def dashboard(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    chart = Highcharts()
 
     charts = list()
     charts.append({
@@ -29,7 +28,6 @@ def dashboard(request, deliverable_id, meeting_id):
             meeting_id,)
         )
     })
-
     charts.append({
         'chart_id': 'stakeholders_input',
         'chart_title': 'Stakeholders Input',
