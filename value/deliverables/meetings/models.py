@@ -167,7 +167,9 @@ class Meeting(models.Model):
             objects = objects.order_by(order)
         else:
             content_type = ContentType.objects.get_for_model(_class)
-            ordered_by_ranking = Ranking.objects.filter(content_type=content_type, meeting=self, measure_value__id=order).order_by('-percentage_votes')
+            ordered_by_ranking = Ranking.objects \
+                .filter(content_type=content_type, meeting=self, measure_value__id=order) \
+                .order_by('-percentage_votes')
             objects = map(lambda o: o.content_object, ordered_by_ranking)
         return objects
 
@@ -261,6 +263,7 @@ class MeetingItem(models.Model):
     decision_item = models.ForeignKey(DecisionItem, on_delete=models.PROTECT)
     meeting_decision = models.BooleanField(default=False)
     rationales = models.ManyToManyField(Rationale)
+    has_rationales = models.BooleanField(default=False)
     value_ranking = models.FloatField(default=0.0)
     meeting_ranking = models.FloatField(default=0.0)
     evaluation_summary = GenericRelation(Ranking)
@@ -317,10 +320,12 @@ class MeetingItem(models.Model):
     def get_evaluations_with_rationale(self):
         return self.meeting.get_evaluations().filter(meeting_item=self).exclude(rationale=None).order_by('factor__name')
 
-    def has_rationales(self):
+    def update_has_rationales(self):
         has_evaluation_rationales = self.get_evaluations_with_rationale().exists()
         has_meeting_item_rationales = self.rationales.exists()
-        return has_evaluation_rationales or has_meeting_item_rationales
+        self.has_rationales = has_evaluation_rationales or has_meeting_item_rationales
+        self.save()
+        return self.has_rationales
 
     def get_all_rationales(self):
         evaluations = self.get_evaluations_with_rationale()

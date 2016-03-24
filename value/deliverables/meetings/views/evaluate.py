@@ -25,7 +25,7 @@ def evaluate(request, deliverable_id, meeting_id):
             .get(pk=meeting_id, deliverable__id=deliverable_id)
     except Meeting.DoesNotExist:
         raise Http404
-    
+
     factors = meeting.factors.all()
     measure = meeting.measure
     measure_values = measure.measurevalue_set.all()
@@ -39,14 +39,14 @@ def evaluate(request, deliverable_id, meeting_id):
 
     evaluations = Evaluation.get_user_evaluations_by_meeting(user=request.user, meeting=meeting) \
             .select_related(
-                'meeting', 
-                'meeting_item', 
-                'user', 
-                'factor', 
-                'factor__measure', 
+                'meeting',
+                'meeting_item',
+                'user',
+                'factor',
+                'factor__measure',
                 'factor__group',
-                'measure', 
-                'measure_value', 
+                'measure',
+                'measure_value',
                 'rationale'
             )
     meeting_items = meeting.meetingitem_set.select_related('decision_item')
@@ -54,8 +54,8 @@ def evaluate(request, deliverable_id, meeting_id):
     search_query = request.GET.get('search')
     if search_query:
         meeting_items = meeting_items.filter(decision_item__name__icontains=search_query)
-    return render(request, 'meetings/evaluate.html', { 
-        'meeting': meeting, 
+    return render(request, 'meetings/evaluate.html', {
+        'meeting': meeting,
         'factors': factors,
         'measure': measure,
         'measure_values': measure_values,
@@ -86,10 +86,10 @@ def save_evaluation(request, deliverable_id, meeting_id):
         measure_value = None
 
     Evaluation.objects.update_or_create(
-            meeting=meeting, 
-            meeting_item=meeting_item, 
-            user=request.user, 
-            factor=factor, 
+            meeting=meeting,
+            meeting_item=meeting_item,
+            user=request.user,
+            factor=factor,
             measure=measure,
             defaults={ 'evaluated_at': timezone.now(), 'measure_value': measure_value }
     )
@@ -117,13 +117,13 @@ def save_rationale(request, deliverable_id, meeting_id):
         measure = Measure.objects.get(pk=measure_id)
 
         evaluation, created = Evaluation.objects.get_or_create(
-                meeting=meeting, 
-                user=request.user, 
-                meeting_item=meeting_item, 
-                factor=factor, 
+                meeting=meeting,
+                user=request.user,
+                meeting_item=meeting_item,
+                factor=factor,
                 measure=measure
         )
-        
+
         if evaluation.rationale:
             form = RationaleForm(request.POST, instance=evaluation.rationale)
             form.instance.updated_by = request.user
@@ -139,6 +139,7 @@ def save_rationale(request, deliverable_id, meeting_id):
                 evaluation.rationale = None
             evaluation.save()
             meeting.deliverable.save()
+            meeting_item.update_has_rationales()
             meeting.calculate_meeting_related_rationales_count()
             context = get_meeting_progress(meeting)
             return HttpResponse(json.dumps(context), content_type='application/json')

@@ -23,9 +23,9 @@ def get_features_acceptance_chart_dict(meeting_item):
         'instance_type': 'meeting_item',
         'remote': reverse('deliverables:meetings:features_acceptance_chart', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)),
         'info_remote': reverse('deliverables:details_decision_item', args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk)),
-        'has_rationales': meeting_item.has_rationales(),
+        'has_rationales': meeting_item.has_rationales,
         'rationales_remote': reverse('deliverables:meetings:meeting_item_rationale', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk))
-    }    
+    }
     return chart_data
 
 def get_features_acceptance_scenario_chart_dict(scenario):
@@ -75,7 +75,7 @@ def features_acceptance(request, deliverable_id, meeting_id):
     charts = map(get_features_acceptance_chart_dict, meeting.get_ordered_meeting_items(order))
     stakeholder_ids = get_stakeholders_ids(meeting)
 
-    return render(request, 'meetings/dashboard/decision_items_acceptance/list.html', { 
+    return render(request, 'meetings/dashboard/decision_items_acceptance/list.html', {
         'meeting': meeting,
         'chart_menu_active': 'features_acceptance',
         'charts': charts,
@@ -90,7 +90,7 @@ def features_acceptance(request, deliverable_id, meeting_id):
 def features_acceptance_chart(request, deliverable_id, meeting_id, meeting_item_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     meeting_item = meeting.meetingitem_set.get(pk=meeting_item_id)
-    
+
     chart_type = request.GET.get('chart_type')
     stakeholder_ids = request.GET.getlist('stakeholder')
 
@@ -103,7 +103,7 @@ def features_acceptance_chart(request, deliverable_id, meeting_id, meeting_item_
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        return render(request, 'meetings/dashboard/decision_items_acceptance/popup.html', { 
+        return render(request, 'meetings/dashboard/decision_items_acceptance/popup.html', {
             'meeting': meeting,
             'chart': chart,
             'chart_types_options': chart_types_options,
@@ -115,7 +115,7 @@ def features_acceptance_chart(request, deliverable_id, meeting_id, meeting_item_
 @login_required
 def features_acceptance_scenarios(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    
+
     chart_type = get_or_set_treemap_chart_type_session(request, 'decision_items_acceptance_scenario_chart_type')
     chart_types_options = get_treemap_chart_types_dict()
 
@@ -125,7 +125,7 @@ def features_acceptance_scenarios(request, deliverable_id, meeting_id):
     charts = map(get_features_acceptance_scenario_chart_dict, meeting.get_ordered_scenarios(order))
     stakeholder_ids = get_stakeholders_ids(meeting)
 
-    return render(request, 'meetings/dashboard/decision_items_acceptance/scenarios.html', { 
+    return render(request, 'meetings/dashboard/decision_items_acceptance/scenarios.html', {
         'meeting': meeting,
         'chart_menu_active': 'features_acceptance',
         'charts': charts,
@@ -143,7 +143,7 @@ def features_acceptance_scenario_chart(request, deliverable_id, meeting_id, scen
 
     chart_type = request.GET.get('chart_type')
     stakeholders = request.GET.getlist('stakeholder')
-    
+
     chart_types_options = get_treemap_chart_types_dict()
     stakeholder_ids = get_stakeholders_ids(meeting, stakeholders)
     options = get_features_acceptance_scenario_chart_options(scenario, stakeholder_ids, chart_type)
@@ -153,7 +153,7 @@ def features_acceptance_scenario_chart(request, deliverable_id, meeting_id, scen
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        return render(request, 'meetings/dashboard/decision_items_acceptance/popup.html', { 
+        return render(request, 'meetings/dashboard/decision_items_acceptance/popup.html', {
             'meeting': meeting,
             'chart': chart,
             'chart_types_options': chart_types_options,

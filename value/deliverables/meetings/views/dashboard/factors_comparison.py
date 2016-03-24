@@ -24,9 +24,9 @@ def get_features_chart_dict(meeting_item):
         'instance_type': 'meeting_item',
         'remote': reverse('deliverables:meetings:features_chart', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)),
         'info_remote': reverse('deliverables:details_decision_item', args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk)),
-        'has_rationales': meeting_item.has_rationales(),
+        'has_rationales': meeting_item.has_rationales,
         'rationales_remote': reverse('deliverables:meetings:meeting_item_rationale', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk))
-    }    
+    }
     return chart_data
 
 def get_features_scenario_chart_dict(scenario):
@@ -57,7 +57,7 @@ def features(request, deliverable_id, meeting_id):
     charts = map(get_features_chart_dict, meeting.get_ordered_meeting_items(order))
     stakeholder_ids = get_stakeholders_ids(meeting)
 
-    return render(request, 'meetings/dashboard/factors_comparison/list.html', { 
+    return render(request, 'meetings/dashboard/factors_comparison/list.html', {
         'meeting': meeting,
         'chart_menu_active': 'features',
         'charts': charts,
@@ -85,7 +85,7 @@ def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        return render(request, 'meetings/dashboard/factors_comparison/popup.html', { 
+        return render(request, 'meetings/dashboard/factors_comparison/popup.html', {
             'meeting': meeting,
             'chart': chart,
             'chart_types_options': chart_types_options,
@@ -97,7 +97,7 @@ def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
 @login_required
 def features_scenarios(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    
+
     chart_type = get_or_set_bar_chart_type_session(request, 'factors_comparison_scenario_chart_type')
     chart_types_options = get_bar_chart_types_dict()
 
@@ -107,7 +107,7 @@ def features_scenarios(request, deliverable_id, meeting_id):
     charts = map(get_features_scenario_chart_dict, meeting.get_ordered_scenarios(order))
     stakeholder_ids = get_stakeholders_ids(meeting)
 
-    return render(request, 'meetings/dashboard/factors_comparison/scenarios.html', { 
+    return render(request, 'meetings/dashboard/factors_comparison/scenarios.html', {
         'meeting': meeting,
         'chart_menu_active': 'features',
         'charts': charts,
@@ -125,7 +125,7 @@ def features_scenario_chart(request, deliverable_id, meeting_id, scenario_id):
 
     chart_type = request.GET.get('chart_type')
     stakeholders = request.GET.getlist('stakeholder')
-    
+
     chart_types_options = get_bar_chart_types_dict()
     stakeholder_ids = get_stakeholders_ids(meeting, stakeholders)
     options = Highcharts().factors_comparison_scenario(meeting, scenario, chart_type, stakeholder_ids)
@@ -135,7 +135,7 @@ def features_scenario_chart(request, deliverable_id, meeting_id, scenario_id):
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        return render(request, 'meetings/dashboard/factors_comparison/popup.html', { 
+        return render(request, 'meetings/dashboard/factors_comparison/popup.html', {
             'meeting': meeting,
             'chart': chart,
             'chart_types_options': chart_types_options,

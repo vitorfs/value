@@ -16,7 +16,7 @@ from value.deliverables.meetings.utils import *
 ''' Support functions '''
 
 def get_factors_groups_chart_dict(meeting_item):
-    chart_data = { 
+    chart_data = {
         'id': meeting_item.pk,
         'name': meeting_item.decision_item.name,
         'ranking': meeting_item.value_ranking,
@@ -24,7 +24,7 @@ def get_factors_groups_chart_dict(meeting_item):
         'instance_type': 'meeting_item',
         'remote': reverse('deliverables:meetings:factors_groups_chart', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)),
         'info_remote': reverse('deliverables:details_decision_item', args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk)),
-        'has_rationales': meeting_item.has_rationales(),
+        'has_rationales': meeting_item.has_rationales,
         'rationales_remote': reverse('deliverables:meetings:meeting_item_rationale', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk))
     }
     return chart_data
@@ -65,7 +65,7 @@ def factors_groups(request, deliverable_id, meeting_id):
         charts = map(get_factors_groups_chart_dict, meeting.get_ordered_meeting_items(order))
         stakeholder_ids = get_stakeholders_ids(meeting)
 
-        return render(request, 'meetings/dashboard/factors_groups_comparison/list.html', { 
+        return render(request, 'meetings/dashboard/factors_groups_comparison/list.html', {
             'meeting': meeting,
             'chart_menu_active': 'factors_groups',
             'charts': charts,
@@ -91,7 +91,7 @@ def factors_groups_chart(request, deliverable_id, meeting_id, meeting_item_id):
         return HttpResponse(dump, content_type='application/json')
     else:
         chart = get_factors_groups_chart_dict(meeting_item)
-        return render(request, 'meetings/dashboard/factors_groups_comparison/popup.html', { 
+        return render(request, 'meetings/dashboard/factors_groups_comparison/popup.html', {
             'meeting': meeting,
             'chart': chart,
             'chart_uri': 'features',
@@ -110,7 +110,7 @@ def factors_groups_scenarios(request, deliverable_id, meeting_id):
         charts = map(get_factors_groups_scenario_chart_dict, meeting.get_ordered_scenarios(order))
         stakeholder_ids = get_stakeholders_ids(meeting)
 
-        return render(request, 'meetings/dashboard/factors_groups_comparison/scenarios.html', { 
+        return render(request, 'meetings/dashboard/factors_groups_comparison/scenarios.html', {
             'meeting': meeting,
             'chart_menu_active': 'factors_groups',
             'charts': charts,
@@ -136,7 +136,7 @@ def factors_groups_scenario_chart(request, deliverable_id, meeting_id, scenario_
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        return render(request, 'meetings/dashboard/factors_groups_comparison/popup.html', { 
+        return render(request, 'meetings/dashboard/factors_groups_comparison/popup.html', {
             'meeting': meeting,
             'chart': chart,
             'stakeholder_ids': stakeholder_ids,
