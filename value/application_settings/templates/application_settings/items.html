@@ -6,7 +6,7 @@
   <script src="{% static 'js/application_settings/settings.js' %}"></script>
   <script>
     $(function () {
-      Sortable.create($("#column-display-order")[0], { 
+      Sortable.create($("#column-display-order")[0], {
         draggable: ".sortable",
         onEnd: function (evt) {
           var value = '';
@@ -23,9 +23,9 @@
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'settings:index' %}">Application settings</a></li>
-    <li class="active">Decision items</li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'settings:index' %}">{% trans 'Application settings' %}</a></li>
+    <li class="active">{% trans 'Decision items' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
@@ -35,60 +35,11 @@
     {% csrf_token %}
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Decision items</h3>
+        <h3 class="panel-title">{% trans 'Decision items' %}</h3>
       </div>
       <div class="panel-body">
-        {% comment %}
         <div class="form-group" style="margin-bottom: 0">
-          <label>Define the default ordering for every screen that display decision items</label>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  Order by
-                </div>
-                <ul class="list-group sortable" style="min-height: 38px" id="order-by">
-                  <li class="list-group-item">
-                    <span class="pull-right">
-                      <label class="radio-inline">
-                        <input type="radio" name="name_order_criteria" value="asc" checked> <span class="fa fa-sort-alpha-asc"></span>
-                      </label>
-                      <label class="radio-inline">
-                        <input type="radio" name="name_order_criteria" value="desc"> <span class="fa fa-sort-alpha-desc"></span>
-                      </label>
-                    </span>
-                    Name
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="panel panel-default" style="margin-bottom: 0">
-                <div class="panel-heading">
-                  Available columns
-                </div>
-                <ul class="list-group sortable" style="min-height: 38px" id="columns">
-                  {% for name, field in custom_fields.items %}
-                  <li class="list-group-item">
-                    <span class="pull-right">
-                      <label class="radio-inline">
-                        <input type="radio" name="{{ name }}_order_criteria" value="asc" checked> {% custom_field_sort_icon field "asc" %}
-                      </label>
-                      <label class="radio-inline">
-                        <input type="radio" name="{{ name }}_order_criteria" value="desc"> {% custom_field_sort_icon field "desc" %}
-                      </label>
-                    </span>
-                    {{ field.label }}
-                  </li>
-                  {% endfor %}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-        {% endcomment %}
-        <div class="form-group" style="margin-bottom: 0">
-          <label>Define the column display order</label>
+          <label>{% trans 'Define the column display order' %}</label>
           <input type="hidden" id="id_column_display" name="column_display" value="{{ app_settings.DECISION_ITEMS_COLUMNS_DISPLAY }}">
           <div id="column-display-order">
             {% spaceless %}
@@ -100,7 +51,7 @@
         </div>
       </div>
       <div class="panel-footer">
-        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button type="submit" class="btn btn-primary">{% trans 'Save changes' %}</button>
       </div>
     </div>
   </form>
@@ -109,38 +60,38 @@
     {% csrf_token %}
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Custom fields</h3>
+        <h3 class="panel-title">{% trans 'Custom fields' %}</h3>
       </div>
       <div class="panel-body" style="height: 400px; overflow-y: scroll;">
-        <p>Add custom fields to the decision items model. Please note that the fields <strong>name</strong> and <strong>description</strong> are fixed.</p>
+        <p>{% trans 'Add custom fields to the decision items model. Please note that the fields' %} <strong>{% trans 'name' %}</strong> {% trans 'and' %} <strong>{% trans 'description' %}</strong> {% trans 'are fixed' %}.</p>
         <table class="table table-condensed table-bordered">
           <thead>
             <tr>
-              <th>Column</th>
-              <th>Label</th>
-              <th>Data type</th>
-              <th style="width: 60px;">Display</th>
-              <th style="width: 60px;">Active</th>
+              <th>{% trans 'Column' %}</th>
+              <th>{% trans 'Label' %}</th>
+              <th>{% trans 'Data type' %}</th>
+              <th style="width: 60px;">{% trans 'Display' %}</th>
+              <th style="width: 60px;">{% trans 'Active' %}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td style="vertical-align: middle">name</td>
-              <td><input type="text" class="form-control input-sm" disabled value="Name"></td>
+              <td style="vertical-align: middle">{% trans 'name' %}</td>
+              <td><input type="text" class="form-control input-sm" disabled value="{% trans  %'Name'}"></td>
               <td>
                 <select class="form-control input-sm" disabled>
-                  <option>String</option>
+                  <option>{% trans 'String' %}</option>
                 </select>
               </td>
               <td style="vertical-align: middle; text-align: center;"><input type="checkbox" checked disabled></td>
               <td style="vertical-align: middle; text-align: center;"><input type="checkbox" checked disabled></td>
             </tr>
             <tr>
-              <td style="vertical-align: middle;">description</td>
-              <td><input type="text" class="form-control input-sm" disabled value="Description"></td>
+              <td style="vertical-align: middle;">{% trans 'description' %}</td>
+              <td><input type="text" class="form-control input-sm" disabled value="{% trans  %'Description'}"></td>
               <td>
                 <select class="form-control input-sm" disabled>
-                  <option>String</option>
+                  <option>{% trans 'String' %}</option>
                 </select>
               </td>
               <td style="vertical-align: middle; text-align: center;"><input type="checkbox" checked disabled></td>
@@ -149,7 +100,7 @@
             {% for column_index in custom_fields_range %}
               <tr>
                 <td style="vertical-align: middle">
-                  column_{{ column_index }}
+                  {% trans 'column_' %}{{ column_index }}
                 </td>
                 <td>
                   <input type="text" class="form-control input-sm js-control-disable" name="column_label_{{ column_index }}" maxlength="255" value="{% custom_field_attr custom_fields column_index 'label' %}">
@@ -173,7 +124,7 @@
         </table>
       </div>
       <div class="panel-footer">
-        <button class="btn btn-primary" type="submit">Save changes</button>
+        <button class="btn btn-primary" type="submit">{% trans 'Save changes' %}</button>
       </div>
     </div>
   </form>
