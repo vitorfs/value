@@ -1,6 +1,6 @@
 {% extends 'application_settings/base.html' %}
 
-{% load staticfiles customfields excelhelpers %}
+{% load i18n static customfields excelhelpers %}
 
 {% block stylesheet %}
   <link href="{% static 'css/prism.css' %}" rel="stylesheet">
@@ -13,9 +13,9 @@
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'settings:index' %}">Application settings</a></li>
-    <li class="active">Import template</li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'settings:index' %}">{% trans 'Application settings' %}</a></li>
+    <li class="active">{% trans 'Import template' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
@@ -24,15 +24,16 @@
     {% csrf_token %}
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Import template</h3>
+        <h3 class="panel-title">{% trans 'Import template' %}</h3>
       </div>
       <div class="panel-body">
-        <p>You may import decision items for a given deliverable or meeting from a external file.</p>
+        <p>{% trans 'You may import decision items for a given deliverable or meeting from a external file' %}.</p>
         <div class="panel-group" id="templates" role="tablist" aria-multiselectable="true" style="margin-bottom: 0">
           <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="heading-xls">
               <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#templates" href="#collapse-xls" aria-expanded="true" aria-controls="collapse-xls">
+                <a data-toggle="collapse" data-parent="#templates" href="#collapse-xls"
+                   aria-expanded="true" aria-controls="collapse-xls">
                   Excel <small>.xls, .xlsx</small>
                 </a>
               </h4>
@@ -42,28 +43,49 @@
                 <div class="form-horizontal">
                   <div class="form-group">
                     <div class="col-sm-8 col-md-6 col-lg-4">
-                      <label for="id_start_line">Orientation</label>
+                      <label for="id_start_line">{% trans 'Orientation' %}</label>
                       <select id="id_orientation" name="orientation" class="form-control">
-                        <option value="row"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'row' %} selected="selected"{% endif %}>One entry per row</option>
-                        <option value="column"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'column' %} selected="selected"{% endif %}>One entry per column</option>
+                        <option value="row"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'row' %} selected="selected"{% endif %}>
+                          {% trans 'One entry per row' %}
+                        </option>
+                        <option value="column"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'column' %} selected="selected"{% endif %}>
+                          {% trans 'One entry per column' %}
+                        </option>
                       </select>
                     </div>
                     <div class="col-sm-4 col-md-3 col-lg-2">
-                      <label for="id_starting_row" class="entry_per_row"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'column' %} style="display: none"{% endif %}>Starting row</label>
-                      <label for="id_starting_column" class="entry_per_column"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'row' %} style="display: none"{% endif %}>Starting column</label>
-                      <input type="text" class="form-control" id="id_starting_row_column" name="starting_row_column" value="{{ app_settings.EXCEL_STARTING_ROW_COLUMN }}">
+                      <label for="id_starting_row"
+                             class="entry_per_row"
+                             {% if app_settings.EXCEL_ENTRY_ORIENTATION == 'column' %}
+                             style="display: none"
+                             {% endif %}>
+                        {% trans 'Starting row' %}
+                      </label>
+                      <label for="id_starting_column"
+                             class="entry_per_column"
+                             {% if app_settings.EXCEL_ENTRY_ORIENTATION == 'row' %}
+                             style="display: none"
+                             {% endif %}>
+                        {% trans 'Starting column' %}
+                      </label>
+                      <input type="text" class="form-control" id="id_starting_row_column" name="starting_row_column"
+                             value="{{ app_settings.EXCEL_STARTING_ROW_COLUMN }}">
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-sm-12">
-                      <label>Spreadsheet template</label>
+                      <label>{% trans 'Spreadsheet template' %}</label>
                       <table class="table table-bordered" style="margin-bottom: 0; width: auto">
                         <thead>
                           <tr>
-                            <th>Field</th>
-                            <th class="entry_per_row"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'column' %} style="display: none"{% endif %}>Column</th>
-                            <th class="entry_per_column"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'row' %} style="display: none"{% endif %}>Row</th>
-                            <th>Import?</th>
+                            <th>{% trans 'Field' %}</th>
+                            <th class="entry_per_row"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'column' %} style="display: none"{% endif %}>
+                              {% trans 'Column' %}
+                            </th>
+                            <th class="entry_per_column"{% if app_settings.EXCEL_ENTRY_ORIENTATION == 'row' %} style="display: none"{% endif %}>
+                              {% trans 'Row' %}
+                            </th>
+                            <th>{% trans 'Import' %}?</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -87,128 +109,18 @@
                   </div>
                   <div class="form-group">
                     <div class="col-sm-4">
-                      <label for="id_excel_sheet_index">Sheet index <small>(Zero based index. Leave empty for all.)</small></label>
+                      <label for="id_excel_sheet_index">{% trans 'Sheet index' %} <small>({% trans 'Zero based index. Leave empty for all' %}.)</small></label>
                       <input type="text" class="form-control" id="id_excel_sheet_index" name="excel_sheet_index" value="{{ app_settings.EXCEL_SHEET_INDEX }}">
                     </div>
                   </div>
-                </div>              
-              </div>
-            </div>
-          </div>
-{% comment %}
-          <div class="panel panel-default">
-            <div class="panel-heading" role="tab" id="heading-csv">
-              <h4 class="panel-title">
-                <a class="collapsed" data-toggle="collapse" data-parent="#templates" href="#collapse-csv" aria-expanded="false" aria-controls="collapse-csv">
-                  Plain text <small>.csv, .txt</small>
-                </a>
-              </h4>
-            </div>
-            <div id="collapse-csv" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-csv">
-              <div class="panel-body">
-                <div class="form-group">
-                  <label for="id_separator">Separator</label>
-                  <div>
-                    <label class="radio-inline">
-                      <input type="radio" name="separator" id="id_comma" value="comma"> Comma
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio" name="separator" id="id_tab" value="tab"> Tab
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio" name="separator" id="id_semicolon" value="semicolon"> Semicolon
-                    </label>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="id_start_line">Start line</label>
-                  <input type="number" class="form-control" style="width: 100px" id="id_start_line" name="start_line">
-                </div>
-                <div class="form-group">
-                  <label>Column order</label>
-                  <div id="plain-text-column-order">
-                    <span class="label label-default sortable">Name</span><span class="label label-default sortable">Description</span>{% for name, field in custom_fields.items %}<span class="label label-default sortable">{{ field.label }}</span>{% endfor %}
-                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="panel panel-default">
-            <div class="panel-heading" role="tab" id="heading-json">
-              <h4 class="panel-title">
-                <a class="collapsed" data-toggle="collapse" data-parent="#templates" href="#collapse-json" aria-expanded="false" aria-controls="collapse-json">
-                  JSON
-                </a>
-              </h4>
-            </div>
-            <div id="collapse-json" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-json">
-              <div class="panel-body">
-                <p>Use the following template to import data from a json file. Please note any attribute with different name will be ignored. Entries with empty <strong>name</strong> will be ignored as well. The attribute order doesn't matter and you don't have to put all the 30 custom attributes in the file.</p>
-                <pre><code class="language-js">[
-  {
-    'name': '',
-    'description': '',
-    'column_1': '',
-    'column_2': '',
-    'column_3': '',
-    …
-    'column_30': ''
-  },
-  {
-    'name': '',
-    'description': '',
-    'column_1': '',
-    'column_2': '',
-    'column_3': '',
-    …
-    'column_30': ''
-  }
-]</code></pre>
-              </div>
-            </div>
-          </div>
-
-          <div class="panel panel-default">
-            <div class="panel-heading" role="tab" id="heading-xml">
-              <h4 class="panel-title">
-                <a class="collapsed" data-toggle="collapse" data-parent="#templates" href="#collapse-xml" aria-expanded="false" aria-controls="collapse-xml">
-                  XML
-                </a>
-              </h4>
-            </div>
-            <div id="collapse-xml" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-xml">
-              <div class="panel-body">
-                <p>Use the following template to import data from a xml file. Please note any attribute with different name will be ignored. Entries with empty <strong>name</strong> will be ignored as well. The attribute order doesn't matter and you don't have to put all the 30 custom attributes in the file.</p>
-                <pre><code class="language-markup">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;items&gt;
-  &lt;item&gt;
-    &lt;name&gt;&lt;/name&gt;
-    &lt;description&gt;&lt;/description&gt;
-    &lt;column_1&gt;&lt;/column_1&gt;
-    &lt;column_2&gt;&lt;/column_2&gt;
-    &lt;column_3&gt;&lt;/column_3&gt;
-    …
-    &lt;column_30&gt;&lt;/column_30&gt;
-  &lt;/item&gt;
-  &lt;item&gt;
-    &lt;name&gt;&lt;/name&gt;
-    &lt;description&gt;&lt;/description&gt;
-    &lt;column_1&gt;&lt;/column_1&gt;
-    &lt;column_2&gt;&lt;/column_2&gt;
-    &lt;column_3&gt;&lt;/column_3&gt;
-    …
-    &lt;column_30&gt;&lt;/column_30&gt;
-  &lt;/item&gt;
-&lt;/items&gt;</code></pre>
-              </div>
-            </div>
-          </div>
-{% endcomment %}
         </div>
-
       </div>
       <div class="panel-footer">
-        <button class="btn btn-primary" type="submit">Save changes</button>
+        <button class="btn btn-primary" type="submit">{% trans 'Save changes' %}</button>
       </div>
     </div>
   </form>

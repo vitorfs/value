@@ -13,6 +13,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.views.decorators.http import require_POST
+from django.utils.translation import ugettext as _
 
 from value.deliverables.models import DecisionItemLookup
 from value.application_settings.models import ApplicationSetting
@@ -23,7 +24,8 @@ from value.application_settings.models import ApplicationSetting
 def index(request):
     users = User.objects.filter(is_active=True, is_superuser=False).order_by(Lower('username'))
     admins = User.objects.filter(is_active=True, is_superuser=True).order_by(Lower('username'))
-    return render(request, 'application_settings/index.html', { 'admins': admins, 'users': users })
+    return render(request, 'application_settings/index.html', {'admins': admins, 'users': users})
+
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
@@ -38,9 +40,10 @@ def admins(request):
     revoke_ids = filter(None, revoke_ids)
     if any(revoke_ids):
         User.objects.filter(id__in=revoke_ids).update(is_superuser=False)
-        
-    messages.success(request, u'Administrators settings saved successfully!')
+
+    messages.success(request, _(u'Administrators settings saved successfully!'))
     return redirect(reverse('settings:index'))
+
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
@@ -50,7 +53,7 @@ def items(request):
     column_types = DecisionItemLookup.COLUMN_TYPES
     decision_items_fields = DecisionItemLookup.get_visible_fields()
     app_settings = ApplicationSetting.get()
-    return render(request, 'application_settings/items.html', { 
+    return render(request, 'application_settings/items.html', {
         'custom_fields_range': custom_fields_range,
         'custom_fields': custom_fields,
         'column_types': column_types,
@@ -58,18 +61,22 @@ def items(request):
         'app_settings': app_settings
         })
 
+
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 @require_POST
 def save_ordering(request):
     try:
-        setting, created = ApplicationSetting.objects.get_or_create(name=ApplicationSetting.DECISION_ITEMS_COLUMNS_DISPLAY)
+        setting, created = ApplicationSetting.objects.get_or_create(
+            name=ApplicationSetting.DECISION_ITEMS_COLUMNS_DISPLAY
+        )
         setting.value = request.POST.get('column_display')
         setting.save()
-        messages.success(request, u'Ordering and column display saved successfully.')
+        messages.success(request, _(u'Ordering and column display saved successfully.'))
     except:
-        messages.error(request, u'An error ocurred while trying to save your data.')
+        messages.error(request, _(u'An error ocurred while trying to save your data.'))
     return redirect(reverse('settings:items'))
+
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
@@ -100,18 +107,20 @@ def save_custom_fields(request):
     setting.value = column_display
     setting.save()
 
-    messages.success(request, u'Custom fields were saved successfully.')
+    messages.success(request, _(u'Custom fields were saved successfully.'))
     return redirect(reverse('settings:items'))
+
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def import_template(request):
     import_template_fields = DecisionItemLookup.get_all_fields()
     app_settings = ApplicationSetting.get()
-    return render(request, 'application_settings/import.html', { 
+    return render(request, 'application_settings/import.html', {
         'import_template_fields': import_template_fields,
         'app_settings': app_settings
         })
+
 
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
@@ -122,7 +131,9 @@ def save_import_templates(request):
     orientation.value = request.POST.get('orientation')
     orientation.save()
 
-    starting_row_column, created = ApplicationSetting.objects.get_or_create(name=ApplicationSetting.EXCEL_STARTING_ROW_COLUMN)
+    starting_row_column, created = ApplicationSetting.objects.get_or_create(
+        name=ApplicationSetting.EXCEL_STARTING_ROW_COLUMN
+    )
     starting_row_column.value = request.POST.get('starting_row_column')
     starting_row_column.save()
 
@@ -142,5 +153,5 @@ def save_import_templates(request):
     excel_sheet_index.value = request.POST.get('excel_sheet_index')
     excel_sheet_index.save()
 
-    messages.success(request, u'Import templates saved successfully.')
+    messages.success(request, _(u'Import templates saved successfully.'))
     return redirect(reverse('settings:import'))

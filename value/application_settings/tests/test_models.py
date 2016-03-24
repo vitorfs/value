@@ -27,7 +27,7 @@ class ApplicationSettingTests(TestCase):
         )
         ApplicationSetting.objects.create(
             name=ApplicationSetting.EXCEL_IMPORT_TEMPLATE,
-            value=pickle.dumps({'name': 'A','description': 'B'})
+            value=pickle.dumps({'name': 'A', 'description': 'B'})
         )
         ApplicationSetting.objects.create(
             name=ApplicationSetting.PLAIN_TEXT_SEPARATOR,
@@ -84,11 +84,11 @@ class ApplicationSettingTests(TestCase):
         setting.value = 'name,description,'
         setting.save()
         s = ApplicationSetting.get()
-        self.assertEqual(s[ApplicationSetting.DECISION_ITEMS_COLUMNS_DISPLAY], ['name','description'])
+        self.assertEqual(s[ApplicationSetting.DECISION_ITEMS_COLUMNS_DISPLAY], ['name', 'description'])
 
     def test_application_setting_get_invalid_decision_items_column_display(self):
         setting = ApplicationSetting.objects.get(pk=ApplicationSetting.DECISION_ITEMS_COLUMNS_DISPLAY)
         setting.value = None
         setting.save()
         s = ApplicationSetting.get()
-        self.assertEqual(s[ApplicationSetting.DECISION_ITEMS_COLUMNS_DISPLAY], ['name','description'])
+        self.assertEqual(s[ApplicationSetting.DECISION_ITEMS_COLUMNS_DISPLAY], ['name', 'description'])

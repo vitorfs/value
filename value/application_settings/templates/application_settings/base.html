@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li class="active">Application settings</li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li class="active">{% trans 'Application settings' %}</li>
   </ol>
 {% endblock breadcrumb %}
 

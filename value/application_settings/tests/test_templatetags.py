@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from django.test import TestCase
-from django.template import Context, Template, TemplateSyntaxError
+from django.template import Context, Template
 
 from value.deliverables.models import DecisionItemLookup
 from value.application_settings.templatetags import customfields as cf
@@ -11,7 +11,12 @@ class CustomFieldsTests(TestCase):
 
     def setUp(self):
         DecisionItemLookup.objects.create(column_name='column_1', column_label='Name')
-        DecisionItemLookup.objects.create(column_name='column_2', column_label='Effort', column_type=DecisionItemLookup.FLOAT, column_display=False)
+        DecisionItemLookup.objects.create(
+            column_name='column_2',
+            column_label='Effort',
+            column_type=DecisionItemLookup.FLOAT,
+            column_display=False
+        )
         self.fields = DecisionItemLookup.get_custom_fields()
         self.column_types = DecisionItemLookup.COLUMN_TYPES
 
@@ -29,7 +34,7 @@ class CustomFieldsTests(TestCase):
             '{% endfor %}'
         ).render(Context({
                 'custom_fields': self.fields,
-                'custom_fields_range': range(1,3)
+                'custom_fields_range': range(1, 3)
             }))
         self.assertEqual(out, 'Name,Effort,')
 
@@ -45,12 +50,12 @@ class CustomFieldsTests(TestCase):
     def test_custom_field_display_tag(self):
         out = Template(
             '{% load customfields %}'
-            '<input type="checkbox" name="column_display_{{ column_index }}" {% custom_field_display custom_fields column_index %}>'
+            '<input type="checkbox" {% custom_field_display custom_fields column_index %}>'
         ).render(Context({
                 'custom_fields': self.fields,
                 'column_index': 1
             }))
-        self.assertEqual(out, '<input type="checkbox" name="column_display_1" checked>')
+        self.assertEqual(out, '<input type="checkbox" checked>')
 
     def test_custom_field_is_active(self):
         self.assertEqual(cf.custom_field_is_active(self.fields, 1), 'checked')

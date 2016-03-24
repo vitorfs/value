@@ -67,6 +67,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 )
 
 ROOT_URLCONF = 'value.urls'
@@ -90,6 +91,15 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+LANGUAGES = (
+    ('en', 'English'),
+    ('pt-br', 'Portuguese')
+)
+
+LOCALE_PATHS = (
+    PROJECT_DIR.child('locale'),
+)
 
 
 STATIC_ROOT = PROJECT_DIR.parent.parent.child('static')

@@ -7,6 +7,7 @@ from django.utils.html import mark_safe
 
 register = template.Library()
 
+
 @register.simple_tag
 def excel_columns(name, index, settings):
     select = '<select id="id_column_{0}" name="column_{0}" class="form-control" {1}>{2}</select>'
@@ -51,6 +52,7 @@ def excel_columns(name, index, settings):
 
     return mark_safe(html)
 
+
 @register.simple_tag
 def excel_is_checked(name, settings):
     checked = ''
@@ -58,6 +60,7 @@ def excel_is_checked(name, settings):
         if name in settings['EXCEL_IMPORT_TEMPLATE'].keys():
             checked = ' checked'
     return checked
+
 
 @register.simple_tag
 def excel_rows(name, index, settings):

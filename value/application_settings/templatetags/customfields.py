@@ -3,12 +3,14 @@ from value.deliverables.models import DecisionItemLookup
 
 register = template.Library()
 
+
 @register.simple_tag
 def custom_field_attr(fields, column, attr):
     try:
         return fields['column_{0}'.format(column)][attr]
-    except Exception, e:
+    except:
         return ''
+
 
 @register.simple_tag
 def custom_field_display(fields, column):
@@ -18,12 +20,14 @@ def custom_field_display(fields, column):
             return 'checked'
     return ''
 
+
 @register.simple_tag
 def custom_field_is_active(fields, column):
     if 'column_{0}'.format(column) in fields.keys():
         return 'checked'
     else:
         return ''
+
 
 @register.simple_tag
 def custom_field_selected(fields, column, field_type):
@@ -33,6 +37,7 @@ def custom_field_selected(fields, column, field_type):
             return 'selected'
     else:
         return ''
+
 
 @register.simple_tag
 def custom_field_sort_icon(field, order):
