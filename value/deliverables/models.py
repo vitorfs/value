@@ -37,8 +37,8 @@ class Deliverable(models.Model):
         return self.meeting_set \
             .filter(status__in=['O', 'A']) \
             .prefetch_related(
-                'meetingstakeholder_set__stakeholder__profile', 
-                'meetingitem_set', 
+                'meetingstakeholder_set__stakeholder__profile',
+                'meetingitem_set',
                 'factors'
             ).select_related('deliverable', 'deliverable__manager__profile', 'measure')
 
@@ -46,8 +46,8 @@ class Deliverable(models.Model):
         return self.meeting_set \
             .filter(status='C') \
             .prefetch_related(
-                'meetingstakeholder_set__stakeholder__profile', 
-                'meetingitem_set', 
+                'meetingstakeholder_set__stakeholder__profile',
+                'meetingitem_set',
                 'factors'
             ).select_related('deliverable', 'deliverable__manager__profile', 'measure')
 
@@ -104,12 +104,14 @@ class DecisionItem(models.Model):
 def attachment_file_upload_to(instance, filename):
     return u'deliverables/{0}/attachments/{1}'.format(instance.decision_item.deliverable.pk, filename)
 
+
 class DecisionItemAttachment(models.Model):
     decision_item = models.ForeignKey(DecisionItem, related_name='attachments')
     attachment = models.FileField(upload_to=attachment_file_upload_to)
-    
+
     class Meta:
         db_table = 'decision_items_attachments'
+
 
 @receiver(post_delete, sender=DecisionItemAttachment)
 def attachment_post_delete_handler(sender, **kwargs):
@@ -130,7 +132,7 @@ class DecisionItemLookup(models.Model):
         (INTEGER, 'Integer'),
         (DATE, 'Date'),
         (DATE_TIME, 'Date Time'),
-        )
+    )
 
     column_name = models.CharField(max_length=255, primary_key=True)
     column_label = models.CharField(max_length=255, null=True, blank=True)
@@ -146,14 +148,16 @@ class DecisionItemLookup(models.Model):
     @staticmethod
     def get_base_fields():
         base_fields = {}
-        base_fields['name'] = { 
-                'label': 'Name', 
-                'type': DecisionItemLookup.STRING, 
-                'display': True }
-        base_fields['description'] = { 
-                'label': 'Description', 
-                'type': DecisionItemLookup.STRING, 
-                'display': True }
+        base_fields['name'] = {
+            'label': 'Name',
+            'type': DecisionItemLookup.STRING,
+            'display': True
+        }
+        base_fields['description'] = {
+            'label': 'Description',
+            'type': DecisionItemLookup.STRING,
+            'display': True
+        }
         return base_fields
 
     @staticmethod
@@ -161,7 +165,11 @@ class DecisionItemLookup(models.Model):
         fields = {}
         qs = DecisionItemLookup.objects.all()
         for result in qs:
-            fields[result.column_name] = { 'label': result.column_label, 'type': result.column_type, 'display': result.column_display }
+            fields[result.column_name] = {
+                'label': result.column_label,
+                'type': result.column_type,
+                'display': result.column_display
+            }
         return fields
 
     @staticmethod

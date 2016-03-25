@@ -62,9 +62,9 @@ def avatar(user, size=128):
         return u'{0}avatar/{1}/{2}.png'.format(settings.MEDIA_URL, size, initials)
     else:
         url = u'{0}?{1}'.format(
-          reverse('avatar', args=(initials,)),
-          urllib.urlencode({'size': size, 'bg': colors[initials[:1].lower()], 'fg': 'ffffff'})
-          )
+            reverse('avatar', args=(initials,)),
+            urllib.urlencode({'size': size, 'bg': colors[initials[:1].lower()], 'fg': 'ffffff'})
+        )
         return url
 
 

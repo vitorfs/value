@@ -19,9 +19,9 @@ from value.factors.models import Factor
 from value.measures.models import Measure
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
 from value.deliverables.models import Deliverable, DecisionItem, DecisionItemAttachment, DecisionItemLookup
-from value.deliverables.meetings.models import Evaluation, MeetingStakeholder
+from value.deliverables.meetings.models import Evaluation
 from value.deliverables.forms import UploadFileForm, DeliverableForm, DeliverableBasicDataForm, \
-        DeliverableFactorsForm, DeliverableMeasureForm, DeliverableRemoveStakeholdersForm
+    DeliverableFactorsForm, DeliverableMeasureForm, DeliverableRemoveStakeholdersForm
 from value.deliverables.utils import excel_column_map
 
 
@@ -40,10 +40,11 @@ def index(request):
         .prefetch_related('meeting_set') \
         .order_by('-updated_at')
 
-    return render(request, 'deliverables/index.html', { 
-            'manager_deliverables': manager_deliverables,
-            'stakeholder_deliverables': stakeholder_deliverables
-        })
+    return render(request, 'deliverables/index.html', {
+        'manager_deliverables': manager_deliverables,
+        'stakeholder_deliverables': stakeholder_deliverables
+    })
+
 
 @login_required
 @transaction.atomic
@@ -53,13 +54,21 @@ def new(request):
 
     has_measure = Measure.objects.filter(is_active=True).exists()
     if not has_measure:
-        messages.warning(request, u'There is not active measure. Please configure it properly on Management » Measures.')
+        messages.warning(
+            request,
+            u'There is not active measure. Please configure it properly on Management » Measures.'
+        )
 
     has_factors = Factor.objects.filter(is_active=True).exists()
     if not has_factors:
-        messages.warning(request, u'There is not active value factor. Please configure it properly on Management » Factors.')
+        messages.warning(
+            request,
+            u'There is not active value factor. Please configure it properly on Management » Factors.'
+        )
 
-    stakeholders_queryset = User.objects.filter(is_active=True).order_by('first_name', 'last_name', 'username').exclude(pk=request.user.pk)
+    stakeholders_queryset = User.objects.filter(is_active=True) \
+        .order_by('first_name', 'last_name', 'username') \
+        .exclude(pk=request.user.pk)
 
     if request.method == 'POST':
         form = DeliverableForm(request.POST)
@@ -78,7 +87,6 @@ def new(request):
             deliverable.save()
 
             messages.success(request, u'The deliverable {0} was added successfully.'.format(deliverable.name))
-
             return redirect(reverse('deliverables:deliverable', args=(deliverable.pk,)))
         else:
             messages.error(request, u'Please correct the error below.')
@@ -86,12 +94,12 @@ def new(request):
         form = DeliverableForm(initial={'factors': Factor.objects.filter(is_active=True)})
         form.fields['stakeholders'].queryset = stakeholders_queryset
         formset = DecisionItemFormSet(prefix='decision_item', queryset=DecisionItem.objects.none())
+    return render(request, 'deliverables/new.html', {
+        'fields': fields,
+        'form': form,
+        'formset': formset
+    })
 
-    return render(request, 'deliverables/new.html', { 
-            'fields': fields,
-            'form': form,
-            'formset': formset
-            })
 
 @login_required
 @require_POST
@@ -117,19 +125,25 @@ def import_decision_items(request):
                 decision_items.append(decision_item)
         fields = DecisionItemLookup.get_visible_fields()
         DecisionItemFormSet = modelformset_factory(DecisionItem, fields=fields.keys(), extra=len(decision_items))
-        formset = DecisionItemFormSet(prefix='decision_item', queryset=DecisionItem.objects.none(), initial=decision_items)
+        formset = DecisionItemFormSet(
+            prefix='decision_item',
+            queryset=DecisionItem.objects.none(),
+            initial=decision_items
+        )
         html = render_to_string('deliverables/includes/decision_items_import_table.html', {
-                'decision_items': decision_items,
-                'fields': fields,
-                'formset': formset,
-                'filename': filename
-                })
+            'decision_items': decision_items,
+            'fields': fields,
+            'formset': formset,
+            'filename': filename
+        })
     return HttpResponse(html)
+
 
 @login_required
 @user_is_stakeholder
 def deliverable(request, deliverable_id):
     return redirect(reverse('deliverables:meetings:index', args=(deliverable_id,)))
+
 
 @login_required
 @user_is_stakeholder
@@ -141,15 +155,19 @@ def stakeholders(request, deliverable_id):
             .get(pk=deliverable_id)
     except Deliverable.DoesNotExist:
         raise Http404
-    return render(request, 'deliverables/stakeholders.html', { 'deliverable': deliverable })
+    return render(request, 'deliverables/stakeholders.html', {'deliverable': deliverable})
+
 
 @login_required
 @user_is_manager
 def load_available_stakeholders(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     available_stakeholders = User.objects.filter(is_active=True).exclude(pk__in=deliverable.get_all_stakeholders())
-    html = render_to_string('deliverables/includes/add_stakeholders.html', { 'available_stakeholders': available_stakeholders })
+    html = render_to_string('deliverables/includes/add_stakeholders.html', {
+        'available_stakeholders': available_stakeholders
+    })
     return HttpResponse(html)
+
 
 @login_required
 @user_is_manager
@@ -167,6 +185,7 @@ def add_stakeholders(request, deliverable_id):
         messages.warning(request, u'No stakeholder were selected. Nothing changed.')
     return redirect(reverse('deliverables:stakeholders', args=(deliverable.pk,)))
 
+
 @login_required
 @user_is_manager
 @transaction.atomic
@@ -182,6 +201,7 @@ def remove_stakeholder(request, deliverable_id):
         messages.error(request, 'An error ocurred while trying to remove the selected stakeholders.')
     return redirect('deliverables:stakeholders', deliverable.pk)
 
+
 @login_required
 @require_POST
 def process_decision_items_list_actions(request, deliverable_id):
@@ -191,7 +211,7 @@ def process_decision_items_list_actions(request, deliverable_id):
         decision_items_ids = request.POST.getlist('decision_item_id')
         decision_items = DecisionItem.objects.filter(pk__in=decision_items_ids)
 
-        decision_items_list = { 'can_delete': list(), 'cannot_delete': list() }
+        decision_items_list = {'can_delete': list(), 'cannot_delete': list()}
         decision_items_list['can_delete'] = filter(lambda i: not i.meetingitem_set.exists(), decision_items)
         decision_items_list['cannot_delete'] = filter(lambda i: i.meetingitem_set.exists(), decision_items)
 
@@ -202,13 +222,13 @@ def process_decision_items_list_actions(request, deliverable_id):
             deliverable.save()
             messages.success(request, 'The selected decision items were deleted successfully.')
         else:
-            return render(request, 'deliverables/decision_items/delete_list.html', { 
-                    'deliverable': deliverable, 
-                    'decision_items': decision_items_list, 
-                    'action': action 
-                    })
-
+            return render(request, 'deliverables/decision_items/delete_list.html', {
+                'deliverable': deliverable,
+                'decision_items': decision_items_list,
+                'action': action
+            })
     return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
+
 
 @login_required
 @user_is_stakeholder
@@ -216,7 +236,8 @@ def decision_items(request, deliverable_id):
     if request.method == 'POST':
         return process_decision_items_list_actions(request, deliverable_id)
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    return render(request, 'deliverables/decision_items/list.html', { 'deliverable': deliverable })
+    return render(request, 'deliverables/decision_items/list.html', {'deliverable': deliverable})
+
 
 @login_required
 @user_is_manager
@@ -231,16 +252,17 @@ def save_imported_decision_items(request, deliverable_id):
             form.instance.deliverable = deliverable
         formset.save()
         deliverable.save()
-        html = render_to_string('deliverables/decision_items/includes/decision_items_table.html', { 
-                'deliverable': deliverable 
-                })
+        html = render_to_string('deliverables/decision_items/includes/decision_items_table.html', {
+            'deliverable': deliverable
+        })
         return HttpResponse(html)
     else:
         html = render_to_string('deliverables/includes/decision_items_import_table.html', {
-                'fields': fields,
-                'formset': formset
-                })
+            'fields': fields,
+            'formset': formset
+        })
         return HttpResponseBadRequest(html)
+
 
 @login_required
 @user_is_manager
@@ -259,11 +281,12 @@ def add_decision_item(request, deliverable_id):
             messages.error(request, u'Please correct the error below.')
     else:
         form = DecisionItemForm()
-    return render(request, 'deliverables/decision_items/add.html', { 
-            'deliverable': deliverable,
-            'fields': fields,
-            'form': form
-            })
+    return render(request, 'deliverables/decision_items/add.html', {
+        'deliverable': deliverable,
+        'fields': fields,
+        'form': form
+    })
+
 
 @login_required
 @user_is_manager
@@ -290,13 +313,13 @@ def edit_decision_item(request, deliverable_id, decision_item_id):
     else:
         form = DecisionItemForm(instance=decision_item)
         formset = AttachmentFormset(instance=decision_item)
+    return render(request, 'deliverables/decision_items/edit.html', {
+        'deliverable': deliverable,
+        'fields': fields,
+        'form': form,
+        'formset': formset
+    })
 
-    return render(request, 'deliverables/decision_items/edit.html', { 
-            'deliverable': deliverable,
-            'fields': fields,
-            'form': form,
-            'formset': formset
-            })
 
 @login_required
 @user_is_manager
@@ -310,11 +333,12 @@ def delete_decision_item(request, deliverable_id, decision_item_id):
         return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
     else:
         related_evaluations = Evaluation.objects.filter(meeting_item__decision_item=decision_item).order_by('meeting')
-        return render(request, 'deliverables/decision_items/delete.html', { 
-                'deliverable': deliverable,
-                'decision_item': decision_item,
-                'related_evaluations': related_evaluations
-                })
+        return render(request, 'deliverables/decision_items/delete.html', {
+            'deliverable': deliverable,
+            'decision_item': decision_item,
+            'related_evaluations': related_evaluations
+        })
+
 
 @login_required
 @user_is_stakeholder
@@ -322,11 +346,12 @@ def details_decision_item(request, deliverable_id, decision_item_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     decision_item = get_object_or_404(DecisionItem, pk=decision_item_id)
     fields = DecisionItemLookup.get_all_fields()
-    return render(request, 'deliverables/decision_items/includes/decision_item_details.html', { 
-            'deliverable': deliverable, 
-            'item': decision_item,
-            'fields': fields
-            })
+    return render(request, 'deliverables/decision_items/includes/decision_item_details.html', {
+        'deliverable': deliverable,
+        'item': decision_item,
+        'fields': fields
+    })
+
 
 @login_required
 @user_is_manager
@@ -336,8 +361,8 @@ def settings(request, deliverable_id):
         .exclude(pk=request.user.id) \
         .select_related('profile') \
         .order_by(
-            Lower('first_name').asc(), 
-            Lower('last_name').asc(), 
+            Lower('first_name').asc(),
+            Lower('last_name').asc(),
             Lower('username').asc()
         )
     if request.method == 'POST':
@@ -349,17 +374,17 @@ def settings(request, deliverable_id):
             return redirect(reverse('deliverables:settings', args=(deliverable.pk,)))
     else:
         form = DeliverableBasicDataForm(instance=deliverable)
-    return render(request, 'deliverables/settings/details.html', { 
-            'deliverable': deliverable,
-            'form': form,
-            'users': users
-            })
+    return render(request, 'deliverables/settings/details.html', {
+        'deliverable': deliverable,
+        'form': form,
+        'users': users
+    })
+
 
 @login_required
 @user_is_manager
 def factors_settings(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-
     if request.method == 'POST':
         form = DeliverableFactorsForm(request.POST, instance=deliverable)
         if form.is_valid():
@@ -369,17 +394,16 @@ def factors_settings(request, deliverable_id):
             return redirect(reverse('deliverables:factors_settings', args=(deliverable.pk,)))
     else:
         form = DeliverableFactorsForm(instance=deliverable)
+    return render(request, 'deliverables/settings/factors.html', {
+        'deliverable': deliverable,
+        'form': form
+    })
 
-    return render(request, 'deliverables/settings/factors.html', { 
-            'deliverable': deliverable,
-            'form': form
-            })
 
 @login_required
 @user_is_manager
 def measure_settings(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-
     if request.method == 'POST':
         form = DeliverableMeasureForm(request.POST, instance=deliverable)
         if form.is_valid():
@@ -392,10 +416,11 @@ def measure_settings(request, deliverable_id):
     else:
         form = DeliverableMeasureForm(instance=deliverable)
 
-    return render(request, 'deliverables/settings/measure.html', { 
-            'deliverable': deliverable,
-            'form': form
-            })
+    return render(request, 'deliverables/settings/measure.html', {
+        'deliverable': deliverable,
+        'form': form
+    })
+
 
 @login_required
 @user_is_manager
@@ -410,13 +435,17 @@ def transfer(request, deliverable_id):
         deliverable.stakeholders.remove(user)
         deliverable.manager = user
         deliverable.save()
-        messages.success(request, u'The deliverable {0} was successfully transferred to {1}.'.format(deliverable.name, user.profile.get_display_name()))
+        messages.success(request, u'The deliverable {0} was successfully transferred to {1}.'.format(
+            deliverable.name,
+            user.profile.get_display_name())
+        )
         return redirect(reverse('deliverables:index'))
     except:
         messages.error(request, 'Something went wrong. Nothing changed.')
     return redirect(reverse('deliverables:settings', args=(deliverable.pk,)))
 
+
 @login_required
 def historical_dashboard(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    return render(request, 'deliverables/historical_dashboard.html', { 'deliverable': deliverable })
+    return render(request, 'deliverables/historical_dashboard.html', {'deliverable': deliverable})

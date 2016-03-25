@@ -59,7 +59,7 @@ def items(request):
         'column_types': column_types,
         'decision_items_fields': decision_items_fields,
         'app_settings': app_settings
-        })
+    })
 
 
 @login_required
@@ -119,7 +119,7 @@ def import_template(request):
     return render(request, 'application_settings/import.html', {
         'import_template_fields': import_template_fields,
         'app_settings': app_settings
-        })
+    })
 
 
 @login_required

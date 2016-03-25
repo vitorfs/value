@@ -86,10 +86,10 @@ def groups(request):
     available_factors = Factor.objects.filter(is_active=True, group=None)
     form = GroupForm()
     return render(request, 'factors/groups.html', {
-            'groups': groups,
-            'available_factors': available_factors,
-            'form': form
-        })
+        'groups': groups,
+        'available_factors': available_factors,
+        'form': form
+    })
 
 
 @login_required

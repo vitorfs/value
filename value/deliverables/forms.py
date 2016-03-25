@@ -19,6 +19,7 @@ class StakeholderPanelGroupMultipleModelChoiceField(forms.ModelMultipleChoiceFie
             name = u'{0} <small class="text-muted">({1})</small>'.format(name, groups)
         return name
 
+
 class FactorModelMultipleChoiceField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
         name = obj.name
@@ -34,23 +35,32 @@ class UploadFileForm(forms.Form):
 
 
 class DeliverableForm(forms.ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class' : 'form-control'}), max_length=255)
-    description = forms.CharField(widget=forms.Textarea(attrs={'class' : 'form-control expanding', 'rows': '1'}), max_length=2000, required=False)
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        max_length=255
+    )
+    description = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control expanding', 'rows': '1'}),
+        max_length=2000,
+        required=False
+    )
     stakeholders = StakeholderPanelGroupMultipleModelChoiceField(
         widget=forms.CheckboxSelectMultiple(),
-        queryset=User.objects.none(), 
+        queryset=User.objects.none(),
         required=False
-        )
+    )
     factors = FactorModelMultipleChoiceField(
         label='Select value factors to be used within the decision-making meetings',
-        widget=forms.CheckboxSelectMultiple(), 
-        queryset=Factor.objects.select_related('group').filter(is_active=True), 
+        widget=forms.CheckboxSelectMultiple(),
+        queryset=Factor.objects.select_related('group').filter(is_active=True),
         required=True
-        )
-    measure = forms.ModelChoiceField(label='Select the measure to be used within the decision-making meetings', 
+    )
+    measure = forms.ModelChoiceField(
+        label='Select the measure to be used within the decision-making meetings',
         queryset=Measure.objects.filter(is_active=True),
         required=True,
-        empty_label=None)
+        empty_label=None
+    )
 
     class Meta:
         model = Deliverable
@@ -58,43 +68,54 @@ class DeliverableForm(forms.ModelForm):
 
 
 class DeliverableBasicDataForm(forms.ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class' : 'form-control'}), max_length=255)
-    description = forms.CharField(widget=forms.Textarea(attrs={'class' : 'form-control expanding', 'rows': '1'}), max_length=2000, required=False)
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        max_length=255
+    )
+    description = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control expanding', 'rows': '1'}),
+        max_length=2000,
+        required=False
+    )
 
     class Meta:
         model = Deliverable
-        fields = ['name', 'description',]
+        fields = ['name', 'description']
+
 
 class DeliverableRemoveStakeholdersForm(forms.Form):
     clear_user_related_data = forms.BooleanField(
         widget=forms.HiddenInput(),
         required=False
-        )
+    )
     stakeholders = forms.ModelMultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(),
         queryset=User.objects.all(),
         required=True
-        )
+    )
 
 
 class DeliverableFactorsForm(forms.ModelForm):
     factors = FactorModelMultipleChoiceField(
         label='Select value factors to be used within the decision-making meetings',
-        widget=forms.CheckboxSelectMultiple(), 
-        queryset=Factor.objects.select_related('group').all(), 
+        widget=forms.CheckboxSelectMultiple(),
+        queryset=Factor.objects.select_related('group').all(),
         required=True
-        )
+    )
 
     class Meta:
         model = Deliverable
-        fields = ['factors',]
+        fields = ['factors', ]
 
 
 class DeliverableMeasureForm(forms.ModelForm):
-    measure = forms.ModelChoiceField(label='Select the measure to be used within the decision-making meetings', 
+    measure = forms.ModelChoiceField(
+        label='Select the measure to be used within the decision-making meetings',
         queryset=Measure.objects.all(),
         required=True,
-        empty_label=None)
+        empty_label=None
+    )
+
     class Meta:
         model = Deliverable
-        fields = ['measure',]
+        fields = ['measure', ]

@@ -8,9 +8,10 @@ register = template.Library()
 @register.filter('attr')
 def attr(obj, attr_name):
     value = getattr(obj, attr_name)
-    if value == None:
+    if value is None:
         value = ''
     return value
+
 
 @register.filter('dictkey')
 def dictkey(dictionary, key):

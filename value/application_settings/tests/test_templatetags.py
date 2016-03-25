@@ -33,9 +33,9 @@ class CustomFieldsTests(TestCase):
             '{% custom_field_attr custom_fields column_index "label" %},'
             '{% endfor %}'
         ).render(Context({
-                'custom_fields': self.fields,
-                'custom_fields_range': range(1, 3)
-            }))
+            'custom_fields': self.fields,
+            'custom_fields_range': range(1, 3)
+        }))
         self.assertEqual(out, 'Name,Effort,')
 
     def test_custom_field_display(self):
@@ -52,9 +52,9 @@ class CustomFieldsTests(TestCase):
             '{% load customfields %}'
             '<input type="checkbox" {% custom_field_display custom_fields column_index %}>'
         ).render(Context({
-                'custom_fields': self.fields,
-                'column_index': 1
-            }))
+            'custom_fields': self.fields,
+            'column_index': 1
+        }))
         self.assertEqual(out, '<input type="checkbox" checked>')
 
     def test_custom_field_is_active(self):

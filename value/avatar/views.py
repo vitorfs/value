@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import os
 
 from django.conf import settings
@@ -31,9 +33,9 @@ def avatar(request, initials):
         im = Image.new('RGB', (W, H), bg)
         draw = ImageDraw.Draw(im)
         font_path = '{0}/font/{1}'.format(os.path.dirname(__file__), 'SourceCodePro-Bold.ttf')
-        font = ImageFont.truetype(font_path, size/2)
+        font = ImageFont.truetype(font_path, size / 2)
         w, h = draw.textsize(initials, font=font)
-        draw.text(((W-w)/2, (W-w)/2), initials, fill=fg, font=font)
+        draw.text(((W - w) / 2, (W - w) / 2), initials, fill=fg, font=font)
         del draw
         if not os.path.exists(avatar_dir):
             os.makedirs(avatar_dir)

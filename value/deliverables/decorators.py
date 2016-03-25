@@ -1,7 +1,5 @@
 # coding: utf-8
 
-from functools import wraps
-
 from django.shortcuts import redirect
 from django.http import HttpResponseForbidden
 from django.contrib import messages
@@ -16,6 +14,7 @@ def permission_denied(request):
         messages.error(request, 'Permission denied.')
         return redirect('signin')
 
+
 def user_is_manager(function):
     def wrap(request, *args, **kwargs):
         try:
@@ -29,6 +28,7 @@ def user_is_manager(function):
     wrap.__doc__ = function.__doc__
     wrap.__name__ = function.__name__
     return wrap
+
 
 def user_is_stakeholder(function):
     def wrap(request, *args, **kwargs):

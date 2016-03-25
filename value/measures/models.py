@@ -78,7 +78,7 @@ class MeasureValue(models.Model):
         ('#5E5E5E', '#5E5E5E'),
         ('#000000', '#000000'),
         ('#030202', '#030202'),
-        )
+    )
     measure = models.ForeignKey(Measure)
     description = models.CharField(_('description'), max_length=255)
     order = models.IntegerField(_('order'), default=0)

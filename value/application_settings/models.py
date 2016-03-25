@@ -29,7 +29,7 @@ class ApplicationSetting(models.Model):
         (PLAIN_TEXT_STARTING_LINE, _('Plain text starting line')),
         (DECISION_ITEMS_DEFAULT_ORDERING, _('Decision items default ordering')),
         (DECISION_ITEMS_COLUMNS_DISPLAY, _('Decision items columns display')),
-        )
+    )
 
     name = models.CharField(_('name'), max_length=255, primary_key=True, choices=APPLICATION_SETTINGS)
     value = models.CharField(_('value'), max_length=255, null=True, blank=True)

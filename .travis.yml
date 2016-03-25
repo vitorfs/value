@@ -6,4 +6,5 @@ before_script:
   - cp .env.example .env
   - python manage.py migrate
 script:
+  - flake8 value
   - python manage.py test --settings=value.test_settings
