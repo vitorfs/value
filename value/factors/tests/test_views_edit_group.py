@@ -10,7 +10,11 @@ from value.measures.models import Measure
 
 
 class EditGroupTest(TestCase):
-    fixtures = ['development_auth_initial_data', 'development_measures_initial_data', 'development_factors_initial_data',]
+    fixtures = [
+        'development_auth_initial_data',
+        'development_measures_initial_data',
+        'development_factors_initial_data'
+    ]
 
     @classmethod
     def setUpTestData(cls):

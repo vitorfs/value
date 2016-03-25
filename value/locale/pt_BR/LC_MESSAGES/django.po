@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-24 18:20+0200\n"
+"POT-Creation-Date: 2016-03-25 13:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,6 +51,9 @@ msgid "Decision items columns display"
 msgstr ""
 
 #: value/application_settings/models.py:34
+#: value/application_settings/templates/application_settings/items.html:66
+#: value/application_settings/templates/application_settings/items.html:79
+#: value/factors/models.py:10 value/factors/models.py:22
 msgid "name"
 msgstr ""
 
@@ -60,11 +63,16 @@ msgstr ""
 
 #: value/application_settings/templates/application_settings/base.html:7
 #: value/application_settings/templates/application_settings/import.html:16
+#: value/application_settings/templates/application_settings/items.html:26
+#: value/core/templates/core/home.html:7
+#: value/factors/templates/factors/add.html:7
+#: value/factors/templates/factors/delete.html:5
 msgid "Home"
 msgstr ""
 
 #: value/application_settings/templates/application_settings/base.html:8
 #: value/application_settings/templates/application_settings/import.html:17
+#: value/application_settings/templates/application_settings/items.html:27
 msgid "Application settings"
 msgstr ""
 
@@ -76,7 +84,166 @@ msgstr ""
 #: value/application_settings/templates/application_settings/import.html:30
 msgid ""
 "You may import decision items for a given deliverable or meeting from a "
-"external file."
+"external file"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/import.html:46
+msgid "Orientation"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/import.html:49
+msgid "One entry per row"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/import.html:52
+msgid "One entry per column"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/import.html:62
+msgid "Starting row"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/import.html:69
+msgid "Starting column"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/import.html:77
+msgid "Spreadsheet template"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/import.html:81
+msgid "Field"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/import.html:83
+#: value/application_settings/templates/application_settings/items.html:70
+msgid "Column"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/import.html:86
+msgid "Row"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/import.html:88
+msgid "Import"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/import.html:112
+msgid "Sheet index"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/import.html:112
+msgid "Zero based index. Leave empty for all"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/import.html:123
+#: value/application_settings/templates/application_settings/index.html:106
+#: value/application_settings/templates/application_settings/items.html:54
+#: value/application_settings/templates/application_settings/items.html:127
+msgid "Save changes"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/index.html:17
+msgid "You are about to remove yourself as a system administrator"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/index.html:18
+msgid "You will no longer be able to access the admin panel"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/index.html:19
+msgid "Are you sure you want to proceed"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/index.html:32
+msgid "Permissions"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/index.html:35
+msgid "Select the users you want to grant/revoke administrator permissions"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/index.html:42
+msgid "Administrators"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/index.html:43
+msgid "Revoke access"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/index.html:55
+msgid "you"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/index.html:66
+#: value/application_settings/templates/application_settings/index.html:96
+msgid "No available users"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/index.html:76
+msgid "Other users"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/index.html:77
+msgid "Grant access"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/items.html:28
+#: value/application_settings/templates/application_settings/items.html:38
+msgid "Decision items"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/items.html:42
+msgid "Define the column display order"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/items.html:63
+msgid "Custom fields"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/items.html:66
+msgid ""
+"Add custom fields to the decision items model. Please note that the fields"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/items.html:66
+msgid "and"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/items.html:66
+#: value/application_settings/templates/application_settings/items.html:90
+#: value/factors/models.py:23
+msgid "description"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/items.html:66
+msgid "are fixed"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/items.html:71
+msgid "Label"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/items.html:72
+msgid "Data type"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/items.html:73
+msgid "Display"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/items.html:74
+#: value/factors/forms.py:41
+msgid "Active"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/items.html:83
+#: value/application_settings/templates/application_settings/items.html:94
+msgid "String"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/items.html:103
+msgid "column_"
 msgstr ""
 
 #: value/application_settings/views.py:44
@@ -97,4 +264,123 @@ msgstr ""
 
 #: value/application_settings/views.py:156
 msgid "Import templates saved successfully."
+msgstr ""
+
+#: value/core/templates/core/home.html:13
+msgid "You are signed in as"
+msgstr ""
+
+#: value/factors/forms.py:19 value/factors/forms.py:25
+msgid "Select…"
+msgstr ""
+
+#: value/factors/forms.py:42
+msgid "Unselect this instead of deleting factors."
+msgstr ""
+
+#: value/factors/models.py:14
+msgid "value factors group"
+msgstr ""
+
+#: value/factors/models.py:15
+msgid "value factors groups"
+msgstr ""
+
+#: value/factors/models.py:25
+msgid "active"
+msgstr ""
+
+#: value/factors/models.py:26
+msgid "group"
+msgstr ""
+
+#: value/factors/models.py:31
+msgid "value factor"
+msgstr ""
+
+#: value/factors/models.py:32
+msgid "value factors"
+msgstr ""
+
+#: value/factors/templates/factors/add.html:8
+#: value/factors/templates/factors/delete.html:6
+msgid "Factors"
+msgstr ""
+
+#: value/factors/templates/factors/add.html:9
+#: value/factors/templates/factors/add.html:16
+msgid "Add factor"
+msgstr ""
+
+#: value/factors/templates/factors/add.html:21
+msgid "Save"
+msgstr ""
+
+#: value/factors/templates/factors/add.html:22
+#: value/factors/templates/factors/delete.html:20
+msgid "Cancel"
+msgstr ""
+
+#: value/factors/templates/factors/delete.html:8
+msgid "Delete"
+msgstr ""
+
+#: value/factors/templates/factors/delete.html:14
+msgid "Are you sure you want to delete the factor"
+msgstr ""
+
+#: value/factors/templates/factors/delete.html:19
+msgid "Confirm"
+msgstr ""
+
+#: value/factors/templates/factors/delete.html:28
+msgid "The value factor <strong>{{ factor.name }}</strong> cannot be deleted."
+msgstr ""
+
+#: value/factors/templates/factors/delete.html:31
+msgid ""
+"There's already deliverables and meetings associated with this value factor. "
+"Change its status to <strong>inactive</strong> instead."
+msgstr ""
+
+#: value/factors/templates/factors/delete.html:37
+msgid "Back"
+msgstr ""
+
+#: value/factors/views.py:29
+#, python-brace-format
+msgid "The factor {0} was added successfully."
+msgstr ""
+
+#: value/factors/views.py:32 value/factors/views.py:50
+msgid "Please correct the error below."
+msgstr ""
+
+#: value/factors/views.py:47
+#, python-brace-format
+msgid "The factor {0} was changed successfully."
+msgstr ""
+
+#: value/factors/views.py:63
+#, python-brace-format
+msgid "The factor {0} was deleted successfully."
+msgstr ""
+
+#: value/factors/views.py:102
+#, python-brace-format
+msgid "Group {0} successfully added!"
+msgstr ""
+
+#: value/factors/views.py:104 value/factors/views.py:118
+msgid "Name is a required field!"
+msgstr ""
+
+#: value/factors/views.py:116
+#, python-brace-format
+msgid "Group {0} successfully edited!"
+msgstr ""
+
+#: value/factors/views.py:133
+#, python-brace-format
+msgid "The group {0} was deleted successfully."
 msgstr ""

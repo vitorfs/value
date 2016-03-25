@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
-{% load staticfiles %}
+{% load i18n static %}
 
 {% block javascript %}
-  <script type="text/javascript" src="{% static 'js/factors/groups.js' %}"></script>
+  <script type="text/javascript" src="{% static 'factors/js/groups.js' %}"></script>
 {% endblock javascript %}
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li class="active">Factors Groups</li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li class="active">{% trans 'Factors Groups' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
@@ -18,17 +18,19 @@
   {% if groups.exists %}
     <div class="row">
       <div class="col-sm-6">
-        <p class="lead">Use drag and drop to assign a factor to a group</p>
+        <p class="lead">{% trans 'Use drag and drop to assign a factor to a group' %}</p>
       </div>
       <div class="col-sm-6 text-right">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#new-group"><span class="glyphicon glyphicon-plus"></span> Add a factor group</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#new-group">
+          <span class="glyphicon glyphicon-plus"></span> {% trans 'Add a factor group' %}
+        </button>
       </div>
     </div>
     <div class="row">
       <div class="col-sm-4 col-md-3">
         <div class="panel panel-info">
           <div class="panel-heading">
-            <h3 class="panel-title">Available Factors</h3>
+            <h3 class="panel-title">{% trans 'Available Factors' %}</h3>
           </div>
           <ul class="list-group sortable" id="available-factors" data-group-id="" style="min-height: 38px;">
             {% for factor in available_factors %}
@@ -49,10 +51,16 @@
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h3 class="panel-title">
-                  <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Click to remove the group" data-container="body" class="pull-right js-confirm-group-deletion" data-group-id="{{ group.pk }}" data-group-name="{{ group.name }}">
+                  <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top"
+                     title="{% trans 'Click to remove the group' %}" data-container="body"
+                     class="pull-right js-confirm-group-deletion" data-group-id="{{ group.pk }}"
+                     data-group-name="{{ group.name }}">
                     <span class="glyphicon glyphicon-remove"></span>
                   </a>
-                  <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Click to edit the group" data-container="body" class="pull-right js-edit-group" data-group-edit-url="{% url 'factors:edit_group' group.pk %}" style="margin-right: 5px;">
+                  <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top"
+                     title="{% trans 'Click to edit the group' %}" data-container="body"
+                     class="pull-right js-edit-group" data-group-edit-url="{% url 'factors:edit_group' group.pk %}"
+                     style="margin-right: 5px;">
                     <span class="glyphicon glyphicon-pencil"></span>
                   </a>
                   {{ group.name }}
@@ -77,8 +85,10 @@
   {% else %}
     <div class="well blank-state">
       <span class="fa fa-clone"></span>
-      <h3>The factors groups directory is empty.</h3>
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#new-group"><span class="glyphicon glyphicon-plus"></span> Add the first factor group</button>
+      <h3>{% trans 'The factors groups directory is empty.' %}</h3>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#new-group">
+        <span class="glyphicon glyphicon-plus"></span> {% trans 'Add the first factor group' %}
+      </button>
     </div>
   {% endif %}
 
@@ -88,15 +98,17 @@
       <div class="modal-dialog modal-sm">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">New factor group</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">{% trans 'New factor group' %}</h4>
           </div>
           <div class="modal-body">
             {% include 'includes/form_vertical.html' with form=form %}
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
+            <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
           </div>
         </div>
       </div>
@@ -116,14 +128,18 @@
       <div class="modal-dialog modal-sm">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Are you sure?</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">{% trans 'Are you sure?' %}</h4>
           </div>
           <div class="modal-body">
-            <p>The associated value factors won't be deleted.</p>
+            <p>{% trans 'The associated value factors won't be deleted.' %}</p>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-danger btn-block">Delete group <span class="group-name"></span></button>
+            <button type="submit" class="btn btn-danger btn-block">
+              {% trans 'Delete group' %} <span class="group-name"></span>
+            </button>
           </div>
         </div>
       </div>
@@ -134,19 +150,19 @@
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Edit group</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">{% trans 'Edit group' %}</h4>
         </div>
         <div class="modal-body">
-          
+
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-primary" id="btn-save-group-edit">Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
+          <button type="button" class="btn btn-primary" id="btn-save-group-edit">{% trans 'Save' %}</button>
         </div>
       </div>
     </div>
   </div>
-
 {% endblock content %}
-

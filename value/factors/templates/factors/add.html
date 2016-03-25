@@ -1,23 +1,25 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'factors:index' %}">Factors</a></li>
-    <li class="active">Add factor</li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'factors:index' %}">{% trans 'Factors' %}</a></li>
+    <li class="active">{% trans 'Add factor' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
   <div class="row">
     <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
-      <p class="lead">Add factor</p>
+      <p class="lead">{% trans 'Add factor' %}</p>
       <form method="post">
         {% csrf_token %}
         {% include 'includes/form_vertical.html' %}
         <div class="form-group">
-          <button type="submit" class="btn btn-primary">Save</button>
-          <a href="{% url 'factors:index' %}" class="btn btn-default">Cancel</a>
+          <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
+          <a href="{% url 'factors:index' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
         </div>
       </form>
     </div>

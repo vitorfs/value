@@ -60,7 +60,7 @@ $(function () {
     else {
       $(".js-btn-remove", evt.item).css("display", "inline");
     }
-    
+
   };
 
   $("#available-factors").sortable({

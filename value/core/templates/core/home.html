@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li class="active">Home</li>
+    <li class="active">{% trans 'Home' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
-  <p class="lead">You are signed in as <strong>{% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}</strong></p>
+  <p class="lead">
+    {% trans 'You are signed in as' %} <strong>{{ user.profile.get_display_name }}</strong>
+  </p>
 {% endblock content %}
