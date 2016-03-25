@@ -25,15 +25,15 @@ def avatar(request, initials):
     else:
         try:
             size = int(size)
-        except Exception, e:
+        except:
             size = 128
-        W, H = (size,size)
-        im = Image.new('RGB', (W,H), bg)
+        W, H = (size, size)
+        im = Image.new('RGB', (W, H), bg)
         draw = ImageDraw.Draw(im)
         font_path = '{0}/font/{1}'.format(os.path.dirname(__file__), 'SourceCodePro-Bold.ttf')
         font = ImageFont.truetype(font_path, size/2)
         w, h = draw.textsize(initials, font=font)
-        draw.text(((W-w)/2, (W-w)/2), initials, fill=fg, font=font)    
+        draw.text(((W-w)/2, (W-w)/2), initials, fill=fg, font=font)
         del draw
         if not os.path.exists(avatar_dir):
             os.makedirs(avatar_dir)

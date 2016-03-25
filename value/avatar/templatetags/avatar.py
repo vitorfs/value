@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding: utf-8
 
 import os
 import urllib
@@ -11,9 +11,9 @@ from django.utils.html import mark_safe
 
 register = template.Library()
 
+
 @register.simple_tag
 def avatar(user, size=128):
-
     initials = ''
 
     if user.first_name and user.last_name:
@@ -27,7 +27,7 @@ def avatar(user, size=128):
     else:
         initials = user.username
 
-    colors =  { 
+    colors = {
         'a': '8A2E60',
         'b': '4B2D73',
         'c': 'AA5A39',
@@ -63,16 +63,23 @@ def avatar(user, size=128):
     else:
         url = u'{0}?{1}'.format(
           reverse('avatar', args=(initials,)),
-          urllib.urlencode({ 'size' : size, 'bg' : colors[initials[:1].lower()], 'fg' : 'ffffff' })
+          urllib.urlencode({'size': size, 'bg': colors[initials[:1].lower()], 'fg': 'ffffff'})
           )
         return url
+
 
 @register.simple_tag
 def avatar_id(pk, size=128):
     user = User.objects.get(pk=pk)
     return avatar(user, size)
-    
+
+
 @register.simple_tag
 def avatar_img(user, size=128):
     src = avatar(user, size)
-    return mark_safe(u'<img src="{0}" alt="{1}" class="img-circle" data-toggle="tooltip" data-placement="top" title="{1}">'.format(src, user.profile.get_display_name()))
+    return mark_safe(
+        u'<img src="{0}" alt="{1}" class="img-circle" data-toggle="tooltip" data-placement="top" title="{1}">'.format(
+            src,
+            user.profile.get_display_name()
+        )
+    )
