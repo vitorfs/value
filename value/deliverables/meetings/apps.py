@@ -8,4 +8,4 @@ class MeetingsConfig(AppConfig):
     verbose_name = 'Meetings'
 
     def ready(self):
-        import value.deliverables.meetings.signals.handlers #noqa
+        import value.deliverables.meetings.signals.handlers  # noqa

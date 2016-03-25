@@ -56,7 +56,7 @@ class ScenarioBuilderFormTests(TransactionTestCase):
         self.criteria = map(repr, self.meeting.measure.measurevalue_set.all())
 
     def test_scenario_builder_form_init(self):
-        form = ScenarioBuilderForm(initial={ 'meeting': self.meeting })
+        form = ScenarioBuilderForm(initial={'meeting': self.meeting})
 
         choices = form.fields['meeting_items_count'].choices
         criteria_queryset = form.fields['criteria'].queryset
@@ -64,4 +64,4 @@ class ScenarioBuilderFormTests(TransactionTestCase):
 
         self.assertQuerysetEqual(criteria_queryset, self.criteria, ordered=False)
         self.assertQuerysetEqual(factors_queryset, self.factors, ordered=False)
-        self.assertEqual(choices, [(1,1),(2,2),(3,3),(4,4),(5,5)])
+        self.assertEqual(choices, [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)])

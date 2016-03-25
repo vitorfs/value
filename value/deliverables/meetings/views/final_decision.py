@@ -19,26 +19,23 @@ def final_decision(request, deliverable_id, meeting_id):
     MeetingItemFormset = modelformset_factory(MeetingItem, form=MeetingItemFinalDecisionForm, extra=0)
     meeting_items = meeting.meetingitem_set.select_related('decision_item').all().order_by('-meeting_decision')
     formset = MeetingItemFormset(queryset=meeting_items)
-    return render(request, 'meetings/final_decision.html', { 
-            'meeting': meeting,
-            'formset': formset,
-        })
+    return render(request, 'meetings/final_decision.html', {
+        'meeting': meeting,
+        'formset': formset})
+
 
 @login_required
 @require_POST
 @transaction.atomic
 def save_final_decision(request, deliverable_id, meeting_id):
-    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     MeetingItemFormset = modelformset_factory(MeetingItem, form=MeetingItemFinalDecisionForm, extra=0)
     formset = MeetingItemFormset(request.POST)
-
-    errors = []
+    errors = list()
     for form in formset:
         if form.is_valid():
             form.save()
         else:
             errors.append(form.instance.pk)
-
     if any(errors):
         dump = json.dumps(errors)
         return HttpResponseBadRequest(dump, content_type='application/json')

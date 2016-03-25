@@ -7,13 +7,13 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from value.measures.models import MeasureValue
 from value.deliverables.meetings.models import Meeting, Scenario
 from value.deliverables.meetings.charts import Highcharts
 from value.deliverables.meetings.utils import *
 
 
 ''' Support functions '''
+
 
 def get_features_chart_dict(meeting_item):
     chart_data = {
@@ -22,12 +22,22 @@ def get_features_chart_dict(meeting_item):
         'ranking': meeting_item.value_ranking,
         'instance': meeting_item,
         'instance_type': 'meeting_item',
-        'remote': reverse('deliverables:meetings:features_chart', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)),
-        'info_remote': reverse('deliverables:details_decision_item', args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk)),
+        'remote': reverse(
+            'deliverables:meetings:features_chart',
+            args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)
+        ),
+        'info_remote': reverse(
+            'deliverables:details_decision_item',
+            args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk)
+        ),
         'has_rationales': meeting_item.has_rationales,
-        'rationales_remote': reverse('deliverables:meetings:meeting_item_rationale', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk))
+        'rationales_remote': reverse(
+            'deliverables:meetings:meeting_item_rationale',
+            args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)
+        )
     }
     return chart_data
+
 
 def get_features_scenario_chart_dict(scenario):
     chart_data = {
@@ -36,13 +46,20 @@ def get_features_scenario_chart_dict(scenario):
         'ranking': scenario.value_ranking,
         'instance': scenario,
         'instance_type': 'scenario',
-        'remote': reverse('deliverables:meetings:features_scenario_chart', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk)),
-        'info_remote': reverse('deliverables:meetings:scenario_details', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk))
+        'remote': reverse(
+            'deliverables:meetings:features_scenario_chart',
+            args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk)
+        ),
+        'info_remote': reverse(
+            'deliverables:meetings:scenario_details',
+            args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk)
+        )
     }
     return chart_data
 
 
 ''' Views '''
+
 
 @login_required
 def features(request, deliverable_id, meeting_id):
@@ -65,8 +82,8 @@ def features(request, deliverable_id, meeting_id):
         'chart_types_options': chart_types_options,
         'chart_type': chart_type,
         'chart_order_options': chart_order_options,
-        'order': order
-        })
+        'order': order})
+
 
 @login_required
 def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
@@ -91,8 +108,8 @@ def features_chart(request, deliverable_id, meeting_id, meeting_item_id):
             'chart_types_options': chart_types_options,
             'chart_type': chart_type,
             'stakeholder_ids': stakeholder_ids,
-            'dump': dump
-            })
+            'dump': dump})
+
 
 @login_required
 def features_scenarios(request, deliverable_id, meeting_id):
@@ -115,8 +132,8 @@ def features_scenarios(request, deliverable_id, meeting_id):
         'chart_types_options': chart_types_options,
         'chart_type': chart_type,
         'chart_order_options': chart_order_options,
-        'order': order
-        })
+        'order': order})
+
 
 @login_required
 def features_scenario_chart(request, deliverable_id, meeting_id, scenario_id):
@@ -141,5 +158,4 @@ def features_scenario_chart(request, deliverable_id, meeting_id, scenario_id):
             'chart_types_options': chart_types_options,
             'chart_type': chart_type,
             'stakeholder_ids': stakeholder_ids,
-            'dump': dump
-            })
+            'dump': dump})

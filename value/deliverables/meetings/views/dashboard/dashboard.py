@@ -8,10 +8,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from value.measures.models import MeasureValue
-from value.deliverables.meetings.models import Meeting, Evaluation
+from value.deliverables.meetings.models import Meeting
 from value.deliverables.meetings.charts import Highcharts
 from value.deliverables.decorators import user_is_manager
-from value.deliverables.meetings.decorators import meeting_is_analysing_or_closed, user_is_meeting_stakeholder
+from value.deliverables.meetings.decorators import meeting_is_analysing_or_closed
 from value.deliverables.meetings.utils import *
 
 
@@ -45,6 +45,7 @@ def dashboard(request, deliverable_id, meeting_id):
     else:
         return redirect('deliverables:meetings:decision_items_overview', meeting.deliverable.pk, meeting.pk)
 
+
 @login_required
 @user_is_manager
 def dashboard_factors_usage_chart(request, deliverable_id, meeting_id):
@@ -63,8 +64,8 @@ def dashboard_factors_usage_chart(request, deliverable_id, meeting_id):
         return render(request, 'meetings/dashboard/dashboard_popup.html', {
             'meeting': meeting,
             'chart': chart_data,
-            'dump': dump
-            })
+            'dump': dump})
+
 
 @login_required
 @user_is_manager
@@ -76,7 +77,12 @@ def dashboard_stakeholders_input_chart(request, deliverable_id, meeting_id):
     chart_data = {
         'chart_id': 'stakeholders_input',
         'chart_title': 'Stakeholders Input',
-        'chart_uri': reverse('deliverables:meetings:dashboard_stakeholders_input_chart', args=(deliverable_id, meeting_id,))
+        'chart_uri': reverse(
+            'deliverables:meetings:dashboard_stakeholders_input_chart', args=(
+                deliverable_id,
+                meeting_id
+            )
+        )
     }
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
@@ -84,11 +90,11 @@ def dashboard_stakeholders_input_chart(request, deliverable_id, meeting_id):
         return render(request, 'meetings/dashboard/dashboard_popup.html', {
             'meeting': meeting,
             'chart': chart_data,
-            'dump': dump
-            })
+            'dump': dump})
 
 
 ''' Value Ranking '''
+
 
 def get_value_ranking_chart_dict(meeting):
     chart_data = {
@@ -97,6 +103,7 @@ def get_value_ranking_chart_dict(meeting):
         'remote': reverse('deliverables:meetings:value_ranking', args=(meeting.deliverable.pk, meeting.pk))
     }
     return chart_data
+
 
 @login_required
 @meeting_is_analysing_or_closed
@@ -116,11 +123,11 @@ def value_ranking(request, deliverable_id, meeting_id):
             'chart_menu_active': 'value_ranking',
             'chart_page_title': 'Value Ranking',
             'chart': chart,
-            'dump': dump
-            })
+            'dump': dump})
 
 
 ''' Decision Items Overview '''
+
 
 def get_decision_items_overview_chart_dict(meeting):
     chart_data = {
@@ -129,6 +136,7 @@ def get_decision_items_overview_chart_dict(meeting):
         'remote': reverse('deliverables:meetings:decision_items_overview', args=(meeting.deliverable.pk, meeting.pk))
     }
     return chart_data
+
 
 @login_required
 @meeting_is_analysing_or_closed
@@ -162,15 +170,14 @@ def decision_items_overview(request, deliverable_id, meeting_id):
             'stakeholder_ids': stakeholder_ids,
             'chart_type': chart_type,
             'chart_types_options': chart_types_options,
-            'chart': chart
-            })
+            'chart': chart})
+
 
 @login_required
 @meeting_is_analysing_or_closed
 def features_comparison(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     stakeholder_ids = get_stakeholders_ids(meeting)
-    evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(user_id__in=stakeholder_ids)
     measure = meeting.measure
     charts = measure.measurevalue_set.all()
     return render(request, 'meetings/dashboard/decision_items_comparison/list.html', {
@@ -179,8 +186,8 @@ def features_comparison(request, deliverable_id, meeting_id):
         'stakeholder_ids': stakeholder_ids,
         'chart_uri': 'measures',
         'chart_menu_active': 'features_comparison',
-        'chart_page_title': 'Decision Items Comparison'
-        })
+        'chart_page_title': 'Decision Items Comparison'})
+
 
 @login_required
 @meeting_is_analysing_or_closed
@@ -206,5 +213,4 @@ def features_comparison_chart(request, deliverable_id, meeting_id, measure_value
             'stakeholder_ids': stakeholder_ids,
             'chart_uri': 'measures',
             'chart_menu_active': 'features_comparison',
-            'chart_page_title': 'Features Comparison'
-            })
+            'chart_page_title': 'Features Comparison'})

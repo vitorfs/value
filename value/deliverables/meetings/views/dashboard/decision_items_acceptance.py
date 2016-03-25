@@ -14,6 +14,7 @@ from value.deliverables.meetings.utils import *
 
 ''' Support functions'''
 
+
 def get_features_acceptance_chart_dict(meeting_item):
     chart_data = {
         'id': meeting_item.pk,
@@ -21,12 +22,22 @@ def get_features_acceptance_chart_dict(meeting_item):
         'ranking': meeting_item.value_ranking,
         'instance': meeting_item,
         'instance_type': 'meeting_item',
-        'remote': reverse('deliverables:meetings:features_acceptance_chart', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)),
-        'info_remote': reverse('deliverables:details_decision_item', args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk)),
+        'remote': reverse(
+            'deliverables:meetings:features_acceptance_chart',
+            args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)
+        ),
+        'info_remote': reverse(
+            'deliverables:details_decision_item',
+            args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk)
+        ),
         'has_rationales': meeting_item.has_rationales,
-        'rationales_remote': reverse('deliverables:meetings:meeting_item_rationale', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk))
+        'rationales_remote': reverse(
+            'deliverables:meetings:meeting_item_rationale',
+            args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)
+        )
     }
     return chart_data
+
 
 def get_features_acceptance_scenario_chart_dict(scenario):
     chart_data = {
@@ -35,10 +46,17 @@ def get_features_acceptance_scenario_chart_dict(scenario):
         'ranking': scenario.value_ranking,
         'instance': scenario,
         'instance_type': 'scenario',
-        'remote': reverse('deliverables:meetings:features_acceptance_scenario_chart', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk)),
-        'info_remote': reverse('deliverables:meetings:scenario_details', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk))
+        'remote': reverse(
+            'deliverables:meetings:features_acceptance_scenario_chart',
+            args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk)
+        ),
+        'info_remote': reverse(
+            'deliverables:meetings:scenario_details',
+            args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk)
+        )
     }
     return chart_data
+
 
 def get_features_acceptance_chart_options(meeting_item, stakeholder_ids, chart_type):
     charts = Highcharts()
@@ -50,6 +68,7 @@ def get_features_acceptance_chart_options(meeting_item, stakeholder_ids, chart_t
     options = chart_function(meeting_item, stakeholder_ids)
     return options
 
+
 def get_features_acceptance_scenario_chart_options(scenario, stakeholder_ids, chart_type):
     charts = Highcharts()
     chart_function = charts.decision_item_acceptance_scenario_simple_treemap
@@ -60,7 +79,9 @@ def get_features_acceptance_scenario_chart_options(scenario, stakeholder_ids, ch
     options = chart_function(scenario, stakeholder_ids)
     return options
 
+
 ''' Views '''
+
 
 @login_required
 def features_acceptance(request, deliverable_id, meeting_id):
@@ -83,8 +104,8 @@ def features_acceptance(request, deliverable_id, meeting_id):
         'chart_types_options': chart_types_options,
         'chart_type': chart_type,
         'chart_order_options': chart_order_options,
-        'order': order
-        })
+        'order': order})
+
 
 @login_required
 def features_acceptance_chart(request, deliverable_id, meeting_id, meeting_item_id):
@@ -109,8 +130,8 @@ def features_acceptance_chart(request, deliverable_id, meeting_id, meeting_item_
             'chart_types_options': chart_types_options,
             'chart_type': chart_type,
             'stakeholder_ids': stakeholder_ids,
-            'dump': dump
-            })
+            'dump': dump})
+
 
 @login_required
 def features_acceptance_scenarios(request, deliverable_id, meeting_id):
@@ -133,8 +154,8 @@ def features_acceptance_scenarios(request, deliverable_id, meeting_id):
         'chart_types_options': chart_types_options,
         'chart_type': chart_type,
         'chart_order_options': chart_order_options,
-        'order': order
-        })
+        'order': order})
+
 
 @login_required
 def features_acceptance_scenario_chart(request, deliverable_id, meeting_id, scenario_id):
@@ -159,5 +180,4 @@ def features_acceptance_scenario_chart(request, deliverable_id, meeting_id, scen
             'chart_types_options': chart_types_options,
             'chart_type': chart_type,
             'stakeholder_ids': stakeholder_ids,
-            'dump': dump
-            })
+            'dump': dump})

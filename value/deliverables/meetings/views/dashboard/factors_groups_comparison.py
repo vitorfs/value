@@ -15,6 +15,7 @@ from value.deliverables.meetings.utils import *
 
 ''' Support functions '''
 
+
 def get_factors_groups_chart_dict(meeting_item):
     chart_data = {
         'id': meeting_item.pk,
@@ -22,12 +23,22 @@ def get_factors_groups_chart_dict(meeting_item):
         'ranking': meeting_item.value_ranking,
         'instance': meeting_item,
         'instance_type': 'meeting_item',
-        'remote': reverse('deliverables:meetings:factors_groups_chart', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)),
-        'info_remote': reverse('deliverables:details_decision_item', args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk)),
+        'remote': reverse(
+            'deliverables:meetings:factors_groups_chart',
+            args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)
+        ),
+        'info_remote': reverse(
+            'deliverables:details_decision_item',
+            args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk)
+        ),
         'has_rationales': meeting_item.has_rationales,
-        'rationales_remote': reverse('deliverables:meetings:meeting_item_rationale', args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk))
+        'rationales_remote': reverse(
+            'deliverables:meetings:meeting_item_rationale',
+            args=(meeting_item.meeting.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)
+        )
     }
     return chart_data
+
 
 def get_factors_groups_scenario_chart_dict(scenario):
     chart_data = {
@@ -36,10 +47,17 @@ def get_factors_groups_scenario_chart_dict(scenario):
         'ranking': scenario.value_ranking,
         'instance': scenario,
         'instance_type': 'scenario',
-        'remote': reverse('deliverables:meetings:factors_groups_scenario_chart', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk)),
-        'info_remote': reverse('deliverables:meetings:scenario_details', args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk))
+        'remote': reverse(
+            'deliverables:meetings:factors_groups_scenario_chart',
+            args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk)
+        ),
+        'info_remote': reverse(
+            'deliverables:meetings:scenario_details',
+            args=(scenario.meeting.deliverable.pk, scenario.meeting.pk, scenario.pk)
+        )
     }
     return chart_data
+
 
 def application_has_factors_groups():
     return FactorGroup.objects.exists()
@@ -47,12 +65,13 @@ def application_has_factors_groups():
 
 ''' Views '''
 
+
 @login_required
 def factors_groups_empty(request, meeting):
     return render(request, 'meetings/dashboard/factors_groups_comparison/empty.html', {
         'meeting': meeting,
-        'chart_menu_active': 'factors_groups'
-        })
+        'chart_menu_active': 'factors_groups'})
+
 
 @login_required
 def factors_groups(request, deliverable_id, meeting_id):
@@ -71,10 +90,10 @@ def factors_groups(request, deliverable_id, meeting_id):
             'charts': charts,
             'stakeholder_ids': stakeholder_ids,
             'chart_order_options': chart_order_options,
-            'order': order
-            })
+            'order': order})
     else:
         return factors_groups_empty(request, meeting)
+
 
 @login_required
 def factors_groups_chart(request, deliverable_id, meeting_id, meeting_item_id):
@@ -96,8 +115,8 @@ def factors_groups_chart(request, deliverable_id, meeting_id, meeting_item_id):
             'chart': chart,
             'chart_uri': 'features',
             'stakeholder_ids': stakeholder_ids,
-            'dump': dump
-            })
+            'dump': dump})
+
 
 @login_required
 def factors_groups_scenarios(request, deliverable_id, meeting_id):
@@ -116,10 +135,10 @@ def factors_groups_scenarios(request, deliverable_id, meeting_id):
             'charts': charts,
             'stakeholder_ids': stakeholder_ids,
             'chart_order_options': chart_order_options,
-            'order': order
-            })
+            'order': order})
     else:
         return factors_groups_empty(request, meeting)
+
 
 @login_required
 def factors_groups_scenario_chart(request, deliverable_id, meeting_id, scenario_id):
@@ -140,5 +159,4 @@ def factors_groups_scenario_chart(request, deliverable_id, meeting_id, scenario_
             'meeting': meeting,
             'chart': chart,
             'stakeholder_ids': stakeholder_ids,
-            'dump': dump
-            })
+            'dump': dump})

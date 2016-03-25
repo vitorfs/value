@@ -16,7 +16,11 @@ class FinalDecisionTestCase(TestCase):
     Final Decision View
     Base class with setup test data and fixtures
     '''
-    fixtures = ['development_auth_initial_data', 'development_measures_initial_data', 'development_factors_initial_data',]
+    fixtures = [
+        'development_auth_initial_data',
+        'development_measures_initial_data',
+        'development_factors_initial_data'
+    ]
 
     @classmethod
     def setUpTestData(cls):
@@ -27,17 +31,28 @@ class FinalDecisionTestCase(TestCase):
         User.objects.create_user(username='stakeholder_1', email='stakeholder_1@company.com', password='123')
         User.objects.create_user(username='stakeholder_2', email='stakeholder_2@company.com', password='123')
 
-        deliverable = Deliverable.objects.create(name='Product 1', measure=Measure.objects.all().first(), manager=user, created_by=user)
+        deliverable = Deliverable.objects.create(
+            name='Product 1',
+            measure=Measure.objects.all().first(),
+            manager=user,
+            created_by=user
+        )
         deliverable.factors = Factor.objects.filter(is_active=True)
         deliverable.stakeholders = User.objects.all()
         DecisionItem.objects.create(deliverable=deliverable, name='Feature 1')
         DecisionItem.objects.create(deliverable=deliverable, name='Feature 2')
         DecisionItem.objects.create(deliverable=deliverable, name='Feature 3')
 
-        meeting = Meeting.objects.create(name='Meeting 1', deliverable=deliverable, started_at=timezone.now(), created_by=user, measure=deliverable.measure)
+        meeting = Meeting.objects.create(
+            name='Meeting 1',
+            deliverable=deliverable,
+            started_at=timezone.now(),
+            created_by=user,
+            measure=deliverable.measure
+        )
         meeting.factors = deliverable.factors.all()
         meeting.save()
-        
+
         for decision_item in deliverable.decisionitem_set.all():
             MeetingItem.objects.create(meeting=meeting, decision_item=decision_item)
 
@@ -57,7 +72,9 @@ class FinalDecisionTest(FinalDecisionTestCase):
     '''
     def setUp(self):
         super(FinalDecisionTest, self).setUp()
-        self.response = self.client.get(r('deliverables:meetings:final_decision', args=(self.meeting.deliverable.pk, self.meeting.pk)))
+        self.response = self.client.get(
+            r('deliverables:meetings:final_decision', args=(self.meeting.deliverable.pk, self.meeting.pk))
+        )
 
     def test_loaded_fixture(self):
         self.assertGreater(User.objects.all().count(), 0)
@@ -85,7 +102,9 @@ class OngoingMeetingFinalDecisionTest(FinalDecisionTestCase):
         super(OngoingMeetingFinalDecisionTest, self).setUp()
         self.meeting.status = Meeting.ONGOING
         self.meeting.save()
-        self.response = self.client.get(r('deliverables:meetings:final_decision', args=(self.meeting.deliverable.pk, self.meeting.pk)))
+        self.response = self.client.get(
+            r('deliverables:meetings:final_decision', args=(self.meeting.deliverable.pk, self.meeting.pk))
+        )
 
     def test_html(self):
         self.assertContains(self.response, 'The meeting is still ongoing!')
@@ -99,7 +118,9 @@ class AnalysingMeetingFinalDecisionTest(FinalDecisionTestCase):
         super(AnalysingMeetingFinalDecisionTest, self).setUp()
         self.meeting.status = Meeting.ANALYSING
         self.meeting.save()
-        self.response = self.client.get(r('deliverables:meetings:final_decision', args=(self.meeting.deliverable.pk, self.meeting.pk)))
+        self.response = self.client.get(
+            r('deliverables:meetings:final_decision', args=(self.meeting.deliverable.pk, self.meeting.pk))
+        )
 
     def test_html(self):
         self.assertContains(self.response, '<form')
@@ -117,7 +138,9 @@ class ClosedMeetingFinalDecisionTest(FinalDecisionTestCase):
         super(ClosedMeetingFinalDecisionTest, self).setUp()
         self.meeting.status = Meeting.CLOSED
         self.meeting.save()
-        self.response = self.client.get(r('deliverables:meetings:final_decision', args=(self.meeting.deliverable.pk, self.meeting.pk)))
+        self.response = self.client.get(
+            r('deliverables:meetings:final_decision', args=(self.meeting.deliverable.pk, self.meeting.pk))
+        )
 
     def test_html(self):
         self.assertContains(self.response, '<form')
@@ -145,8 +168,16 @@ class LoginRequiredFinalDecisionTest(FinalDecisionTestCase):
         '''
         Override base class method to avoid login
         '''
-        self.response = self.client.get(r('deliverables:meetings:final_decision', args=(self.meeting.deliverable.pk, self.meeting.pk)))
+        self.response = self.client.get(
+            r('deliverables:meetings:final_decision', args=(self.meeting.deliverable.pk, self.meeting.pk))
+        )
 
     def test_login_required(self):
         self.assertEqual(302, self.response.status_code)
-        self.assertRedirects(self.response, '{0}?next={1}'.format(r('signin'), r('deliverables:meetings:final_decision', args=(self.meeting.deliverable.pk, self.meeting.pk))))
+        self.assertRedirects(
+            self.response,
+            '{0}?next={1}'.format(
+                r('signin'),
+                r('deliverables:meetings:final_decision', args=(self.meeting.deliverable.pk, self.meeting.pk))
+            )
+        )

@@ -12,7 +12,7 @@ from django.utils import timezone
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
 from value.deliverables.meetings.forms import RationaleForm
-from value.deliverables.meetings.models import Meeting, MeetingItem, Evaluation, Rationale
+from value.deliverables.meetings.models import Meeting, MeetingItem, Evaluation
 from value.deliverables.meetings.utils import get_meeting_progress
 
 
@@ -32,23 +32,22 @@ def evaluate(request, deliverable_id, meeting_id):
 
     count = measure_values.count()
     if count > 0:
-        size = 75.0/count
+        size = 75.0 / count
         relative_col_size = '{0}%'.format(size)
     else:
         relative_col_size = 'auto'
 
     evaluations = Evaluation.get_user_evaluations_by_meeting(user=request.user, meeting=meeting) \
-            .select_related(
-                'meeting',
-                'meeting_item',
-                'user',
-                'factor',
-                'factor__measure',
-                'factor__group',
-                'measure',
-                'measure_value',
-                'rationale'
-            )
+        .select_related(
+            'meeting',
+            'meeting_item',
+            'user',
+            'factor',
+            'factor__measure',
+            'factor__group',
+            'measure',
+            'measure_value',
+            'rationale')
     meeting_items = meeting.meetingitem_set.select_related('decision_item')
     total_items = meeting_items.count()
     search_query = request.GET.get('search')
@@ -63,8 +62,8 @@ def evaluate(request, deliverable_id, meeting_id):
         'evaluations': evaluations,
         'total_items': total_items,
         'meeting_items': meeting_items,
-        'search_query': search_query
-        })
+        'search_query': search_query})
+
 
 @login_required
 @require_POST
@@ -86,12 +85,12 @@ def save_evaluation(request, deliverable_id, meeting_id):
         measure_value = None
 
     Evaluation.objects.update_or_create(
-            meeting=meeting,
-            meeting_item=meeting_item,
-            user=request.user,
-            factor=factor,
-            measure=measure,
-            defaults={ 'evaluated_at': timezone.now(), 'measure_value': measure_value }
+        meeting=meeting,
+        meeting_item=meeting_item,
+        user=request.user,
+        factor=factor,
+        measure=measure,
+        defaults={'evaluated_at': timezone.now(), 'measure_value': measure_value}
     )
 
     meeting_item.calculate_ranking()
@@ -101,6 +100,7 @@ def save_evaluation(request, deliverable_id, meeting_id):
     meeting.calculate_progress()
     context = get_meeting_progress(meeting)
     return HttpResponse(json.dumps(context), content_type='application/json')
+
 
 @login_required
 @require_POST
@@ -117,11 +117,11 @@ def save_rationale(request, deliverable_id, meeting_id):
         measure = Measure.objects.get(pk=measure_id)
 
         evaluation, created = Evaluation.objects.get_or_create(
-                meeting=meeting,
-                user=request.user,
-                meeting_item=meeting_item,
-                factor=factor,
-                measure=measure
+            meeting=meeting,
+            user=request.user,
+            meeting_item=meeting_item,
+            factor=factor,
+            measure=measure
         )
 
         if evaluation.rationale:

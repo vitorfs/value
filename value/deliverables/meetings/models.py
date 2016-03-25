@@ -1,8 +1,8 @@
 # coding: utf-8
 
 from django.db import models, transaction
-from django.db.models import Count, Min, Sum
-from django.db.models.signals import m2m_changed, post_save
+from django.db.models import Count, Sum
+from django.db.models.signals import m2m_changed
 from django.contrib.auth.models import User, Group
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
@@ -42,7 +42,7 @@ class Meeting(models.Model):
         (ONGOING, 'Ongoing'),
         (ANALYSING, 'Analysing'),
         (CLOSED, 'Closed'),
-        )
+    )
 
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=2000, null=True, blank=True)
@@ -95,7 +95,10 @@ class Meeting(models.Model):
             label = 'label-warning'
         elif self.status == Meeting.CLOSED:
             label = 'label-danger'
-        return u'<span class="label {0}"><span style="text-transform: uppercase;">{1}</span></span>'.format(label, self.get_status_icon_html())
+        return u'<span class="label {0}"><span style="text-transform: uppercase;">{1}</span></span>'.format(
+            label,
+            self.get_status_icon_html()
+        )
 
     def get_evaluations(self):
         return Evaluation.get_evaluations_by_meeting(self)
@@ -136,7 +139,7 @@ class Meeting(models.Model):
     def get_stakeholder_groups(self):
         groups = Group.objects.values_list('name', flat=True).order_by('name')
 
-        grouped_stakeholders = { 'No group': list() }
+        grouped_stakeholders = {'No group': list()}
         for group in groups:
             grouped_stakeholders[group] = list()
 
@@ -180,7 +183,10 @@ class Meeting(models.Model):
         by the meeting item ranking.
         """
         meeting_items = self.meetingitem_set.all()
-        db_model_order = map(lambda key: u'decision_item__{0}'.format(key), DecisionItemLookup.get_visible_fields().keys())
+        db_model_order = map(
+            lambda key: u'decision_item__{0}'.format(key),
+            DecisionItemLookup.get_visible_fields().keys()
+        )
         db_model_order.append('-value_ranking')
         return self._get_ordered(MeetingItem, meeting_items, order, db_model_order)
 
@@ -227,7 +233,7 @@ class Meeting(models.Model):
                         measure=measure_value.measure,
                         measure_value=measure_value,
                         evaluated_at=timezone.now()
-                        )
+                    )
                 meeting_item.calculate_ranking()
 
 
@@ -289,7 +295,7 @@ class MeetingItem(models.Model):
 
     def calculate_ranking(self):
         item_evaluations = Evaluation.get_evaluations_by_meeting(self.meeting) \
-                .filter(meeting_item=self)
+            .filter(meeting_item=self)
 
         measure = self.meeting.measure
         stakeholders_count = self.meeting.meetingstakeholder_set.count()
@@ -304,14 +310,29 @@ class MeetingItem(models.Model):
             meeting_item_content_type = ContentType.objects.get_for_model(MeetingItem)
 
             for measure_value in measure.measurevalue_set.all():
-                Ranking.objects.get_or_create(meeting=self.meeting, content_type=meeting_item_content_type, object_id=self.pk, measure_value=measure_value)
+                Ranking.objects.get_or_create(
+                    meeting=self.meeting,
+                    content_type=meeting_item_content_type,
+                    object_id=self.pk,
+                    measure_value=measure_value
+                )
 
             for ranking in rankings:
                 votes = int(ranking['votes'])
                 percentage = get_votes_percentage(max_evaluations, votes, round_value=False)
-                Ranking.objects.filter(meeting=self.meeting, content_type=meeting_item_content_type, object_id=self.pk, measure_value__id=ranking['measure_value__id']).update(raw_votes=votes, percentage_votes=percentage)
+                Ranking.objects.filter(
+                    meeting=self.meeting,
+                    content_type=meeting_item_content_type,
+                    object_id=self.pk,
+                    measure_value__id=ranking['measure_value__id']
+                ).update(raw_votes=votes, percentage_votes=percentage)
 
-            rankings = Ranking.objects.filter(meeting=self.meeting, content_type=meeting_item_content_type, object_id=self.pk).order_by('measure_value__order')
+            rankings = Ranking.objects.filter(
+                meeting=self.meeting,
+                content_type=meeting_item_content_type,
+                object_id=self.pk
+            ).order_by('measure_value__order')
+
             highest = rankings.first()
             lowest = rankings.last()
             self.value_ranking = highest.percentage_votes - lowest.percentage_votes
@@ -343,7 +364,7 @@ class MeetingStakeholder(models.Model):
 
     class Meta:
         db_table = 'meeting_stakeholders'
-        ordering = ('stakeholder__first_name', 'stakeholder__last_name', 'stakeholder__username',)
+        ordering = ('stakeholder__first_name', 'stakeholder__last_name', 'stakeholder__username')
 
     def __unicode__(self):
         return '{0} - {1}'.format(self.meeting.name, self.stakeholder.username)
@@ -361,7 +382,7 @@ class Evaluation(models.Model):
 
     class Meta:
         db_table = 'evaluations'
-        unique_together = (('meeting', 'meeting_item', 'user', 'factor', 'measure'),)
+        unique_together = (('meeting', 'meeting_item', 'user', 'factor', 'measure'), )
 
     def __unicode__(self):
         return '{0} - {1}'.format(self.meeting.name, self.meeting_item.decision_item.name)
@@ -372,7 +393,7 @@ class Evaluation(models.Model):
             meeting=meeting,
             factor__in=meeting.factors.all(),
             measure=meeting.measure
-            )
+        )
 
     @staticmethod
     def get_evaluations_by_meeting(meeting):
@@ -413,7 +434,6 @@ class Scenario(models.Model):
     def build(self, *args, **kwargs):
         limit = int(kwargs.get('meeting_items_count'))
         measure_value = kwargs.get('criteria')
-        category = kwargs.get('category')
         name = kwargs.get('name')
         factors = kwargs.get('factors')
 
@@ -466,7 +486,14 @@ class Scenario(models.Model):
             for measure_value_id, raw_votes in aggregated_measure_values.iteritems():
                 percentage_votes = get_votes_percentage(max_evaluations, raw_votes, round_value=False)
                 measure_value = MeasureValue.objects.get(pk=measure_value_id)
-                Ranking.objects.create(content_object=self, meeting=self.meeting, measure_value=measure_value, raw_votes=raw_votes, percentage_votes=percentage_votes)
+                Ranking.objects.create(
+                    content_object=self,
+                    meeting=self.meeting,
+                    measure_value=measure_value,
+                    raw_votes=raw_votes,
+                    percentage_votes=percentage_votes
+                )
+
 
 def calculate_scenario_ranking(sender, instance, action, **kwargs):
     if action in ['post_add', 'post_remove']:

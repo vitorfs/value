@@ -6,7 +6,7 @@ from django.http import HttpResponse, Http404
 from django.views.decorators.http import require_POST
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -16,7 +16,7 @@ from django.utils.html import mark_safe
 
 from value.deliverables.models import Deliverable, DecisionItemLookup, DecisionItem
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
-from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
+from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder
 from value.deliverables.meetings.forms import NewMeetingForm, MeetingForm, MeetingStatusForm
 from value.deliverables.meetings.utils import get_meeting_progress
 
@@ -28,7 +28,8 @@ def index(request, deliverable_id):
         deliverable = Deliverable.objects.select_related('manager__profile').get(pk=deliverable_id)
     except Deliverable.DoesNotExist:
         raise Http404
-    return render(request, 'deliverables/meetings.html', { 'deliverable': deliverable })
+    return render(request, 'deliverables/meetings.html', {'deliverable': deliverable})
+
 
 @login_required
 @user_is_manager
@@ -42,7 +43,9 @@ def new(request, deliverable_id):
         form = NewMeetingForm(request.POST, instance=meeting)
         stakeholder_ids = request.POST.getlist('stakeholders')
         selected_stakeholders = User.objects.filter(id__in=stakeholder_ids)
-        meeting_stakeholders = User.objects.filter(Q(id__in=selected_stakeholders) | Q(id__in=deliverable.stakeholders.all())).filter(is_active=True).distinct()
+        meeting_stakeholders = User.objects.filter(
+            Q(id__in=selected_stakeholders) | Q(id__in=deliverable.stakeholders.all())
+        ).filter(is_active=True).distinct()
 
         decision_item_ids = request.POST.getlist('decision_item')
         selected_decision_items = deliverable.decisionitem_set.filter(id__in=decision_item_ids)
@@ -53,11 +56,11 @@ def new(request, deliverable_id):
             meeting.measure = deliverable.measure
             meeting.created_by = request.user
             meeting.save()
-            
+
             meeting.factors = deliverable.factors.filter(is_active=True)
 
             MeetingStakeholder.objects.create(meeting=meeting, stakeholder=request.user)
-            
+
             for stakeholder in selected_stakeholders:
                 MeetingStakeholder.objects.create(meeting=meeting, stakeholder=stakeholder)
 
@@ -76,16 +79,18 @@ def new(request, deliverable_id):
             print form.errors
             messages.error(request, u'Please correct the error below.')
     else:
-        form = NewMeetingForm(instance=meeting, initial={ 'started_at': timezone.now() })
-        meeting_stakeholders = deliverable.stakeholders.filter(is_active=True).order_by('first_name', 'last_name', 'username')
+        form = NewMeetingForm(instance=meeting, initial={'started_at': timezone.now()})
+        meeting_stakeholders = deliverable.stakeholders \
+            .filter(is_active=True) \
+            .order_by('first_name', 'last_name', 'username')
         selected_stakeholders = meeting_stakeholders
         selected_decision_items = decision_items
     available_stakeholders = User.objects \
-            .exclude(id__in=deliverable.stakeholders.all()) \
-            .exclude(id__in=selected_stakeholders) \
-            .filter(is_active=True) \
-            .order_by('first_name', 'last_name', 'username')
-    return render(request, 'meetings/new.html', { 
+        .exclude(id__in=deliverable.stakeholders.all()) \
+        .exclude(id__in=selected_stakeholders) \
+        .filter(is_active=True) \
+        .order_by('first_name', 'last_name', 'username')
+    return render(request, 'meetings/new.html', {
         'deliverable': deliverable,
         'decision_items_fields': decision_items_fields,
         'decision_items': decision_items,
@@ -94,7 +99,8 @@ def new(request, deliverable_id):
         'meeting_stakeholders': meeting_stakeholders,
         'available_stakeholders': available_stakeholders,
         'selected_stakeholders': selected_stakeholders
-        })
+    })
+
 
 @login_required
 def meeting(request, deliverable_id, meeting_id):
@@ -105,6 +111,7 @@ def meeting(request, deliverable_id, meeting_id):
         return redirect(reverse('deliverables:meetings:dashboard', args=(deliverable_id, meeting_id)))
     else:
         return redirect(reverse('deliverables:meetings:evaluate', args=(deliverable_id, meeting_id)))
+
 
 @login_required
 @user_is_manager
@@ -120,14 +127,19 @@ def change_meeting_status(request, deliverable_id, meeting_id):
         messages.success(request, u'The meeting status was changed from {0} to {1}.'.format(old_status, new_status))
     else:
         messages.error(request, u'An error ocurred while trying to change meeting status.'.format(meeting.name))
-    redirect_to = request.POST.get('next', reverse('deliverables:meetings:meeting', args=(meeting.deliverable.pk, meeting.pk)))
+    redirect_to = request.POST.get(
+        'next',
+        reverse('deliverables:meetings:meeting', args=(meeting.deliverable.pk, meeting.pk))
+    )
     return redirect(redirect_to)
+
 
 @login_required
 def update_meeting_progress(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     context = get_meeting_progress(meeting)
     return HttpResponse(json.dumps(context), content_type='application/json')
+
 
 @login_required
 @require_POST
@@ -138,15 +150,23 @@ def remove_stakeholder(request, deliverable_id, meeting_id):
     if user != request.user:
         meeting_stakeholder = MeetingStakeholder.objects.get(stakeholder=user, meeting=meeting)
         if meeting_stakeholder.stakeholder.evaluation_set.filter(meeting=meeting).exists():
-            messages.warning(request, u'The stakeholder {0} cannot be removed from this meeting because he has already provided evaluation input.'.format(user.profile.get_display_name()))
+            messages.warning(
+                request,
+                u'''The stakeholder {0} cannot be removed from this meeting
+                because he has already provided evaluation input.'''.format(user.profile.get_display_name())
+            )
         else:
             meeting_stakeholder.delete()
             meeting.calculate_progress()
             meeting.calculate_all_rankings()
-            messages.success(request, u'{0} was successfully removed from the meeting!'.format(user.profile.get_display_name()))
+            messages.success(
+                request,
+                u'{0} was successfully removed from the meeting!'.format(user.profile.get_display_name())
+            )
     else:
         messages.warning(request, 'You cannot remove yourself from the meeting.')
     return redirect(reverse('deliverables:meetings:stakeholders', args=(deliverable_id, meeting_id)))
+
 
 @login_required
 @require_POST
@@ -166,6 +186,7 @@ def add_stakeholders(request, deliverable_id, meeting_id):
         messages.warning(request, u'Select at least one stakeholder to add.')
     return redirect(reverse('deliverables:meetings:stakeholders', args=(deliverable_id, meeting_id)))
 
+
 @login_required
 @require_POST
 @transaction.atomic
@@ -181,24 +202,27 @@ def remove_decision_items(request, deliverable_id, meeting_id):
                 item.delete()
             meeting.calculate_progress()
             meeting.calculate_all_rankings()
-            pretty_names = map(lambda i: u'<strong>{0}</strong>'.format(i.decision_item.name) , can_delete) 
+            pretty_names = map(lambda i: u'<strong>{0}</strong>'.format(i.decision_item.name), can_delete)
             messages.success(
-                request, 
+                request,
                 mark_safe(
-                    u'The following decision items was sucessfully removed from the meeting: <ul><li>{0}</li></ul>'.format(u'</li><li>'.join(pretty_names))
-                    )
+                    u'''The following decision items was sucessfully removed from the meeting:
+                    <ul><li>{0}</li></ul>'''.format(u'</li><li>'.join(pretty_names))
+                )
             )
         if cannot_delete:
-            pretty_names = map(lambda i: u'<strong>{0}</strong>'.format(i.decision_item.name) , cannot_delete) 
+            pretty_names = map(lambda i: u'<strong>{0}</strong>'.format(i.decision_item.name), cannot_delete)
             messages.warning(
-                request, 
+                request,
                 mark_safe(
-                    u'The following decision items wasn\'t removed from the meeting because they were already in use: <ul><li>{0}</li></ul>'.format(u'</li><li>'.join(pretty_names))
-                    )
+                    u'''The following decision items wasn\'t removed from the meeting
+                    because they were already in use: <ul><li>{0}</li></ul>'''.format(u'</li><li>'.join(pretty_names))
                 )
+            )
     else:
         messages.warning(request, u'Select at least one decision item to remove.')
     return redirect(reverse('deliverables:meetings:decision_items', args=(deliverable_id, meeting_id)))
+
 
 @login_required
 @require_POST
@@ -218,6 +242,7 @@ def add_decision_items(request, deliverable_id, meeting_id):
         messages.warning(request, u'Select at least one decision item to add.')
     return redirect(reverse('deliverables:meetings:decision_items', args=(deliverable_id, meeting_id)))
 
+
 @login_required
 def settings(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
@@ -232,9 +257,9 @@ def settings(request, deliverable_id, meeting_id):
     else:
         form = MeetingForm(instance=meeting)
     return render(request, 'meetings/settings/details.html', {
-            'meeting': meeting,
-            'form': form
-            })
+        'meeting': meeting,
+        'form': form})
+
 
 @login_required
 @user_is_manager
@@ -242,25 +267,28 @@ def decision_items(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     decision_items_in_use = meeting.meetingitem_set.values('decision_item__id')
     available_decision_items = meeting.deliverable.decisionitem_set.exclude(id__in=decision_items_in_use)
-    return render(request, 'meetings/settings/items.html', { 
-            'meeting': meeting, 
-            'available_decision_items': available_decision_items
-        })
+    return render(request, 'meetings/settings/items.html', {
+        'meeting': meeting,
+        'available_decision_items': available_decision_items})
+
 
 @login_required
 @user_is_manager
 def stakeholders(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    stakeholders = [meeting_stakeholder.stakeholder for meeting_stakeholder in meeting.meetingstakeholder_set.select_related('stakeholder')]
+    stakeholders = [
+        meeting_stakeholder.stakeholder for meeting_stakeholder in meeting.meetingstakeholder_set.select_related(
+            'stakeholder')
+    ]
     available_stakeholders = User.objects \
-            .exclude(id__in=meeting.meetingstakeholder_set.values('stakeholder__id')) \
-            .filter(is_active=True) \
-            .order_by('first_name', 'last_name', 'username')
-    return render(request, 'meetings/settings/stakeholders.html', { 
-            'meeting': meeting,
-            'stakeholders': stakeholders,
-            'available_stakeholders': available_stakeholders,
-        })
+        .exclude(id__in=meeting.meetingstakeholder_set.values('stakeholder__id')) \
+        .filter(is_active=True) \
+        .order_by('first_name', 'last_name', 'username')
+    return render(request, 'meetings/settings/stakeholders.html', {
+        'meeting': meeting,
+        'stakeholders': stakeholders,
+        'available_stakeholders': available_stakeholders})
+
 
 @login_required
 @user_is_manager
@@ -271,4 +299,4 @@ def delete(request, deliverable_id, meeting_id):
         meeting.delete()
         messages.success(request, u'The meeeting {0} was completly deleted successfully.'.format(meeting.name))
         return redirect(reverse('deliverables:deliverable', args=(meeting.deliverable.pk,)))
-    return render(request, 'meetings/settings/delete.html', { 'meeting': meeting, 'can_delete': can_delete })
+    return render(request, 'meetings/settings/delete.html', {'meeting': meeting, 'can_delete': can_delete})

@@ -1,7 +1,5 @@
 # coding: utf-8
 
-from functools import wraps
-
 from django.shortcuts import redirect
 from django.http import HttpResponseForbidden
 from django.contrib import messages
@@ -15,6 +13,7 @@ def permission_denied(request):
     else:
         messages.error(request, 'Permission denied.')
         return redirect('signin')
+
 
 def user_is_meeting_stakeholder(function):
     def wrap(request, *args, **kwargs):
@@ -30,6 +29,7 @@ def user_is_meeting_stakeholder(function):
     wrap.__doc__ = function.__doc__
     wrap.__name__ = function.__name__
     return wrap
+
 
 def meeting_is_analysing_or_closed(function):
     def wrap(request, *args, **kwargs):
