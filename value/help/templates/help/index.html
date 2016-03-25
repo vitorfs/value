@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li class="active">Help</li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li class="active">{% trans 'Help' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
-
   <div class="row">
     <div class="col-md-12">
     </div>
   </div>
-
 {% endblock content %}
