@@ -1,91 +1,91 @@
-{% load staticfiles %}<!DOCTYPE html>
+{% load static %}<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf" content="{{ csrf_token }}">
-    <title>{% block title %}VALUE · ImproVing decision-mAking reLating to software-intensive prodUcts and sErvices development{% endblock %}</title>
-    <link rel="apple-touch-icon" sizes="57x57" href="{% static 'icons/apple-touch-icon-57x57.png' %}">
-    <link rel="apple-touch-icon" sizes="60x60" href="{% static 'icons/apple-touch-icon-60x60.png' %}">
-    <link rel="apple-touch-icon" sizes="72x72" href="{% static 'icons/apple-touch-icon-72x72.png' %}">
-    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'icons/apple-touch-icon-76x76.png' %}">
-    <link rel="apple-touch-icon" sizes="114x114" href="{% static 'icons/apple-touch-icon-114x114.png' %}">
-    <link rel="apple-touch-icon" sizes="120x120" href="{% static 'icons/apple-touch-icon-120x120.png' %}">
-    <link rel="apple-touch-icon" sizes="144x144" href="{% static 'icons/apple-touch-icon-144x144.png' %}">
-    <link rel="apple-touch-icon" sizes="152x152" href="{% static 'icons/apple-touch-icon-152x152.png' %}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/apple-touch-icon-180x180.png' %}">
-    <link rel="icon" type="image/png" href="{% static 'icons/favicon-32x32.png' %}" sizes="32x32">
-    <link rel="icon" type="image/png" href="{% static 'icons/favicon-194x194.png' %}" sizes="194x194">
-    <link rel="icon" type="image/png" href="{% static 'icons/favicon-96x96.png' %}" sizes="96x96">
-    <link rel="icon" type="image/png" href="{% static 'icons/android-chrome-192x192.png' %}" sizes="192x192">
-    <link rel="icon" type="image/png" href="{% static 'icons/favicon-16x16.png' %}" sizes="16x16">
-    <link rel="manifest" href="{% static 'icons/manifest.json' %}">
-    <link rel="shortcut icon" href="{% static 'icons/favicon.ico' %}">
-    <meta name="msapplication-TileColor" content="#fe0074">
-    <meta name="msapplication-TileImage" content="{% static 'icons/mstile-144x144.png' %}">
-    <meta name="msapplication-config" content="{% static 'icons/browserconfig.xml' %}">
-    <meta name="theme-color" content="#ffffff">
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/toastr.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/selectize.bootstrap3.css' %}" rel="stylesheet">
-    <link href="{% static 'css/app.css' %}" rel="stylesheet">
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    {% block stylesheet %}{% endblock %}
-  </head>
-  <body>
-    {% block body %}     
-      <div class="wrapper">
-        {% include 'includes/header.html' %}
-        <main>
-          <div class="container">
-            <div class="row">
-              <div class="col-md-12">
-                {% block breadcrumb %}{% endblock %}
-                {% block tabs %}{% endblock %}
-                {% include 'includes/messages.html' with messages=messages %}
-                {% block content %}{% endblock %}
-              </div>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf" content="{{ csrf_token }}">
+  <title>{% block title %}VALUE · ImproVing decision-mAking reLating to software-intensive prodUcts and sErvices development{% endblock %}</title>
+  <link rel="apple-touch-icon" sizes="57x57" href="{% static 'icons/apple-touch-icon-57x57.png' %}">
+  <link rel="apple-touch-icon" sizes="60x60" href="{% static 'icons/apple-touch-icon-60x60.png' %}">
+  <link rel="apple-touch-icon" sizes="72x72" href="{% static 'icons/apple-touch-icon-72x72.png' %}">
+  <link rel="apple-touch-icon" sizes="76x76" href="{% static 'icons/apple-touch-icon-76x76.png' %}">
+  <link rel="apple-touch-icon" sizes="114x114" href="{% static 'icons/apple-touch-icon-114x114.png' %}">
+  <link rel="apple-touch-icon" sizes="120x120" href="{% static 'icons/apple-touch-icon-120x120.png' %}">
+  <link rel="apple-touch-icon" sizes="144x144" href="{% static 'icons/apple-touch-icon-144x144.png' %}">
+  <link rel="apple-touch-icon" sizes="152x152" href="{% static 'icons/apple-touch-icon-152x152.png' %}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/apple-touch-icon-180x180.png' %}">
+  <link rel="icon" type="image/png" href="{% static 'icons/favicon-32x32.png' %}" sizes="32x32">
+  <link rel="icon" type="image/png" href="{% static 'icons/favicon-194x194.png' %}" sizes="194x194">
+  <link rel="icon" type="image/png" href="{% static 'icons/favicon-96x96.png' %}" sizes="96x96">
+  <link rel="icon" type="image/png" href="{% static 'icons/android-chrome-192x192.png' %}" sizes="192x192">
+  <link rel="icon" type="image/png" href="{% static 'icons/favicon-16x16.png' %}" sizes="16x16">
+  <link rel="manifest" href="{% static 'icons/manifest.json' %}">
+  <link rel="shortcut icon" href="{% static 'icons/favicon.ico' %}">
+  <meta name="msapplication-TileColor" content="#fe0074">
+  <meta name="msapplication-TileImage" content="{% static 'icons/mstile-144x144.png' %}">
+  <meta name="msapplication-config" content="{% static 'icons/browserconfig.xml' %}">
+  <meta name="theme-color" content="#ffffff">
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/toastr.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/selectize.bootstrap3.css' %}" rel="stylesheet">
+  <link href="{% static 'css/app.css' %}" rel="stylesheet">
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  {% block stylesheet %}{% endblock %}
+</head>
+<body>
+  {% block body %}
+    <div class="wrapper">
+      {% include 'includes/header.html' %}
+      <main>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              {% block breadcrumb %}{% endblock %}
+              {% block tabs %}{% endblock %}
+              {% include 'includes/messages.html' with messages=messages %}
+              {% block content %}{% endblock %}
             </div>
           </div>
-        </main>
-        <div class="push"></div>
-      </div>
-      {% include 'includes/footer.html' %}
-      <div class="page-loading">
-        <div class="spinner">
-          <div class="bounce1"></div>
-          <div class="bounce2"></div>
-          <div class="bounce3"></div>
         </div>
+      </main>
+      <div class="push"></div>
+    </div>
+    {% include 'includes/footer.html' %}
+    <div class="page-loading">
+      <div class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
       </div>
-      <div class="sk-folding-cube">
-        <div class="sk-cube1 sk-cube"></div>
-        <div class="sk-cube2 sk-cube"></div>
-        <div class="sk-cube4 sk-cube"></div>
-        <div class="sk-cube3 sk-cube"></div>
-      </div>
-    {% endblock body %}
+    </div>
+    <div class="sk-folding-cube">
+      <div class="sk-cube1 sk-cube"></div>
+      <div class="sk-cube2 sk-cube"></div>
+      <div class="sk-cube4 sk-cube"></div>
+      <div class="sk-cube3 sk-cube"></div>
+    </div>
+  {% endblock body %}
 
-    {% block mustache %}{% endblock %}
-    <script src="{% static 'js/modernizr.custom.33893.js' %}"></script>
-    <script src="{% static 'js/mustache.min.js' %}"></script>
-    <script src="{% static 'js/jquery-2.1.3.min.js' %}"></script>
-    <script src="{% static 'js/jquery.tablesorter.min.js' %}"></script>
-    <script src="{% static 'js/moment.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
-    <script src="{% static 'js/expanding.js' %}"></script>
-    <script src="{% static 'js/Sortable.min.js' %}"></script>
-    <script src="{% static 'js/jquery.binding.js' %}"></script>
-    <script src="{% static 'js/toastr.min.js' %}"></script>
-    <script src="{% static 'js/selectize.min.js' %}"></script>
-    <script src="{% static 'js/app.js' %}"></script>
-    {% block javascript %}{% endblock %}
-  </body>
+  {% block mustache %}{% endblock %}
+  <script src="{% static 'js/modernizr.custom.33893.js' %}"></script>
+  <script src="{% static 'js/mustache.min.js' %}"></script>
+  <script src="{% static 'js/jquery-2.1.3.min.js' %}"></script>
+  <script src="{% static 'js/jquery.tablesorter.min.js' %}"></script>
+  <script src="{% static 'js/moment.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+  <script src="{% static 'js/expanding.js' %}"></script>
+  <script src="{% static 'js/Sortable.min.js' %}"></script>
+  <script src="{% static 'js/jquery.binding.js' %}"></script>
+  <script src="{% static 'js/toastr.min.js' %}"></script>
+  <script src="{% static 'js/selectize.min.js' %}"></script>
+  <script src="{% static 'js/app.js' %}"></script>
+  {% block javascript %}{% endblock %}
+</body>
 </html>

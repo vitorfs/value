@@ -1,11 +1,16 @@
 {% load avatar %}
 
 {% with display_name=stakeholder.profile.get_display_name %}
-  <div class="panel panel-warning" data-stakeholder-id="{{ stakeholder.pk }}" data-stakeholder-name="{{ display_name }}">
+  <div class="panel panel-warning"
+       data-stakeholder-id="{{ stakeholder.pk }}"
+       data-stakeholder-name="{{ display_name }}">
     <div class="panel-body bg-warning text-warning">
       <div class="row">
         <div class="col-md-11">
-          <img src="{% avatar stakeholder 32 %}" alt="{{ display_name }}" class="img-circle" style="margin-right: 10px">
+          <img src="{% avatar stakeholder 32 %}"
+               alt="{{ display_name }}"
+               class="img-circle"
+               style="margin-right: 10px">
           {{ display_name }}
           {% if stakeholder.groups.exists %}
             <small class="text-muted text-warning">({% for group in stakeholder.groups.all %}{{ group.name }}{% if not forloop.last %}, {% endif %}{% endfor %})</small>

@@ -1,23 +1,13 @@
 {% extends 'base.html' %}
 
-{% load staticfiles %}
+{% load i18n static %}
 
 {% block stylesheet %}
   <link href="{% static 'css/cover.css' %}" rel="stylesheet">
 {% endblock stylesheet %}
 
-{% block javascript %}
-  <script>
-    $(function () {
-      $("#id_username").focus();
-    });
-  </script>
-{% endblock %}
-
 {% block body %}
-
   <div class="wrapper">
-    
     <ul class="cb-slideshow">
       <li><span>Image 01</span></li>
       <li><span>Image 02</span></li>
@@ -29,7 +19,6 @@
       <li><span>Image 08</span></li>
       <li><span>Image 09</span></li>
     </ul>
-
     <header>
       <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
@@ -45,7 +34,9 @@
           <div class="col-md-4 col-md-offset-4">
             {% if form.non_field_errors %}
               <div class="alert alert-danger alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="alert" aria-label="{% trans 'Close' %}">
+                  <span aria-hidden="true">&times;</span>
+                </button>
                 {% for error in form.non_field_errors %}
                   {{ error }}
                 {% endfor %}
@@ -54,36 +45,47 @@
             {% include 'includes/messages.html' %}
             <div class="panel panel-default panel-login">
               <div class="panel-heading">
-                <h3 class="panel-title">Sign in</h3>
+                <h3 class="panel-title">{% trans 'Sign in' %}</h3>
               </div>
               <div class="panel-body">
                 <form method="post" role="form">
                   {% csrf_token %}
                   <div class="form-group{% if form.username.errors %} has-error{% endif %}">
-                    <label for="id_username">Username</label>
-                    <input type="text" class="form-control" id="id_username" name="username" placeholder="Username">
+                    <label for="id_username">{% trans 'Username' %}</label>
+                    <input type="text"
+                           class="form-control"
+                           id="id_username"
+                           name="username"
+                           placeholder="{% trans 'Username' %}"
+                           autofocus>
                     {% for error in form.username.errors %}
                       <span class="help-block">{{ error }}</span>
                     {% endfor %}
                   </div>
                   <div class="form-group{% if form.password.errors %} has-error{% endif %}">
-                    <label for="id_password">Password</label>
-                    <input type="password" class="form-control" id="id_password" name="password" placeholder="Password">
+                    <label for="id_password">{% trans 'Password' %}</label>
+                    <input type="password"
+                           class="form-control"
+                           id="id_password"
+                           name="password"
+                           placeholder="{% trans 'Password' %}">
                     {% for error in form.password.errors %}
                       <span class="help-block">{{ error }}</span>
                     {% endfor %}
                   </div>
-                  <button type="submit" class="btn btn-primary">Sign in</button>
-                  <a href="{% url 'password_reset' %}" class="btn btn-link">Forgot your password?</a>
-                </form>    
+                  <button type="submit" class="btn btn-primary">
+                    {% trans 'Sign in' %}
+                  </button>
+                  <a href="{% url 'password_reset' %}" class="btn btn-link">
+                    {% trans 'Forgot your password?' %}
+                  </a>
+                </form>
               </div>
-            </div>  
+            </div>
           </div>
         </div>
       </div>
     </main>
   </div>
-
   {% include 'includes/footer.html' %}
-
 {% endblock body %}

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% load i18n %}<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -41,13 +41,19 @@
         <div class="row">
           <div class="col-md-12">
             <h1>VALUE</h1>
-            <h2>403<br><small>Permission denied</small></h2>
-            <p class="lead">We think you should not be here.</p>
-            <a href="{% url 'home' %}" class="btn btn-link"><span class="fa fa-home"></span> Home</a>
+            <h2>403<br><small>{% trans 'Permission denied' %}</small></h2>
+            <p class="lead">{% trans 'We think you should not be here.' %}</p>
+            <a href="{% url 'home' %}" class="btn btn-link">
+              <span class="fa fa-home"></span> {% trans 'Home' %}
+            </a>
             <span class="divider">·</span>
-            <a href="{% url 'help:index' %}" class="btn btn-link"><span class="fa fa-question-circle"></span> Help</a>
+            <a href="{% url 'help:index' %}" class="btn btn-link">
+              <span class="fa fa-question-circle"></span> {% trans 'Help' %}
+            </a>
             <span class="divider">·</span>
-            <a href="#" class="btn btn-link"><span class="fa fa-bug"></span> Report a bug</a>
+            <a href="#" class="btn btn-link">
+              <span class="fa fa-bug"></span> {% trans 'Report a bug' %}
+            </a>
           </div>
         </div>
       </div>

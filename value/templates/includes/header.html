@@ -1,10 +1,10 @@
-{% load templatehelpers %}
+{% load i18n templatehelpers %}
 <header>
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
         <button data-target="#header-menu" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
-          <span class="sr-only">Toggle navigation</span>
+          <span class="sr-only">{% trans 'Toggle navigation' %}</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -15,43 +15,49 @@
         <div class="collapse navbar-collapse" id="header-menu">
           <ul class="nav navbar-nav">
             <li{% if '/deliverables/' in request.path %} class="active"{% endif %}>
-              <a href="{% url 'deliverables:index' %}"><span class="fa fa-inbox"></span> Deliverables</a>
+              <a href="{% url 'deliverables:index' %}">
+                <span class="fa fa-inbox"></span> {% trans 'Deliverables' %}
+              </a>
             </li>
             {% if user.is_superuser %}
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                  <span class="fa fa-gears"></span> Management <span class="caret"></span>
+                  <span class="fa fa-gears"></span> {% trans 'Management' %} <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="{% url 'factors:index' %}">Factors</a></li>
-                  <li><a href="{% url 'factors:groups' %}">Factors Groups</a></li>
-                  <li><a href="{% url 'users:users' %}">Users</a></li>
-                  <li><a href="{% url 'users:roles'  %}">Roles</a></li>
-                  <li><a href="{% url 'measures:index' %}">Measures</a></li>
+                  <li><a href="{% url 'factors:index' %}">{% trans 'Factors' %}</a></li>
+                  <li><a href="{% url 'factors:groups' %}">{% trans 'Factors Groups' %}</a></li>
+                  <li><a href="{% url 'users:users' %}">{% trans 'Users' %}</a></li>
+                  <li><a href="{% url 'users:roles'  %}">{% trans 'Roles' %}</a></li>
+                  <li><a href="{% url 'measures:index' %}">{% trans 'Measures' %}</a></li>
                 </ul>
               </li>
             {% endif %}
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            {% comment %}
-            <li{% if '/help/' in request.path %} class="active"{% endif %}>
-              <a href="{% url 'help:index' %}"><span class="glyphicon glyphicon-question-sign"></span></a>
-            </li>
-            {% endcomment %}
             {% if user.is_superuser %}
               <li{% if request.path|startswith:'/settings/' %} class="active"{% endif %}>
                 <a href="{% url 'settings:index' %}"><span class="glyphicon glyphicon-cog"></span></a>
               </li>
             {% endif %}
             <li class="dropdown">
-              <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ user.profile.get_display_name }} <span class="caret"></span></a>
+              <a href="javascript:void(0);"
+                 class="dropdown-toggle"
+                 data-toggle="dropdown"
+                 role="button"
+                 aria-expanded="false">
+                {{ user.profile.get_display_name }} <span class="caret"></span>
+              </a>
               <ul class="dropdown-menu" role="menu">
-                <li{% if '/account/' in request.path %} class="active"{% endif %}><a href="{% url 'account' %}">My account</a></li>
+                <li{% if '/account/' in request.path %} class="active"{% endif %}>
+                  <a href="{% url 'account' %}">{% trans 'My account' %}</a>
+                </li>
                 <li class="divider"></li>
-                <li><a href="{% url 'signout' %}">Sign out</a></li>
+                <li>
+                  <a href="{% url 'signout' %}">{% trans 'Sign out' %}</a>
+                </li>
               </ul>
             </li>
-            {% comment %}<li><a href="#menu" class="menu-link"><span class="glyphicon glyphicon-menu-hamburger"></span></a></li>{% endcomment %}
           </ul>
         </div>
       {% endif %}

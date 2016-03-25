@@ -1,6 +1,8 @@
 {% load avatar %}
 
-<div class="panel {% if is_selected %}panel-success{% else %}panel-default{% endif %}" data-stakeholder-id="{{ stakeholder.pk }}" data-stakeholder-name="{{ display_name }}">
+<div class="panel {% if is_selected %}panel-success{% else %}panel-default{% endif %}"
+     data-stakeholder-id="{{ stakeholder.pk }}"
+     data-stakeholder-name="{{ display_name }}">
   <div class="panel-body{% if is_selected %} bg-success text-success{% endif %}">
     <div class="row">
       <div class="col-md-11">
@@ -9,11 +11,17 @@
         {% if stakeholder.groups.exists %}
           <small class="text-muted">({% for group in stakeholder.groups.all %}{{ group.name }}{% if not forloop.last %}, {% endif %}{% endfor %})</small>
         {% endif %}
-        <input type="checkbox" name="stakeholders" value="{{ stakeholder.pk }}" style="display: none;"{% if is_selected %} checked{% endif %} autocomplete="off">
+        <input type="checkbox"
+               name="stakeholders"
+               value="{{ stakeholder.pk }}"
+               style="display: none;"{% if is_selected %} checked{% endif %}
+               autocomplete="off">
       </div>
       <div class="col-md-1 text-right panel-action-icon">
-        <span class="glyphicon glyphicon-ok text-success" style="line-height: 28px;{% if not is_selected %}display: none;{% endif %}"></span>
-        <span class="glyphicon glyphicon-remove text-danger" style="line-height: 28px; display: none;"></span>
+        <span class="glyphicon glyphicon-ok text-success"
+              style="line-height: 28px;{% if not is_selected %}display: none;{% endif %}"></span>
+        <span class="glyphicon glyphicon-remove text-danger"
+              style="line-height: 28px; display: none;"></span>
       </div>
     </div>
   </div>

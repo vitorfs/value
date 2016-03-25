@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block body %}
   <div class="wrapper">
     <header>
@@ -8,7 +10,9 @@
           <div class="navbar-header">
             <a href="{% url 'home' %}" class="navbar-brand">Value</a>
           </div>
-          <a href="{% url 'signin' %}" title="Sign in" class="btn btn-default navbar-btn navbar-right">Sign in</a>
+          <a href="{% url 'signin' %}" title="{% trans 'Sign in' %}" class="btn btn-default navbar-btn navbar-right">
+            {% trans 'Sign in' %}
+          </a>
         </div>
       </nav>
     </header>
