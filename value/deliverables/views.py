@@ -13,6 +13,7 @@ from django.template.loader import render_to_string
 from django.forms.models import modelform_factory, modelformset_factory, inlineformset_factory
 from django.db import transaction
 from django.db.models.functions import Lower
+from django.utils.translation import ugettext as _
 
 from value.application_settings.models import ApplicationSetting
 from value.factors.models import Factor
@@ -56,14 +57,14 @@ def new(request):
     if not has_measure:
         messages.warning(
             request,
-            u'There is not active measure. Please configure it properly on Management » Measures.'
+            _(u'There is not active measure. Please configure it properly on Management » Measures.')
         )
 
     has_factors = Factor.objects.filter(is_active=True).exists()
     if not has_factors:
         messages.warning(
             request,
-            u'There is not active value factor. Please configure it properly on Management » Factors.'
+            _(u'There is not active value factor. Please configure it properly on Management » Factors.')
         )
 
     stakeholders_queryset = User.objects.filter(is_active=True) \
@@ -86,10 +87,10 @@ def new(request):
             formset.save()
             deliverable.save()
 
-            messages.success(request, u'The deliverable {0} was added successfully.'.format(deliverable.name))
+            messages.success(request, _(u'The deliverable {0} was added successfully.').format(deliverable.name))
             return redirect(reverse('deliverables:deliverable', args=(deliverable.pk,)))
         else:
-            messages.error(request, u'Please correct the error below.')
+            messages.error(request, _(u'Please correct the error below.'))
     else:
         form = DeliverableForm(initial={'factors': Factor.objects.filter(is_active=True)})
         form.fields['stakeholders'].queryset = stakeholders_queryset
@@ -180,9 +181,9 @@ def add_stakeholders(request, deliverable_id):
             stakeholder = User.objects.get(pk=user_id)
             deliverable.stakeholders.add(stakeholder)
         deliverable.save()
-        messages.success(request, u'The stakeholders were added successfully.')
+        messages.success(request, _(u'The stakeholders were added successfully.'))
     else:
-        messages.warning(request, u'No stakeholder were selected. Nothing changed.')
+        messages.warning(request, _(u'No stakeholder were selected. Nothing changed.'))
     return redirect(reverse('deliverables:stakeholders', args=(deliverable.pk,)))
 
 
@@ -196,9 +197,9 @@ def remove_stakeholder(request, deliverable_id):
     if form.is_valid():
         users = form.cleaned_data['stakeholders']
         deliverable.stakeholders.remove(*users)
-        messages.success(request, u'The stakeholders were removed successfully.')
+        messages.success(request, _(u'The stakeholders were removed successfully.'))
     else:
-        messages.error(request, 'An error ocurred while trying to remove the selected stakeholders.')
+        messages.error(request, _('An error ocurred while trying to remove the selected stakeholders.'))
     return redirect('deliverables:stakeholders', deliverable.pk)
 
 
@@ -220,7 +221,7 @@ def process_decision_items_list_actions(request, deliverable_id):
                 if not decision_item.meetingitem_set.exists():
                     decision_item.delete()
             deliverable.save()
-            messages.success(request, 'The selected decision items were deleted successfully.')
+            messages.success(request, _('The selected decision items were deleted successfully.'))
         else:
             return render(request, 'deliverables/decision_items/delete_list.html', {
                 'deliverable': deliverable,
@@ -275,10 +276,10 @@ def add_decision_item(request, deliverable_id):
         if form.is_valid():
             decision_item = form.save()
             deliverable.save()
-            messages.success(request, u'The decision item {0} was added successfully.'.format(decision_item.name))
+            messages.success(request, _(u'The decision item {0} was added successfully.').format(decision_item.name))
             return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
         else:
-            messages.error(request, u'Please correct the error below.')
+            messages.error(request, _(u'Please correct the error below.'))
     else:
         form = DecisionItemForm()
     return render(request, 'deliverables/decision_items/add.html', {
@@ -306,10 +307,10 @@ def edit_decision_item(request, deliverable_id, decision_item_id):
                     form.save()
             formset.save()
             deliverable.save()
-            messages.success(request, u'The decision item {0} was saved successfully.'.format(decision_item.name))
+            messages.success(request, _(u'The decision item {0} was saved successfully.').format(decision_item.name))
             return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
         else:
-            messages.error(request, u'Please correct the error below.')
+            messages.error(request, _(u'Please correct the error below.'))
     else:
         form = DecisionItemForm(instance=decision_item)
         formset = AttachmentFormset(instance=decision_item)
@@ -329,7 +330,7 @@ def delete_decision_item(request, deliverable_id, decision_item_id):
     if request.method == 'POST':
         decision_item.delete()
         deliverable.save()
-        messages.success(request, u'The decision item {0} was deleted successfully.'.format(decision_item.name))
+        messages.success(request, _(u'The decision item {0} was deleted successfully.').format(decision_item.name))
         return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
     else:
         related_evaluations = Evaluation.objects.filter(meeting_item__decision_item=decision_item).order_by('meeting')
@@ -369,7 +370,7 @@ def settings(request, deliverable_id):
         form = DeliverableBasicDataForm(request.POST, instance=deliverable)
         if form.is_valid():
             form.save()
-            messages.success(request, u'The deliverable {0} was saved successfully.'.format(deliverable.name))
+            messages.success(request, _(u'The deliverable {0} was saved successfully.').format(deliverable.name))
             # redirect after post to avoid form re-submition
             return redirect(reverse('deliverables:settings', args=(deliverable.pk,)))
     else:
@@ -389,7 +390,7 @@ def factors_settings(request, deliverable_id):
         form = DeliverableFactorsForm(request.POST, instance=deliverable)
         if form.is_valid():
             deliverable = form.save()
-            messages.success(request, u'The deliverable {0} was saved successfully.'.format(deliverable.name))
+            messages.success(request, _(u'The deliverable {0} was saved successfully.').format(deliverable.name))
             # redirect after post to avoid form re-submition
             return redirect(reverse('deliverables:factors_settings', args=(deliverable.pk,)))
     else:
@@ -410,7 +411,7 @@ def measure_settings(request, deliverable_id):
             deliverable = form.save()
             for meeting in deliverable.meeting_set.all():
                 meeting.calculate_all_rankings()
-            messages.success(request, u'The deliverable {0} was saved successfully.'.format(deliverable.name))
+            messages.success(request, _(u'The deliverable {0} was saved successfully.').format(deliverable.name))
             # redirect after post to avoid form re-submition
             return redirect(reverse('deliverables:measure_settings', args=(deliverable.pk,)))
     else:
@@ -435,13 +436,13 @@ def transfer(request, deliverable_id):
         deliverable.stakeholders.remove(user)
         deliverable.manager = user
         deliverable.save()
-        messages.success(request, u'The deliverable {0} was successfully transferred to {1}.'.format(
+        messages.success(request, _(u'The deliverable {0} was successfully transferred to {1}.').format(
             deliverable.name,
             user.profile.get_display_name())
         )
         return redirect(reverse('deliverables:index'))
     except:
-        messages.error(request, 'Something went wrong. Nothing changed.')
+        messages.error(request, _('Something went wrong. Nothing changed.'))
     return redirect(reverse('deliverables:settings', args=(deliverable.pk,)))
 
 

@@ -2,6 +2,7 @@
 
 from django import forms
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 
 from value.factors.models import Factor
 from value.measures.models import Measure
@@ -50,13 +51,13 @@ class DeliverableForm(forms.ModelForm):
         required=False
     )
     factors = FactorModelMultipleChoiceField(
-        label='Select value factors to be used within the decision-making meetings',
+        label=_('Select value factors to be used within the decision-making meetings'),
         widget=forms.CheckboxSelectMultiple(),
         queryset=Factor.objects.select_related('group').filter(is_active=True),
         required=True
     )
     measure = forms.ModelChoiceField(
-        label='Select the measure to be used within the decision-making meetings',
+        label=_('Select the measure to be used within the decision-making meetings'),
         queryset=Measure.objects.filter(is_active=True),
         required=True,
         empty_label=None
@@ -97,7 +98,7 @@ class DeliverableRemoveStakeholdersForm(forms.Form):
 
 class DeliverableFactorsForm(forms.ModelForm):
     factors = FactorModelMultipleChoiceField(
-        label='Select value factors to be used within the decision-making meetings',
+        label=_('Select value factors to be used within the decision-making meetings'),
         widget=forms.CheckboxSelectMultiple(),
         queryset=Factor.objects.select_related('group').all(),
         required=True
@@ -110,7 +111,7 @@ class DeliverableFactorsForm(forms.ModelForm):
 
 class DeliverableMeasureForm(forms.ModelForm):
     measure = forms.ModelChoiceField(
-        label='Select the measure to be used within the decision-making meetings',
+        label=_('Select the measure to be used within the decision-making meetings'),
         queryset=Measure.objects.all(),
         required=True,
         empty_label=None

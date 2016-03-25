@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load attr avatar staticfiles widget_tweaks %}
+{% load attr avatar static i18n widget_tweaks %}
 
 {% block stylesheet %}
   <link href="{% static 'css/deliverables/deliverables.css' %}" rel="stylesheet">
@@ -13,24 +13,21 @@
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
-    <li class="active">New deliverable</li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'deliverables:index' %}">{% trans 'Deliverables' %}</a></li>
+    <li class="active">{% trans 'New deliverable' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
-
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
-      <p class="lead">New deliverable</p>
-
+      <p class="lead">{% trans 'New deliverable' %}</p>
       <form method="post" role="form">
         {% csrf_token %}
-        
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">1. Provide the deliverable details</h3>
+            <h3 class="panel-title">{% trans '1. Provide the deliverable details' %}</h3>
           </div>
           <div class="panel-body">
             <div class="form-group{% if form.name.errors %} has-error{% endif %}">
@@ -52,18 +49,26 @@
 
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">2. Assign the users who participated in the decision-making process</h3>
+            <h3 class="panel-title">{% trans '2. Assign the users who participated in the decision-making process' %}</h3>
           </div>
           <div class="panel-body">
             <div class="clearfix" style="margin-bottom: 20px">
               <div class="dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="selection-options" data-toggle="dropdown" aria-expanded="true">
-                  Select
+                  {% trans 'Select' %}
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="selection-options">
-                  <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" class="js-stakeholders-select-all">All</a></li>
-                  <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0);" class="js-stakeholders-select-none">None</a></li>
+                  <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" class="js-stakeholders-select-all">
+                      {% trans 'All' %}
+                    </a>
+                  </li>
+                  <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="javascript:void(0);" class="js-stakeholders-select-none">
+                      {% trans 'None' %}
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -76,7 +81,10 @@
                       <div class="col-md-11">
                         <img src="{% avatar_id checkbox.choice_value 32 %}" alt="{{ checkbox.choice_label }}" class="img-circle" style="margin-right: 10px">
                         {{ checkbox.choice_label|safe }}
-                        <input type="checkbox" name="{{ checkbox.name }}" value="{{ checkbox.choice_value }}" style="display: none"{% if checkbox.is_checked %} checked="checked"{% endif %}>
+                        <input type="checkbox"
+                               name="{{ checkbox.name }}"
+                               value="{{ checkbox.choice_value }}"
+                               style="display: none"{% if checkbox.is_checked %} checked="checked"{% endif %}>
                       </div>
                       <div class="col-md-1 text-right panel-action-icon">
                         <span class="glyphicon glyphicon-ok text-success" style="line-height: 28px;{% if not checkbox.is_checked %} display: none{% endif %}"></span>
@@ -91,7 +99,7 @@
 
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">3. Define the decision items (e.g. features, ideas, requirements)</h3>
+            <h3 class="panel-title">{% trans '3. Define the decision items (e.g. features, ideas, requirements)' %}</h3>
           </div>
           <div class="panel-body">
             <div class="form-group" style="margin-bottom: 0">
@@ -110,7 +118,9 @@
                 <tfoot>
                   <tr>
                     <td colspan="{{ fields|length|add:'1' }}">
-                      <button type="button" class="btn btn-primary btn-sm js-add-row"><span class="glyphicon glyphicon-plus"></span> Add</button>
+                      <button type="button" class="btn btn-primary btn-sm js-add-row">
+                        <span class="glyphicon glyphicon-plus"></span> {% trans 'Add' %}
+                      </button>
                       {% include 'deliverables/includes/import_decision_items.html' with btn='btn-sm' %}
                     </td>
                   </tr>
@@ -120,7 +130,12 @@
                     <tr>
                       {% for field in form.visible_fields %}
                         <td{% if field.errors %} class="bg-danger has-error"{% endif %}>
-                          <input type="text" class="form-control input-sm" id="{{ field.id_for_label }}" name="{{ field.html_name }}" value="{{ field.value|default_if_none:'' }}" maxlength="{{ field.field.max_length }}">
+                          <input type="text"
+                                 class="form-control input-sm"
+                                 id="{{ field.id_for_label }}"
+                                 name="{{ field.html_name }}"
+                                 value="{{ field.value|default_if_none:'' }}"
+                                 maxlength="{{ field.field.max_length }}">
                           {% for error in field.errors %}
                             <p class="help-block">{{ error }}</p>
                           {% endfor %}
@@ -130,21 +145,31 @@
                         {% for hidden in form.hidden_fields %}
                           {{ hidden }}
                         {% endfor %}
-                        <a href="javascript:void(0);" class="js-remove-row"><span class="glyphicon glyphicon-remove-sign"></span></a>
+                        <a href="javascript:void(0);" class="js-remove-row">
+                          <span class="glyphicon glyphicon-remove-sign"></span>
+                        </a>
                       </td>
                     </tr>
                   {% endfor %}
                   <tr class="empty-row">
                     {% for field in formset.0.visible_fields %}
                       <td>
-                        <input type="text" id="id_{{ formset.prefix }}-__prefix__-{{ field.name }}" name="{{ formset.prefix }}-__prefix__-{{ field.name }}" maxlength="{{ field.field.max_length }}" class="form-control input-sm">
+                        <input type="text"
+                               id="id_{{ formset.prefix }}-__prefix__-{{ field.name }}"
+                               name="{{ formset.prefix }}-__prefix__-{{ field.name }}"
+                               maxlength="{{ field.field.max_length }}"
+                               class="form-control input-sm">
                       </td>
                     {% endfor %}
                     <td style="text-align: center; vertical-align: middle">
                       {% for hidden in formset.0.hidden_fields %}
-                        <input type="hidden" id="id_{{ formset.prefix }}-__prefix__-{{ hidden.name }}" name="{{ formset.prefix }}-__prefix__-{{ hidden.name }}">
+                        <input type="hidden"
+                               id="id_{{ formset.prefix }}-__prefix__-{{ hidden.name }}"
+                               name="{{ formset.prefix }}-__prefix__-{{ hidden.name }}">
                       {% endfor %}
-                      <a href="javascript:void(0);" class="js-remove-row"><span class="glyphicon glyphicon-remove-sign"></span></a>
+                      <a href="javascript:void(0);" class="js-remove-row">
+                        <span class="glyphicon glyphicon-remove-sign"></span>
+                      </a>
                     </td>
                   </tr>
                 </tbody>
@@ -155,10 +180,9 @@
 
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">4. Select value factors and measure</h3>
+            <h3 class="panel-title">{% trans '4. Select value factors and measure' %}</h3>
           </div>
           <div class="panel-body">
-
             <div class="form-group{% if form.factors.errors %} has-error{% endif %}">
               <label for="{{ form.factors.id_for_label }}" class="control-label">{{ form.factors.label }}</label>
               {% for checkbox in form.factors %}
@@ -172,7 +196,6 @@
                 <p class="help-block">{{ error }}</p>
               {% endfor %}
             </div>
-
             <div class="form-group{% if form.measure.errors %} has-error{% endif %}">
               <label for="{{ form.measure.id_for_label }}" class="control-label">{{ form.measure.label }}</label>
               <div style="width: 200px;">{{ form.measure|add_class:'form-control' }}</div>
@@ -180,17 +203,13 @@
                 <p class="help-block">{{ error }}</p>
               {% endfor %}
             </div>
-
           </div>
         </div>
-
         <div style="margin-bottom: 20px">
-          <button type="submit" class="btn btn-primary">Save</button>
-          <a href="{% url 'deliverables:index' %}" class="btn btn-default" alt="Cancel">Cancel</a>
+          <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
+          <a href="{% url 'deliverables:index' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
         </div>
-
       </form>
     </div>
   </div>
-
 {% endblock content %}

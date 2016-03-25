@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'deliverables:index' %}">{% trans 'Deliverables' %}</a></li>
     <li><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></li>
-    <li class="active">Meetings</li>
+    <li class="active">{% trans 'Meetings' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
-
   {% include 'deliverables/includes/menu.html' with active='meetings' deliverable=deliverable %}
 
   {% if deliverable.description %}
@@ -18,11 +19,13 @@
   {% endif %}
 
   {% with has_meetings=deliverable.meeting_set.exists %}
-    
+
     {% if has_meetings %}
       {% if deliverable.manager == user %}
         <div style="margin-bottom: 20px;" class="clearfix">
-          <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> New meeting</a>
+          <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary">
+            <span class="glyphicon glyphicon-plus"></span> {% trans 'New meeting' %}
+          </a>
         </div>
       {% endif %}
     {% endif %}
@@ -31,7 +34,7 @@
       {% if deliverable.get_meetings_in_progress.exists %}
         <div class="panel panel-success">
           <div class="panel-heading">
-            <h3 class="panel-title">Meetings in progress</h3>
+            <h3 class="panel-title">{% trans 'Meetings in progress' %}</h3>
           </div>
           {% include 'deliverables/includes/meetings_table.html' with meetings=deliverable.get_meetings_in_progress %}
         </div>
@@ -39,7 +42,7 @@
       {% if deliverable.get_past_meetings.exists %}
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Past meetings</h3>
+            <h3 class="panel-title">{% trans 'Past meetings' %}</h3>
           </div>
           {% include 'deliverables/includes/meetings_table.html' with meetings=deliverable.get_past_meetings %}
         </div>
@@ -47,12 +50,13 @@
     {% else %}
       <div class="well blank-state">
         <span class="fa fa-calendar"></span>
-        <h3>This deliverable had no meeting yet.</h3>
+        <h3>{% trans 'This deliverable had no meeting yet.' %}</h3>
         {% if deliverable.manager == user %}
-          <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Start a meeting</a>
+          <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary">
+            <span class="glyphicon glyphicon-plus"></span> {% trans 'Start a meeting' %}
+          </a>
         {% endif %}
       </div>
     {% endif %}
   {% endwith %}
-
 {% endblock content %}

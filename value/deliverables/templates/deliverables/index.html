@@ -1,33 +1,34 @@
 {% extends 'base.html' %}
 
-{% load staticfiles avatar %}
+{% load i18n static avatar %}
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li class="active">Deliverables</li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li class="active">{% trans 'Deliverables' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
-
   {% if manager_deliverables or stakeholder_deliverables %}
     <div style="margin-bottom: 20px">
-      <a class="btn btn-primary" href="{% url 'deliverables:new' %}"><span class="glyphicon glyphicon-plus"></span> New deliverable</a>
+      <a class="btn btn-primary" href="{% url 'deliverables:new' %}">
+        <span class="glyphicon glyphicon-plus"></span> {% trans 'New deliverable' %}
+      </a>
     </div>
     {% if manager_deliverables %}
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">Deliverables <span class="badge">Manager</span></h3>
+          <h3 class="panel-title">{% trans 'Deliverables' %} <span class="badge">{% trans 'Manager' %}</span></h3>
         </div>
         <table class="table table-hover table-clickable-row">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Manager</th>
-              <th>Stakeholders</th>
-              <th>Meetings</th>
-              <th>Updated at</th>
+              <th>{% trans 'Name' %}</th>
+              <th>{% trans 'Manager' %}</th>
+              <th>{% trans 'Stakeholders' %}</th>
+              <th>{% trans 'Meetings' %}</th>
+              <th>{% trans 'Updated at' %}</th>
             </tr>
           </thead>
           <tbody>
@@ -52,16 +53,16 @@
     {% if stakeholder_deliverables %}
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">Deliverables <span class="badge">Stakeholder</span></h3>
+          <h3 class="panel-title">{% trans 'Deliverables' %} <span class="badge">{% trans 'Stakeholder' %}</span></h3>
         </div>
         <table class="table table-hover table-clickable-row">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Manager</th>
-              <th>Stakeholders</th>
-              <th>Meetings</th>
-              <th>Updated at</th>
+              <th>{% trans 'Name' %}</th>
+              <th>{% trans 'Manager' %}</th>
+              <th>{% trans 'Stakeholders' %}</th>
+              <th>{% trans 'Meetings' %}</th>
+              <th>{% trans 'Updated at' %}</th>
             </tr>
           </thead>
           <tbody>
@@ -86,10 +87,11 @@
   {% else %}
     <div class="well blank-state">
       <span class="fa fa-inbox"></span>
-      <h3>Welcome to your repository of deliverables!</h3>
-      <p class="lead">A deliverable can be a project, a product, a release or a service.</p>
-      <a class="btn btn-primary" href="{% url 'deliverables:new' %}"><span class="glyphicon glyphicon-plus"></span> Add your first deliverable</a>
+      <h3>{% trans 'Welcome to your repository of deliverables!' %}</h3>
+      <p class="lead">{% trans 'A deliverable can be a project, a product, a release or a service.' %}</p>
+      <a class="btn btn-primary" href="{% url 'deliverables:new' %}">
+        <span class="glyphicon glyphicon-plus"></span> {% trans 'Add your first deliverable' %}
+      </a>
     </div>
   {% endif %}
-
 {% endblock content %}

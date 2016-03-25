@@ -6,6 +6,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.utils.translation import ugettext_lazy as _
 
 from value.application_settings.models import ApplicationSetting
 from value.factors.models import Factor
@@ -13,19 +14,21 @@ from value.measures.models import Measure
 
 
 class Deliverable(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField(max_length=2000, null=True, blank=True)
+    name = models.CharField(_('name'), max_length=255)
+    description = models.TextField(_('description'), max_length=2000, null=True, blank=True)
     stakeholders = models.ManyToManyField(User)
     measure = models.ForeignKey(Measure, related_name='deliverables')
     factors = models.ManyToManyField(Factor, related_name='deliverables')
     manager = models.ForeignKey(User, related_name='deliverable_manager_user')
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(_('created at'), auto_now_add=True)
     created_by = models.ForeignKey(User, related_name='deliverable_creation_user')
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(_('updated at'), auto_now=True)
     updated_by = models.ForeignKey(User, null=True, related_name='deliverable_update_user')
 
     class Meta:
         db_table = 'deliverables'
+        verbose_name = _('deliverable')
+        verbose_name_plural = _('deliverables')
 
     def __unicode__(self):
         return self.name
@@ -58,8 +61,8 @@ class Deliverable(models.Model):
 
 class DecisionItem(models.Model):
     deliverable = models.ForeignKey(Deliverable)
-    name = models.CharField(max_length=255)
-    description = models.TextField(max_length=2000, null=True, blank=True)
+    name = models.CharField(_('name'), max_length=255)
+    description = models.TextField(_('description'), max_length=2000, null=True, blank=True)
     column_1 = models.CharField(max_length=255, null=True, blank=True)
     column_2 = models.CharField(max_length=255, null=True, blank=True)
     column_3 = models.CharField(max_length=255, null=True, blank=True)
@@ -93,6 +96,8 @@ class DecisionItem(models.Model):
 
     class Meta:
         db_table = 'decision_items'
+        verbose_name = _('decision item')
+        verbose_name_plural = _('decision items')
 
     def __unicode__(self):
         return self.name
@@ -107,10 +112,12 @@ def attachment_file_upload_to(instance, filename):
 
 class DecisionItemAttachment(models.Model):
     decision_item = models.ForeignKey(DecisionItem, related_name='attachments')
-    attachment = models.FileField(upload_to=attachment_file_upload_to)
+    attachment = models.FileField(_('attachment'), upload_to=attachment_file_upload_to)
 
     class Meta:
         db_table = 'decision_items_attachments'
+        verbose_name = _('attachment')
+        verbose_name_plural = _('attachments')
 
 
 @receiver(post_delete, sender=DecisionItemAttachment)
@@ -127,34 +134,36 @@ class DecisionItemLookup(models.Model):
     DATE = 'D'
     DATE_TIME = 'T'
     COLUMN_TYPES = (
-        (STRING, 'String'),
-        (FLOAT, 'Float'),
-        (INTEGER, 'Integer'),
-        (DATE, 'Date'),
-        (DATE_TIME, 'Date Time'),
+        (STRING, _('String')),
+        (FLOAT, _('Float')),
+        (INTEGER, _('Integer')),
+        (DATE, _('Date')),
+        (DATE_TIME, _('Date Time')),
     )
 
-    column_name = models.CharField(max_length=255, primary_key=True)
-    column_label = models.CharField(max_length=255, null=True, blank=True)
-    column_type = models.CharField(max_length=1, choices=COLUMN_TYPES, default=STRING)
-    column_display = models.BooleanField(default=True)
+    column_name = models.CharField(_('column name'), max_length=255, primary_key=True)
+    column_label = models.CharField(_('column label'), max_length=255, null=True, blank=True)
+    column_type = models.CharField(_('column type'), max_length=1, choices=COLUMN_TYPES, default=STRING)
+    column_display = models.BooleanField(_('column display'), default=True)
 
     class Meta:
         db_table = 'decision_items_lookup'
+        verbose_name = _('decision items lookup')
+        verbose_name_plural = _('decision items lookups')
 
     def __unicode__(self):
         return self.column_name
 
     @staticmethod
     def get_base_fields():
-        base_fields = {}
+        base_fields = dict()
         base_fields['name'] = {
-            'label': 'Name',
+            'label': _('Name'),
             'type': DecisionItemLookup.STRING,
             'display': True
         }
         base_fields['description'] = {
-            'label': 'Description',
+            'label': _('Description'),
             'type': DecisionItemLookup.STRING,
             'display': True
         }
