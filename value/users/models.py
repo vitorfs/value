@@ -1,8 +1,8 @@
 # coding: utf-8
 
-from django.db import models
-from django.db.models.signals import post_save
 from django.contrib.auth.models import User
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 
 class Profile(models.Model):
@@ -10,6 +10,8 @@ class Profile(models.Model):
 
     class Meta:
         db_table = 'auth_user_profile'
+        verbose_name = _('profile')
+        verbose_name_plural = _('profiles')
 
     def __unicode__(self):
         return self.get_display_name()
@@ -27,14 +29,3 @@ class Profile(models.Model):
     def get_display_roles(self):
         groups = self.user.groups.all().values_list('name', flat=True)
         return ', '.join(groups)
-
-
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
-
-post_save.connect(create_user_profile, sender=User)
-post_save.connect(save_user_profile, sender=User)

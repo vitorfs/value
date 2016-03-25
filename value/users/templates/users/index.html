@@ -1,28 +1,28 @@
 {% extends 'base.html' %}
 
-{% load togglebooleanfield %}
+{% load i18n togglebooleanfield %}
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li class="active">Users</li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li class="active">{% trans 'Users' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
-  <a class="btn btn-primary pull-right" href="{% url 'users:add' %}"><span class="glyphicon glyphicon-plus"></span> Add user</a>
-
+  <a class="btn btn-primary pull-right" href="{% url 'users:add' %}">
+    <span class="glyphicon glyphicon-plus"></span> {% trans 'Add user' %}
+  </a>
   <h1 class="lead">Available users</h1>
-
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Username</th>
-        <th>Email</th>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>Active</th>
-        <th>Roles</th>
+        <th>{% trans 'Username' %}</th>
+        <th>{% trans 'Email' %}</th>
+        <th>{% trans 'First name' %}</th>
+        <th>{% trans 'Last name' %}</th>
+        <th>{% trans 'Active' %}</th>
+        <th>{% trans 'Roles' %}</th>
         <th></th>
       </tr>
     </thead>
@@ -36,8 +36,12 @@
           <td>{% toggle_boolean user %}</td>
           <td>{{ user.profile.get_display_roles }}</td>
           <td class="text-right text-nowrap">
-            <a href="{% url 'users:user' user.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
-            <a href="{% url 'users:delete' user.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+            <a href="{% url 'users:user' user.pk %}" class="btn btn-default btn-sm">
+              <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
+            </a>
+            <a href="{% url 'users:delete' user.pk %}" class="btn btn-default btn-sm">
+              <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
+            </a>
           </td>
         </tr>
       {% endfor %}

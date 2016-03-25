@@ -1,25 +1,25 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'users:users' %}">Users</a></li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'users:users' %}">{% trans 'Users' %}</a></li>
     <li><a href="{% url 'users:user' delete_user.pk %}">{{ delete_user.username }}</a></li>
-    <li class="active">Delete</li>
+    <li class="active">{% trans 'Delete' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
-  <h1 class="lead">Are you sure you want to delete the user {{ delete_user.username }}?</h1>
-
+  <h1 class="lead">{% trans 'Are you sure you want to delete the user {{ delete_user.username }}?' %}</h1>
   <form method="post" class="form-horizontal">
     {% csrf_token %}
     <div class="form-group">
       <div class="col-sm-12">
-        <button type="submit" class="btn btn-primary">Confirm</button>
-        <a href="{% url 'users:users' %}" class="btn btn-default">Cancel</a>
+        <button type="submit" class="btn btn-primary">{% trans 'Confirm' %}</button>
+        <a href="{% url 'users:users' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
       </div>
     </div>
   </form>
-
 {% endblock content %}

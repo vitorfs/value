@@ -1,35 +1,39 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'users:users' %}">Users</a></li>
-    <li class="active">Add user</li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'users:users' %}">{% trans 'Users' %}</a></li>
+    <li class="active">{% trans 'Add user' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
-
   <div class="row">
     <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
-
-      <p class="lead" style="margin-bottom: 0">Add user</p>
-      <p class="help-block">First, enter a username and password. Then, you'll be able to edit more user options.</p>
-
+      <p class="lead" style="margin-bottom: 0">{% trans 'Add user' %}</p>
+      <p class="help-block">
+        {% trans 'First, enter a username and password. Then, you'll be able to edit more user options.' %}
+      </p>
       {% if form.non_field_errors %}
         <div class="alert alert-danger alert-dismissible" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <button type="button" class="close" data-dismiss="alert" aria-label="{% trans 'Close' %}">
+            <span aria-hidden="true">&times;</span>
+          </button>
           {% for error in form.non_field_errors %}
             {{ error }}
           {% endfor %}
         </div>
       {% endif %}
-
       <form method="post">
         {% csrf_token %}
         <div class="form-group{% if form.username.errors %} has-error{% endif %}">
           <label for="{{ form.username.id_for_label }}" class="control-label">{{ form.username.label }}</label>
-          <input type="text" class="form-control" value="{{ form.username.value }}" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" maxlength="{{ form.username.field.max_length }}">
+          <input type="text" class="form-control" value="{{ form.username.value }}"
+                 id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}"
+                 maxlength="{{ form.username.field.max_length }}">
           {% for error in form.username.errors %}
             <p class="help-block">{{ error }}</p>
           {% endfor %}
@@ -37,26 +41,26 @@
         </div>
         <div class="form-group{% if form.password1.errors %} has-error{% endif %}">
           <label for="{{ form.password1.id_for_label }}" class="control-label">{{ form.password1.label }}</label>
-          <input type="password" class="form-control" id="{{ form.password1.id_for_label }}" name="{{ form.password1.html_name }}">
+          <input type="password" class="form-control" id="{{ form.password1.id_for_label }}"
+                 name="{{ form.password1.html_name }}">
           {% for error in form.password1.errors %}
             <p class="help-block">{{ error }}</p>
           {% endfor %}
         </div>
         <div class="form-group{% if form.password2.errors %} has-error{% endif %}">
           <label for="{{ form.password2.id_for_label }}" class="control-label">{{ form.password2.label }}</label>
-          <input type="password" class="form-control" id="{{ form.password2.id_for_label }}" name="{{ form.password2.html_name }}">
+          <input type="password" class="form-control" id="{{ form.password2.id_for_label }}"
+                 name="{{ form.password2.html_name }}">
           {% for error in form.password2.errors %}
             <p class="help-block">{{ error }}</p>
           {% endfor %}
           <span class="help-block">{{ form.password2.help_text }}</span>
         </div>
         <div class="form-group">
-          <button type="submit" class="btn btn-primary">Save</button>
-          <a href="{% url 'users:users' %}" class="btn btn-default">Cancel</a>
+          <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
+          <a href="{% url 'users:users' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
         </div>
       </form>
-
     </div>
   </div>
-
 {% endblock content %}

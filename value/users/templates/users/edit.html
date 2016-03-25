@@ -1,62 +1,75 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'users:users' %}">Users</a></li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'users:users' %}">{% trans 'Users' %}</a></li>
     <li class="active">{{ form.instance.username }}</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
-
   <div class="row">
     <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
-
-      <p class="lead">Edit user</p>
-
+      <p class="lead">{% trans 'Edit user' %}</p>
       {% if form.non_field_errors %}
         <div class="alert alert-danger alert-dismissible" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <button type="button" class="close" data-dismiss="alert" aria-label="{% trans 'Close' %}">
+            <span aria-hidden="true">&times;</span>
+          </button>
           {% for error in form.non_field_errors %}
             {{ error }}
           {% endfor %}
         </div>
       {% endif %}
-
       <form method="post">
-
         {% csrf_token %}
-
         <div class="form-group{% if form.username.errors %} has-error{% endif %}">
           <label for="{{ form.username.id_for_label }}" class="control-label">{{ form.username.label }}</label>
-          <input type="text" class="form-control" value="{{ form.username.value }}" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" maxlength="{{ form.username.field.max_length }}">
+          <input type="text"
+                 class="form-control"
+                 value="{{ form.username.value }}"
+                 id="{{ form.username.id_for_label }}"
+                 name="{{ form.username.html_name }}"
+                 maxlength="{{ form.username.field.max_length }}">
           {% for error in form.username.errors %}
             <p class="help-block">{{ error }}</p>
           {% endfor %}
           <span class="help-block">{{ form.username.help_text }}</span>
         </div>
-
         <div class="form-group">
           <label for="{{ form.password.id_for_label }}" class="control-label">{{ form.password.label }}</label>
           <span class="help-block">{{ form.password.help_text | safe }}</span>
         </div>
-
         <div class="form-group{% if form.first_name.errors %} has-error{% endif %}">
           <label for="{{ form.first_name.id_for_label }}" class="control-label">{{ form.first_name.label }}</label>
-          <input type="text" class="form-control" value="{{ form.first_name.value }}" id="{{ form.first_name.id_for_label }}" name="{{ form.first_name.html_name }}" maxlength="{{ form.first_name.field.max_length }}">
+          <input type="text"
+                 class="form-control"
+                 value="{{ form.first_name.value }}"
+                 id="{{ form.first_name.id_for_label }}"
+                 name="{{ form.first_name.html_name }}"
+                 maxlength="{{ form.first_name.field.max_length }}">
         </div>
-
         <div class="form-group{% if form.last_name.errors %} has-error{% endif %}">
           <label for="{{ form.last_name.id_for_label }}" class="control-label">{{ form.last_name.label }}</label>
-          <input type="text" class="form-control" value="{{ form.last_name.value }}" id="{{ form.last_name.id_for_label }}" name="{{ form.last_name.html_name }}" maxlength="{{ form.last_name.field.max_length }}">
+          <input type="text"
+                 class="form-control"
+                 value="{{ form.last_name.value }}"
+                 id="{{ form.last_name.id_for_label }}"
+                 name="{{ form.last_name.html_name }}"
+                 maxlength="{{ form.last_name.field.max_length }}">
         </div>
-
         <div class="form-group{% if form.email.errors %} has-error{% endif %}">
           <label for="{{ form.email.id_for_label }}" class="control-label">{{ form.email.label }}</label>
-          <input type="email" class="form-control" value="{{ form.email.value }}" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" maxlength="{{ form.email.field.max_length }}">
+          <input type="email"
+                 class="form-control"
+                 value="{{ form.email.value }}"
+                 id="{{ form.email.id_for_label }}"
+                 name="{{ form.email.html_name }}"
+                 maxlength="{{ form.email.field.max_length }}">
         </div>
-
         <div class="form-group">
           <div class="checkbox">
             <label>
@@ -65,14 +78,11 @@
           </div>
           <span class="help-block">{{ form.is_active.help_text }}</span>
         </div>
-
         <div class="form-group">
-          <button type="submit" class="btn btn-primary">Save</button>
-          <a href="{% url 'users:users' %}" class="btn btn-default">Cancel</a>
+          <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
+          <a href="{% url 'users:users' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
         </div>
-
       </form>
-
     </div>
   </div>
 {% endblock content %}

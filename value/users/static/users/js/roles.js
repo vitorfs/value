@@ -9,9 +9,9 @@ $(function () {
   });
 
   $("#available-users").sortable({
-    group: { 
-      name: "roles", 
-      pull: "clone", 
+    group: {
+      name: "roles",
+      pull: "clone",
       put: false
     },
     sort: false
