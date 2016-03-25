@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load staticfiles %}
+{% load i18n static %}
 
 {% block stylesheet %}
   <link href="{% static 'css/bootstrap-colorselector.css' %}" rel="stylesheet">
@@ -8,13 +8,13 @@
 
 {% block javascript %}
   <script src="{% static 'js/bootstrap-colorselector.js' %}"></script>
-  <script src="{% static 'js/measures/measure.js' %}"></script>
+  <script src="{% static 'measures/js/measure.js' %}"></script>
 {% endblock javascript %}
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'measures:index' %}">Measures</a></li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'measures:index' %}">{% trans 'Measures' %}</a></li>
     <li class="active">{{ form.instance.name }}</li>
   </ol>
 {% endblock breadcrumb %}
@@ -25,17 +25,17 @@
       {% if not can_edit %}
         <div class="alert alert-info">
           <span class="glyphicon glyphicon-info-sign"></span>
-          This measure is already in use. You may not change in its choices.
+          {% trans 'This measure is already in use. You may not change in its choices.' %}
         </div>
       {% endif %}
-      <p class="lead">Edit measure</p>
+      <p class="lead">{% trans 'Edit measure' %}</p>
       <form method="post">
         {% csrf_token %}
         {% include 'includes/form_vertical.html' %}
         {% include 'measures/includes/measure_values_formset.html' %}
         <div class="form-group">
-          <button type="submit" class="btn btn-primary">Save</button>
-          <a href="{% url 'measures:index' %}" class="btn btn-default">Cancel</a>
+          <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
+          <a href="{% url 'measures:index' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
         </div>
       </form>
     </div>

@@ -1,31 +1,40 @@
+# coding: utf-8
+
 from django.db import models
-from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 
 
 class Measure(models.Model):
     """
-    Measures used in the decision-making process. There should be only one
-    active (is_active = True) measure object within the context of the
-    application.
+        Measures used in the decision-making process. There should be only one
+        active (is_active = True) measure object within the context of the
+        application.
     """
-    name = models.CharField(max_length=255, unique=True)
-    is_active = models.BooleanField(default=True)
-    
+    name = models.CharField(_('name'), max_length=255, unique=True)
+    is_active = models.BooleanField(_('active'), default=True)
+
     class Meta:
         db_table = 'measures'
+        verbose_name = _('measure')
+        verbose_name_plural = _('measures')
 
     def __unicode__(self):
         return self.name
 
     def get_values_as_string(self):
         """
-        Parse all MeasureValue objects into a string formatted shape with
-        small colored squares.
-        The output should look like '[#] Positive, [#] Neutral, [#] Negative'.
+            Parse all MeasureValue objects into a string formatted shape with
+            small colored squares.
+            The output should look like '[#] Positive, [#] Neutral, [#] Negative'.
         """
         string_values = []
         for value in self.measurevalue_set.all():
-            string_values.append(u'<span style="display: inline-block; border-radius: 2px; height: 12px; width: 12px; background-color: {1};"></span> {0}'.format(value.description, value.color))
+            string_values.append(
+                u'<span class="measure-square" style="background-color: {1};"></span> {0}'.format(
+                    value.description,
+                    value.color
+                )
+            )
         return u', '.join(string_values)
 
 
@@ -71,13 +80,15 @@ class MeasureValue(models.Model):
         ('#030202', '#030202'),
         )
     measure = models.ForeignKey(Measure)
-    description = models.CharField(max_length=255)
-    order = models.IntegerField(default=0)
-    color = models.CharField(max_length=7, choices=COLORS, default=PRIMARY_BLUE)
+    description = models.CharField(_('description'), max_length=255)
+    order = models.IntegerField(_('order'), default=0)
+    color = models.CharField(_('color'), max_length=7, choices=COLORS, default=PRIMARY_BLUE)
 
     class Meta:
         db_table = 'measure_values'
         ordering = ('order',)
+        verbose_name = _('measure value')
+        verbose_name_plural = _('measure values')
 
     def __unicode__(self):
         return self.description

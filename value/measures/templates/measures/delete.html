@@ -1,35 +1,41 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'measures:index' %}">Measures</a></li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'measures:index' %}">{% trans 'Measures' %}</a></li>
     <li><a href="{% url 'measures:edit' measure.pk %}">{{ measure.name }}</a></li>
-    <li class="active">Delete</li>
+    <li class="active">{% trans 'Delete' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
 
   {% if can_delete %}
-    <h1 class="lead">Are you sure you want to delete the measure {{ measure.name }}?</h1>
-
+    <h1 class="lead">{% trans 'Are you sure you want to delete the measure {{ measure.name }}?' %}</h1>
     <form method="post" class="form-horizontal">
       {% csrf_token %}
       <div class="form-group">
         <div class="col-sm-12">
-          <button type="submit" class="btn btn-primary">Confirm</button>
-          <a href="{% url 'measures:index' %}" class="btn btn-default">Cancel</a>
+          <button type="submit" class="btn btn-primary">{% trans 'Confirm' %}</button>
+          <a href="{% url 'measures:index' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
         </div>
       </div>
     </form>
   {% else %}
     <div class="well blank-state">
       <span class="glyphicon glyphicon-ban-circle"></span>
-      <h3>The measure <strong>{{ measure.name }}</strong> cannot be deleted.</h3>
-      <p class="lead">There's already deliverables and meetings associated with this measure. Change its status to <strong>inactive</strong> instead.</p>
+      <h3>{% trans 'The measure <strong>{{ measure.name }}</strong> cannot be deleted.' %}</h3>
+      <p class="lead">
+        {% blocktrans trimmed %}
+          There's already deliverables and meetings associated with this measure.
+          Change its status to <strong>inactive</strong> instead.
+        {% endblocktrans %}
+      </p>
       <a href="{% url 'measures:index' %}" class="btn btn-default">
-        <span class="fa fa-arrow-left"></span> Back
+        <span class="fa fa-arrow-left"></span> {% trans 'Back' %}
       </a>
     </div>
   {% endif %}

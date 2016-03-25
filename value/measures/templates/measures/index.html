@@ -1,24 +1,26 @@
 {% extends 'base.html' %}
 
-{% load togglebooleanfield %}
+{% load i18n togglebooleanfield %}
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li class="active">Measures</li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li class="active">{% trans 'Measures' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
   {% if measures.exists %}
-    <a class="btn btn-primary pull-right" href="{% url 'measures:add' %}"><span class="glyphicon glyphicon-plus"></span> Add measure</a>
-    <h1 class="lead">Available measures</h1>
+    <a class="btn btn-primary pull-right" href="{% url 'measures:add' %}">
+      <span class="glyphicon glyphicon-plus"></span> {% trans 'Add measure' %}
+    </a>
+    <h1 class="lead">{% trans 'Available measures' %}</h1>
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Values</th>
-          <th>Active</th>
+          <th>{% trans 'Name' %}</th>
+          <th>{% trans 'Values' %}</th>
+          <th>{% trans 'Active' %}</th>
           <th></th>
         </tr>
       </thead>
@@ -29,8 +31,12 @@
             <td>{{ measure.get_values_as_string|safe }}</td>
             <td>{% toggle_boolean measure %}</td>
             <td class="text-right text-nowrap">
-              <a href="{% url 'measures:edit' measure.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
-              <a href="{% url 'measures:delete' measure.pk %}" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+              <a href="{% url 'measures:edit' measure.pk %}" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-pencil"></span> {% trans 'Edit' %}
+              </a>
+              <a href="{% url 'measures:delete' measure.pk %}" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete' %}
+              </a>
             </td>
           </tr>
         {% endfor %}
@@ -39,8 +45,10 @@
   {% else %}
     <div class="well blank-state">
       <span class="fa fa-balance-scale"></span>
-      <h3>The measures directory is empty.</h3>
-      <a href="{% url 'measures:add' %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add the first measure</a>
+      <h3>{% trans 'The measures directory is empty.' %}</h3>
+      <a href="{% url 'measures:add' %}" class="btn btn-primary">
+        <span class="glyphicon glyphicon-plus"></span> {% trans 'Add the first measure' %}
+      </a>
     </div>
   {% endif %}
 

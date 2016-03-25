@@ -103,7 +103,7 @@ $(function () {
     if (i < rows) {
       var sibling = $("#table-measure-values tbody tr:eq(" + (i + 1) + ")");
       var row = $(this).closest("tr").detach();
-      $(sibling).after(row);      
+      $(sibling).after(row);
     }
     manage_value_order();
     return false;

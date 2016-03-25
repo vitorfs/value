@@ -112,10 +112,10 @@ h3.page-header {
 }
 
 @keyframes bouncedelay {
-  0%, 80%, 100% { 
+  0%, 80%, 100% {
     transform: scale(0.0);
     -webkit-transform: scale(0.0);
-  } 40% { 
+  } 40% {
     transform: scale(1.0);
     -webkit-transform: scale(1.0);
   }
@@ -128,7 +128,7 @@ h3.page-header {
   margin-left: auto;
   margin-right: auto;
   background-color: #333;
-  border-radius: 100%;  
+  border-radius: 100%;
   -webkit-animation: scaleout 1.0s infinite ease-in-out;
   animation: scaleout 1.0s infinite ease-in-out;
 }
@@ -142,7 +142,7 @@ h3.page-header {
 }
 
 @keyframes scaleout {
-  0% { 
+  0% {
     transform: scale(0.0);
     -webkit-transform: scale(0.0);
   } 100% {
@@ -170,7 +170,7 @@ h3.page-header {
   position: relative;
   -webkit-transform: scale(1.1);
       -ms-transform: scale(1.1);
-          transform: scale(1.1); 
+          transform: scale(1.1);
 }
 .sk-folding-cube .sk-cube:before {
   content: '';
@@ -204,7 +204,7 @@ h3.page-header {
 }
 .sk-folding-cube .sk-cube3:before {
   -webkit-animation-delay: 0.6s;
-          animation-delay: 0.6s; 
+          animation-delay: 0.6s;
 }
 .sk-folding-cube .sk-cube4:before {
   -webkit-animation-delay: 0.9s;
@@ -214,31 +214,31 @@ h3.page-header {
   0%, 10% {
     -webkit-transform: perspective(140px) rotateX(-180deg);
             transform: perspective(140px) rotateX(-180deg);
-    opacity: 0; 
+    opacity: 0;
   } 25%, 75% {
     -webkit-transform: perspective(140px) rotateX(0deg);
             transform: perspective(140px) rotateX(0deg);
-    opacity: 1; 
+    opacity: 1;
   } 90%, 100% {
     -webkit-transform: perspective(140px) rotateY(180deg);
             transform: perspective(140px) rotateY(180deg);
-    opacity: 0; 
-  } 
+    opacity: 0;
+  }
 }
 
 @keyframes sk-foldCubeAngle {
   0%, 10% {
     -webkit-transform: perspective(140px) rotateX(-180deg);
             transform: perspective(140px) rotateX(-180deg);
-    opacity: 0; 
+    opacity: 0;
   } 25%, 75% {
     -webkit-transform: perspective(140px) rotateX(0deg);
             transform: perspective(140px) rotateX(0deg);
-    opacity: 1; 
+    opacity: 1;
   } 90%, 100% {
     -webkit-transform: perspective(140px) rotateY(180deg);
             transform: perspective(140px) rotateY(180deg);
-    opacity: 0; 
+    opacity: 0;
   }
 }
 
@@ -349,7 +349,7 @@ th.headerSortUp:after {
   margin-bottom: 0;
 }
 
-.context-menu .list-group .list-group-item:last-child, 
+.context-menu .list-group .list-group-item:last-child,
 .context-menu .list-group .list-group-item:first-child {
   border-radius: 0;
 }
@@ -460,7 +460,7 @@ th.headerSortUp:after {
   margin-top: 20px;
 }
 
-.table tbody tr td, 
+.table tbody tr td,
 .table thead tr th {
   vertical-align: middle;
 }
@@ -554,4 +554,11 @@ th.headerSortUp:after {
 input[type="checkbox"],
 input[type="radio"] {
   cursor: pointer;
+}
+
+.measure-square {
+  display: inline-block;
+  border-radius: 2px;
+  height: 12px;
+  width: 12px;
 }
