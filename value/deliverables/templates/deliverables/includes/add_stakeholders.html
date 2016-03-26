@@ -1,15 +1,19 @@
+{% load i18n %}
+
 {% if available_stakeholders %}
   <div class="alert alert-info alert-dismissible fade in" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    Select the stakeholders to be associated with the deliverable.
+    <button type="button" class="close" data-dismiss="alert" aria-label="{% trans 'Close' %}">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    {% trans 'Select the stakeholders to be associated with the deliverable.' %}
   </div>
   {% include 'includes/users_panel_group.html' with stakeholders=available_stakeholders group_actions='selectable' %}
 {% else %}
   <div class="well" style="margin-bottom: 0">
     <div class="text-center" style="padding: 2em 0;">
       <span class="fa fa-users text-muted" style="font-size: 2.5em"></span>
-      <h4 style="margin: 1em 0;">There is no stakeholder available.</h4>
-      <a href="{% url 'users:add' %}" class="btn btn-primary">Create new user</a>
+      <h4 style="margin: 1em 0;">{% trans 'There is no stakeholder available.' %}</h4>
+      <a href="{% url 'users:add' %}" class="btn btn-primary">{% trans 'Create new user' %}</a>
     </div>
   </div>
 {% endif %}

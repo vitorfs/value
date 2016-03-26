@@ -1,18 +1,33 @@
-<button type="button" class="btn btn-primary js-import-decision-items {{ btn }}"><span class="fa fa-cloud-upload"></span> Import from Excel</button>
-<input type="file" id="id_import_decision_items" name="import_decision_items" data-import-url="{% url 'deliverables:import_decision_items' %}" data-csrf-token="{{ csrf_token }}" style="display: none">
-<div class="modal fade" id="import-modal" tabindex="-1" role="dialog" aria-labelledby="import-modal-title" aria-hidden="true">
+{% load i18n %}
+
+<button type="button" class="btn btn-primary js-import-decision-items {{ btn }}">
+  <span class="fa fa-cloud-upload"></span> {% trans 'Import from Excel' %}
+</button>
+<input type="file"
+       id="id_import_decision_items"
+       name="import_decision_items"
+       data-import-url="{% url 'deliverables:import_decision_items' %}"
+       data-csrf-token="{{ csrf_token }}"
+       style="display: none">
+<div class="modal fade"
+     id="import-modal"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="import-modal-title"
+     aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="import-modal-title">Imported data</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="import-modal-title">{% trans 'Imported data' %}</h4>
       </div>
       <div class="modal-body"></div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Discard</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Discard' %}</button>
         <button type="button" class="btn btn-primary js-confirm-import">
-          <span class="glyphicon glyphicon-ok"></span>
-          Confirm
+          <span class="glyphicon glyphicon-ok"></span> {% trans 'Confirm' %}
         </button>
       </div>
     </div>

@@ -1,8 +1,18 @@
+{% load i18n %}
 <div class="panel panel-default panel-menu">
-  <div class="panel-heading">Delivearble settings</div>
+  <div class="panel-heading">{% trans 'Delivearble settings' %}</div>
   <div class="list-group">
-    <a href="{% url 'deliverables:settings' deliverable.pk %}" class="list-group-item{% if active == 'details' %} active{% endif %}">Deliverable details</a>
-    <a href="{% url 'deliverables:factors_settings' deliverable.pk %}" class="list-group-item{% if active == 'factors' %} active{% endif %}">Value factors</a>
-    <a href="{% url 'deliverables:measure_settings' deliverable.pk %}" class="list-group-item{% if active == 'measure' %} active{% endif %}">Measure</a>
+    <a href="{% url 'deliverables:settings' deliverable.pk %}"
+       class="list-group-item{% if active == 'details' %} active{% endif %}">
+      {% trans 'Deliverable details' %}
+    </a>
+    <a href="{% url 'deliverables:factors_settings' deliverable.pk %}"
+       class="list-group-item{% if active == 'factors' %} active{% endif %}">
+      {% trans 'Value factors' %}
+    </a>
+    <a href="{% url 'deliverables:measure_settings' deliverable.pk %}"
+       class="list-group-item{% if active == 'measure' %} active{% endif %}">
+      {% trans 'Measure' %}
+    </a>
   </div>
 </div>

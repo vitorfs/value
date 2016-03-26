@@ -1,16 +1,18 @@
-{% load attr %}
+{% load attr i18n %}
 
 {% if filename %}
   <div class="alert alert-info" role="alert">
     <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-    <span class="sr-only">Info:</span>
-    Imported <strong>{{ formset|length }}</strong> entries from file <strong>{{ filename }}</strong>.
+    <span class="sr-only">{% trans 'Info:' %}</span>
+    {% trans 'Imported <strong>{{ formset|length }}</strong> entries from file <strong>{{ filename }}</strong>.' %}
   </div>
 {% endif %}
 
 {{ formset.management_form }}
 
-<table id="decision-items-import-table" class="table table-bordered table-striped" style="margin-bottom: 0; width: auto;">
+<table id="decision-items-import-table"
+       class="table table-bordered table-striped"
+       style="margin-bottom: 0; width: auto;">
   <thead>
     <tr>
       {% for field in formset.0 %}
@@ -26,7 +28,12 @@
       <tr>
         {% for field in form.visible_fields %}
           <td{% if field.errors %} class="bg-danger has-error"{% endif %}>
-            <input type="text" class="form-control input-sm" id="{{ field.id_for_label }}" name="{{ field.html_name }}" value="{{ field.value|default_if_none:'' }}" maxlength="{{ field.field.max_length }}">
+            <input type="text"
+                   class="form-control input-sm"
+                   id="{{ field.id_for_label }}"
+                   name="{{ field.html_name }}"
+                   value="{{ field.value|default_if_none:'' }}"
+                   maxlength="{{ field.field.max_length }}">
             {% for error in field.errors %}
               <p class="help-block">{{ error }}</p>
             {% endfor %}
@@ -36,7 +43,9 @@
           {% for hidden in form.hidden_fields %}
             {{ hidden }}
           {% endfor %}
-          <a href="javascript:void(0);" class="js-remove-row"><span class="glyphicon glyphicon-remove-sign"></span></a>
+          <a href="javascript:void(0);" class="js-remove-row">
+            <span class="glyphicon glyphicon-remove-sign"></span>
+          </a>
         </td>
       </tr>
     {% endfor %}

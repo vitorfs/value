@@ -1,9 +1,17 @@
-{% load attr %}
+{% load attr i18n %}
 
 <div>
   <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 10px;">
-    <li role="presentation" class="active"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">Details</a></li>
-    <li role="presentation"><a href="#attachments" aria-controls="attachments" role="tab" data-toggle="tab">Attachments</a></li>
+    <li role="presentation" class="active">
+      <a href="#details" aria-controls="details" role="tab" data-toggle="tab">
+        {% trans 'Details' %}
+      </a>
+    </li>
+    <li role="presentation">
+      <a href="#attachments" aria-controls="attachments" role="tab" data-toggle="tab">
+        {% trans 'Attachments' %}
+      </a>
+    </li>
   </ul>
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="details">
@@ -18,11 +26,15 @@
       {% if item.has_attachments %}
         <ul class="list-group" style="margin-top: 20px;">
           {% for attachment in item.attachments.all %}
-            <li class="list-group-item"><a href="{{ MEDIA_URL }}{{ attachment.attachment }}" target="_blank">{{ attachment.attachment }}</a></li>
+            <li class="list-group-item">
+              <a href="{{ MEDIA_URL }}{{ attachment.attachment }}" target="_blank">
+                {{ attachment.attachment }}
+              </a>
+            </li>
           {% endfor %}
         </ul>
       {% else %}
-        <em class="text-muted" style="margin: 20px 0; display: block;">This item has no attachments.</em>
+        <em class="text-muted" style="margin: 20px 0; display: block;">{% trans 'This item has no attachments.' %}</em>
       {% endif %}
     </div>
   </div>

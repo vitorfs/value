@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load staticfiles %}
+{% load i18n static %}
 
 {% block javascript %}
   <script src="{% static 'js/deliverables/import_decision_items.js' %}"></script>
@@ -17,10 +17,10 @@
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'deliverables:index' %}">{% trans 'Deliverables' %}</a></li>
     <li><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></li>
-    <li class="active">Decision Items</li>
+    <li class="active">{% trans 'Decision Items' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
@@ -34,13 +34,17 @@
     {% if deliverable.manager == user %}
       <input type="hidden" name="action" id="id_action">
       <div style="margin-bottom: 20px;">
-        <a href="{% url 'deliverables:add_decision_item' deliverable.pk %}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add item</a>
-        <span id="import-decision-items-container" data-save-import-url="{% url 'deliverables:save_imported_decision_items' deliverable.pk %}" data-csrf-token="{{ csrf_token }}">
+        <a href="{% url 'deliverables:add_decision_item' deliverable.pk %}" class="btn btn-primary">
+          <span class="glyphicon glyphicon-plus"></span> {% trans 'Add item' %}
+        </a>
+        <span id="import-decision-items-container"
+              data-save-import-url="{% url 'deliverables:save_imported_decision_items' deliverable.pk %}"
+              data-csrf-token="{{ csrf_token }}">
           {% include 'deliverables/includes/import_decision_items.html' %}
         </span>
         <button type="button" class="btn btn-default js-delete-selected" disabled="disabled">
           <span class="glyphicon glyphicon-trash"></span>
-          Remove selected items
+          {% trans 'Remove selected items' %}
         </button>
       </div>
     {% endif %}

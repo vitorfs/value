@@ -1,18 +1,25 @@
-{% load attr %}
+{% load attr i18n %}
+
 {% with fields=deliverable.get_decision_items_fields %}
   <table class="table table-hover table-bordered table-striped table-check-all" id="decision-items-table">
     <thead>
       <tr>
-        <th><input type="checkbox" autocomplete="off"></th>
+        <th>
+          <input type="checkbox" autocomplete="off">
+        </th>
         {% for name, field in fields.items %}
-        <th>{{ field.label }}</th>
+          <th>{{ field.label }}</th>
         {% endfor %}
       </tr>
     </thead>
     <tfoot>
       <tr>
         <td colspan="{{ fields.items|length|add:'1' }}">
-          Selected: <span class="count">0</span> of {{ deliverable.decisionitem_set.count }} decision items
+          {% trans 'Selected:' %}
+          <span class="count">0</span>
+          {% trans 'of' %}
+          {{ deliverable.decisionitem_set.count }}
+          {% trans 'decision items' %}
         </td>
       </tr>
     </tfoot>
@@ -24,7 +31,11 @@
         </td>
         {% for name, field in fields.items %}
           {% if forloop.first and deliverable.manager == user %}
-            <td><a href="{% url 'deliverables:edit_decision_item' deliverable.pk item.pk %}">{{ item|attr:name }}</a></td>
+            <td>
+              <a href="{% url 'deliverables:edit_decision_item' deliverable.pk item.pk %}">
+                {{ item|attr:name }}
+              </a>
+            </td>
           {% else %}
             <td>{{ item|attr:name }}</td>
           {% endif %}
@@ -32,7 +43,9 @@
       </tr>
       {% empty %}
         <tr>
-          <td colspan="{{ fields.items|length|add:'1' }}">No data</td>
+          <td colspan="{{ fields.items|length|add:'1' }}">
+            {% trans 'No data' %}
+          </td>
         </tr>
       {% endfor %}
     </tbody>

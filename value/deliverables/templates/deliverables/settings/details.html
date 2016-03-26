@@ -1,13 +1,11 @@
 {% extends 'base.html' %}
 
-{% load avatar %}
+{% load avatar i18n %}
 
 {% block javascript %}
   <script>
     $(function () {
-
       var options = [{% for stakeholder in users %}{ name: "{{ stakeholder.profile.get_display_name }}", pk: {{ stakeholder.pk }}, img: "{% avatar stakeholder 20 %}" }{% if not forloop.last %}, {% endif %}{% endfor %}];
-
       $("#id_user").selectizeUsers(options);
 
       $("#id_user").change(function () {
@@ -16,7 +14,7 @@
         }
         else {
           $("#confirm-transfer").prop("disabled", true);
-        }        
+        }
       });
 
       $("#enable-confirm-deletion").click(function () {
@@ -33,10 +31,10 @@
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'deliverables:index' %}">{% trans 'Deliverables' %}</a></li>
     <li><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></li>
-    <li class="active">Settings</li>
+    <li class="active">{% trans 'Settings' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
@@ -45,7 +43,6 @@
 {% endblock tabs %}
 
 {% block content %}
-
   <div class="row">
     <div class="col-md-3 col-sm-4">
       {% include 'deliverables/settings/includes/menu.html' with deliverable=deliverable active='details' %}
@@ -55,26 +52,31 @@
         {% csrf_token %}
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Deliverable details</h3>
+            <h3 class="panel-title">{% trans 'Deliverable details' %}</h3>
           </div>
           <div class="panel-body">
             {% include 'includes/form_vertical.html' with form=form %}
           </div>
           <div class="panel-footer">
-            <button type="submit" class="btn btn-primary">Save changes</button>
+            <button type="submit" class="btn btn-primary">{% trans 'Save changes' %}</button>
           </div>
         </div>
       </form>
 
       <div class="panel panel-danger">
         <div class="panel-heading">
-          <h3 class="panel-title">Danger zone</h3>
+          <h3 class="panel-title">{% trans 'Danger zone' %}</h3>
         </div>
         <ul class="list-group">
           <li class="list-group-item">
-            <button type="button" class="btn btn-danger pull-right" data-toggle="modal" data-target="#transfer-deliverable">Transfer</button>
-            <p><strong>Transfer ownership</strong></p>
-            <p style="margin-bottom: 0;">Transfer this deliverable to another user.</p>
+            <button type="button"
+                    class="btn btn-danger pull-right"
+                    data-toggle="modal"
+                    data-target="#transfer-deliverable">
+              {% trans 'Transfer' %}
+            </button>
+            <p><strong>{% trans 'Transfer ownership' %}</strong></p>
+            <p style="margin-bottom: 0;">{% trans 'Transfer this deliverable to another user.' %}</p>
           </li>
         </ul>
       </div>
@@ -83,23 +85,31 @@
 
   <form method="post" action="{% url 'deliverables:transfer' deliverable.pk %}">
     {% csrf_token %}
-    <div class="modal fade" id="transfer-deliverable" tabindex="-1" role="dialog" aria-labelledby="transfer-deliverable-title" aria-hidden="true">
+    <div class="modal fade"
+         id="transfer-deliverable"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="transfer-deliverable-title"
+         aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="transfer-deliverable-title">Transfer ownership</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="transfer-deliverable-title">{% trans 'Transfer ownership' %}</h4>
           </div>
           <div class="modal-body">
-            <label for="id_user" class="control-label">Select the new owner's name:</label>
+            <label for="id_user" class="control-label">{% trans 'Select the new owner\'s name:' %}</label>
             <select id="id_user" name="user"></select>
           </div>
           <div class="modal-footer">
-            <button type="submit" id="confirm-transfer" class="btn btn-danger btn-block" disabled>Transfer ownership</button>
+            <button type="submit" id="confirm-transfer" class="btn btn-danger btn-block" disabled>
+              {% trans 'Transfer ownership' %}
+            </button>
           </div>
         </div>
       </div>
     </div>
   </form>
-
 {% endblock content %}

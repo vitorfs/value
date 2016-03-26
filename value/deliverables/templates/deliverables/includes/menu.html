@@ -1,13 +1,36 @@
-<h3 style="margin-bottom: 20px;">
-  <a href="{% url 'deliverables:deliverable' deliverable.pk %}" style="font-weight: 300;">{{ deliverable.name }}</a>
-</h3>
+{% load i18n %}
 
+<h3 style="margin-bottom: 20px;">
+  <a href="{% url 'deliverables:deliverable' deliverable.pk %}" style="font-weight: 300;">
+    {{ deliverable.name }}
+  </a>
+</h3>
 <ul class="nav nav-tabs" style="margin-bottom: 20px">
-  <li role="presentation"{% if active == 'meetings' %} class="active"{% endif %}><a href="{% url 'deliverables:meetings:index' deliverable.pk %}"><span class="fa fa-calendar"></span> Meetings</a></li>
-  <li role="presentation"{% if active == 'stakeholders' %} class="active"{% endif %}><a href="{% url 'deliverables:stakeholders' deliverable.pk %}"><span class="fa fa-users"></span> Stakeholders</a></li>
-  <li role="presentation"{% if active == 'decision_items' %} class="active"{% endif %}><a href="{% url 'deliverables:decision_items' deliverable.pk %}"><span class="fa fa-list"></span> Decision Items</a></li>
-  <li role="presentation"{% if active == 'historical_dashboard' %} class="active"{% endif %}><a href="{% url 'deliverables:historical_dashboard' deliverable.pk %}"><span class="fa fa-line-chart"></span> Historical Dashboard</a></li>
+  <li role="presentation"{% if active == 'meetings' %} class="active"{% endif %}>
+    <a href="{% url 'deliverables:meetings:index' deliverable.pk %}">
+      <span class="fa fa-calendar"></span> {% trans 'Meetings' %}
+    </a>
+  </li>
+  <li role="presentation"{% if active == 'stakeholders' %} class="active"{% endif %}>
+    <a href="{% url 'deliverables:stakeholders' deliverable.pk %}">
+      <span class="fa fa-users"></span> {% trans 'Stakeholders' %}
+    </a>
+  </li>
+  <li role="presentation"{% if active == 'decision_items' %} class="active"{% endif %}>
+    <a href="{% url 'deliverables:decision_items' deliverable.pk %}">
+      <span class="fa fa-list"></span> {% trans 'Decision Items' %}
+    </a>
+  </li>
+  <li role="presentation"{% if active == 'historical_dashboard' %} class="active"{% endif %}>
+    <a href="{% url 'deliverables:historical_dashboard' deliverable.pk %}">
+      <span class="fa fa-line-chart"></span> {% trans 'Historical Dashboard' %}
+    </a>
+  </li>
   {% if user == deliverable.manager %}
-    <li role="presentation"{% if active == 'settings' %} class="active"{% endif %}><a href="{% url 'deliverables:settings' deliverable.pk %}"><span class="fa fa-wrench"></span> Settings</a></li>
+    <li role="presentation"{% if active == 'settings' %} class="active"{% endif %}>
+      <a href="{% url 'deliverables:settings' deliverable.pk %}">
+        <span class="fa fa-wrench"></span> {% trans 'Settings' %}
+      </a>
+    </li>
   {% endif %}
 </ul>

@@ -3,6 +3,7 @@
 from django.shortcuts import redirect
 from django.http import HttpResponseForbidden
 from django.contrib import messages
+from django.utils.translation import ugettext as _
 
 from value.deliverables.models import Deliverable
 
@@ -11,7 +12,7 @@ def permission_denied(request):
     if request.is_ajax():
         return HttpResponseForbidden()
     else:
-        messages.error(request, 'Permission denied.')
+        messages.error(request, _('Permission denied.'))
         return redirect('signin')
 
 

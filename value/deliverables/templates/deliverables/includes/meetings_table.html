@@ -1,13 +1,13 @@
-{% load avatar %}
+{% load avatar i18n %}
 
 <table class="table table-hover table-clickable-row">
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Attendees</th>
-      <th>Items</th>
-      <th>Progress</th>
-      <th>Status</th>
+      <th>{% trans 'Name' %}</th>
+      <th>{% trans 'Attendees' %}</th>
+      <th>{% trans 'Items' %}</th>
+      <th>{% trans 'Progress' %}</th>
+      <th>{% trans 'Status' %}</th>
       <th>
         <span class="fa fa-map-marker"></span>
       </th>
@@ -22,7 +22,11 @@
   <tbody>
     {% for meeting in meetings %}
       <tr data-href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">
-        <td><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></td>
+        <td>
+          <a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">
+            {{ meeting.name }}
+          </a>
+        </td>
         <td>
           {% for meeting_stakeholder in meeting.meetingstakeholder_set.all %}
             {% avatar_img meeting_stakeholder.stakeholder 20 %}
@@ -32,7 +36,12 @@
         <td>
           {% with progress=meeting.progress %}
             <div class="progress" style="margin-bottom: 0">
-              <div class="progress-bar{% if progress == 100.0 %} progress-bar-success{% else %} progress-bar-warning{% endif %}" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%;">
+              <div class="progress-bar{% if progress == 100.0 %} progress-bar-success{% else %} progress-bar-warning{% endif %}"
+                   role="progressbar"
+                   aria-valuenow="{{ progress }}"
+                   aria-valuemin="0"
+                   aria-valuemax="100"
+                   style="width: {{ progress }}%;">
                 {{ progress }}%
               </div>
             </div>
@@ -45,7 +54,7 @@
       </tr>
     {% empty %}
       <tr>
-        <td colspan="7">No data</td>
+        <td colspan="8">{% trans 'No data' %}</td>
       </tr>
     {% endfor %}
   </tbody>
