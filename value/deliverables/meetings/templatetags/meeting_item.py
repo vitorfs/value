@@ -3,6 +3,7 @@
 from django import template
 from django.utils.html import mark_safe
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext as _
 
 from value.deliverables.meetings.models import MeetingItem
 from value.deliverables.meetings.utils import format_percentage
@@ -21,7 +22,9 @@ def meeting_item(meeting_item_id):
 
 @register.simple_tag
 def display_evaluation_summary(instance):
-    html = u'<div class="progress help-cursor" style="margin-bottom: 0" title="Decision Item Evaluation Summary">'
+    html = u'<div class="progress help-cursor" style="margin-bottom: 0" title="{0}">'.format(
+        _('Decision Item Evaluation Summary')
+    )
 
     evaluation_summary = instance.evaluation_summary.all().select_related('measure_value')
     for ranking in evaluation_summary:
@@ -46,7 +49,11 @@ def display_ranking_label(ranking):
         label = 'label-warning'
     html = u'''<span class="label {0} pull-right help-cursor"
                      style="margin-right: 10px; margin-top: 2px;"
-                     title="Value Ranking">{1}</span>'''.format(label, format_percentage(ranking))
+                     title="{1}">{2}</span>'''.format(
+        label,
+        _('Value Ranking'),
+        format_percentage(ranking)
+    )
     return mark_safe(html)
 
 
@@ -58,14 +65,14 @@ def display_info_button(meeting_item):
     )
     html = u'''
         <span data-toggle="tooltip"
-              title="Click to view details"
+              title="{0}"
               data-container="body" style="margin-left: 5px;">
           <a href="javascript:void(0);"
              class="btn-details js-decision-item-details"
              data-toggle="modal"
              data-target="#modal-decision-item-details"
-             data-remote-url="{0}">
+             data-remote-url="{1}">
             <span class="glyphicon glyphicon-info-sign"></span>
           </a>
-    </span>'''.format(remote)
+    </span>'''.format(_('Click to view details'), remote)
     return mark_safe(html)

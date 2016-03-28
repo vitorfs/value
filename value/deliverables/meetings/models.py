@@ -1,12 +1,13 @@
 # coding: utf-8
 
-from django.db import models, transaction
-from django.db.models import Count, Sum
-from django.db.models.signals import m2m_changed
 from django.contrib.auth.models import User, Group
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
+from django.db import models, transaction
+from django.db.models import Count, Sum
+from django.db.models.signals import m2m_changed
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
@@ -15,14 +16,27 @@ from value.deliverables.meetings.utils import format_percentage, get_votes_perce
 
 
 class Rationale(models.Model):
-    text = models.TextField(max_length=4000, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name='rationales_created')
-    updated_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name='rationales_updated')
+    text = models.TextField(_('text'), max_length=4000, null=True, blank=True)
+    created_at = models.DateTimeField(_('created at'), auto_now_add=True)
+    updated_at = models.DateTimeField(_('updated at'), auto_now=True)
+    created_by = models.ForeignKey(
+        User,
+        verbose_name=_('created by'),
+        on_delete=models.PROTECT,
+        related_name='rationales_created'
+    )
+    updated_by = models.ForeignKey(
+        User,
+        verbose_name=_('updated by'),
+        on_delete=models.PROTECT,
+        null=True,
+        related_name='rationales_updated'
+    )
 
     class Meta:
         db_table = 'rationales'
+        verbose_name = _('rationale')
+        verbose_name_plural = _('rationales')
 
     def __unicode__(self):
         return self.text
@@ -39,30 +53,43 @@ class Meeting(models.Model):
     ANALYSING = 'A'
     CLOSED = 'C'
     STATUS = (
-        (ONGOING, 'Ongoing'),
-        (ANALYSING, 'Analysing'),
-        (CLOSED, 'Closed'),
+        (ONGOING, _('Ongoing')),
+        (ANALYSING, _('Analysing')),
+        (CLOSED, _('Closed')),
     )
 
-    name = models.CharField(max_length=255)
-    description = models.CharField(max_length=2000, null=True, blank=True)
-    location = models.CharField(max_length=50, null=True, blank=True)
+    name = models.CharField('name', max_length=255)
+    description = models.CharField('description', max_length=2000, null=True, blank=True)
+    location = models.CharField('location', max_length=50, null=True, blank=True)
     deliverable = models.ForeignKey(Deliverable, on_delete=models.PROTECT)
     measure = models.ForeignKey(Measure, on_delete=models.PROTECT, related_name='meetings', null=True)
     factors = models.ManyToManyField(Factor, related_name='meetings')
-    status = models.CharField(max_length=1, choices=STATUS, default=ONGOING)
-    started_at = models.DateTimeField()
-    ended_at = models.DateTimeField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name='meetings_created')
-    updated_at = models.DateTimeField(auto_now=True)
-    updated_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name='meetings_updated')
+    status = models.CharField('status', max_length=1, choices=STATUS, default=ONGOING)
+    started_at = models.DateTimeField('started at')
+    ended_at = models.DateTimeField('ended at', null=True, blank=True)
+    created_at = models.DateTimeField('created at', auto_now_add=True)
+    created_by = models.ForeignKey(
+        User,
+        verbose_name='created by',
+        on_delete=models.PROTECT,
+        related_name='meetings_created'
+    )
+    updated_at = models.DateTimeField(_('updated at'), auto_now=True)
+    updated_by = models.ForeignKey(
+        User,
+        verbose_name=_('updated by'),
+        on_delete=models.PROTECT,
+        null=True,
+        related_name='meetings_updated'
+    )
     rationales = models.ManyToManyField(Rationale)
-    rationales_count = models.PositiveIntegerField(default=0)
-    progress = models.FloatField(default=0.0)
+    rationales_count = models.PositiveIntegerField(_('rationales count'), default=0)
+    progress = models.FloatField(_('progress'), default=0.0)
 
     class Meta:
         db_table = 'meetings'
+        verbose_name = _('meeting')
+        verbose_name_plural = _('meetings')
         ordering = ('-updated_at',)
 
     def __unicode__(self):
@@ -249,8 +276,8 @@ class Ranking(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
-    raw_votes = models.IntegerField(default=0)
-    percentage_votes = models.FloatField(default=0.0)
+    raw_votes = models.IntegerField(_('raw votes'), default=0)
+    percentage_votes = models.FloatField(_('percentage votes'), default=0.0)
 
     class Meta:
         db_table = 'rankings'
@@ -267,16 +294,18 @@ class Ranking(models.Model):
 class MeetingItem(models.Model):
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
     decision_item = models.ForeignKey(DecisionItem, on_delete=models.PROTECT)
-    meeting_decision = models.BooleanField(default=False)
+    meeting_decision = models.BooleanField(_('meeting decision'), default=False)
     rationales = models.ManyToManyField(Rationale)
-    has_rationales = models.BooleanField(default=False)
-    value_ranking = models.FloatField(default=0.0)
-    meeting_ranking = models.FloatField(default=0.0)
+    has_rationales = models.BooleanField(_('has rationales?'), default=False)
+    value_ranking = models.FloatField(_('value ranking'), default=0.0)
+    meeting_ranking = models.FloatField(_('meeting ranking'), default=0.0)
     evaluation_summary = GenericRelation(Ranking)
 
     class Meta:
         db_table = 'meeting_items'
         ordering = ('decision_item__name',)
+        verbose_name = _('meeting item')
+        verbose_name_plural = _('meeting items')
 
     def __unicode__(self):
         return '{0} ({1})'.format(self.decision_item.name, self.meeting.name)
@@ -360,7 +389,7 @@ class MeetingItem(models.Model):
 class MeetingStakeholder(models.Model):
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
     stakeholder = models.ForeignKey(User, on_delete=models.PROTECT)
-    meeting_input = models.FloatField(default=0.0)
+    meeting_input = models.FloatField(_('meeting input'), default=0.0)
 
     class Meta:
         db_table = 'meeting_stakeholders'
@@ -377,12 +406,14 @@ class Evaluation(models.Model):
     factor = models.ForeignKey(Factor, on_delete=models.PROTECT)
     measure = models.ForeignKey(Measure, on_delete=models.PROTECT)
     measure_value = models.ForeignKey(MeasureValue, on_delete=models.SET_NULL, null=True, blank=True)
-    evaluated_at = models.DateTimeField(null=True, blank=True)
+    evaluated_at = models.DateTimeField(_('evaluated at'), null=True, blank=True)
     rationale = models.OneToOneField(Rationale, on_delete=models.SET_NULL, null=True)
 
     class Meta:
         db_table = 'evaluations'
         unique_together = (('meeting', 'meeting_item', 'user', 'factor', 'measure'), )
+        verbose_name = _('evaluation')
+        verbose_name_plural = _('evaluations')
 
     def __unicode__(self):
         return '{0} - {1}'.format(self.meeting.name, self.meeting_item.decision_item.name)
@@ -409,10 +440,10 @@ class Scenario(models.Model):
     The Scenario class is used to aggregate decision items to generate different
     types of visualization inside the dashboard.
     """
-    name = models.CharField(max_length=255)
+    name = models.CharField(_('name'), max_length=255)
     meeting = models.ForeignKey(Meeting, on_delete=models.PROTECT, related_name='scenarios')
     meeting_items = models.ManyToManyField(MeetingItem, related_name='scenarios')
-    value_ranking = models.FloatField(default=0.0)
+    value_ranking = models.FloatField(_('value ranking'), default=0.0)
     evaluation_summary = GenericRelation(Ranking)
     rationales = models.ManyToManyField(Rationale)
 

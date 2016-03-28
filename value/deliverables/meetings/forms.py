@@ -1,13 +1,14 @@
 # coding: utf-8
 
 from django import forms
-from django.core.exceptions import ValidationError
 from django.utils.html import escape
+from django.utils.translation import ugettext_lazy as _
 
 from value.factors.models import Factor
 from value.measures.models import MeasureValue
 from value.deliverables.models import Deliverable
 from value.deliverables.meetings.models import Meeting, MeetingItem, Scenario, Rationale
+from value.deliverables.meetings.validators import validate_scenarios_selection
 
 
 class AbstractMeetingForm(forms.ModelForm):
@@ -15,7 +16,7 @@ class AbstractMeetingForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length=255)
     started_at = forms.DateTimeField(
         widget=forms.DateTimeInput(format='%d/%m/%Y %H:%M', attrs={'class': 'form-control'}),
-        label='Starting at',
+        label=_('Starting at'),
         input_formats=['%d/%m/%Y %H:%M', ]
     )
     description = forms.CharField(
@@ -100,14 +101,17 @@ class FactorMultipleModelChoiceField(forms.ModelMultipleChoiceField):
 class ScenarioBuilderForm(forms.Form):
     name = forms.CharField(label='Name', max_length=255, required=True)
     meeting = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Meeting.objects.all(), required=True)
-    meeting_items_count = forms.ChoiceField(label='Number of decision items to compose the scenario', required=True)
+    meeting_items_count = forms.ChoiceField(
+        label=_('Number of decision items to compose the scenario'),
+        required=True
+    )
     factors = FactorMultipleModelChoiceField(
         widget=forms.CheckboxSelectMultiple(),
-        label='Related to',
+        label=_('Related to'),
         queryset=Factor.objects.none(),
         required=True
     )
-    criteria = forms.ModelChoiceField(label='Based on', queryset=None, required=True, empty_label=None)
+    criteria = forms.ModelChoiceField(label=_('Based on'), queryset=None, required=True, empty_label=None)
 
     def __init__(self, *args, **kwargs):
         super(ScenarioBuilderForm, self).__init__(*args, **kwargs)
@@ -120,16 +124,11 @@ class ScenarioBuilderForm(forms.Form):
         fields = ('meeting', 'meeting_items_count', 'factors', 'criteria')
 
 
-def validate_scenarios_selection(value):
-    if len(value) != 2:
-        raise ValidationError('Select exactly two scenarios to compare.')
-
-
 class CompareScenarioForm(forms.Form):
     meeting = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Meeting.objects.all(), required=True)
     scenarios = forms.ModelMultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(),
-        label='Select two scenarios to compare',
+        label=_('Select two scenarios to compare'),
         queryset=Scenario.objects.none(),
         required=True
     )

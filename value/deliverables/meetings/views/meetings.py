@@ -13,6 +13,7 @@ from django.db.models import Q
 from django.db import transaction
 from django.utils import timezone
 from django.utils.html import mark_safe
+from django.utils.translation import ugettext as _
 
 from value.deliverables.models import Deliverable, DecisionItemLookup, DecisionItem
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
@@ -73,11 +74,11 @@ def new(request, deliverable_id):
             if initial_measure_value:
                 meeting.initial_data(initial_measure_value)
 
-            messages.success(request, u'The meeting {0} was created successfully.'.format(meeting.name))
+            messages.success(request, _(u'The meeting {0} was created successfully.').format(meeting.name))
             return redirect(reverse('deliverables:meetings:meeting', args=(deliverable.pk, meeting.pk,)))
         else:
             print form.errors
-            messages.error(request, u'Please correct the error below.')
+            messages.error(request, _(u'Please correct the error below.'))
     else:
         form = NewMeetingForm(instance=meeting, initial={'started_at': timezone.now()})
         meeting_stakeholders = deliverable.stakeholders \
@@ -124,9 +125,9 @@ def change_meeting_status(request, deliverable_id, meeting_id):
         meeting = form.save()
         meeting.deliverable.save()
         new_status = meeting.get_status_display()
-        messages.success(request, u'The meeting status was changed from {0} to {1}.'.format(old_status, new_status))
+        messages.success(request, _(u'The meeting status was changed from {0} to {1}.').format(old_status, new_status))
     else:
-        messages.error(request, u'An error ocurred while trying to change meeting status.'.format(meeting.name))
+        messages.error(request, _(u'An error ocurred while trying to change meeting status.').format(meeting.name))
     redirect_to = request.POST.get(
         'next',
         reverse('deliverables:meetings:meeting', args=(meeting.deliverable.pk, meeting.pk))
@@ -152,8 +153,8 @@ def remove_stakeholder(request, deliverable_id, meeting_id):
         if meeting_stakeholder.stakeholder.evaluation_set.filter(meeting=meeting).exists():
             messages.warning(
                 request,
-                u'''The stakeholder {0} cannot be removed from this meeting
-                because he has already provided evaluation input.'''.format(user.profile.get_display_name())
+                _(u'''The stakeholder {0} cannot be removed from this meeting
+                because he has already provided evaluation input.''').format(user.profile.get_display_name())
             )
         else:
             meeting_stakeholder.delete()
@@ -161,10 +162,10 @@ def remove_stakeholder(request, deliverable_id, meeting_id):
             meeting.calculate_all_rankings()
             messages.success(
                 request,
-                u'{0} was successfully removed from the meeting!'.format(user.profile.get_display_name())
+                _(u'{0} was successfully removed from the meeting!').format(user.profile.get_display_name())
             )
     else:
-        messages.warning(request, 'You cannot remove yourself from the meeting.')
+        messages.warning(request, _('You cannot remove yourself from the meeting.'))
     return redirect(reverse('deliverables:meetings:stakeholders', args=(deliverable_id, meeting_id)))
 
 
@@ -181,9 +182,9 @@ def add_stakeholders(request, deliverable_id, meeting_id):
             meeting_stakeholder.save()
         meeting.calculate_progress()
         meeting.calculate_all_rankings()
-        messages.success(request, u'Stakeholders sucessfully added to the meeting!')
+        messages.success(request, _(u'Stakeholders sucessfully added to the meeting!'))
     else:
-        messages.warning(request, u'Select at least one stakeholder to add.')
+        messages.warning(request, _(u'Select at least one stakeholder to add.'))
     return redirect(reverse('deliverables:meetings:stakeholders', args=(deliverable_id, meeting_id)))
 
 
@@ -206,8 +207,10 @@ def remove_decision_items(request, deliverable_id, meeting_id):
             messages.success(
                 request,
                 mark_safe(
-                    u'''The following decision items was sucessfully removed from the meeting:
-                    <ul><li>{0}</li></ul>'''.format(u'</li><li>'.join(pretty_names))
+                    u'{0}<ul><li>{1}</li></ul>'.format(
+                        _('The following decision items was sucessfully removed from the meeting:'),
+                        u'</li><li>'.join(pretty_names)
+                    )
                 )
             )
         if cannot_delete:
@@ -215,12 +218,15 @@ def remove_decision_items(request, deliverable_id, meeting_id):
             messages.warning(
                 request,
                 mark_safe(
-                    u'''The following decision items wasn\'t removed from the meeting
-                    because they were already in use: <ul><li>{0}</li></ul>'''.format(u'</li><li>'.join(pretty_names))
+                    u'{0}<ul><li>{1}</li></ul>'.format(
+                        _('''The following decision items wasn\'t removed from the meeting because
+                        they were already in use:'''),
+                        u'</li><li>'.join(pretty_names)
+                    )
                 )
             )
     else:
-        messages.warning(request, u'Select at least one decision item to remove.')
+        messages.warning(request, _(u'Select at least one decision item to remove.'))
     return redirect(reverse('deliverables:meetings:decision_items', args=(deliverable_id, meeting_id)))
 
 
@@ -237,9 +243,9 @@ def add_decision_items(request, deliverable_id, meeting_id):
             meeting_item.save()
         meeting.calculate_progress()
         meeting.calculate_all_rankings()
-        messages.success(request, u'Decision items sucessfully added to the meeting!')
+        messages.success(request, _(u'Decision items sucessfully added to the meeting!'))
     else:
-        messages.warning(request, u'Select at least one decision item to add.')
+        messages.warning(request, _(u'Select at least one decision item to add.'))
     return redirect(reverse('deliverables:meetings:decision_items', args=(deliverable_id, meeting_id)))
 
 
@@ -251,9 +257,9 @@ def settings(request, deliverable_id, meeting_id):
         if form.is_valid():
             form.save()
             meeting.deliverable.save()
-            messages.success(request, u'The meeting details was saved successfully!')
+            messages.success(request, _(u'The meeting details was saved successfully!'))
         else:
-            messages.error(request, u'Please correct the error below.')
+            messages.error(request, _(u'Please correct the error below.'))
     else:
         form = MeetingForm(instance=meeting)
     return render(request, 'meetings/settings/details.html', {
@@ -297,6 +303,6 @@ def delete(request, deliverable_id, meeting_id):
     can_delete = (not meeting.evaluation_set.exists())
     if request.method == 'POST' and can_delete:
         meeting.delete()
-        messages.success(request, u'The meeeting {0} was completly deleted successfully.'.format(meeting.name))
+        messages.success(request, _(u'The meeeting {0} was completly deleted successfully.').format(meeting.name))
         return redirect(reverse('deliverables:deliverable', args=(meeting.deliverable.pk,)))
     return render(request, 'meetings/settings/delete.html', {'meeting': meeting, 'can_delete': can_delete})

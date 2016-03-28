@@ -2,12 +2,13 @@
 
 import json
 
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseBadRequest, Http404
 from django.views.decorators.http import require_POST
-from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.utils.translation import ugettext as _
 
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
@@ -147,4 +148,4 @@ def save_rationale(request, deliverable_id, meeting_id):
             return HttpResponseBadRequest(form['text'].errors.as_text())
 
     except ObjectDoesNotExist:
-        return HttpResponseBadRequest('An error ocurred while trying to save your data.')
+        return HttpResponseBadRequest(_('An error ocurred while trying to save your data.'))

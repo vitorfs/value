@@ -2,6 +2,7 @@
 
 from django import template
 from django.utils.html import escape, mark_safe
+from django.utils.translation import ugettext as _
 
 register = template.Library()
 
@@ -55,7 +56,7 @@ def evaluation_options(evaluations, meeting_item, factor, measure, measure_value
     if factor.group:
         factor_name = u'<strong>{0}</strong>: {1}'.format(escape(factor.group.name), escape(factor.name))
 
-    factor_description = 'No description'
+    factor_description = _('No description')
     if factor.description:
         factor_description = escape(factor.description)
 
@@ -68,7 +69,7 @@ def evaluation_options(evaluations, meeting_item, factor, measure, measure_value
  class="btn-rationale js-rationale {1} pull-right"
  data-toggle="popover"
  data-placement="right"
- title="Add a rationale for {0}"
+ title="{4} {0}"
  data-content=""
  data-rationale="{2}">
 <span class="fa fa-comment"></span>
@@ -76,7 +77,8 @@ def evaluation_options(evaluations, meeting_item, factor, measure, measure_value
         factor_name,
         no_comment,
         escape(rationale_text),
-        factor_description
+        factor_description,
+        _('Add a rationale for')
     )
 
     for measure_value in measure_values:

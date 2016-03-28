@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load staticfiles meeting_item %}
+{% load i18n static meeting_item %}
 
 {% block javascript %}
   <script src="{% static 'js/meetings/meetings.js' %}"></script>
@@ -9,12 +9,12 @@
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'deliverables:index' %}">{% trans 'Deliverables' %}</a></li>
     <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a></li>
-    <li><a href="{% url 'deliverables:meetings:index' meeting.deliverable.pk %}">Meetings</a></li>
+    <li><a href="{% url 'deliverables:meetings:index' meeting.deliverable.pk %}">{% trans 'Meetings' %}</a></li>
     <li><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
-    <li class="active">Final Decision</li>
+    <li class="active">{% trans 'Final Decision' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
@@ -24,36 +24,43 @@
   {% if meeting.is_ongoing %}
     <div class="well blank-state">
       <span class="fa fa-refresh"></span>
-      <h3>The meeting is still ongoing!</h3>
-      <p class="lead">In order to record the final decision the meeting manager must change its status to <strong>Analysing</strong>.</p>
+      <h3>{% trans 'The meeting is still ongoing!' %}</h3>
+      <p class="lead">
+        {% blocktrans trimmed %}
+          In order to record the final decision the meeting manager must change its status
+          to <strong>Analysing</strong>.
+        {% endblocktrans %}
+      </p>
       {% if user == meeting.deliverable.manager %}
         <button type="button" class="btn btn-primary js-change-meeting-status" data-option="{{ meeting.ANALYSING }}">
-          <span class="fa fa-bar-chart-o"></span> Change status to Analysing
+          <span class="fa fa-bar-chart-o"></span> {% trans 'Change status to Analysing' %}
         </button>
       {% endif %}
     </div>
   {% else %}
     <div class="row">
       <div class="col-lg-8 col-md-10 col-sm-12 col-lg-offset-2 col-md-offset-1">
-
-        <form id="form-final-decision" method="post" action="{% url 'deliverables:meetings:save_final_decision' meeting.deliverable.pk meeting.pk %}">
+        <form id="form-final-decision"
+              method="post"
+              action="{% url 'deliverables:meetings:save_final_decision' meeting.deliverable.pk meeting.pk %}">
           {% csrf_token %}
           {{ formset.management_form }}
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h3 class="panel-title">Final Decision</h3>
+              <h3 class="panel-title">{% trans 'Final Decision' %}</h3>
             </div>
             <table class="table table-bordered" id="table-final-decision">
               <thead>
-                <th>Name</th>
-                <th>Summary</th>
-                <th style="width: 140px;">Value Ranking</th>
-                <th style="width: 100px;">Decision</th>
-                <th style="width: 150px;">Meeting Ranking</th>
+                <th>{% trans 'Name' %}</th>
+                <th>{% trans 'Summary' %}</th>
+                <th style="width: 140px;">{% trans 'Value Ranking' %}</th>
+                <th style="width: 100px;">{% trans 'Decision' %}</th>
+                <th style="width: 150px;">{% trans 'Meeting Ranking' %}</th>
               </thead>
               <tbody>
                 {% for form in formset %}
-                  <tr data-item-id="{{ form.instance.pk }}"{% if meeting.is_closed %} class="{% if form.instance.meeting_decision %}bg-success{% else %}bg-danger{% endif %}"{% endif %}>
+                  <tr data-item-id="{{ form.instance.pk }}"
+                      {% if meeting.is_closed %} class="{% if form.instance.meeting_decision %}bg-success{% else %}bg-danger{% endif %}"{% endif %}>
                     <td style="vertical-align: middle;">
                       {{ form.instance.decision_item.name }}
                       {% display_info_button form.instance %}
@@ -64,7 +71,9 @@
                     <td style="vertical-align: middle;">
                       {% display_evaluation_summary form.instance %}
                     </td>
-                    <td style="vertical-align: middle; text-align: right;">{{ form.instance.value_ranking_as_html|safe }}</td>
+                    <td style="vertical-align: middle; text-align: right;">
+                      {{ form.instance.value_ranking_as_html|safe }}
+                    </td>
                     <td style="vertical-align: middle; text-align: center;">
                       {% if not meeting.is_closed %}
                         {{ form.meeting_decision }}
@@ -78,7 +87,6 @@
                         </span>
                       {% endif %}
                     </td>
-
                     <td style="vertical-align: middle; text-align: center;">
                       {% if not meeting.is_closed %}
                         <span class="hide">{{ form.meeting_ranking.value }}</span>
@@ -87,18 +95,14 @@
                         {{ form.meeting_ranking.value }}
                       {% endif %}
                     </td>
-
                   </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
         </form>
-
       </div>
     </div>
   {% endif %}
-
   {% include 'deliverables/decision_items/includes/modal.html' %}
-
 {% endblock content %}

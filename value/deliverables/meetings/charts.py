@@ -5,6 +5,7 @@ import operator
 from django.contrib.auth.models import User
 from django.db.models import Count
 from django.utils.html import escape
+from django.utils.translation import ugettext as _
 
 from value.factors.models import Group as FactorGroup
 from value.deliverables.meetings.models import Meeting, MeetingItem, Evaluation
@@ -46,12 +47,12 @@ class Highcharts(object):
             'yAxis': {
                 'min': 0,
                 'max': 100,
-                'title': {'text': 'Percentage of evaluations'},
+                'title': {'text': _('Percentage of evaluations')},
                 'labels': {'format': '{value}%'}
             },
             'legend': {'reversed': True},
             'plotOptions': {'series': {'stacking': stacking}},
-            'tooltip': {'pointFormat': 'Percentage: <strong>{point.y}%</strong>'},
+            'tooltip': {'pointFormat': _('Percentage:') + ' <strong>{point.y}%</strong>'},
             'exporting': {'enabled': False},
             'series': series
         }
@@ -75,7 +76,7 @@ class Highcharts(object):
                     }
                 }],
                 'data': data,
-                'tooltip': {'pointFormat': '{point.name} Percentage: <strong>{point.value}%</strong>'}
+                'tooltip': {'pointFormat': '{point.name} ' + _('Percentage:') + ' <strong>{point.value}%</strong>'}
             }],
             'exporting': {'enabled': False}
         }
@@ -106,17 +107,17 @@ class Highcharts(object):
         options = {
             'chart': {'type': 'bar'},
             'title': {'text': 'Stakeholder\'s Input'},
-            'subtitle': {'text': '100% means the stakeholder evaluated all the meeting\'s decision items.'},
+            'subtitle': {'text': _('100% means the stakeholder evaluated all the meeting\'s decision items.')},
             'xAxis': {
                 'type': 'category',
                 'labels': {'style': self.label_style}
             },
-            'yAxis': {'min': 0, 'max': 100, 'title': {'text': 'Stakeholder Meeting Input'}},
+            'yAxis': {'min': 0, 'max': 100, 'title': {'text': _('Stakeholder Meeting Input')}},
             'legend': {'enabled': False},
-            'tooltip': {'pointFormat': 'Usage percentage: <strong>{point.y}%</strong>'},
+            'tooltip': {'pointFormat': _('Usage percentage:') + ' <strong>{point.y}%</strong>'},
             'exporting': {'enabled': False},
             'series': [{
-                'name': 'Stakeholder Meeting Input',
+                'name': _('Stakeholder Meeting Input'),
                 'data': data,
                 'color': '#337AB7',
                 'dataLabels': {
@@ -154,18 +155,18 @@ class Highcharts(object):
 
         options = {
             'chart': {'type': 'column'},
-            'title': {'text': 'Overall Value Factors Usage'},
-            'subtitle': {'text': 'Which factors are being used to evaluate the decision items.'},
+            'title': {'text': _('Overall Value Factors Usage')},
+            'subtitle': {'text': _('Which factors are being used to evaluate the decision items.')},
             'xAxis': {
                 'type': 'category',
                 'labels': {'style': self.label_style}
             },
-            'yAxis': {'min': 0, 'max': 100, 'title': {'text': 'Factors usage percentage'}},
+            'yAxis': {'min': 0, 'max': 100, 'title': {'text': _('Factors usage percentage')}},
             'legend': {'enabled': False},
-            'tooltip': {'pointFormat': 'Usage percentage: <strong>{point.y}%</strong>'},
+            'tooltip': {'pointFormat': _('Usage percentage:') + ' <strong>{point.y}%</strong>'},
             'exporting': {'enabled': False},
             'series': [{
-                'name': 'Factors usage percentage',
+                'name': _('Factors usage percentage'),
                 'data': data,
                 'color': '#337AB7',
                 'dataLabels': {
@@ -189,13 +190,13 @@ class Highcharts(object):
 
         options = {
             'chart': {'type': 'column'},
-            'title': {'text': 'Value Ranking'},
+            'title': {'text': _('Value Ranking')},
             'exporting': {'enabled': False},
             'xAxis': {
                 'categories': list(categories)
             },
             'series': [{
-                'name': 'Ranking',
+                'name': _('Ranking'),
                 'data': list(data),
                 'color': '#337AB7',
                 'dataLabels': {
@@ -235,7 +236,8 @@ class Highcharts(object):
         groups_text = get_stakeholders_group_names(stakeholder_ids)
         options = {
             'chart': {'type': 'column'},
-            'title': {'text': u'Features Comparison: {0} {1}'.format(
+            'title': {'text': u'{0}: {1} {2}'.format(
+                _('Features Comparison'),
                 measure_value.description,
                 measure_value.measure.name
             )},
@@ -257,7 +259,7 @@ class Highcharts(object):
             },
             'exporting': {'enabled': False},
             'series': [{
-                'name': measure_value.description + ' Votes',
+                'name': measure_value.description + ' ' + _('Votes'),
                 'data': data,
                 'color': measure_value.color,
                 'dataLabels': {
@@ -303,7 +305,7 @@ class Highcharts(object):
 
             options = self._base_stacked_chart(categories, series, chart_type)
             groups_text = get_stakeholders_group_names(stakeholder_ids)
-            options['subtitle'] = {'text': u'{0} opinion'.format(groups_text)}
+            options['subtitle'] = {'text': u'{0} {1}'.format(groups_text, _('opinion'))}
         return options
 
     def decision_items_overview(self, meeting, chart_type, stakeholder_ids):
@@ -311,7 +313,7 @@ class Highcharts(object):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(user_id__in=stakeholder_ids)
         meeting_items = meeting.meetingitem_set.select_related('decision_item').all()
         options = self._decision_items_overview(meeting, chart_type, stakeholder_ids, evaluations, meeting_items)
-        options['title'] = {'text': u'Decision Items Overview'}
+        options['title'] = {'text': _(u'Decision Items Overview')}
         return options
 
     def decision_items_overview_scenario(self, scenario, chart_type, stakeholder_ids):
@@ -326,7 +328,7 @@ class Highcharts(object):
             evaluations,
             meeting_items
         )
-        options['title'] = {'text': u'Scenario Overview'}
+        options['title'] = {'text': _(u'Scenario Overview')}
         return options
 
     ''' Factors Comparison Charts '''
@@ -388,8 +390,10 @@ class Highcharts(object):
         max_votes = len(set(stakeholder_ids))
         options = self._factors_comparison_chart(chart_type, evaluations, max_votes)
         groups_text = get_stakeholders_group_names(stakeholder_ids)
-        options['title'] = {'text': u'{0} Value Factors Comparison'.format(meeting_item.decision_item.name)}
-        options['subtitle'] = {'text': u'{0} opinion'.format(groups_text)}
+        options['title'] = {'text': u'{0} {1}'.format(
+            meeting_item.decision_item.name, _('Value Factors Comparison')
+        )}
+        options['subtitle'] = {'text': u'{0} {1}'.format(groups_text, _('opinion'))}
         return options
 
     def factors_comparison_scenario(self, meeting, scenario, chart_type, stakeholder_ids):
@@ -399,8 +403,10 @@ class Highcharts(object):
         max_votes = len(stakeholder_ids) * items_count
         options = self._factors_comparison_chart(chart_type, evaluations, max_votes)
         groups_text = get_stakeholders_group_names(stakeholder_ids)
-        options['title'] = {'text': u'{0} Value Factors Comparison'.format(escape(scenario.name))}
-        options['subtitle'] = {'text': u'{0} opinion'.format(groups_text)}
+        options['title'] = {'text': u'{0} {1}'.format(
+            escape(scenario.name), _('Value Factors Comparison')
+        )}
+        options['subtitle'] = {'text': u'{0} {1}'.format(groups_text, _('opinion'))}
         return options
 
     ''' Decision Items Acceptance Charts '''
@@ -431,8 +437,10 @@ class Highcharts(object):
 
         options = self._decision_item_acceptance_simple_treemap(evaluations, max_votes)
         groups_text = get_stakeholders_group_names(stakeholder_ids)
-        options['title'] = {'text': u'{0} Acceptance'.format(escape(meeting_item.decision_item.name))}
-        options['subtitle'] = {'text': u'{0} opinion'.format(groups_text)}
+        options['title'] = {'text': u'{0} {1}'.format(
+            escape(meeting_item.decision_item.name), _('Acceptance')
+        )}
+        options['subtitle'] = {'text': u'{0} {1}'.format(groups_text, _('opinion'))}
         return options
 
     def decision_item_acceptance_scenario_simple_treemap(self, scenario, stakeholder_ids):
@@ -444,8 +452,10 @@ class Highcharts(object):
 
         options = self._decision_item_acceptance_simple_treemap(evaluations, max_votes)
         groups_text = get_stakeholders_group_names(stakeholder_ids)
-        options['title'] = {'text': u'{0} Acceptance'.format(escape(scenario.name))}
-        options['subtitle'] = {'text': u'{0} opinion'.format(groups_text)}
+        options['title'] = {'text': u'{0} {1}'.format(
+            escape(scenario.name), _('Acceptance')
+        )}
+        options['subtitle'] = {'text': u'{0} {1}'.format(groups_text, _('opinion'))}
         return options
 
     ''' Detailed Treemap '''
@@ -483,9 +493,11 @@ class Highcharts(object):
         max_votes = factors_count * len(stakeholder_ids)
 
         options = self._decision_item_acceptance_detailed_treemap(evaluations, max_votes)
-        options['title'] = {'text': u'{0} Acceptance'.format(escape(meeting_item.decision_item.name))}
+        options['title'] = {'text': u'{0} {1}'.format(
+            escape(meeting_item.decision_item.name), _('Acceptance')
+        )}
         groups_text = get_stakeholders_group_names(stakeholder_ids)
-        options['subtitle'] = {'text': u'{0} opinion'.format(groups_text)}
+        options['subtitle'] = {'text': u'{0} {1}'.format(groups_text, _('opinion'))}
         return options
 
     def decision_item_acceptance_scenario_detailed_treemap(self, scenario, stakeholder_ids):
@@ -496,9 +508,11 @@ class Highcharts(object):
         max_votes = factors_count * len(stakeholder_ids) * meeting_items_count
 
         options = self._decision_item_acceptance_detailed_treemap(evaluations, max_votes)
-        options['title'] = {'text': u'{0} Acceptance'.format(escape(scenario.name))}
+        options['title'] = {'text': u'{0} {1}'.format(
+            escape(scenario.name), _('Acceptance')
+        )}
         groups_text = get_stakeholders_group_names(stakeholder_ids)
-        options['subtitle'] = {'text': u'{0} opinion'.format(groups_text)}
+        options['subtitle'] = {'text': u'{0} {1}'.format(groups_text, _('opinion'))}
         return options
 
     ''' Pie Chart Drilldown '''
@@ -543,7 +557,7 @@ class Highcharts(object):
                 'pointFormat': '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}%</b><br/>'
             },
             'series': [{
-                'name': 'Acceptance Summary',
+                'name': _('Acceptance Summary'),
                 'colorByPoint': True,
                 'data': series
             }],
@@ -561,8 +575,12 @@ class Highcharts(object):
 
         options = self._decision_item_acceptance_pie_chart_drilldown(evaluations, max_votes)
         groups_text = get_stakeholders_group_names(stakeholder_ids)
-        options['title'] = {'text': u'{0} Acceptance'.format(escape(meeting_item.decision_item.name))}
-        options['subtitle'] = {'text': u'{0} opinion. Click the slices to view value factors.'.format(groups_text)}
+        options['title'] = {'text': u'{0} {1}'.format(
+            escape(meeting_item.decision_item.name), _('Acceptance')
+        )}
+        options['subtitle'] = {'text': u'{0} {1}. {2}.'.format(
+            groups_text, _('opinion'), _('Click the slices to view value factors')
+        )}
         return options
 
     def decision_item_acceptance_scenario_pie_chart_drilldown(self, scenario, stakeholder_ids):
@@ -574,8 +592,10 @@ class Highcharts(object):
 
         options = self._decision_item_acceptance_pie_chart_drilldown(evaluations, max_votes)
         groups_text = get_stakeholders_group_names(stakeholder_ids)
-        options['title'] = {'text': u'{0} Acceptance'.format(escape(scenario.name))}
-        options['subtitle'] = {'text': u'{0} opinion. Click the slices to view value factors.'.format(groups_text)}
+        options['title'] = {'text': u'{0} {1}'.format(escape(scenario.name), _('Acceptance'))}
+        options['subtitle'] = {'text': u'{0} {1}. {2}.'.format(
+            groups_text, _('opinion'), _('Click the slices to view value factors')
+        )}
         return options
 
     ''' Factors Groups Comparison '''
@@ -604,7 +624,7 @@ class Highcharts(object):
                     serie['data'].append(percentage)
                 series.append(serie)
 
-            categories = [category if category else 'No group' for category in categories]
+            categories = [category if category else _('No group') for category in categories]
 
             options = {
                 'chart': {'polar': True, 'type': 'line'},
@@ -633,7 +653,7 @@ class Highcharts(object):
             .filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
         options = self._factors_groups(evaluations, stakeholder_ids)
         stakeholders_text = get_stakeholders_group_names(stakeholder_ids)
-        subtitle = '<strong>Stakeholders Roles:</strong> {0}'.format(stakeholders_text)
+        subtitle = u'<strong>{0}:</strong> {1}'.format(_('Stakeholders Roles'), stakeholders_text)
         options['title'] = {'text': escape(meeting_item.decision_item.name)}
         options['subtitle'] = {'text': subtitle}
         return options
@@ -646,8 +666,10 @@ class Highcharts(object):
         items_names = scenario.meeting_items.values_list('decision_item__name', flat=True)
         items_text = u', '.join(items_names)
         stakeholders_text = get_stakeholders_group_names(stakeholder_ids)
-        subtitle = u'<strong>Decision Items:</strong> {0}<br><strong>Stakeholders Roles:</strong> {1}'.format(
+        subtitle = u'<strong>{0}:</strong> {1}<br><strong>{2}:</strong> {3}'.format(
+            _('Decision Items'),
             escape(items_text),
+            _('Stakeholders Roles'),
             stakeholders_text
         )
         options['title'] = {'text': escape(scenario.name)}

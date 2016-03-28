@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import ugettext as _
 
 from value.measures.models import MeasureValue
 from value.deliverables.meetings.models import Meeting
@@ -55,7 +56,7 @@ def dashboard_factors_usage_chart(request, deliverable_id, meeting_id):
     dump = json.dumps(options)
     chart_data = {
         'chart_id': 'factors_usage',
-        'chart_title': 'Factors Usage',
+        'chart_title': _('Factors Usage'),
         'chart_uri': reverse('deliverables:meetings:dashboard_factors_usage_chart', args=(deliverable_id, meeting_id,))
     }
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
@@ -76,7 +77,7 @@ def dashboard_stakeholders_input_chart(request, deliverable_id, meeting_id):
     dump = json.dumps(options)
     chart_data = {
         'chart_id': 'stakeholders_input',
-        'chart_title': 'Stakeholders Input',
+        'chart_title': _('Stakeholders Input'),
         'chart_uri': reverse(
             'deliverables:meetings:dashboard_stakeholders_input_chart', args=(
                 deliverable_id,
@@ -99,7 +100,7 @@ def dashboard_stakeholders_input_chart(request, deliverable_id, meeting_id):
 def get_value_ranking_chart_dict(meeting):
     chart_data = {
         'id': 'value-ranking',
-        'name': 'Value Ranking',
+        'name': _('Value Ranking'),
         'remote': reverse('deliverables:meetings:value_ranking', args=(meeting.deliverable.pk, meeting.pk))
     }
     return chart_data
@@ -121,7 +122,7 @@ def value_ranking(request, deliverable_id, meeting_id):
         return render(request, template_name, {
             'meeting': meeting,
             'chart_menu_active': 'value_ranking',
-            'chart_page_title': 'Value Ranking',
+            'chart_page_title': _('Value Ranking'),
             'chart': chart,
             'dump': dump})
 
@@ -132,7 +133,7 @@ def value_ranking(request, deliverable_id, meeting_id):
 def get_decision_items_overview_chart_dict(meeting):
     chart_data = {
         'id': 'meeting-overview',
-        'name': 'Decision Items Overview',
+        'name': _('Decision Items Overview'),
         'remote': reverse('deliverables:meetings:decision_items_overview', args=(meeting.deliverable.pk, meeting.pk))
     }
     return chart_data
@@ -165,7 +166,7 @@ def decision_items_overview(request, deliverable_id, meeting_id):
         return render(request, template_name, {
             'meeting': meeting,
             'chart_menu_active': 'decision_items_overview',
-            'chart_page_title': 'Decision Items Overview',
+            'chart_page_title': _('Decision Items Overview'),
             'dump': dump,
             'stakeholder_ids': stakeholder_ids,
             'chart_type': chart_type,
@@ -186,7 +187,7 @@ def features_comparison(request, deliverable_id, meeting_id):
         'stakeholder_ids': stakeholder_ids,
         'chart_uri': 'measures',
         'chart_menu_active': 'features_comparison',
-        'chart_page_title': 'Decision Items Comparison'})
+        'chart_page_title': _('Decision Items Comparison')})
 
 
 @login_required
@@ -213,4 +214,4 @@ def features_comparison_chart(request, deliverable_id, meeting_id, measure_value
             'stakeholder_ids': stakeholder_ids,
             'chart_uri': 'measures',
             'chart_menu_active': 'features_comparison',
-            'chart_page_title': 'Features Comparison'})
+            'chart_page_title': _('Features Comparison')})

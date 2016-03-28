@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext as _
 
 from value.deliverables.meetings.charts import Highcharts
 from value.deliverables.meetings.models import Meeting, Scenario
@@ -56,14 +57,14 @@ def get_scenario_charts(scenario):
     chart_value_ranking = get_scenario_value_ranking_chart_dict(scenario)
 
     chart_factors = get_features_scenario_chart_dict(scenario)
-    chart_factors['name'] = 'Factors Comparison'
+    chart_factors['name'] = _('Factors Comparison')
     chart_factors_type = 'stacked_columns'
 
     chart_factors_groups = get_factors_groups_scenario_chart_dict(scenario)
-    chart_factors_groups['name'] = 'Factors Group Comparison'
+    chart_factors_groups['name'] = _('Factors Group Comparison')
 
     chart_acceptance = get_features_acceptance_scenario_chart_dict(scenario)
-    chart_acceptance['name'] = 'Decision Items Acceptance'
+    chart_acceptance['name'] = _('Decision Items Acceptance')
     chart_acceptance_type = 'simple'
 
     charts_data = {
@@ -220,9 +221,9 @@ def delete_scenario(request, deliverable_id, meeting_id):
     try:
         scenario = Scenario.objects.get(pk=scenario_id)
         scenario.delete()
-        messages.success(request, u'Scenario {0} successfully deleted!'.format(scenario.name))
+        messages.success(request, _(u'Scenario {0} successfully deleted!').format(scenario.name))
     except Scenario.DoesNotExist:
-        messages.error(request, 'An unexpected error ocurred.')
+        messages.error(request, _('An unexpected error ocurred.'))
     return redirect(next)
 
 

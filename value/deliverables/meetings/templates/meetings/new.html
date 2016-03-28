@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load staticfiles avatar attr %}
+{% load avatar attr i18n static %}
 
 {% block javascript %}
   <script src="{% static 'js/meetings/new.js' %}"></script>
@@ -8,10 +8,10 @@
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'deliverables:index' %}">{% trans 'Deliverables' %}</a></li>
     <li><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></li>
-    <li class="active">New Meeting</li>
+    <li class="active">{% trans 'New Meeting' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
@@ -21,26 +21,29 @@
 
   <div class="row">
     <div class="col-md-8 col-md-offset-2">
-      <p class="lead">New meeting</p>
-
+      <p class="lead">{% trans 'New meeting' %}</p>
       <form method="post" id="new-meeting">
-
         {% csrf_token %}
-
         {% for hidden in form.hidden_fields %}
           {{ hidden }}
         {% endfor %}
-
         <div class="panel-group" id="meeting-setup" role="tablist" aria-multiselectable="true">
           <div class="panel {% if not form.errors %}panel-default{% else %}panel-danger{% endif %}">
             <div class="panel-heading" role="tab" id="heading-basic-data">
               <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#meeting-setup" href="#collapse-basic-data" aria-expanded="true" aria-controls="collapse-basic-data">
-                  1. Provide the meeting details
+                <a data-toggle="collapse"
+                   data-parent="#meeting-setup"
+                   href="#collapse-basic-data"
+                   aria-expanded="true"
+                   aria-controls="collapse-basic-data">
+                  {% trans '1. Provide the meeting details' %}
                 </a>
               </h4>
             </div>
-            <div id="collapse-basic-data" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-basic-data">
+            <div id="collapse-basic-data"
+                 class="panel-collapse collapse in"
+                 role="tabpanel"
+                 aria-labelledby="heading-basic-data">
               <div class="panel-body">
                 <div class="row">
                   <div class="col-sm-4">
@@ -66,7 +69,7 @@
                   </div>
                   <div class="col-sm-4">
                     <div class="form-group">
-                      <label for="id_location">Location</label>
+                      <label for="id_location">{% trans 'Location' %}</label>
                       <input type="text" class="form-control" id="id_location" name="location">
                     </div>
                   </div>
@@ -74,7 +77,7 @@
                 <div class="row">
                   <div class="col-sm-12">
                     <div class="form-group">
-                      <label>Description</label>
+                      <label>{% trans 'Description' %}</label>
                       <textarea class="form-control expanding" rows="1" id="id_notes"></textarea>
                     </div>
                   </div>
@@ -85,34 +88,50 @@
           <div class="panel {% if selected_stakeholders.exists %}panel-default{% else %}panel-danger{% endif %}">
             <div class="panel-heading" role="tab" id="heading-stakeholders">
               <div class="pull-right panel-info" style="margin-top: -2px">
-                <img src="{% avatar user 20 %}" alt="{{ user.profile.get_display_name }}" class="img-circle" style="margin-left: 5px">
+                <img src="{% avatar user 20 %}"
+                     alt="{{ user.profile.get_display_name }}"
+                     class="img-circle"
+                     style="margin-left: 5px">
                 {% for stakeholder in selected_stakeholders %}
-                  <img src="{% avatar stakeholder 20 %}" alt="{{ stakeholder.profile.get_display_name }}" class="img-circle" style="margin-left: 5px">
+                  <img src="{% avatar stakeholder 20 %}"
+                       alt="{{ stakeholder.profile.get_display_name }}"
+                       class="img-circle"
+                       style="margin-left: 5px">
                 {% endfor %}
               </div>
               <h4 class="panel-title">
-                <a class="collapsed" data-toggle="collapse" data-parent="#meeting-setup" href="#collapse-stakeholders" aria-expanded="false" aria-controls="collapse-stakeholders">
-                  2. Review the stakeholders
+                <a class="collapsed"
+                   data-toggle="collapse"
+                   data-parent="#meeting-setup"
+                   href="#collapse-stakeholders"
+                   aria-expanded="false"
+                   aria-controls="collapse-stakeholders">
+                  {% trans '2. Review the stakeholders' %}
                 </a>
               </h4>
             </div>
-            <div id="collapse-stakeholders" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-stakeholders">
+            <div id="collapse-stakeholders"
+                 class="panel-collapse collapse"
+                 role="tabpanel"
+                 aria-labelledby="heading-stakeholders">
               <div class="panel-body">
                 <div class="alert alert-info alert-dismissible fade in" role="alert">
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  Click to remove a stakeholder from the meeting.
+                  <button type="button" class="close" data-dismiss="alert" aria-label="{% trans 'Close' %}">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  {% trans 'Click to remove a stakeholder from the meeting.' %}
                 </div>
                 {% if not selected_stakeholders.exists %}
                   <div class="alert alert-danger alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="{% trans 'Close' %}">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
                     Select at least one stakeholder before starting the meeting.
-                  </div>              
+                  </div>
                 {% endif %}
-
                 <div class="deliverable-manager" style="margin-bottom: 20px">
                   {% include 'includes/user_panel_manager.html' with stakeholder=user %}
                 </div>
-
                 <div class="deliverable-stakeholders">
                   {% include 'includes/users_panel_group.html' with stakeholders=meeting_stakeholders selected_stakeholders=selected_stakeholders group_actions='selectable' %}
                 </div>
@@ -122,57 +141,81 @@
           <div class="panel {% if selected_decision_items.exists %}panel-default{% else %}panel-danger{% endif %}">
             <div class="panel-heading" role="tab" id="heading-decision-items">
               <div class="pull-right panel-info" style="line-height: 16px">
-                <span class="selected-items-count">{{ selected_decision_items.count }}</span> items to discuss
+                <span class="selected-items-count">{{ selected_decision_items.count }}</span>
+                {% trans 'items to discuss' %}
               </div>
               <h4 class="panel-title">
-                <a class="collapsed" data-toggle="collapse" data-parent="#meeting-setup" href="#collapse-decision-items" aria-expanded="false" aria-controls="collapse-decision-items">
-                  3. Select the decision items
+                <a class="collapsed"
+                   data-toggle="collapse"
+                   data-parent="#meeting-setup"
+                   href="#collapse-decision-items"
+                   aria-expanded="false"
+                   aria-controls="collapse-decision-items">
+                  {% trans '3. Select the decision items' %}
                 </a>
               </h4>
             </div>
-            <div id="collapse-decision-items" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-decision-items">
+            <div id="collapse-decision-items"
+                 class="panel-collapse collapse"
+                 role="tabpanel"
+                 aria-labelledby="heading-decision-items">
               <div class="panel-body">
                 {% if not selected_decision_items.exists %}
                   <div class="alert alert-danger alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    Select at least one decision item before starting the meeting.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="{% trans 'Close' %}">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    {% trans 'Select at least one decision item before starting the meeting.' %}
                   </div>
                 {% endif %}
-                <table id="decisionItemsTable" class="table table-striped table-bordered table-sortable table-check-all" style="margin-bottom: 0;">
+                <table id="decisionItemsTable"
+                       class="table table-striped table-bordered table-sortable table-check-all"
+                       style="margin-bottom: 0;">
                   <thead>
                     <tr>
-                      <th><input type="checkbox"{% if decision_items.count == selected_decision_items.count %} checked{% endif %}></th>
+                      <th>
+                        <input type="checkbox"{% if decision_items.count == selected_decision_items.count %} checked{% endif %}>
+                      </th>
                       {% for name, field in decision_items_fields.items %}
-                      <th>{{ field.label }}</th>
+                        <th>{{ field.label }}</th>
                       {% endfor %}
                     </tr>
                   </thead>
                   <tbody>
                     {% for item in decision_items %}
                     <tr>
-                      <td><input type="checkbox" name="decision_item" value="{{ item.pk }}"{% if item in selected_decision_items %} checked{% endif %}></td>
+                      <td>
+                        <input type="checkbox"
+                               name="decision_item"
+                               value="{{ item.pk }}"
+                               {% if item in selected_decision_items %} checked{% endif %}>
+                      </td>
                       {% for name, field in decision_items_fields.items %}
                         <td>{{ item|attr:name }}</td>
                       {% endfor %}
                     </tr>
                     {% empty %}
                       <tr>
-                        <td colspan="{{ decision_items_fields.items|length|add:'1' }}">No data</td>
+                        <td colspan="{{ decision_items_fields.items|length|add:'1' }}">
+                          {% trans 'No data' %}
+                        </td>
                       </tr>
                     {% endfor %}
                   </tbody>
                 </table>
-
               </div>
-
             </div>
           </div>
-
           <div class="panel {% if form.default_evaluation.errors %}panel-danger{% else %}panel-default{% endif %}">
             <div class="panel-heading" role="tab" id="heading-advanced">
               <h4 class="panel-title">
-                <a class="collapsed" data-toggle="collapse" data-parent="#meeting-setup" href="#collapse-advanced" aria-expanded="false" aria-controls="collapse-advanced">
-                  4. Advanced settings
+                <a class="collapsed"
+                   data-toggle="collapse"
+                   data-parent="#meeting-setup"
+                   href="#collapse-advanced"
+                   aria-expanded="false"
+                   aria-controls="collapse-advanced">
+                  {% trans '4. Advanced settings' %}
                 </a>
               </h4>
             </div>
@@ -181,7 +224,9 @@
                 <div class="row">
                   <div class="col-sm-4">
                     <div class="form-group{% if form.default_evaluation.errors %} has-error{% endif %}">
-                      <label for="{{ form.default_evaluation.id_for_label }}">{{ form.default_evaluation.label }}</label>
+                      <label for="{{ form.default_evaluation.id_for_label }}">
+                        {{ form.default_evaluation.label }}
+                      </label>
                       {{ form.default_evaluation }}
                       {% for error in form.default_evaluation.errors %}
                         <span class="help-block">{{ error }}</span>
@@ -192,16 +237,16 @@
               </div>
             </div>
           </div>
-
         </div>
-
         <div class="form-group">
-          <button type="submit" class="btn btn-primary btn-start-meeting">Start the meeting</button>
-          <a href="{% url 'deliverables:deliverable' deliverable.pk %}" class="btn btn-default">Cancel</a>
+          <button type="submit" class="btn btn-primary btn-start-meeting">
+            {% trans 'Start the meeting' %}
+          </button>
+          <a href="{% url 'deliverables:deliverable' deliverable.pk %}" class="btn btn-default">
+            {% trans 'Cancel' %}
+          </a>
         </div>
-
       </form>
     </div>
   </div>
-
 {% endblock content %}
