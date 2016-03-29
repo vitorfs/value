@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load staticfiles %}
+{% load i18n static %}
 
 {% block stylesheet %}
   <link href="{% static 'css/meetings/dashboard.css' %}" rel="stylesheet">
@@ -21,33 +21,36 @@
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'deliverables:index' %}">{% trans 'Deliverables' %}</a></li>
     <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a></li>
-    <li><a href="{% url 'deliverables:meetings:index' meeting.deliverable.pk %}">Meetings</a></li>
+    <li><a href="{% url 'deliverables:meetings:index' meeting.deliverable.pk %}">{% trans 'Meetings' %}</a></li>
     <li><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
-    <li class="active">Dashboard</li>
+    <li class="active">{% trans 'Dashboard' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block content %}
-
   {% include 'meetings/includes/menu.html' with active='dashboard' meeting=meeting %}
-
   {% if meeting.is_ongoing %}
     {% if user == meeting.deliverable.manager %}
-
       <div class="alert alert-dismissible alert-info" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4><span class="glyphicon glyphicon-info-sign"></span> The meeting is still ongoing.</h4> 
-        <p>In order to analyse the dashboard you must change the meeting status to <strong>Analysing</strong>. The following charts can help you determine the meeting progress.</p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="{% trans 'Close' %}">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4><span class="glyphicon glyphicon-info-sign"></span> {% trans 'The meeting is still ongoing.' %}</h4>
+        <p>
+          {% blocktrans trimmed %}
+            In order to analyse the dashboard you must change the meeting status to <strong>Analysing</strong>.
+            The following charts can help you determine the meeting progress.
+          {% endblocktrans %}
+        </p>
         <p>
           <button type="button" class="btn btn-primary js-change-meeting-status" data-option="{{ meeting.ANALYSING }}">
-            <span class="fa fa-bar-chart-o"></span> Change status to Analysing
+            <span class="fa fa-bar-chart-o"></span> {% trans 'Change status to Analysing' %}
           </button>
         </p>
       </div>
-
       <div class="panel-group charts">
         {% for chart in charts %}
           {% include 'meetings/dashboard/dashboard_chart.html' with chart=chart opened=True %}
@@ -56,12 +59,14 @@
     {% else %}
       <div class="well blank-state">
         <span class="fa fa-refresh"></span>
-        <h3>The meeting is still ongoing!</h3>
-        <p class="lead">In order to analyse the dashboard the meeting manager must change its status to <strong>Analysing</strong>.</p>
+        <h3>{% trans 'The meeting is still ongoing!' %}</h3>
+        <p class="lead">
+          {% blocktrans trimmed %}
+            In order to analyse the dashboard the meeting manager must change its status to <strong>Analysing</strong>.
+          {% endblocktrans %}
+        </p>
       </div>
     {% endif %}
   {% else %}
-
   {% endif %}
-
 {% endblock %}

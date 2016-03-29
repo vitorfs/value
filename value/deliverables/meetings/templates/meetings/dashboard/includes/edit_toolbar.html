@@ -1,6 +1,8 @@
-<button type="button" 
+{% load i18n %}
+
+<button type="button"
         class="btn btn-default btn-xs btn-chart-edit"
-        title="Edit" 
+        title="{% trans 'Edit' %}"
         data-remote-url="{% url 'deliverables:meetings:edit_scenario' meeting.deliverable.pk meeting.pk chart.instance.pk %}"
         data-toggle="modal"
         data-target="#modal-edit-scenario">

@@ -1,10 +1,12 @@
+{% load i18n %}
+
 <div class="btn-group btn-group-xs" role="group">
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"{% if not opened %} disabled{% endif %}>
     <span class="fa fa-bar-chart"></span>
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu dropdown-menu-right js-chart-type" role="menu">
-    <li role="presentation" class="dropdown-header">Chart type</li>
+    <li role="presentation" class="dropdown-header">{% trans 'Chart type' %}</li>
     {% for key, value in chart_types_options.iteritems %}
       <li role="presentation"{% if chart_type == key %} class="active"{% endif %}>
         <a role="menuitem" tabindex="-1" href="javascript:void(0);">

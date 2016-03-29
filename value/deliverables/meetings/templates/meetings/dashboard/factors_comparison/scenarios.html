@@ -1,5 +1,7 @@
 {% extends 'meetings/dashboard/base_charts.html' %}
 
+{% load i18n %}
+
 {% block javascript %}
   {{ block.super }}
   <script>
@@ -10,8 +12,12 @@
 {% endblock javascript %}
 
 {% block breadcrumb_extra %}
-  <li><a href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">Factors Comparison</a></li>
-  <li class="active">Scenarios</li>
+  <li>
+    <a href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">
+      {% trans 'Factors Comparison' %}
+    </a>
+  </li>
+  <li class="active">{% trans 'Scenarios' %}</li>
 {% endblock breadcrumb_extra %}
 
 {% block charts %}
@@ -20,13 +26,21 @@
       <h3 class="panel-title">
         {% include 'meetings/dashboard/includes/charts_order.html' %}
         {% include 'meetings/dashboard/includes/partial_default_chart_type.html' %}
-        Factors Comparison
+        {% trans 'Factors Comparison' %}
       </h3>
     </div>
     <div class="panel-body">
       <ul class="nav nav-tabs" style="margin-bottom: 20px;">
-        <li role="presentation"><a href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">All Decision Items</a></li>
-        <li role="presentation" class="active"><a href="{% url 'deliverables:meetings:features_scenarios' meeting.deliverable.pk meeting.pk %}">Scenarios</a></li>
+        <li role="presentation">
+          <a href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">
+            {% trans 'All Decision Items' %}
+          </a>
+        </li>
+        <li role="presentation" class="active">
+          <a href="{% url 'deliverables:meetings:features_scenarios' meeting.deliverable.pk meeting.pk %}">
+            {% trans 'Scenarios' %}
+          </a>
+        </li>
       </ul>
       <div class="panel-group charts" id="scenarios">
         {% if charts %}

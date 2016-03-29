@@ -1,46 +1,82 @@
+{% load i18n %}
+
 <div class="panel panel-default panel-menu">
   <div class="panel-heading">
     <span class="fa fa-list-alt" style="margin-right: 5px;"></span>
-    Summary
+    {% trans 'Summary' %}
   </div>
   <div class="list-group">
-    <a class="list-group-item{% if active == 'decision_items_overview' %} active{% endif %}" href="{% url 'deliverables:meetings:decision_items_overview' meeting.deliverable.pk meeting.pk %}">Decision Items Overview</a>
-    <a class="list-group-item{% if active == 'features_comparison' %} active{% endif %}" href="{% url 'deliverables:meetings:features_comparison' meeting.deliverable.pk meeting.pk %}">Decision Items Comparison</a>
-    <a class="list-group-item{% if active == 'value_ranking' %} active{% endif %}" href="{% url 'deliverables:meetings:value_ranking' meeting.deliverable.pk meeting.pk %}">Value Ranking</a>
+    <a class="list-group-item{% if active == 'decision_items_overview' %} active{% endif %}"
+       href="{% url 'deliverables:meetings:decision_items_overview' meeting.deliverable.pk meeting.pk %}">
+      {% trans 'Decision Items Overview' %}
+    </a>
+    <a class="list-group-item{% if active == 'features_comparison' %} active{% endif %}"
+       href="{% url 'deliverables:meetings:features_comparison' meeting.deliverable.pk meeting.pk %}">
+      {% trans 'Decision Items Comparison' %}
+    </a>
+    <a class="list-group-item{% if active == 'value_ranking' %} active{% endif %}"
+       href="{% url 'deliverables:meetings:value_ranking' meeting.deliverable.pk meeting.pk %}">
+      {% trans 'Value Ranking' %}
+    </a>
   </div>
 </div>
-
 <div class="panel panel-default panel-menu">
   <div class="panel-heading">
     <span class="fa fa-file-o" style="margin-right: 5px;"></span>
-    Details
+    {% trans 'Details' %}
   </div>
   <div class="list-group">
-    <a class="list-group-item{% if active == 'features' %} active{% endif %}" href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">Factors Comparison</a>
-    <a class="list-group-item{% if active == 'factors_groups' %} active{% endif %}" href="{% url 'deliverables:meetings:factors_groups' meeting.deliverable.pk meeting.pk %}">Factors Groups Comparison</a>
-    <a class="list-group-item{% if active == 'features_acceptance' %} active{% endif %}" href="{% url 'deliverables:meetings:features_acceptance' meeting.deliverable.pk meeting.pk %}">Decision Items Acceptance</a>
+    <a class="list-group-item{% if active == 'features' %} active{% endif %}"
+       href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">
+      {% trans 'Factors Comparison' %}
+    </a>
+    <a class="list-group-item{% if active == 'factors_groups' %} active{% endif %}"
+       href="{% url 'deliverables:meetings:factors_groups' meeting.deliverable.pk meeting.pk %}">
+      {% trans 'Factors Groups Comparison' %}
+    </a>
+    <a class="list-group-item{% if active == 'features_acceptance' %} active{% endif %}"
+       href="{% url 'deliverables:meetings:features_acceptance' meeting.deliverable.pk meeting.pk %}">
+      {% trans 'Decision Items Acceptance' %}
+    </a>
   </div>
 </div>
-
 <div class="panel panel-default panel-menu" id="scenarios-menu">
   <div class="panel-heading">
-    <div class="btn-group pull-right">      
-      <button type="button" class="btn btn-xs btn-default js-scenario-add" title="Add a scenario" data-toggle="modal" data-target="#modal-add-scenario" data-next="scenario_charts">
+    <div class="btn-group pull-right">
+      <button type="button"
+              class="btn btn-xs btn-default js-scenario-add"
+              title="{% trans 'Add a scenario' %}"
+              data-toggle="modal"
+              data-target="#modal-add-scenario"
+              data-next="scenario_charts">
         <span class="glyphicon glyphicon-plus"></span>
       </button>
-      <button type="button" class="btn btn-xs btn-default js-scenario-builder" title="Build a scenario" data-toggle="modal" data-target="#modal-scenario-builder" data-remote-url="{% url 'deliverables:meetings:scenario_builder' meeting.deliverable.pk meeting.pk %}" data-next="scenario_charts">
+      <button type="button"
+              class="btn btn-xs btn-default js-scenario-builder"
+              title="{% trans 'Build a scenario' %}"
+              data-toggle="modal"
+              data-target="#modal-scenario-builder"
+              data-remote-url="{% url 'deliverables:meetings:scenario_builder' meeting.deliverable.pk meeting.pk %}"
+              data-next="scenario_charts">
         <span class="fa fa-wrench"></span>
       </button>
-      <button type="button" class="btn btn-xs btn-default js-scenario-compare" title="Compare scenarios" data-toggle="modal" data-target="#modal-scenario-compare">
+      <button type="button"
+              class="btn btn-xs btn-default js-scenario-compare"
+              title="{% trans 'Compare scenarios' %}"
+              data-toggle="modal"
+              data-target="#modal-scenario-compare">
         <span class="fa fa-share-alt"></span>
       </button>
     </div>
     <span class="fa fa-files-o" style="margin-right: 5px;"></span>
-    Scenarios
+    {% trans 'Scenarios' %}
   </div>
   <div class="list-group">
     {% for scenario in meeting.scenarios.all %}
-      <a href="{% url 'deliverables:meetings:scenario' meeting.deliverable.pk meeting.pk scenario.pk %}" class="list-group-item{% if active == scenario.pk %} active{% endif %}">{{ scenario.name }}</a>
+      <a href="{% url 'deliverables:meetings:scenario' meeting.deliverable.pk meeting.pk scenario.pk %}"
+         class="list-group-item{% if active == scenario.pk %} active{% endif %}">
+        {{ scenario.name }}
+      </a>
     {% endfor %}
   </div>
 </div>

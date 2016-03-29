@@ -1,5 +1,7 @@
 {% extends 'meetings/dashboard/base_charts.html' %}
 
+{% load i18n %}
+
 {% block javascript %}
   {{ block.super }}
   <script>
@@ -10,7 +12,7 @@
 {% endblock javascript %}
 
 {% block breadcrumb_extra %}
-  <li class="active">Factors Comparison</li>
+  <li class="active">{% trans 'Factors Comparison' %}</li>
 {% endblock breadcrumb_extra %}
 
 {% block charts %}
@@ -24,8 +26,16 @@
     </div>
     <div class="panel-body">
       <ul class="nav nav-tabs" style="margin-bottom: 20px;">
-        <li role="presentation" class="active"><a href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">All Decision Items</a></li>
-        <li role="presentation"><a href="{% url 'deliverables:meetings:features_scenarios' meeting.deliverable.pk meeting.pk %}">Scenarios</a></li>
+        <li role="presentation" class="active">
+          <a href="{% url 'deliverables:meetings:features' meeting.deliverable.pk meeting.pk %}">
+            {% trans 'All Decision Items' %}
+          </a>
+        </li>
+        <li role="presentation">
+          <a href="{% url 'deliverables:meetings:features_scenarios' meeting.deliverable.pk meeting.pk %}">
+            {% trans 'Scenarios' %}
+          </a>
+        </li>
       </ul>
       <div class="panel-group charts">
         {% for chart in charts %}

@@ -1,7 +1,9 @@
+{% load i18n %}
+
 <form action="{{ chart.chart_uri }}">
   <div class="panel panel-default panel-chart">
     <div class="panel-heading" data-target="#collapse-{{ chart.chart_id }}" data-item-id="{{ chart.chart_id }}">
-      <div class="btn-group btn-group-xs pull-right chart-options" role="group" aria-label="Chart Options">
+      <div class="btn-group btn-group-xs pull-right chart-options" role="group" aria-label="{% trans 'Chart Options' %}">
         {% include 'meetings/dashboard/includes/toggle_toolbar.html' with opened=True %}
         {% include 'meetings/dashboard/includes/expand_toolbar.html' with opened=True %}
         {% include 'meetings/dashboard/includes/modal_toolbar.html' with opened=True %}

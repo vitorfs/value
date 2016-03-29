@@ -1,3 +1,5 @@
-<button type="button" class="btn btn-default btn-xs btn-chart-delete" title="Delete" data-chart-name="{{ chart.name }}">
+{% load i18n %}
+
+<button type="button" class="btn btn-default btn-xs btn-chart-delete" title="{% trans 'Delete' %}" data-chart-name="{{ chart.name }}">
   <span class="glyphicon glyphicon-trash"></span>
 </button>
