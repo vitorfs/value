@@ -4,6 +4,8 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
+from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
 
 from value.core import views as core_views
 from value.users import views as users_views
@@ -20,6 +22,8 @@ urlpatterns = [
     url(r'^reset/done/$', auth_views.password_reset_complete, name='password_reset_complete'),
     url(r'^account/$', users_views.account, name='account'),
     url(r'^account/password/$', users_views.change_password, name='change_password'),
+    url(r'^account/language/$', login_required(TemplateView.as_view(template_name='users/language.html')),
+        name='language'),
 
     url(r'^settings/', include('value.application_settings.urls', namespace='settings')),
     url(r'^factors/', include('value.factors.urls', namespace='factors')),
@@ -28,6 +32,7 @@ urlpatterns = [
     url(r'^help/', include('value.help.urls', namespace='help')),
     url(r'^deliverables/', include('value.deliverables.urls', namespace='deliverables')),
     url(r'^avatar/', include('value.avatar.urls')),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
 ]
 
 if settings.DEBUG:

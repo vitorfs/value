@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <div class="btn-group btn-group-xs" role="group">
   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"{% if not opened %} disabled{% endif %}>
     <span class="fa fa-users"></span>
@@ -5,7 +7,7 @@
   </button>
   <ul class="dropdown-menu dropdown-menu-right js-stakeholders" role="menu">
     <li role="presentation" class="dropdown-header">
-      Stakeholders
+      {% trans 'Stakeholders' %}
     </li>
     {% for group_name, stakeholders in meeting.get_stakeholder_groups.iteritems %}
       <li role="presentation" data-target-group-name="{{ group_name }}">
@@ -19,7 +21,7 @@
           <a role="menuitem" tabindex="-1" href="javascript:void(0);" class="js-select-stakeholder" data-group-name="{{ group_name }}">
             {% if stakeholder.pk in stakeholder_ids %}
               <input type="checkbox" name="stakeholder" value="{{ stakeholder.pk }}" checked style="display: none;" autocomplete="off">
-              <span class="glyphicon glyphicon-check"></span> 
+              <span class="glyphicon glyphicon-check"></span>
             {% else %}
               <input type="checkbox" name="stakeholder" value="{{ stakeholder.pk }}" style="display: none;" autocomplete="off">
               <span class="glyphicon glyphicon-unchecked"></span>
@@ -33,7 +35,7 @@
     <li role="presentation">
       <a role="menuitem" tabindex="-1" href="javascript:void(0);">
         <button type="button" class="btn btn-default btn-chart-reload btn-xs btn-block">
-          <span class="glyphicon glyphicon-refresh"></span> 
+          <span class="glyphicon glyphicon-refresh"></span>
           Reload
         </button>
       </a>

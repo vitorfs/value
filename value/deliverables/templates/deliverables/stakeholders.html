@@ -100,9 +100,9 @@
         </div>
         <div class="modal-body">
           <p>
-            {% blocktrans trimmed %}
+            {% blocktrans trimmed with name=decision_item.name %}
               Removing the selected stakeholders will basically remove their access to the deliverable
-              <strong>{{ deliverable.name }}</strong>.
+              <strong>{{ name }}</strong>.
               They will no longer be able to access its data.
             {% endblocktrans %}
           </p>

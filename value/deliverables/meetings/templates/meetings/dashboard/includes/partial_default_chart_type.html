@@ -1,11 +1,13 @@
+{% load i18n %}
+
 <div class="btn-group pull-right" style="margin-top: -6px;">
   <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <span class="fa fa-bar-chart"></span>
-    Type {% for key, value in chart_types_options.iteritems %}{% if chart_type == key %}<strong>{{ value.label }}</strong>{% endif %}{% endfor %}
+    {% trans 'Type' %} {% for key, value in chart_types_options.iteritems %}{% if chart_type == key %}<strong>{{ value.label }}</strong>{% endif %}{% endfor %}
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu dropdown-menu-right">
-    <li role="presentation" class="dropdown-header">Default chart type</li>
+    <li role="presentation" class="dropdown-header">{% trans 'Default chart type' %}</li>
     {% for key, value in chart_types_options.iteritems %}
       <li role="presentation"{% if chart_type == key %} class="active"{% endif %}>
         <a role="menuitem" tabindex="-1" href="?chart_type={{ key }}">

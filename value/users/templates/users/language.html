@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'account' %}">{% trans 'My account' %}</a></li>
+    <li class="active">{% trans 'Language preferences' %}</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-3 col-sm-4">
+      {% include 'users/includes/menu.html' with active='lang' %}
+    </div>
+    <div class="col-md-9 col-sm-8">
+      <form action="{% url 'set_language' %}" method="post">
+        {% csrf_token %}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">{% trans 'Language preferences' %}</h3>
+          </div>
+          <div class="panel-body">
+            <input name="next" type="hidden" value="{{ redirect_to }}" />
+            <select name="language">
+                {% get_current_language as LANGUAGE_CODE %}
+                {% get_available_languages as LANGUAGES %}
+                {% get_language_info_list for LANGUAGES as languages %}
+                {% for language in languages %}
+                    <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected="selected"{% endif %}>
+                        {{ language.name_local }} ({{ language.code }})
+                    </option>
+                {% endfor %}
+            </select>
+          </div>
+          <div class="panel-footer">
+            <button type="submit" class="btn btn-primary">{% trans 'Save changes' %}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock content %}

@@ -1,4 +1,4 @@
-{% load widget_tweaks meeting_item %}
+{% load i18n meeting_item widget_tweaks %}
 
 {% for hidden in form.hidden_fields %}
   {{ hidden }}
@@ -16,14 +16,18 @@
 </div>
 
 <div class="form-group{% if form.meeting_items.errors %} has-error{% endif %}">
-  <label for="{{ form.prefix }}-table-decision-items" class="control-label">Select decision items</label>
+  <label for="{{ form.prefix }}-table-decision-items" class="control-label">
+    {% trans 'Select decision items' %}
+  </label>
   <table class="table table-check-all table-condensed" id="{{ form.prefix }}-table-decision-items" style="margin-bottom: 0;">
     <thead>
       <tr>
-        <th><input type="checkbox"></th>
-        <th>Decision Item</th>
-        <th>Summary</th>
-        <th style="width: 140px;">Value Ranking</th>
+        <th>
+          <input type="checkbox">
+        </th>
+        <th>{% trans 'Decision Item' %}</th>
+        <th>{% trans 'Summary' %}</th>
+        <th style="width: 140px;">{% trans 'Value Ranking' %}</th>
       </tr>
     </thead>
     <tbody>

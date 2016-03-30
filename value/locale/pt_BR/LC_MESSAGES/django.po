@@ -1,14 +1,14 @@
-# SOME DESCRIPTIVE TITLE.
+# VALUE Portuguese Translations
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# This file is distributed under the same license as the VALUE package.
+# Vitor Freitas <vitor@freitas.com>, 2016.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-25 13:06+0200\n"
+"POT-Creation-Date: 2016-03-30 16:09+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,7 +53,10 @@ msgstr ""
 #: value/application_settings/models.py:34
 #: value/application_settings/templates/application_settings/items.html:66
 #: value/application_settings/templates/application_settings/items.html:79
-#: value/factors/models.py:10 value/factors/models.py:22
+#: value/deliverables/meetings/models.py:443 value/deliverables/models.py:17
+#: value/deliverables/models.py:64 value/factors/models.py:10
+#: value/factors/models.py:22 value/help/models.py:16
+#: value/measures/models.py:13
 msgid "name"
 msgstr ""
 
@@ -65,8 +68,44 @@ msgstr ""
 #: value/application_settings/templates/application_settings/import.html:16
 #: value/application_settings/templates/application_settings/items.html:26
 #: value/core/templates/core/home.html:7
+#: value/deliverables/meetings/templates/meetings/dashboard/base_charts.html:22
+#: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:24
+#: value/deliverables/meetings/templates/meetings/dashboard/dashboard_list.html:18
+#: value/deliverables/meetings/templates/meetings/evaluate.html:97
+#: value/deliverables/meetings/templates/meetings/final_decision.html:12
+#: value/deliverables/meetings/templates/meetings/new.html:11
+#: value/deliverables/templates/deliverables/decision_items/add.html:7
+#: value/deliverables/templates/deliverables/decision_items/delete.html:7
+#: value/deliverables/templates/deliverables/decision_items/delete_list.html:7
+#: value/deliverables/templates/deliverables/decision_items/edit.html:7
+#: value/deliverables/templates/deliverables/decision_items/list.html:20
+#: value/deliverables/templates/deliverables/historical_dashboard.html:7
+#: value/deliverables/templates/deliverables/index.html:7
+#: value/deliverables/templates/deliverables/meetings.html:7
+#: value/deliverables/templates/deliverables/new.html:16
+#: value/deliverables/templates/deliverables/settings/details.html:34
+#: value/deliverables/templates/deliverables/settings/factors.html:7
+#: value/deliverables/templates/deliverables/settings/measure.html:7
+#: value/deliverables/templates/deliverables/stakeholders.html:11
 #: value/factors/templates/factors/add.html:7
-#: value/factors/templates/factors/delete.html:5
+#: value/factors/templates/factors/delete.html:7
+#: value/factors/templates/factors/edit.html:7
+#: value/factors/templates/factors/groups.html:11
+#: value/factors/templates/factors/index.html:7
+#: value/help/templates/help/index.html:7
+#: value/measures/templates/measures/add.html:16
+#: value/measures/templates/measures/delete.html:7
+#: value/measures/templates/measures/edit.html:16
+#: value/measures/templates/measures/index.html:7 value/templates/403.html:47
+#: value/templates/404.html.py:47 value/templates/500.html:47
+#: value/users/templates/users/account.html.py:7
+#: value/users/templates/users/add.html:7
+#: value/users/templates/users/change_password.html:7
+#: value/users/templates/users/delete.html:7
+#: value/users/templates/users/edit.html:7
+#: value/users/templates/users/index.html:7
+#: value/users/templates/users/password.html:7
+#: value/users/templates/users/roles.html:11
 msgid "Home"
 msgstr ""
 
@@ -140,6 +179,11 @@ msgstr ""
 #: value/application_settings/templates/application_settings/index.html:106
 #: value/application_settings/templates/application_settings/items.html:54
 #: value/application_settings/templates/application_settings/items.html:127
+#: value/deliverables/templates/deliverables/settings/details.html:61
+#: value/deliverables/templates/deliverables/settings/factors.html:35
+#: value/deliverables/templates/deliverables/settings/measure.html:35
+#: value/users/templates/users/account.html:34
+#: value/users/templates/users/change_password.html:64
 msgid "Save changes"
 msgstr ""
 
@@ -212,7 +256,9 @@ msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:66
 #: value/application_settings/templates/application_settings/items.html:90
-#: value/factors/models.py:23
+#: value/deliverables/models.py:18 value/deliverables/models.py:65
+#: value/factors/models.py:23 value/help/models.py:18
+#: value/measures/models.py:83
 msgid "description"
 msgstr ""
 
@@ -233,12 +279,15 @@ msgid "Display"
 msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:74
-#: value/factors/forms.py:41
+#: value/factors/forms.py:41 value/factors/templates/factors/index.html.py:31
+#: value/measures/forms.py:22 value/measures/templates/measures/index.html:23
+#: value/users/templates/users/index.html:24
 msgid "Active"
 msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:83
 #: value/application_settings/templates/application_settings/items.html:94
+#: value/deliverables/models.py:137
 msgid "String"
 msgstr ""
 
@@ -255,6 +304,7 @@ msgid "Ordering and column display saved successfully."
 msgstr ""
 
 #: value/application_settings/views.py:77
+#: value/deliverables/meetings/views/evaluate.py:154
 msgid "An error ocurred while trying to save your data."
 msgstr ""
 
@@ -268,6 +318,1391 @@ msgstr ""
 
 #: value/core/templates/core/home.html:13
 msgid "You are signed in as"
+msgstr "Você está logado como"
+
+#: value/deliverables/decorators.py:15
+#: value/deliverables/meetings/decorators.py:15
+msgid "Permission denied."
+msgstr ""
+
+#: value/deliverables/forms.py:54 value/deliverables/forms.py:101
+msgid "Select value factors to be used within the decision-making meetings"
+msgstr ""
+
+#: value/deliverables/forms.py:60 value/deliverables/forms.py:114
+msgid "Select the measure to be used within the decision-making meetings"
+msgstr ""
+
+#: value/deliverables/meetings/apps.py:9
+#: value/deliverables/meetings/models.py:92
+msgid "meetings"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:50
+msgid "Percentage of evaluations"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:55
+#: value/deliverables/meetings/charts.py:79
+msgid "Percentage:"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:110
+msgid "100% means the stakeholder evaluated all the meeting's decision items."
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:115
+#: value/deliverables/meetings/charts.py:120
+msgid "Stakeholder Meeting Input"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:117
+#: value/deliverables/meetings/charts.py:166
+msgid "Usage percentage:"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:158
+msgid "Overall Value Factors Usage"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:159
+msgid "Which factors are being used to evaluate the decision items."
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:164
+#: value/deliverables/meetings/charts.py:169
+msgid "Factors usage percentage"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:193
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:19
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_scenario_form.html:30
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_details.html:9
+#: value/deliverables/meetings/templates/meetings/final_decision.html:56
+#: value/deliverables/meetings/templatetags/meeting_item.py:54
+#: value/deliverables/meetings/views/dashboard/dashboard.py:103
+#: value/deliverables/meetings/views/dashboard/dashboard.py:125
+msgid "Value Ranking"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:199
+msgid "Ranking"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:240
+#: value/deliverables/meetings/views/dashboard/dashboard.py:217
+msgid "Features Comparison"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:262
+msgid "Votes"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:308
+#: value/deliverables/meetings/charts.py:396
+#: value/deliverables/meetings/charts.py:409
+#: value/deliverables/meetings/charts.py:443
+#: value/deliverables/meetings/charts.py:458
+#: value/deliverables/meetings/charts.py:500
+#: value/deliverables/meetings/charts.py:515
+#: value/deliverables/meetings/charts.py:582
+#: value/deliverables/meetings/charts.py:597
+msgid "opinion"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:316
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:11
+#: value/deliverables/meetings/views/dashboard/dashboard.py:136
+#: value/deliverables/meetings/views/dashboard/dashboard.py:169
+msgid "Decision Items Overview"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:331
+msgid "Scenario Overview"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:394
+#: value/deliverables/meetings/charts.py:407
+msgid "Value Factors Comparison"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:441
+#: value/deliverables/meetings/charts.py:456
+#: value/deliverables/meetings/charts.py:497
+#: value/deliverables/meetings/charts.py:512
+#: value/deliverables/meetings/charts.py:579
+#: value/deliverables/meetings/charts.py:595
+msgid "Acceptance"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:560
+msgid "Acceptance Summary"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:582
+#: value/deliverables/meetings/charts.py:597
+msgid "Click the slices to view value factors"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:627
+msgid "No group"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:656
+#: value/deliverables/meetings/charts.py:672
+msgid "Stakeholders Roles"
+msgstr ""
+
+#: value/deliverables/meetings/charts.py:670
+#: value/deliverables/templates/deliverables/decision_items/add.html:10
+#: value/deliverables/templates/deliverables/decision_items/delete.html:10
+#: value/deliverables/templates/deliverables/decision_items/delete_list.html:10
+#: value/deliverables/templates/deliverables/decision_items/edit.html:10
+#: value/deliverables/templates/deliverables/decision_items/list.html:23
+#: value/deliverables/templates/deliverables/includes/menu.html:21
+msgid "Decision Items"
+msgstr ""
+
+#: value/deliverables/meetings/forms.py:19
+msgid "Starting at"
+msgstr ""
+
+#: value/deliverables/meetings/forms.py:105
+msgid "Number of decision items to compose the scenario"
+msgstr ""
+
+#: value/deliverables/meetings/forms.py:110
+msgid "Related to"
+msgstr ""
+
+#: value/deliverables/meetings/forms.py:114
+msgid "Based on"
+msgstr ""
+
+#: value/deliverables/meetings/forms.py:131
+msgid "Select two scenarios to compare"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:19
+msgid "text"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:20 value/deliverables/models.py:23
+#: value/help/models.py:21
+msgid "created at"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:21
+#: value/deliverables/meetings/models.py:77 value/deliverables/models.py:25
+#: value/help/models.py:23
+msgid "updated at"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:24
+msgid "created by"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:30
+#: value/deliverables/meetings/models.py:80
+msgid "updated by"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:38
+msgid "rationale"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:39
+msgid "rationales"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:56
+msgid "Ongoing"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:57
+msgid "Analysing"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:58
+msgid "Closed"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:86
+msgid "rationales count"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:87
+msgid "progress"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:91
+msgid "meeting"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:279
+msgid "raw votes"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:280
+msgid "percentage votes"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:297
+msgid "meeting decision"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:299
+msgid "has rationales?"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:300
+#: value/deliverables/meetings/models.py:446
+msgid "value ranking"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:301
+msgid "meeting ranking"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:307
+msgid "meeting item"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:308
+msgid "meeting items"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:392
+msgid "meeting input"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:409
+msgid "evaluated at"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:415
+msgid "evaluation"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:416
+#: value/deliverables/templates/deliverables/decision_items/delete.html:38
+msgid "evaluations"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/base_charts.html:23
+#: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:25
+#: value/deliverables/meetings/templates/meetings/dashboard/dashboard_list.html:19
+#: value/deliverables/meetings/templates/meetings/evaluate.html:98
+#: value/deliverables/meetings/templates/meetings/final_decision.html:13
+#: value/deliverables/meetings/templates/meetings/new.html:12
+#: value/deliverables/templates/deliverables/decision_items/add.html:8
+#: value/deliverables/templates/deliverables/decision_items/delete.html:8
+#: value/deliverables/templates/deliverables/decision_items/delete_list.html:8
+#: value/deliverables/templates/deliverables/decision_items/edit.html:8
+#: value/deliverables/templates/deliverables/decision_items/list.html:21
+#: value/deliverables/templates/deliverables/historical_dashboard.html:8
+#: value/deliverables/templates/deliverables/index.html:8
+#: value/deliverables/templates/deliverables/index.html:22
+#: value/deliverables/templates/deliverables/index.html:56
+#: value/deliverables/templates/deliverables/meetings.html:8
+#: value/deliverables/templates/deliverables/new.html:17
+#: value/deliverables/templates/deliverables/settings/details.html:35
+#: value/deliverables/templates/deliverables/settings/factors.html:8
+#: value/deliverables/templates/deliverables/settings/measure.html:8
+#: value/deliverables/templates/deliverables/stakeholders.html:12
+#: value/templates/includes/header.html:19
+msgid "Deliverables"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/base_charts.html:25
+#: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:27
+#: value/deliverables/meetings/templates/meetings/dashboard/dashboard_list.html:21
+#: value/deliverables/meetings/templates/meetings/evaluate.html:100
+#: value/deliverables/meetings/templates/meetings/final_decision.html:15
+#: value/deliverables/templates/deliverables/includes/menu.html:11
+#: value/deliverables/templates/deliverables/index.html:30
+#: value/deliverables/templates/deliverables/index.html:64
+#: value/deliverables/templates/deliverables/meetings.html:10
+msgid "Meetings"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/base_charts.html:27
+#: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:29
+#: value/deliverables/meetings/templates/meetings/dashboard/dashboard_list.html:23
+msgid "Dashboard"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/base_charts.html:48
+#: value/deliverables/meetings/templates/meetings/dashboard/base_charts.html:63
+#: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:38
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:54
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:83
+#: value/deliverables/meetings/templates/meetings/new.html:119
+#: value/deliverables/meetings/templates/meetings/new.html:126
+#: value/deliverables/meetings/templates/meetings/new.html:165
+#: value/deliverables/templates/deliverables/decision_items/includes/modal.html:7
+#: value/deliverables/templates/deliverables/includes/add_stakeholders.html:5
+#: value/deliverables/templates/deliverables/includes/import_decision_items.html:21
+#: value/deliverables/templates/deliverables/settings/details.html:97
+#: value/deliverables/templates/deliverables/stakeholders.html:73
+#: value/deliverables/templates/deliverables/stakeholders.html:96
+#: value/factors/templates/factors/groups.html:101
+#: value/factors/templates/factors/groups.html:131
+#: value/factors/templates/factors/groups.html:153
+#: value/templates/includes/messages.html:7
+#: value/templates/registration/login.html:37
+#: value/users/templates/users/add.html:22
+#: value/users/templates/users/edit.html:19
+#: value/users/templates/users/password.html:20
+#: value/users/templates/users/roles.html:120
+#: value/users/templates/users/roles.html:141
+#: value/users/templates/users/roles.html:175
+msgid "Close"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/base_charts.html:66
+msgid "Discussion"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/dashboard_chart.html:6
+#: value/deliverables/meetings/templates/meetings/dashboard/decision_items_acceptance/chart.html:10
+#: value/deliverables/meetings/templates/meetings/dashboard/decision_items_comparison/chart.html:9
+#: value/deliverables/meetings/templates/meetings/dashboard/decision_items_overview/chart.html:6
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_comparison/chart.html:10
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/chart.html:10
+#: value/deliverables/meetings/templates/meetings/dashboard/value_ranking/chart.html:6
+msgid "Chart Options"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:41
+msgid "The meeting is still ongoing."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:43
+msgid ""
+"In order to analyse the dashboard you must change the meeting status to "
+"<strong>Analysing</strong>. The following charts can help you determine the "
+"meeting progress."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:50
+#: value/deliverables/meetings/templates/meetings/final_decision.html:36
+msgid "Change status to Analysing"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:62
+#: value/deliverables/meetings/templates/meetings/final_decision.html:27
+msgid "The meeting is still ongoing!"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:64
+msgid ""
+"In order to analyse the dashboard the meeting manager must change its status "
+"to <strong>Analysing</strong>."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/decision_items_acceptance/list.html:15
+#: value/deliverables/meetings/templates/meetings/dashboard/decision_items_acceptance/list.html:24
+#: value/deliverables/meetings/templates/meetings/dashboard/decision_items_acceptance/scenarios.html:17
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:39
+#: value/deliverables/meetings/views/dashboard/scenarios.py:67
+msgid "Decision Items Acceptance"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/decision_items_acceptance/list.html:31
+#: value/deliverables/meetings/templates/meetings/dashboard/decision_items_acceptance/scenarios.html:36
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_comparison/list.html:31
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_comparison/scenarios.html:36
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/list.html:30
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/scenarios.html:35
+msgid "All Decision Items"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/decision_items_acceptance/list.html:36
+#: value/deliverables/meetings/templates/meetings/dashboard/decision_items_acceptance/scenarios.html:20
+#: value/deliverables/meetings/templates/meetings/dashboard/decision_items_acceptance/scenarios.html:41
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_comparison/list.html:36
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_comparison/scenarios.html:20
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_comparison/scenarios.html:41
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/list.html:35
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/scenarios.html:20
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/scenarios.html:40
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:72
+msgid "Scenarios"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_comparison/list.html:15
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_comparison/scenarios.html:17
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_comparison/scenarios.html:29
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:31
+#: value/deliverables/meetings/views/dashboard/scenarios.py:60
+msgid "Factors Comparison"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/empty.html:6
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/empty.html:13
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/list.html:15
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/scenarios.html:17
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/scenarios.html:28
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:35
+msgid "Factors Groups Comparison"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/empty.html:19
+#: value/factors/templates/factors/groups.html:88
+msgid "The factors groups directory is empty."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/empty.html:21
+msgid ""
+"The application is not fully configurated. In order to visualize the "
+"<strong>Factors Groups Comparison</strong> charts the Administrator must "
+"create value factors groups first."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/empty.html:30
+msgid "Add factors groups"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/charts_order.html:6
+msgid "Order by"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/charts_toolbar.html:9
+msgid "Chart type"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/delete_toolbar.html:3
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/list.html:39
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/list.html:42
+#: value/deliverables/templates/deliverables/decision_items/delete.html:16
+#: value/deliverables/templates/deliverables/decision_items/edit.html:93
+#: value/factors/templates/factors/delete.html:10
+#: value/factors/templates/factors/index.html:48
+#: value/measures/templates/measures/delete.html:10
+#: value/measures/templates/measures/includes/measure_values_formset.html:11
+#: value/measures/templates/measures/index.html:38
+#: value/users/templates/users/delete.html:10
+#: value/users/templates/users/index.html:43
+msgid "Delete"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/edit_toolbar.html:5
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/list.html:30
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/list.html:35
+#: value/factors/templates/factors/index.html:45
+#: value/measures/templates/measures/index.html:35
+#: value/users/templates/users/index.html:40
+msgid "Edit"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/expand_toolbar.html:5
+msgid "Open as full-screen"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/info_toolbar.html:5
+msgid "View details"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:6
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_scenario_form.html:29
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_details.html:8
+#: value/deliverables/meetings/templates/meetings/final_decision.html:55
+msgid "Summary"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:15
+#: value/deliverables/meetings/views/dashboard/dashboard.py:190
+msgid "Decision Items Comparison"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:26
+#: value/deliverables/templates/deliverables/decision_items/includes/decision_item_details.html:7
+msgid "Details"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:48
+msgid "Add a scenario"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:56
+msgid "Build a scenario"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:65
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_compare_form.html:8
+msgid "Compare scenarios"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/modal_toolbar.html:5
+msgid "Detach window"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/partial_default_chart_type.html:6
+msgid "Type"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/partial_default_chart_type.html:10
+msgid "Default chart type"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/rationale_toolbar.html:6
+msgid "View evaluation rationale"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/reload_toolbar.html:5
+msgid "Reload the chart"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/stakeholders_toolbar.html:10
+#: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:9
+#: value/deliverables/templates/deliverables/includes/menu.html:16
+#: value/deliverables/templates/deliverables/index.html:29
+#: value/deliverables/templates/deliverables/index.html:63
+#: value/deliverables/templates/deliverables/stakeholders.html:14
+msgid "Stakeholders"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/toggle_toolbar.html:3
+msgid "Toggle details"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/list.html:26
+msgid "Scenario Options"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_compare.html:7
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_compare.html:41
+#, python-format
+msgid "%(name)s Items"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_compare.html:24
+msgid "Common Items"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_compare_form.html:5
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_compare_form.html:15
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:10
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:17
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:31
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:38
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:91
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:103
+#: value/deliverables/meetings/templates/meetings/evaluate.html:83
+#: value/deliverables/meetings/templates/meetings/new.html:246
+#: value/deliverables/templates/deliverables/decision_items/add.html:61
+#: value/deliverables/templates/deliverables/decision_items/delete.html:52
+#: value/deliverables/templates/deliverables/decision_items/delete_list.html:38
+#: value/deliverables/templates/deliverables/decision_items/delete_list.html:79
+#: value/deliverables/templates/deliverables/decision_items/edit.html:99
+#: value/deliverables/templates/deliverables/new.html:210
+#: value/deliverables/templates/deliverables/stakeholders.html:81
+#: value/factors/templates/factors/add.html:22
+#: value/factors/templates/factors/delete.html:22
+#: value/factors/templates/factors/edit.html:22
+#: value/factors/templates/factors/groups.html:110
+#: value/factors/templates/factors/groups.html:162
+#: value/measures/templates/measures/add.html:32
+#: value/measures/templates/measures/delete.html:23
+#: value/measures/templates/measures/edit.html:38
+#: value/users/templates/users/add.html:61
+#: value/users/templates/users/delete.html:21
+#: value/users/templates/users/edit.html:83
+#: value/users/templates/users/password.html:57
+#: value/users/templates/users/roles.html:127
+#: value/users/templates/users/roles.html:148
+msgid "Cancel"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_compare_form.html:16
+msgid "Compare"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_compare_form.html:22
+msgid "No enough data."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_compare_form.html:24
+msgid "You need at least two different scenarios to be able to compare."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_scenario_form.html:20
+msgid "Select decision items"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_scenario_form.html:28
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_details.html:7
+msgid "Decision Item"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_scenarios_action_buttons.html:9
+msgid "Add scenario"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_scenarios_action_buttons.html:17
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:86
+msgid "Scenario builder"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_scenarios_empty_state.html:5
+msgid "You haven"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_scenarios_empty_state.html:6
+msgid "A scenario can be used to combine different set of decision items."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_scenarios_empty_state.html:12
+msgid "Add the first scenario"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_scenarios_empty_state.html:21
+msgid "Build an automatic scenario"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:13
+msgid "New scenario"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:18
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:39
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:92
+#: value/deliverables/meetings/templates/meetings/evaluate.html:86
+#: value/deliverables/templates/deliverables/decision_items/add.html:58
+#: value/deliverables/templates/deliverables/decision_items/edit.html:96
+#: value/deliverables/templates/deliverables/new.html:209
+#: value/factors/templates/factors/add.html:21
+#: value/factors/templates/factors/edit.html:21
+#: value/factors/templates/factors/groups.html:111
+#: value/factors/templates/factors/groups.html:163
+#: value/measures/templates/measures/add.html:31
+#: value/measures/templates/measures/edit.html:37
+#: value/users/templates/users/add.html:60
+#: value/users/templates/users/edit.html:82
+#: value/users/templates/users/roles.html:128
+#: value/users/templates/users/roles.html:149
+msgid "Save"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:34
+msgid "Edit scenario"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:57
+#: value/deliverables/templates/deliverables/stakeholders.html:99
+#: value/factors/templates/factors/groups.html:134
+#: value/users/templates/users/roles.html:178
+msgid "Are you sure?"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:61
+msgid ""
+"The scenario <strong class=\"scenario-name\"></strong> will be permanently "
+"deleted."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:68
+msgid "Delete Scenario"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:106
+msgid "Scenario details"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/evaluate.html:22
+#: value/deliverables/meetings/templates/meetings/evaluate.html:59
+msgid "Rationale"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/evaluate.html:104
+msgid "Evaluate"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/evaluate.html:116
+msgid "Search"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/evaluate.html:131
+msgid "total"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/evaluate.html:136
+msgid "Panel display options"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/evaluate.html:145
+msgid "View"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/evaluate.html:151
+#: value/deliverables/templates/deliverables/new.html:64
+msgid "All"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/evaluate.html:156
+msgid "To-do"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/evaluate.html:161
+msgid "Finished"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/final_decision.html:17
+#: value/deliverables/meetings/templates/meetings/final_decision.html:50
+msgid "Final Decision"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/final_decision.html:29
+msgid ""
+"In order to record the final decision the meeting manager must change its "
+"status to <strong>Analysing</strong>."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/final_decision.html:54
+#: value/deliverables/models.py:161
+#: value/deliverables/templates/deliverables/includes/meetings_table.html:6
+#: value/deliverables/templates/deliverables/index.html:27
+#: value/deliverables/templates/deliverables/index.html:61
+#: value/factors/templates/factors/index.html:28
+#: value/measures/templates/measures/index.html:21
+msgid "Name"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/final_decision.html:57
+msgid "Decision"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/final_decision.html:58
+msgid "Meeting Ranking"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/includes/evaluation_panels.html:35
+msgid "Value Factor"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/new.html:14
+msgid "New Meeting"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/new.html:24
+#: value/deliverables/templates/deliverables/meetings.html:27
+msgid "New meeting"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/new.html:39
+msgid "1. Provide the meeting details"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/new.html:72
+msgid "Location"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/new.html:80
+#: value/deliverables/models.py:166
+#: value/factors/templates/factors/index.html:29
+msgid "Description"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/new.html:109
+msgid "2. Review the stakeholders"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/new.html:122
+msgid "Click to remove a stakeholder from the meeting."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/new.html:145
+msgid "items to discuss"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/new.html:154
+msgid "3. Select the decision items"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/new.html:168
+msgid "Select at least one decision item before starting the meeting."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/new.html:200
+#: value/deliverables/templates/deliverables/decision_items/includes/decision_items_table.html:47
+#: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:61
+#: value/deliverables/templates/deliverables/includes/meetings_table.html:57
+msgid "No data"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/new.html:218
+msgid "4. Advanced settings"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/new.html:243
+msgid "Start the meeting"
+msgstr ""
+
+#: value/deliverables/meetings/templatetags/evaluation_options.py:59
+msgid "No description"
+msgstr ""
+
+#: value/deliverables/meetings/templatetags/evaluation_options.py:81
+msgid "Add a rationale for"
+msgstr ""
+
+#: value/deliverables/meetings/templatetags/meeting_item.py:26
+msgid "Decision Item Evaluation Summary"
+msgstr ""
+
+#: value/deliverables/meetings/templatetags/meeting_item.py:77
+msgid "Click to view details"
+msgstr ""
+
+#: value/deliverables/meetings/validators.py:9
+msgid "Select exactly two scenarios to compare."
+msgstr ""
+
+#: value/deliverables/meetings/views/dashboard/dashboard.py:59
+msgid "Factors Usage"
+msgstr ""
+
+#: value/deliverables/meetings/views/dashboard/dashboard.py:80
+msgid "Stakeholders Input"
+msgstr ""
+
+#: value/deliverables/meetings/views/dashboard/scenarios.py:64
+msgid "Factors Group Comparison"
+msgstr ""
+
+#: value/deliverables/meetings/views/dashboard/scenarios.py:224
+#, python-brace-format
+msgid "Scenario {0} successfully deleted!"
+msgstr ""
+
+#: value/deliverables/meetings/views/dashboard/scenarios.py:226
+msgid "An unexpected error ocurred."
+msgstr ""
+
+#: value/deliverables/meetings/views/meetings.py:77
+#, python-brace-format
+msgid "The meeting {0} was created successfully."
+msgstr ""
+
+#: value/deliverables/meetings/views/meetings.py:81
+#: value/deliverables/meetings/views/meetings.py:262
+#: value/deliverables/views.py:93 value/deliverables/views.py:282
+#: value/deliverables/views.py:313 value/factors/views.py:32
+#: value/factors/views.py:50 value/measures/views.py:46
+#: value/measures/views.py:79 value/users/views.py:42 value/users/views.py:61
+#: value/users/views.py:80 value/users/views.py:208 value/users/views.py:223
+msgid "Please correct the error below."
+msgstr ""
+
+#: value/deliverables/meetings/views/meetings.py:128
+#, python-brace-format
+msgid "The meeting status was changed from {0} to {1}."
+msgstr ""
+
+#: value/deliverables/meetings/views/meetings.py:130
+msgid "An error ocurred while trying to change meeting status."
+msgstr ""
+
+#: value/deliverables/meetings/views/meetings.py:156
+#, python-brace-format
+msgid ""
+"The stakeholder {0} cannot be removed from this meeting\n"
+"                because he has already provided evaluation input."
+msgstr ""
+
+#: value/deliverables/meetings/views/meetings.py:165
+#, python-brace-format
+msgid "{0} was successfully removed from the meeting!"
+msgstr ""
+
+#: value/deliverables/meetings/views/meetings.py:168
+msgid "You cannot remove yourself from the meeting."
+msgstr ""
+
+#: value/deliverables/meetings/views/meetings.py:185
+msgid "Stakeholders sucessfully added to the meeting!"
+msgstr ""
+
+#: value/deliverables/meetings/views/meetings.py:187
+msgid "Select at least one stakeholder to add."
+msgstr ""
+
+#: value/deliverables/meetings/views/meetings.py:211
+msgid "The following decision items was sucessfully removed from the meeting:"
+msgstr ""
+
+#: value/deliverables/meetings/views/meetings.py:222
+msgid ""
+"The following decision items wasn't removed from the meeting because\n"
+"                        they were already in use:"
+msgstr ""
+
+#: value/deliverables/meetings/views/meetings.py:229
+msgid "Select at least one decision item to remove."
+msgstr ""
+
+#: value/deliverables/meetings/views/meetings.py:246
+msgid "Decision items sucessfully added to the meeting!"
+msgstr ""
+
+#: value/deliverables/meetings/views/meetings.py:248
+msgid "Select at least one decision item to add."
+msgstr ""
+
+#: value/deliverables/meetings/views/meetings.py:260
+msgid "The meeting details was saved successfully!"
+msgstr ""
+
+#: value/deliverables/meetings/views/meetings.py:306
+#, python-brace-format
+msgid "The meeeting {0} was completly deleted successfully."
+msgstr ""
+
+#: value/deliverables/models.py:30
+msgid "deliverable"
+msgstr ""
+
+#: value/deliverables/models.py:31
+msgid "deliverables"
+msgstr ""
+
+#: value/deliverables/models.py:99
+msgid "decision item"
+msgstr ""
+
+#: value/deliverables/models.py:100
+#: value/deliverables/templates/deliverables/decision_items/includes/decision_items_table.html:22
+msgid "decision items"
+msgstr ""
+
+#: value/deliverables/models.py:115 value/deliverables/models.py:119
+msgid "attachment"
+msgstr ""
+
+#: value/deliverables/models.py:120
+msgid "attachments"
+msgstr ""
+
+#: value/deliverables/models.py:138
+msgid "Float"
+msgstr ""
+
+#: value/deliverables/models.py:139
+msgid "Integer"
+msgstr ""
+
+#: value/deliverables/models.py:140
+msgid "Date"
+msgstr ""
+
+#: value/deliverables/models.py:141
+msgid "Date Time"
+msgstr ""
+
+#: value/deliverables/models.py:144
+msgid "column name"
+msgstr ""
+
+#: value/deliverables/models.py:145
+msgid "column label"
+msgstr ""
+
+#: value/deliverables/models.py:146
+msgid "column type"
+msgstr ""
+
+#: value/deliverables/models.py:147
+msgid "column display"
+msgstr ""
+
+#: value/deliverables/models.py:151
+msgid "decision items lookup"
+msgstr ""
+
+#: value/deliverables/models.py:152
+msgid "decision items lookups"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/add.html:11
+#: value/deliverables/templates/deliverables/decision_items/add.html:20
+msgid "Add decision item"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/delete.html:26
+#, python-format
+msgid ""
+"Are you sure you want to delete the decision item <strong>%(name)s</strong>? "
+"All the related items will be removed."
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/delete.html:32
+msgid "Summary:"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/delete.html:49
+#: value/deliverables/templates/deliverables/decision_items/delete_list.html:35
+#: value/deliverables/templates/deliverables/includes/import_decision_items.html:30
+#: value/deliverables/templates/deliverables/stakeholders.html:84
+#: value/factors/templates/factors/delete.html:21
+#: value/measures/templates/measures/delete.html:22
+#: value/users/templates/users/delete.html:20
+msgid "Confirm"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/delete_list.html:11
+msgid "Delete decision items"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/delete_list.html:24
+msgid "Are you sure you want to delete the selected decision items?"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/delete_list.html:45
+msgid "Marked for deletion"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/delete_list.html:62
+msgid "Cannot be deleted"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/delete_list.html:65
+msgid ""
+"The following decision items cannot be deleted because they are already "
+"associated with meetings."
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/edit.html:20
+msgid "Change decision item"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/edit.html:61
+#: value/deliverables/templates/deliverables/decision_items/includes/decision_item_details.html:12
+msgid "Attachments"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/edit.html:66
+msgid "File"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/edit.html:67
+msgid "Remove?"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/includes/decision_item_details.html:37
+msgid "This item has no attachments."
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/includes/decision_items_table.html:18
+msgid "Selected:"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/includes/decision_items_table.html:20
+msgid "of"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/includes/modal.html:10
+msgid "Decision item details"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/list.html:38
+msgid "Add item"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/decision_items/list.html:47
+msgid "Remove selected items"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/historical_dashboard.html:10
+#: value/deliverables/templates/deliverables/includes/menu.html:26
+msgid "Historical Dashboard"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/historical_dashboard.html:18
+msgid "There"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/includes/add_stakeholders.html:8
+msgid "Select the stakeholders to be associated with the deliverable."
+msgstr ""
+
+#: value/deliverables/templates/deliverables/includes/add_stakeholders.html:15
+msgid "There is no stakeholder available."
+msgstr ""
+
+#: value/deliverables/templates/deliverables/includes/add_stakeholders.html:16
+msgid "Create new user"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/includes/decision_items_import_table.html:6
+msgid "Info:"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/includes/decision_items_import_table.html:7
+msgid ""
+"Imported <strong>{{ formset|length }}</strong> entries from file "
+"<strong>{{ filename }}</strong>."
+msgstr ""
+
+#: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:6
+msgid "Meeting"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:7
+msgid "Deliverable"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:8
+#: value/deliverables/templates/deliverables/index.html:22
+#: value/deliverables/templates/deliverables/index.html:28
+#: value/deliverables/templates/deliverables/index.html:62
+msgid "Manager"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:10
+#: value/deliverables/templates/deliverables/includes/meetings_table.html:8
+msgid "Items"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:11
+#: value/deliverables/templates/deliverables/includes/meetings_table.html:9
+msgid "Progress"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:12
+#: value/deliverables/templates/deliverables/includes/meetings_table.html:10
+msgid "Status"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/includes/import_decision_items.html:4
+msgid "Import from Excel"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/includes/import_decision_items.html:24
+msgid "Imported data"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/includes/import_decision_items.html:28
+msgid "Discard"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/includes/meetings_table.html:7
+msgid "Attendees"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/includes/menu.html:32
+#: value/deliverables/templates/deliverables/settings/details.html:37
+#: value/deliverables/templates/deliverables/settings/factors.html:10
+#: value/deliverables/templates/deliverables/settings/measure.html:10
+msgid "Settings"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/index.html:16
+#: value/deliverables/templates/deliverables/new.html:18
+#: value/deliverables/templates/deliverables/new.html:25
+msgid "New deliverable"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/index.html:31
+#: value/deliverables/templates/deliverables/index.html:65
+msgid "Updated at"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/index.html:56
+msgid "Stakeholder"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/index.html:90
+msgid "Welcome to your repository of deliverables!"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/index.html:91
+msgid "A deliverable can be a project, a product, a release or a service."
+msgstr ""
+
+#: value/deliverables/templates/deliverables/index.html:93
+msgid "Add your first deliverable"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/meetings.html:37
+msgid "Meetings in progress"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/meetings.html:45
+msgid "Past meetings"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/meetings.html:53
+msgid "This deliverable had no meeting yet."
+msgstr ""
+
+#: value/deliverables/templates/deliverables/meetings.html:56
+msgid "Start a meeting"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/new.html:30
+msgid "1. Provide the deliverable details"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/new.html:52
+msgid "2. Assign the users who participated in the decision-making process"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/new.html:58
+msgid "Select"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/new.html:69
+msgid "None"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/new.html:102
+msgid "3. Define the decision items (e.g. features, ideas, requirements)"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/new.html:122
+msgid "Add"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/new.html:183
+msgid "4. Select value factors and measure"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/settings/details.html:55
+#: value/deliverables/templates/deliverables/settings/includes/menu.html:7
+msgid "Deliverable details"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/settings/details.html:68
+msgid "Danger zone"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/settings/details.html:76
+msgid "Transfer"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/settings/details.html:78
+#: value/deliverables/templates/deliverables/settings/details.html:100
+#: value/deliverables/templates/deliverables/settings/details.html:108
+msgid "Transfer ownership"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/settings/details.html:79
+msgid "Transfer this deliverable to another user."
+msgstr ""
+
+#: value/deliverables/templates/deliverables/settings/details.html:103
+msgid "Select the new owner\\"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/settings/factors.html:11
+#: value/deliverables/templates/deliverables/settings/factors.html:29
+#: value/deliverables/templates/deliverables/settings/includes/menu.html:11
+msgid "Value factors"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/settings/includes/menu.html:3
+msgid "Delivearble settings"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/settings/includes/menu.html:15
+#: value/deliverables/templates/deliverables/settings/measure.html:11
+#: value/deliverables/templates/deliverables/settings/measure.html:29
+#: value/factors/templates/factors/index.html:30
+msgid "Measure"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/stakeholders.html:25
+#: value/deliverables/templates/deliverables/stakeholders.html:55
+#: value/deliverables/templates/deliverables/stakeholders.html:76
+msgid "Add stakeholder"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/stakeholders.html:33
+msgid "Remove selected"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/stakeholders.html:52
+msgid "There is no stakeholder associated to the deliverable."
+msgstr ""
+
+#: value/deliverables/templates/deliverables/stakeholders.html:103
+#, python-format
+msgid ""
+"Removing the selected stakeholders will basically remove their access to the "
+"deliverable <strong>%(name)s</strong>. They will no longer be able to access "
+"its data."
+msgstr ""
+
+#: value/deliverables/templates/deliverables/stakeholders.html:112
+msgid "Remove selected stakeholders"
+msgstr ""
+
+#: value/deliverables/views.py:60
+msgid ""
+"There is not active measure. Please configure it properly on Management » "
+"Measures."
+msgstr ""
+
+#: value/deliverables/views.py:67
+msgid ""
+"There is not active value factor. Please configure it properly on Management "
+"» Factors."
+msgstr ""
+
+#: value/deliverables/views.py:90
+#, python-brace-format
+msgid "The deliverable {0} was added successfully."
+msgstr ""
+
+#: value/deliverables/views.py:184
+msgid "The stakeholders were added successfully."
+msgstr ""
+
+#: value/deliverables/views.py:186
+msgid "No stakeholder were selected. Nothing changed."
+msgstr ""
+
+#: value/deliverables/views.py:200
+msgid "The stakeholders were removed successfully."
+msgstr ""
+
+#: value/deliverables/views.py:202
+msgid "An error ocurred while trying to remove the selected stakeholders."
+msgstr ""
+
+#: value/deliverables/views.py:224
+msgid "The selected decision items were deleted successfully."
+msgstr ""
+
+#: value/deliverables/views.py:279
+#, python-brace-format
+msgid "The decision item {0} was added successfully."
+msgstr ""
+
+#: value/deliverables/views.py:310
+#, python-brace-format
+msgid "The decision item {0} was saved successfully."
+msgstr ""
+
+#: value/deliverables/views.py:333
+#, python-brace-format
+msgid "The decision item {0} was deleted successfully."
+msgstr ""
+
+#: value/deliverables/views.py:373 value/deliverables/views.py:393
+#: value/deliverables/views.py:414
+#, python-brace-format
+msgid "The deliverable {0} was saved successfully."
+msgstr ""
+
+#: value/deliverables/views.py:439
+#, python-brace-format
+msgid "The deliverable {0} was successfully transferred to {1}."
+msgstr ""
+
+#: value/deliverables/views.py:445
+msgid "Something went wrong. Nothing changed."
 msgstr ""
 
 #: value/factors/forms.py:19 value/factors/forms.py:25
@@ -286,7 +1721,8 @@ msgstr ""
 msgid "value factors groups"
 msgstr ""
 
-#: value/factors/models.py:25
+#: value/factors/models.py:25 value/help/models.py:20
+#: value/measures/models.py:14
 msgid "active"
 msgstr ""
 
@@ -303,57 +1739,106 @@ msgid "value factors"
 msgstr ""
 
 #: value/factors/templates/factors/add.html:8
-#: value/factors/templates/factors/delete.html:6
+#: value/factors/templates/factors/delete.html:8
+#: value/factors/templates/factors/edit.html:8
+#: value/factors/templates/factors/index.html:8
+#: value/templates/includes/header.html:28
 msgid "Factors"
 msgstr ""
 
 #: value/factors/templates/factors/add.html:9
 #: value/factors/templates/factors/add.html:16
+#: value/factors/templates/factors/index.html:20
 msgid "Add factor"
 msgstr ""
 
-#: value/factors/templates/factors/add.html:21
-msgid "Save"
-msgstr ""
-
-#: value/factors/templates/factors/add.html:22
-#: value/factors/templates/factors/delete.html:20
-msgid "Cancel"
-msgstr ""
-
-#: value/factors/templates/factors/delete.html:8
-msgid "Delete"
-msgstr ""
-
-#: value/factors/templates/factors/delete.html:14
+#: value/factors/templates/factors/delete.html:16
 msgid "Are you sure you want to delete the factor"
 msgstr ""
 
-#: value/factors/templates/factors/delete.html:19
-msgid "Confirm"
-msgstr ""
-
-#: value/factors/templates/factors/delete.html:28
+#: value/factors/templates/factors/delete.html:30
 msgid "The value factor <strong>{{ factor.name }}</strong> cannot be deleted."
 msgstr ""
 
-#: value/factors/templates/factors/delete.html:31
+#: value/factors/templates/factors/delete.html:33
 msgid ""
 "There's already deliverables and meetings associated with this value factor. "
 "Change its status to <strong>inactive</strong> instead."
 msgstr ""
 
-#: value/factors/templates/factors/delete.html:37
+#: value/factors/templates/factors/delete.html:39
+#: value/measures/templates/measures/delete.html:38
 msgid "Back"
+msgstr ""
+
+#: value/factors/templates/factors/edit.html:16
+msgid "Edit factor"
+msgstr ""
+
+#: value/factors/templates/factors/groups.html:12
+#: value/templates/includes/header.html:29
+msgid "Factors Groups"
+msgstr ""
+
+#: value/factors/templates/factors/groups.html:21
+msgid "Use drag and drop to assign a factor to a group"
+msgstr ""
+
+#: value/factors/templates/factors/groups.html:25
+msgid "Add a factor group"
+msgstr ""
+
+#: value/factors/templates/factors/groups.html:33
+msgid "Available Factors"
+msgstr ""
+
+#: value/factors/templates/factors/groups.html:55
+msgid "Click to remove the group"
+msgstr ""
+
+#: value/factors/templates/factors/groups.html:61
+msgid "Click to edit the group"
+msgstr ""
+
+#: value/factors/templates/factors/groups.html:90
+msgid "Add the first factor group"
+msgstr ""
+
+#: value/factors/templates/factors/groups.html:104
+msgid "New factor group"
+msgstr ""
+
+#: value/factors/templates/factors/groups.html:137
+msgid "The associated value factors won"
+msgstr ""
+
+#: value/factors/templates/factors/groups.html:141
+msgid "Delete group"
+msgstr ""
+
+#: value/factors/templates/factors/groups.html:156
+msgid "Edit group"
+msgstr ""
+
+#: value/factors/templates/factors/index.html:16
+msgid "Available factors"
+msgstr ""
+
+#: value/factors/templates/factors/index.html:27
+msgid "Group"
+msgstr ""
+
+#: value/factors/templates/factors/index.html:58
+msgid "The factors directory is empty."
+msgstr ""
+
+#: value/factors/templates/factors/index.html:60
+msgid "Add the first factor"
 msgstr ""
 
 #: value/factors/views.py:29
 #, python-brace-format
 msgid "The factor {0} was added successfully."
-msgstr ""
-
-#: value/factors/views.py:32 value/factors/views.py:50
-msgid "Please correct the error below."
 msgstr ""
 
 #: value/factors/views.py:47
@@ -384,3 +1869,463 @@ msgstr ""
 #, python-brace-format
 msgid "The group {0} was deleted successfully."
 msgstr ""
+
+#: value/help/models.py:12
+msgid "Administrator Functions"
+msgstr ""
+
+#: value/help/models.py:13
+msgid "General Usage"
+msgstr ""
+
+#: value/help/models.py:17
+msgid "slug"
+msgstr ""
+
+#: value/help/models.py:19
+msgid "category"
+msgstr ""
+
+#: value/help/models.py:28
+msgid "article"
+msgstr ""
+
+#: value/help/models.py:29
+msgid "articles"
+msgstr ""
+
+#: value/help/templates/help/index.html:8 value/templates/403.html.py:51
+#: value/templates/404.html:51 value/templates/500.html.py:51
+msgid "Help"
+msgstr ""
+
+#: value/measures/forms.py:23
+msgid "Unselect this instead of deleting measures."
+msgstr ""
+
+#: value/measures/models.py:18
+msgid "measure"
+msgstr ""
+
+#: value/measures/models.py:19
+msgid "measures"
+msgstr ""
+
+#: value/measures/models.py:84
+msgid "order"
+msgstr ""
+
+#: value/measures/models.py:85
+msgid "color"
+msgstr ""
+
+#: value/measures/models.py:90
+msgid "measure value"
+msgstr ""
+
+#: value/measures/models.py:91
+msgid "measure values"
+msgstr ""
+
+#: value/measures/templates/measures/add.html:17
+#: value/measures/templates/measures/delete.html:8
+#: value/measures/templates/measures/edit.html:17
+#: value/measures/templates/measures/index.html:8
+#: value/templates/includes/header.html:32
+msgid "Measures"
+msgstr ""
+
+#: value/measures/templates/measures/add.html:18
+#: value/measures/templates/measures/add.html:25
+#: value/measures/templates/measures/index.html:15
+msgid "Add measure"
+msgstr ""
+
+#: value/measures/templates/measures/delete.html:17
+msgid "Are you sure you want to delete the measure {{ measure.name }}?"
+msgstr ""
+
+#: value/measures/templates/measures/delete.html:30
+msgid "The measure <strong>{{ measure.name }}</strong> cannot be deleted."
+msgstr ""
+
+#: value/measures/templates/measures/delete.html:32
+msgid ""
+"There's already deliverables and meetings associated with this measure. "
+"Change its status to <strong>inactive</strong> instead."
+msgstr ""
+
+#: value/measures/templates/measures/edit.html:28
+msgid "This measure is already in use. You may not change in its choices."
+msgstr ""
+
+#: value/measures/templates/measures/edit.html:31
+msgid "Edit measure"
+msgstr ""
+
+#: value/measures/templates/measures/includes/measure_values_formset.html:8
+msgid "Order"
+msgstr ""
+
+#: value/measures/templates/measures/includes/measure_values_formset.html:9
+msgid "Choices"
+msgstr ""
+
+#: value/measures/templates/measures/includes/measure_values_formset.html:10
+msgid "Color"
+msgstr ""
+
+#: value/measures/templates/measures/includes/measure_values_formset.html:19
+msgid "Add choice"
+msgstr ""
+
+#: value/measures/templates/measures/includes/measure_values_formset.html:81
+msgid ""
+"Please submit two or more choices. Click on the <strong>Add choice</strong> "
+"button to add more choices to the measure."
+msgstr ""
+
+#: value/measures/templates/measures/index.html:17
+msgid "Available measures"
+msgstr ""
+
+#: value/measures/templates/measures/index.html:22
+msgid "Values"
+msgstr ""
+
+#: value/measures/templates/measures/index.html:48
+msgid "The measures directory is empty."
+msgstr ""
+
+#: value/measures/templates/measures/index.html:50
+msgid "Add the first measure"
+msgstr ""
+
+#: value/measures/views.py:43
+#, python-brace-format
+msgid "The measure {0} was added successfully."
+msgstr ""
+
+#: value/measures/views.py:76
+#, python-brace-format
+msgid "The measure {0} was changed successfully."
+msgstr ""
+
+#: value/measures/views.py:93
+#, python-brace-format
+msgid "The measure {0} was deleted successfully."
+msgstr ""
+
+#: value/templates/403.html:44
+msgid "Permission denied"
+msgstr ""
+
+#: value/templates/403.html:45
+msgid "We think you should not be here."
+msgstr ""
+
+#: value/templates/403.html:55 value/templates/404.html.py:55
+#: value/templates/500.html:55
+msgid "Report a bug"
+msgstr ""
+
+#: value/templates/404.html:44
+msgid "Page not found"
+msgstr ""
+
+#: value/templates/404.html:45
+msgid "The requested url was not found on this server."
+msgstr ""
+
+#: value/templates/500.html:44
+msgid "Internal server error"
+msgstr ""
+
+#: value/templates/500.html:45
+msgid "Something went wrong. That"
+msgstr ""
+
+#: value/templates/base_site.html:13 value/templates/base_site.html.py:14
+#: value/templates/registration/login.html:48
+#: value/templates/registration/login.html:77
+msgid "Sign in"
+msgstr ""
+
+#: value/templates/includes/header.html:7
+msgid "Toggle navigation"
+msgstr ""
+
+#: value/templates/includes/header.html:25
+msgid "Management"
+msgstr ""
+
+#: value/templates/includes/header.html:30
+#: value/users/templates/users/add.html:8
+#: value/users/templates/users/delete.html:8
+#: value/users/templates/users/edit.html:8
+#: value/users/templates/users/index.html:8
+#: value/users/templates/users/password.html:8
+msgid "Users"
+msgstr ""
+
+#: value/templates/includes/header.html:31
+#: value/users/templates/users/index.html:25
+#: value/users/templates/users/roles.html:12
+msgid "Roles"
+msgstr ""
+
+#: value/templates/includes/header.html:53
+#: value/users/templates/users/account.html:8
+#: value/users/templates/users/change_password.html:8
+msgid "My account"
+msgstr ""
+
+#: value/templates/includes/header.html:57
+msgid "Sign out"
+msgstr ""
+
+#: value/templates/registration/login.html:54
+#: value/templates/registration/login.html:59
+#: value/users/templates/users/index.html:20
+msgid "Username"
+msgstr ""
+
+#: value/templates/registration/login.html:66
+#: value/templates/registration/login.html:71
+msgid "Password"
+msgstr ""
+
+#: value/templates/registration/login.html:80
+msgid "Forgot your password?"
+msgstr ""
+
+#: value/templates/registration/password_reset_complete.html:10
+#, python-format
+msgid ""
+"Your password has been set. You may go ahead and <a href=\"%(signin_url)s"
+"\">sign in</a> now."
+msgstr ""
+
+#: value/templates/registration/password_reset_confirm.html:11
+#: value/templates/registration/password_reset_confirm.html:30
+#: value/users/templates/users/account.html:19
+#: value/users/templates/users/change_password.html:9
+#: value/users/templates/users/change_password.html:20
+#: value/users/templates/users/change_password.html:29
+#: value/users/templates/users/password.html:10
+#: value/users/templates/users/password.html:56
+msgid "Change password"
+msgstr ""
+
+#: value/templates/registration/password_reset_confirm.html:17
+#: value/users/templates/users/password.html:32
+msgid "New password"
+msgstr ""
+
+#: value/templates/registration/password_reset_confirm.html:24
+msgid "Confirm password"
+msgstr ""
+
+#: value/templates/registration/password_reset_confirm.html:38
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used. Please request a new password reset."
+msgstr ""
+
+#: value/templates/registration/password_reset_done.html:9
+msgid ""
+"We've emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
+msgstr ""
+
+#: value/templates/registration/password_reset_done.html:15
+msgid ""
+"If you don't receive an email, please make sure you've entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+
+#: value/templates/registration/password_reset_email.html:4
+#, python-format
+msgid ""
+"\n"
+"To initiate the password reset process for your %(username)s VALUE Account, "
+"click the link below:\n"
+"\n"
+"%(protocol)s://%(domain)s%(reset_url)s\n"
+"\n"
+"If clicking the link above doesn't work, please copy and paste the URL in a "
+"new browser window instead.\n"
+"\n"
+"If you've received this mail in error, it's likely that another user entered "
+"your email address by mistake\n"
+"while trying to reset a password. If you didn't initiate the request, you "
+"don't need to take any further action\n"
+"and can safely disregard this email.\n"
+"\n"
+"Sincerely,\n"
+"The VALUE Project Team\n"
+msgstr ""
+
+#: value/templates/registration/password_reset_form.html:10
+msgid "Forgot password"
+msgstr ""
+
+#: value/templates/registration/password_reset_form.html:16
+#: value/users/templates/users/index.html:21
+msgid "Email"
+msgstr ""
+
+#: value/templates/registration/password_reset_form.html:21
+msgid "Enter your email address"
+msgstr ""
+
+#: value/templates/registration/password_reset_form.html:27
+msgid "Submit"
+msgstr ""
+
+#: value/templates/registration/password_reset_subject.txt:1
+msgid "VALUE Password Reset"
+msgstr ""
+
+#: value/users/apps.py:10
+msgid "users"
+msgstr ""
+
+#: value/users/forms.py:10 value/users/templates/users/index.html.py:22
+msgid "First name"
+msgstr ""
+
+#: value/users/forms.py:16 value/users/templates/users/index.html.py:23
+msgid "Last name"
+msgstr ""
+
+#: value/users/forms.py:22
+msgid "Email address"
+msgstr ""
+
+#: value/users/models.py:13
+msgid "profile"
+msgstr ""
+
+#: value/users/models.py:14
+msgid "profiles"
+msgstr ""
+
+#: value/users/templates/users/account.html:16
+#: value/users/templates/users/change_password.html:17
+msgid "Personal settings"
+msgstr ""
+
+#: value/users/templates/users/account.html:18
+#: value/users/templates/users/account.html:28
+#: value/users/templates/users/change_password.html:19
+msgid "Profile"
+msgstr ""
+
+#: value/users/templates/users/add.html:9
+#: value/users/templates/users/add.html:16
+#: value/users/templates/users/index.html:14
+msgid "Add user"
+msgstr ""
+
+#: value/users/templates/users/add.html:18
+msgid "First, enter a username and password. Then, you"
+msgstr ""
+
+#: value/users/templates/users/delete.html:15
+msgid "Are you sure you want to delete the user {{ delete_user.username }}?"
+msgstr ""
+
+#: value/users/templates/users/edit.html:16
+msgid "Edit user"
+msgstr ""
+
+#: value/users/templates/users/password.html:17
+msgid "Change password for {{ form.user.username }}"
+msgstr ""
+
+#: value/users/templates/users/password.html:44
+msgid "Re-type new password"
+msgstr ""
+
+#: value/users/templates/users/roles.html:20
+msgid "Use drag and drop to assign a user to a role"
+msgstr ""
+
+#: value/users/templates/users/roles.html:24
+msgid "Add role"
+msgstr ""
+
+#: value/users/templates/users/roles.html:32
+msgid "Available Users"
+msgstr ""
+
+#: value/users/templates/users/roles.html:62
+msgid "Click to remove the role"
+msgstr ""
+
+#: value/users/templates/users/roles.html:72
+msgid "Click to edit the role"
+msgstr ""
+
+#: value/users/templates/users/roles.html:107
+msgid "The roles directory is empty."
+msgstr ""
+
+#: value/users/templates/users/roles.html:109
+msgid "Add the first role"
+msgstr ""
+
+#: value/users/templates/users/roles.html:123
+msgid "New role"
+msgstr ""
+
+#: value/users/templates/users/roles.html:144
+msgid "Edit role"
+msgstr ""
+
+#: value/users/templates/users/roles.html:181
+msgid "The associated users won"
+msgstr ""
+
+#: value/users/templates/users/roles.html:185
+msgid "Delete role"
+msgstr ""
+
+#: value/users/views.py:38
+#, python-brace-format
+msgid "The user {0} was added successfully. You may edit it again below."
+msgstr ""
+
+#: value/users/views.py:58
+#, python-brace-format
+msgid "The user {0} was changed successfully."
+msgstr ""
+
+#: value/users/views.py:75 value/users/views.py:220
+msgid "Password changed successfully."
+msgstr "Senha alterada com sucesso."
+
+#: value/users/views.py:92
+#, python-brace-format
+msgid "The user {0} was deleted successfully."
+msgstr ""
+
+#: value/users/views.py:130
+#, python-brace-format
+msgid "Role {0} successfully added!"
+msgstr ""
+
+#: value/users/views.py:153
+#, python-brace-format
+msgid "Role {0} successfully edited!"
+msgstr ""
+
+#: value/users/views.py:172
+#, python-brace-format
+msgid "The role {0} was deleted successfully."
+msgstr ""
+
+#: value/users/views.py:206
+msgid "Your profile was changed successfully."
+msgstr "O seu perfil foi atualizado com sucesso."

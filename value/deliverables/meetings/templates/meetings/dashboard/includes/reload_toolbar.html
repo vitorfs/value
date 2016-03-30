@@ -1,1 +1,7 @@
-<button type="button" class="btn btn-default btn-xs btn-chart-reload"{% if not opened %} disabled{% endif %} title="Reload the chart"><span class="glyphicon glyphicon-refresh"></span></button>
+{% load i18n %}
+
+<button type="button"
+        class="btn btn-default btn-xs btn-chart-reload"{% if not opened %} disabled{% endif %}
+        title="{% trans 'Reload the chart' %}">
+  <span class="glyphicon glyphicon-refresh"></span>
+</button>

@@ -1,13 +1,12 @@
-{% load meeting_item %}
+{% load i18n meeting_item %}
 
 <h5 style="margin-top: 0;">{{ scenario.name }}</h5>
-
 <table class="table table-condensed" style="margin-bottom: 0;">
   <thead>
     <tr>
-      <th>Decision Item</th>
-      <th>Summary</th>
-      <th style="width: 140px;">Value Ranking</th>
+      <th>{% trans 'Decision Item' %}</th>
+      <th>{% trans 'Summary' %}</th>
+      <th style="width: 140px;">{% trans 'Value Ranking' %}</th>
     </tr>
   </thead>
   <tbody>

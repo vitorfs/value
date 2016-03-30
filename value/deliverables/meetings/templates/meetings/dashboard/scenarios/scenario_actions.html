@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <form id="form-add-scenario" method="post" action="{% url 'deliverables:meetings:add_scenario' meeting.deliverable.pk meeting.pk %}">
   {% csrf_token %}
   <input type="hidden" name="next" value="{{ request.path }}" id="add-next">
@@ -5,13 +7,15 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cancel"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">New scenario</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Cancel' %}">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">{% trans 'New scenario' %}</h4>
         </div>
         <div class="modal-body" style="min-height: 200px;"></div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
+          <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
         </div>
       </div>
     </div>
@@ -24,13 +28,15 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cancel"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Edit scenario</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Cancel' %}">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">{% trans 'Edit scenario' %}</h4>
         </div>
         <div class="modal-body" style="min-height: 200px;"></div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
+          <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
         </div>
       </div>
     </div>
@@ -45,14 +51,22 @@
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Are you sure?</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">{% trans 'Are you sure?' %}</h4>
         </div>
         <div class="modal-body">
-          <p>The scenario <strong class="scenario-name"></strong> will be permanently deleted.</p>
+          <p>
+            {% blocktrans trimmed %}
+              The scenario <strong class="scenario-name"></strong> will be permanently deleted.
+            {% endblocktrans %}
+          </p>
         </div>
         <div class="modal-footer">
-          <button type="submit" id="confirm-deletion" class="btn btn-danger btn-block">Delete Scenario</button>
+          <button type="submit" id="confirm-deletion" class="btn btn-danger btn-block">
+            {% trans 'Delete Scenario' %}
+          </button>
         </div>
       </div>
     </div>
@@ -66,15 +80,16 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Scenario builder</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">{% trans 'Scenario builder' %}</h4>
         </div>
         <div class="modal-body" style="min-height: 200px;">
-          
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
+          <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
         </div>
       </div>
     </div>
@@ -85,8 +100,10 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Cancel"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Scenario details</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Cancel' %}">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">{% trans 'Scenario details' %}</h4>
       </div>
       <div class="modal-body" style="min-height: 200px;"></div>
     </div>

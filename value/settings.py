@@ -60,6 +60,7 @@ INSTALLED_APPS = (
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -67,7 +68,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
 )
 
 ROOT_URLCONF = 'value.urls'
@@ -93,7 +93,7 @@ USE_L10N = True
 USE_TZ = True
 
 LANGUAGES = (
-    ('en', 'English'),
+    ('en-us', 'English'),
     ('pt-br', 'Portuguese')
 )
 

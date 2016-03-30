@@ -23,8 +23,8 @@
 
 {% block content %}
   <h1 class="lead">
-    {% blocktrans trimmed %}
-      Are you sure you want to delete the decision item <strong>{{ decision_item.name }}</strong>?
+    {% blocktrans trimmed with name=decision_item.name %}
+      Are you sure you want to delete the decision item <strong>{{ name }}</strong>?
       All the related items will be removed.
     {% endblocktrans %}
   </h1>

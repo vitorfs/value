@@ -1,5 +1,7 @@
 {% extends 'meetings/dashboard/base_charts.html' %}
 
+{% load i18n %}
+
 {% block javascript %}
   {{ block.super }}
   <script>
@@ -19,19 +21,25 @@
   <div class="panel panel-default" id="scenarios" data-chart-id="{{ scenario.pk }}">
     <div class="panel-heading">
       <h3 class="panel-title">
-        <div class="btn-group btn-group-sm pull-right chart-options" role="group" aria-label="Scenario Options" style="margin-top: -6px;">
-          <button type="button" 
+        <div class="btn-group btn-group-sm pull-right chart-options"
+             role="group"
+             aria-label="{% trans 'Scenario Options' %}"
+             style="margin-top: -6px;">
+          <button type="button"
                   class="btn btn-default btn-sm btn-chart-edit"
-                  title="Edit" 
+                  title="{% trans 'Edit' %}"
                   data-remote-url="{% url 'deliverables:meetings:edit_scenario' meeting.deliverable.pk meeting.pk scenario.pk %}"
                   data-toggle="modal"
                   data-target="#modal-edit-scenario">
             <span class="glyphicon glyphicon-pencil"></span>
-            Edit
+            {% trans 'Edit' %}
           </button>
-          <button type="button" class="btn btn-default btn-sm btn-chart-delete" title="Delete" data-chart-name="{{ scenario.name }}">
+          <button type="button"
+                  class="btn btn-default btn-sm btn-chart-delete"
+                  title="{% trans 'Delete' %}"
+                  data-chart-name="{{ scenario.name }}">
             <span class="glyphicon glyphicon-trash"></span>
-            Delete
+            {% trans 'Delete' %}
           </button>
         </div>
         {{ scenario.name }}
