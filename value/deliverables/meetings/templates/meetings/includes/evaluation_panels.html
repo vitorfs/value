@@ -1,4 +1,4 @@
-{% load evaluation_percent evaluation_options meeting_item %}
+{% load i18n evaluation_percent evaluation_options meeting_item %}
 
 <form method="post" action="{% url 'deliverables:meetings:save_evaluation' meeting.deliverable.pk meeting.pk %}">
   {% csrf_token %}
@@ -9,7 +9,7 @@
         <table style="width: 100%">
           <body>
             <tr>
-              <td style="width: 25%;">
+              <td style="width: {% if measure_values.count > 5 %} 25% {% else %} 40% {% endif %};">
                 <span class="pull-right" style="padding: 0 15px;">
                   {% display_info_button meeting_item %}
                 </span>
@@ -32,7 +32,7 @@
         <table class="table table-hover table-condensed table-evaluate" data-meeting-item-id="{{ meeting_item.pk }}">
           <thead>
             <tr>
-              <th style="width: 25%">Value Factor</th>
+              <th style="width: {% if measure_values.count > 5 %} 25% {% else %} 40% {% endif %}">{% trans 'Value Factor' %}</th>
               {% for measure_value in measure_values %}
                 <th class="text-center" style="width: {{ relative_col_size }}">{{ measure_value.description }}</th>
               {% endfor %}
@@ -40,7 +40,6 @@
           </thead>
           <tbody>
             {% regroup factors by group as group_list %}
-
             {% for group in group_list %}
               {% for factor in group.list %}
                 {% evaluation_options evaluations=evaluations meeting_item=meeting_item factor=factor measure=measure measure_values=measure_values %}

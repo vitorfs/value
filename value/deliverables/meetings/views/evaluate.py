@@ -32,8 +32,11 @@ def evaluate(request, deliverable_id, meeting_id):
     measure_values = measure.measurevalue_set.all()
 
     count = measure_values.count()
+    grid_space = 60.0
+    if count > 5:
+        grid_space = 75.0
     if count > 0:
-        size = 75.0 / count
+        size = grid_space / count
         relative_col_size = '{0}%'.format(size)
     else:
         relative_col_size = 'auto'

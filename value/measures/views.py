@@ -48,7 +48,7 @@ def add(request):
         measure = Measure()
         form = CreateMeasureForm()
         formset = MeasureValueFormSet()
-    return render(request, 'measures/add.html', {'form': form, 'formset': formset})
+    return render(request, 'measures/add.html', {'form': form, 'formset': formset, 'can_edit': True})
 
 
 @login_required
