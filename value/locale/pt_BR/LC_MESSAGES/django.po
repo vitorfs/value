@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-30 16:09+0300\n"
+"POT-Creation-Date: 2016-03-31 10:34+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,35 +20,35 @@ msgstr ""
 
 #: value/application_settings/models.py:24
 msgid "Excel sheet index"
-msgstr ""
+msgstr "Índice planilha Excel"
 
 #: value/application_settings/models.py:25
 msgid "Excel entry orientation"
-msgstr ""
+msgstr "Orientação registro Excel"
 
 #: value/application_settings/models.py:26
 msgid "Excel starting row/column"
-msgstr ""
+msgstr "Excel linha/coluna inicial"
 
 #: value/application_settings/models.py:27
 msgid "Excel import template"
-msgstr ""
+msgstr "Modelo de importação Excel"
 
 #: value/application_settings/models.py:28
 msgid "Plain text separator"
-msgstr ""
+msgstr "Separador plain/text"
 
 #: value/application_settings/models.py:29
 msgid "Plain text starting line"
-msgstr ""
+msgstr "Linha inicial plain/text"
 
 #: value/application_settings/models.py:30
 msgid "Decision items default ordering"
-msgstr ""
+msgstr "Ordenação padrão dos Itens de Decisão"
 
 #: value/application_settings/models.py:31
 msgid "Decision items columns display"
-msgstr ""
+msgstr "Colunas de exibiçnao dos Itens de Decisão"
 
 #: value/application_settings/models.py:34
 #: value/application_settings/templates/application_settings/items.html:66
@@ -58,11 +58,11 @@ msgstr ""
 #: value/factors/models.py:22 value/help/models.py:16
 #: value/measures/models.py:13
 msgid "name"
-msgstr ""
+msgstr "nome"
 
 #: value/application_settings/models.py:35
 msgid "value"
-msgstr ""
+msgstr "valor"
 
 #: value/application_settings/templates/application_settings/base.html:7
 #: value/application_settings/templates/application_settings/import.html:16
@@ -104,76 +104,79 @@ msgstr ""
 #: value/users/templates/users/delete.html:7
 #: value/users/templates/users/edit.html:7
 #: value/users/templates/users/index.html:7
+#: value/users/templates/users/language.html:7
 #: value/users/templates/users/password.html:7
 #: value/users/templates/users/roles.html:11
 msgid "Home"
-msgstr ""
+msgstr "Inicial"
 
 #: value/application_settings/templates/application_settings/base.html:8
 #: value/application_settings/templates/application_settings/import.html:17
 #: value/application_settings/templates/application_settings/items.html:27
 msgid "Application settings"
-msgstr ""
+msgstr "Configurações da aplicação"
 
 #: value/application_settings/templates/application_settings/import.html:18
 #: value/application_settings/templates/application_settings/import.html:27
 msgid "Import template"
-msgstr ""
+msgstr "Modelo de importação"
 
 #: value/application_settings/templates/application_settings/import.html:30
 msgid ""
 "You may import decision items for a given deliverable or meeting from a "
 "external file"
 msgstr ""
+"Você pode importar os Itens de Decisão para um Entregável ou Reunião a "
+"partir de um arquivo externo"
 
 #: value/application_settings/templates/application_settings/import.html:46
 msgid "Orientation"
-msgstr ""
+msgstr "Orientação"
 
 #: value/application_settings/templates/application_settings/import.html:49
 msgid "One entry per row"
-msgstr ""
+msgstr "Um registro por linha"
 
 #: value/application_settings/templates/application_settings/import.html:52
 msgid "One entry per column"
-msgstr ""
+msgstr "Um registro por coluna"
 
 #: value/application_settings/templates/application_settings/import.html:62
 msgid "Starting row"
-msgstr ""
+msgstr "Linha inicial"
 
 #: value/application_settings/templates/application_settings/import.html:69
 msgid "Starting column"
-msgstr ""
+msgstr "Coluna inicial"
 
 #: value/application_settings/templates/application_settings/import.html:77
 msgid "Spreadsheet template"
-msgstr ""
+msgstr "Modelo da planilha"
 
 #: value/application_settings/templates/application_settings/import.html:81
 msgid "Field"
-msgstr ""
+msgstr "Campo"
 
 #: value/application_settings/templates/application_settings/import.html:83
 #: value/application_settings/templates/application_settings/items.html:70
 msgid "Column"
-msgstr ""
+msgstr "Coluna"
 
 #: value/application_settings/templates/application_settings/import.html:86
 msgid "Row"
-msgstr ""
+msgstr "Linha"
 
 #: value/application_settings/templates/application_settings/import.html:88
 msgid "Import"
-msgstr ""
+msgstr "Importar"
 
 #: value/application_settings/templates/application_settings/import.html:112
 msgid "Sheet index"
-msgstr ""
+msgstr "Índice da planilha"
 
 #: value/application_settings/templates/application_settings/import.html:112
 msgid "Zero based index. Leave empty for all"
-msgstr ""
+msgstr "Índice iniciando em zero. Deixe em branco para considerar todas."
 
 #: value/application_settings/templates/application_settings/import.html:123
 #: value/application_settings/templates/application_settings/index.html:106
@@ -182,73 +185,76 @@ msgstr ""
 #: value/deliverables/templates/deliverables/settings/details.html:61
 #: value/deliverables/templates/deliverables/settings/factors.html:35
 #: value/deliverables/templates/deliverables/settings/measure.html:35
-#: value/users/templates/users/account.html:34
-#: value/users/templates/users/change_password.html:64
+#: value/users/templates/users/account.html:28
+#: value/users/templates/users/change_password.html:58
+#: value/users/templates/users/language.html:39
 msgid "Save changes"
-msgstr ""
+msgstr "Salvar alterações"
 
 #: value/application_settings/templates/application_settings/index.html:17
 msgid "You are about to remove yourself as a system administrator"
-msgstr ""
+msgstr "Você está por se remover como administrador do sistema"
 
 #: value/application_settings/templates/application_settings/index.html:18
 msgid "You will no longer be able to access the admin panel"
-msgstr ""
+msgstr "Você não conseguirá acessar o painel do administrador"
 
 #: value/application_settings/templates/application_settings/index.html:19
 msgid "Are you sure you want to proceed"
-msgstr ""
+msgstr "Você tem certeza que deseja prosseguir"
 
 #: value/application_settings/templates/application_settings/index.html:32
 msgid "Permissions"
-msgstr ""
+msgstr "Permissões"
 
 #: value/application_settings/templates/application_settings/index.html:35
 msgid "Select the users you want to grant/revoke administrator permissions"
 msgstr ""
+"Selecione os usuários que você queria conceder/remover permissões de "
+"administrador"
 
 #: value/application_settings/templates/application_settings/index.html:42
 msgid "Administrators"
-msgstr ""
+msgstr "Administradores"
 
 #: value/application_settings/templates/application_settings/index.html:43
 msgid "Revoke access"
-msgstr ""
+msgstr "Remover acesso"
 
 #: value/application_settings/templates/application_settings/index.html:55
 msgid "you"
-msgstr ""
+msgstr "você"
 
 #: value/application_settings/templates/application_settings/index.html:66
 #: value/application_settings/templates/application_settings/index.html:96
 msgid "No available users"
-msgstr ""
+msgstr "Nenhum usuário disponível"
 
 #: value/application_settings/templates/application_settings/index.html:76
 msgid "Other users"
-msgstr ""
+msgstr "Outros usuários"
 
 #: value/application_settings/templates/application_settings/index.html:77
 msgid "Grant access"
-msgstr ""
+msgstr "Conceder acesso"
 
 #: value/application_settings/templates/application_settings/items.html:28
 #: value/application_settings/templates/application_settings/items.html:38
 msgid "Decision items"
-msgstr ""
+msgstr "Itens de decisão"
 
 #: value/application_settings/templates/application_settings/items.html:42
 msgid "Define the column display order"
-msgstr ""
+msgstr "Defina a ordem de exibição das colunas"
 
 #: value/application_settings/templates/application_settings/items.html:63
 msgid "Custom fields"
-msgstr ""
+msgstr "Campos customizados"
 
 #: value/application_settings/templates/application_settings/items.html:66
 msgid ""
 "Add custom fields to the decision items model. Please note that the fields"
-msgstr ""
+msgstr "Adicione campos customizados ao modelo dos itens de decisão. Por favor"
 
 #: value/application_settings/templates/application_settings/items.html:66
 msgid "and"
@@ -285,10 +291,28 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
+#: value/application_settings/templates/application_settings/items.html:80
+#: value/deliverables/meetings/templates/meetings/final_decision.html:54
+#: value/deliverables/models.py:161
+#: value/deliverables/templates/deliverables/includes/meetings_table.html:6
+#: value/deliverables/templates/deliverables/index.html:27
+#: value/deliverables/templates/deliverables/index.html:61
+#: value/factors/templates/factors/index.html:28
+#: value/measures/templates/measures/index.html:21
+msgid "Name"
+msgstr ""
+
 #: value/application_settings/templates/application_settings/items.html:83
 #: value/application_settings/templates/application_settings/items.html:94
 #: value/deliverables/models.py:137
 msgid "String"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/items.html:91
+#: value/deliverables/meetings/templates/meetings/new.html:80
+#: value/deliverables/models.py:166
+#: value/factors/templates/factors/index.html:29
+msgid "Description"
 msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:103
@@ -1059,16 +1083,6 @@ msgid ""
 "status to <strong>Analysing</strong>."
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/final_decision.html:54
-#: value/deliverables/models.py:161
-#: value/deliverables/templates/deliverables/includes/meetings_table.html:6
-#: value/deliverables/templates/deliverables/index.html:27
-#: value/deliverables/templates/deliverables/index.html:61
-#: value/factors/templates/factors/index.html:28
-#: value/measures/templates/measures/index.html:21
-msgid "Name"
-msgstr ""
-
 #: value/deliverables/meetings/templates/meetings/final_decision.html:57
 msgid "Decision"
 msgstr ""
@@ -1096,12 +1110,6 @@ msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/new.html:72
 msgid "Location"
-msgstr ""
-
-#: value/deliverables/meetings/templates/meetings/new.html:80
-#: value/deliverables/models.py:166
-#: value/factors/templates/factors/index.html:29
-msgid "Description"
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/new.html:109
@@ -2077,6 +2085,7 @@ msgstr ""
 #: value/templates/includes/header.html:53
 #: value/users/templates/users/account.html:8
 #: value/users/templates/users/change_password.html:8
+#: value/users/templates/users/language.html:8
 msgid "My account"
 msgstr ""
 
@@ -2108,10 +2117,9 @@ msgstr ""
 
 #: value/templates/registration/password_reset_confirm.html:11
 #: value/templates/registration/password_reset_confirm.html:30
-#: value/users/templates/users/account.html:19
 #: value/users/templates/users/change_password.html:9
-#: value/users/templates/users/change_password.html:20
-#: value/users/templates/users/change_password.html:29
+#: value/users/templates/users/change_password.html:23
+#: value/users/templates/users/includes/menu.html:10
 #: value/users/templates/users/password.html:10
 #: value/users/templates/users/password.html:56
 msgid "Change password"
@@ -2211,14 +2219,8 @@ msgstr ""
 msgid "profiles"
 msgstr ""
 
-#: value/users/templates/users/account.html:16
-#: value/users/templates/users/change_password.html:17
-msgid "Personal settings"
-msgstr ""
-
-#: value/users/templates/users/account.html:18
-#: value/users/templates/users/account.html:28
-#: value/users/templates/users/change_password.html:19
+#: value/users/templates/users/account.html:22
+#: value/users/templates/users/includes/menu.html:7
 msgid "Profile"
 msgstr ""
 
@@ -2238,6 +2240,16 @@ msgstr ""
 
 #: value/users/templates/users/edit.html:16
 msgid "Edit user"
+msgstr ""
+
+#: value/users/templates/users/includes/menu.html:4
+msgid "Personal settings"
+msgstr ""
+
+#: value/users/templates/users/includes/menu.html:13
+#: value/users/templates/users/language.html:9
+#: value/users/templates/users/language.html:23
+msgid "Language preferences"
 msgstr ""
 
 #: value/users/templates/users/password.html:17
