@@ -4,7 +4,9 @@
   <div class="alert alert-info" role="alert">
     <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
     <span class="sr-only">{% trans 'Info:' %}</span>
-    {% trans 'Imported <strong>{{ formset|length }}</strong> entries from file <strong>{{ filename }}</strong>.' %}
+    {% blocktrans trimmed with len=formset|length %}
+      Imported <strong>{{ len }}</strong> entries from file <strong>{{ filename }}</strong>.
+    {% endblocktrans %}
   </div>
 {% endif %}
 

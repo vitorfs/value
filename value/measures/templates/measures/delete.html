@@ -14,7 +14,11 @@
 {% block content %}
 
   {% if can_delete %}
-    <h1 class="lead">{% trans 'Are you sure you want to delete the measure {{ measure.name }}?' %}</h1>
+    <h1 class="lead">
+      {% blocktrans trimmed with name=measure.name %}
+        Are you sure you want to delete the measure {{ name }}?
+      {% endblocktrans %}
+    </h1>
     <form method="post" class="form-horizontal">
       {% csrf_token %}
       <div class="form-group">

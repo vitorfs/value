@@ -105,39 +105,50 @@ def new(request):
 @login_required
 @require_POST
 def import_decision_items(request):
-    form = UploadFileForm(request.POST, request.FILES)
-    html = ''
-    if form.is_valid():
-        app_settings = ApplicationSetting.get()
-        column_map = excel_column_map()
-        f = request.FILES['file']
-        filename = f.name
-        wb = xlrd.open_workbook(filename=None, file_contents=f.read())
-        decision_items = []
-        for sheet in wb.sheets():
-            for row in range(app_settings['EXCEL_STARTING_ROW_COLUMN'] - 1, sheet.nrows):
-                decision_item = {}
-                for key in app_settings['EXCEL_IMPORT_TEMPLATE'].keys():
-                    column_name = app_settings['EXCEL_IMPORT_TEMPLATE'][key]
-                    try:
-                        decision_item[key] = sheet.cell(row, column_map[column_name]).value
-                    except:
-                        pass
-                decision_items.append(decision_item)
-        fields = DecisionItemLookup.get_visible_fields()
-        DecisionItemFormSet = modelformset_factory(DecisionItem, fields=fields.keys(), extra=len(decision_items))
-        formset = DecisionItemFormSet(
-            prefix='decision_item',
-            queryset=DecisionItem.objects.none(),
-            initial=decision_items
-        )
-        html = render_to_string('deliverables/includes/decision_items_import_table.html', {
-            'decision_items': decision_items,
-            'fields': fields,
-            'formset': formset,
-            'filename': filename
-        })
-    return HttpResponse(html)
+    try:
+        form = UploadFileForm(request.POST, request.FILES)
+        html = ''
+        if form.is_valid():
+            app_settings = ApplicationSetting.get()
+            column_map = excel_column_map()
+            f = request.FILES['file']
+            filename = f.name
+            if '.xls' in filename or '.xlsx' in filename:
+                wb = xlrd.open_workbook(filename=None, file_contents=f.read())
+                decision_items = []
+                for sheet in wb.sheets():
+                    for row in range(app_settings['EXCEL_STARTING_ROW_COLUMN'] - 1, sheet.nrows):
+                        decision_item = {}
+                        for key in app_settings['EXCEL_IMPORT_TEMPLATE'].keys():
+                            column_name = app_settings['EXCEL_IMPORT_TEMPLATE'][key]
+                            try:
+                                decision_item[key] = sheet.cell(row, column_map[column_name]).value
+                            except:
+                                pass
+                        decision_items.append(decision_item)
+                fields = DecisionItemLookup.get_visible_fields()
+                DecisionItemFormSet = modelformset_factory(
+                    DecisionItem,
+                    fields=fields.keys(),
+                    extra=len(decision_items)
+                )
+                formset = DecisionItemFormSet(
+                    prefix='decision_item',
+                    queryset=DecisionItem.objects.none(),
+                    initial=decision_items
+                )
+                html = render_to_string('deliverables/includes/decision_items_import_table.html', {
+                    'decision_items': decision_items,
+                    'fields': fields,
+                    'formset': formset,
+                    'filename': filename
+                })
+                return HttpResponse(html)
+            else:
+                return HttpResponseBadRequest(_('Invalid file type. Supported extensions are .xls or .xlsx'))
+        return HttpResponseBadRequest(_('Invalid form data.'))
+    except:
+        return HttpResponseBadRequest(_('An unexpected error ocurred.'))
 
 
 @login_required
