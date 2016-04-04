@@ -308,7 +308,7 @@ class MeetingItem(models.Model):
         verbose_name_plural = _('meeting items')
 
     def __unicode__(self):
-        return '{0} ({1})'.format(self.decision_item.name, self.meeting.name)
+        return u'{0} ({1})'.format(self.decision_item.name, self.meeting.name)
 
     def get_value_ranking_display(self):
         return format_percentage(self.value_ranking)

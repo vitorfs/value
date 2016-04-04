@@ -87,11 +87,24 @@ def password(request, user_id):
 @user_passes_test(lambda user: user.is_superuser)
 def delete(request, user_id):
     user = get_object_or_404(User, pk=user_id)
+    can_delete = (
+        not user.meetingstakeholder_set.exists() and
+        not user.evaluation_set.exists() and
+        not user.deliverable_creation_user.exists() and
+        not user.deliverable_manager_user.exists() and
+        not user.deliverable_set.exists() and
+        not user.deliverable_update_user.exists() and
+        not user.meetings_created.exists() and
+        not user.meetings_updated.exists() and
+        not user.article_creation_user.exists() and
+        not user.article_update_user.exists() and
+        not user.rationales_created.exists()
+    )
     if request.method == 'POST':
         user.delete()
         messages.success(request, _(u'The user {0} was deleted successfully.').format(user.username))
         return redirect(reverse('users:users'))
-    return render(request, 'users/delete.html', {'delete_user': user})
+    return render(request, 'users/delete.html', {'delete_user': user, 'can_delete': can_delete})
 
 
 @login_required

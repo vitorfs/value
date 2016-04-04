@@ -47,14 +47,8 @@
     </div>
     <div class="panel-body">
       <div class="panel-group charts">
-        <div class="row">
-          <div class="col-md-6">
-            {% include 'meetings/dashboard/decision_items_overview/chart.html' with chart=chart_overview prefix='overview_' chart_type=chart_overview_type chart_types_options=bar_chart_types_options opened=True %}
-          </div>
-          <div class="col-md-6">
-            {% include 'meetings/dashboard/value_ranking/chart.html' with chart=chart_value_ranking prefix='value_ranking_' opened=True %}
-          </div>
-        </div>
+        {% include 'meetings/dashboard/decision_items_overview/chart.html' with chart=chart_overview prefix='overview_' chart_type=chart_overview_type chart_types_options=bar_chart_types_options opened=True %}
+        {% include 'meetings/dashboard/value_ranking/chart.html' with chart=chart_value_ranking prefix='value_ranking_' opened=True %}
         {% include 'meetings/dashboard/factors_comparison/chart.html' with chart=chart_factors prefix='factors_' chart_type=chart_factors_type chart_types_options=bar_chart_types_options opened=True %}
         {% if display_chart_factors_groups %}
           {% include 'meetings/dashboard/factors_groups_comparison/chart.html' with chart=chart_factors_groups prefix='factors_groups_' opened=True %}

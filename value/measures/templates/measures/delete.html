@@ -27,7 +27,11 @@
   {% else %}
     <div class="well blank-state">
       <span class="glyphicon glyphicon-ban-circle"></span>
-      <h3>{% trans 'The measure <strong>{{ measure.name }}</strong> cannot be deleted.' %}</h3>
+      <h3>
+        {% blocktrans trimmed with name=measure.name %}
+          The measure <strong>{{ name }}</strong> cannot be deleted.
+        {% endblocktrans %}
+      </h3>
       <p class="lead">
         {% blocktrans trimmed %}
           There's already deliverables and meetings associated with this measure.

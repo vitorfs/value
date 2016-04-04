@@ -12,14 +12,38 @@
 {% endblock breadcrumb %}
 
 {% block content %}
-  <h1 class="lead">{% trans 'Are you sure you want to delete the user {{ delete_user.username }}?' %}</h1>
-  <form method="post" class="form-horizontal">
-    {% csrf_token %}
-    <div class="form-group">
-      <div class="col-sm-12">
-        <button type="submit" class="btn btn-primary">{% trans 'Confirm' %}</button>
-        <a href="{% url 'users:users' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
+  {% if can_delete %}
+    <h1 class="lead">
+      {% blocktrans trimmed with username=delete_user.username %}
+        Are you sure you want to delete the user {{ username }}?
+      {% endblocktrans %}
+      </h1>
+    <form method="post" class="form-horizontal">
+      {% csrf_token %}
+      <div class="form-group">
+        <div class="col-sm-12">
+          <button type="submit" class="btn btn-primary">{% trans 'Confirm' %}</button>
+          <a href="{% url 'users:users' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
+        </div>
       </div>
+    </form>
+  {% else %}
+    <div class="well blank-state">
+      <span class="glyphicon glyphicon-ban-circle"></span>
+      <h3>
+        {% blocktrans trimmed with username=delete_user.username %}
+          The user <strong>{{ username }}</strong> cannot be deleted.
+        {% endblocktrans %}
+      </h3>
+      <p class="lead">
+        {% blocktrans trimmed %}
+          There's already deliverables and meetings associated with this user.
+          Change its status to <strong>inactive</strong> instead.
+        {% endblocktrans %}
+      </p>
+      <a href="{% url 'users:users' %}" class="btn btn-default">
+        <span class="fa fa-arrow-left"></span> {% trans 'Back' %}
+      </a>
     </div>
-  </form>
+  {% endif %}
 {% endblock content %}

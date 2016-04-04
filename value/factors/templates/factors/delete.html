@@ -27,7 +27,9 @@
     <div class="well blank-state">
       <span class="glyphicon glyphicon-ban-circle"></span>
       <h3>
-        {% trans 'The value factor <strong>{{ factor.name }}</strong> cannot be deleted.' %}
+        {% blocktrans trimmed with name=factor.name %}
+          The value factor <strong>{{ name }}</strong> cannot be deleted.
+        {% endblocktrans %}
       </h3>
       <p class="lead">
         {% blocktrans trimmed %}

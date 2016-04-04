@@ -258,7 +258,7 @@ msgstr "Adicione campos customizados ao modelo dos itens de decisão. Por favor"
 
 #: value/application_settings/templates/application_settings/items.html:66
 msgid "and"
-msgstr ""
+msgstr "e"
 
 #: value/application_settings/templates/application_settings/items.html:66
 #: value/application_settings/templates/application_settings/items.html:90
@@ -266,11 +266,11 @@ msgstr ""
 #: value/factors/models.py:23 value/help/models.py:18
 #: value/measures/models.py:83
 msgid "description"
-msgstr ""
+msgstr "descrição"
 
 #: value/application_settings/templates/application_settings/items.html:66
 msgid "are fixed"
-msgstr ""
+msgstr "são fixos"
 
 #: value/application_settings/templates/application_settings/items.html:71
 msgid "Label"
@@ -278,18 +278,18 @@ msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:72
 msgid "Data type"
-msgstr ""
+msgstr "Tipo de dado"
 
 #: value/application_settings/templates/application_settings/items.html:73
 msgid "Display"
-msgstr ""
+msgstr "Exibir"
 
 #: value/application_settings/templates/application_settings/items.html:74
 #: value/factors/forms.py:41 value/factors/templates/factors/index.html.py:31
 #: value/measures/forms.py:22 value/measures/templates/measures/index.html:23
 #: value/users/templates/users/index.html:24
 msgid "Active"
-msgstr ""
+msgstr "Ativo"
 
 #: value/application_settings/templates/application_settings/items.html:80
 #: value/deliverables/meetings/templates/meetings/final_decision.html:54
@@ -300,45 +300,45 @@ msgstr ""
 #: value/factors/templates/factors/index.html:28
 #: value/measures/templates/measures/index.html:21
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: value/application_settings/templates/application_settings/items.html:83
 #: value/application_settings/templates/application_settings/items.html:94
 #: value/deliverables/models.py:137
 msgid "String"
-msgstr ""
+msgstr "Texto"
 
 #: value/application_settings/templates/application_settings/items.html:91
 #: value/deliverables/meetings/templates/meetings/new.html:80
 #: value/deliverables/models.py:166
 #: value/factors/templates/factors/index.html:29
 msgid "Description"
-msgstr ""
+msgstr "Descrição"
 
 #: value/application_settings/templates/application_settings/items.html:103
 msgid "column_"
-msgstr ""
+msgstr "coluna_"
 
 #: value/application_settings/views.py:44
 msgid "Administrators settings saved successfully!"
-msgstr ""
+msgstr "Configurações de administrador salvas com sucesso!"
 
 #: value/application_settings/views.py:75
 msgid "Ordering and column display saved successfully."
-msgstr ""
+msgstr "Ordenação e exibição de colunas salvas com sucesso."
 
 #: value/application_settings/views.py:77
 #: value/deliverables/meetings/views/evaluate.py:154
 msgid "An error ocurred while trying to save your data."
-msgstr ""
+msgstr "Ocorreu um erro equanto tentamos salvar seus dados."
 
 #: value/application_settings/views.py:110
 msgid "Custom fields were saved successfully."
-msgstr ""
+msgstr "Campos customizados foram salvos com sucesso."
 
 #: value/application_settings/views.py:156
 msgid "Import templates saved successfully."
-msgstr ""
+msgstr "Modelos de importação salvos com sucesso."
 
 #: value/core/templates/core/home.html:13
 msgid "You are signed in as"
@@ -347,11 +347,11 @@ msgstr "Você está logado como"
 #: value/deliverables/decorators.py:15
 #: value/deliverables/meetings/decorators.py:15
 msgid "Permission denied."
-msgstr ""
+msgstr "Permissão negada."
 
 #: value/deliverables/forms.py:54 value/deliverables/forms.py:101
 msgid "Select value factors to be used within the decision-making meetings"
-msgstr ""
+msgstr "Selecione os fatores de valor para serem usados nas reuniões de tomada de decisão"
 
 #: value/deliverables/forms.py:60 value/deliverables/forms.py:114
 msgid "Select the measure to be used within the decision-making meetings"
