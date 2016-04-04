@@ -25,10 +25,19 @@ $(function () {
     else if (target === "collapse-stakeholders") {
       $("#heading-stakeholders .panel-info").html("");
 
-      $("#heading-stakeholders .panel-info").append('<img src="' + $(".deliverable-manager .img-circle").attr("src").replace("32", "20") + '" alt="' + $(".deliverable-manager .img-circle").attr("alt") + '" class="img-circle" style="margin-left: 5px;">');
+      $("#heading-stakeholders .panel-info").append($(".deliverable-manager .avatar").clone());
 
-      $("#collapse-stakeholders .panel-group-stakeholders .panel.panel-success .img-circle").each(function () {
-        $("#heading-stakeholders .panel-info").append('<img src="' + $(this).attr("src").replace("32", "20") + '" alt="' + $(this).attr("alt") + '" class="img-circle" style="margin-left: 5px;">');
+      $("#collapse-stakeholders .panel-group-stakeholders .panel.panel-success .avatar").each(function () {
+        $("#heading-stakeholders .panel-info").append($(this).clone());
+      });
+
+      $("#heading-stakeholders .panel-info .avatar").each(function () {
+        $(this).css("height", "20px")
+               .css("width", "20px")
+               .css("font-size", "10px")
+               .css("padding-top", "2px")
+               .css("margin-right", "0")
+               .css("margin-left", "5px");
       });
     }
     else if (target === "collapse-decision-items") {

@@ -34,10 +34,7 @@
           <ul class="list-group sortable" id="available-users" style="min-height: 38px;">
             {% for user in users %}
               <li class="list-group-item" data-user-id="{{ user.pk }}" style="line-height: 32px;">
-                <img src="{% avatar user 32 %}"
-                     alt="{{ user.profile.get_display_name }}"
-                     class="img-circle"
-                     style="margin-right: 5px">
+                {% avatar user 32 5 %}
                 {{ user.profile.get_display_name }}
                 <button type="button"
                         class="btn btn-xs btn-danger js-btn-remove pull-right"
@@ -82,10 +79,7 @@
               <ul class="list-group role sortable" data-role-id="{{ role.pk }}" style="min-height: 38px;">
                 {% for user in role.user_set.all %}
                   <li class="list-group-item" data-user-id="{{ user.pk }}">
-                    <img src="{% avatar user 32 %}"
-                         alt="{{ user.profile.get_display_name }}"
-                         class="img-circle"
-                         style="margin-right: 5px">
+                    {% avatar user 32 5 %}
                     {{ user.profile.get_display_name }}
                     <button type="button"
                             class="btn btn-xs btn-danger js-btn-remove pull-right"

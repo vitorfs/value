@@ -31,7 +31,6 @@ urlpatterns = [
     url(r'^users/', include('value.users.urls', namespace='users')),
     url(r'^help/', include('value.help.urls', namespace='help')),
     url(r'^deliverables/', include('value.deliverables.urls', namespace='deliverables')),
-    url(r'^avatar/', include('value.avatar.urls')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
 ]
 

@@ -54,7 +54,6 @@ INSTALLED_APPS = (
     'value.help',
     'value.measures',
     'value.users',
-    'value.avatar',
     'value.application_settings',
 )
 

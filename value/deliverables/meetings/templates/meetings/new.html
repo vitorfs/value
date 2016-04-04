@@ -88,15 +88,9 @@
           <div class="panel {% if selected_stakeholders.exists %}panel-default{% else %}panel-danger{% endif %}">
             <div class="panel-heading" role="tab" id="heading-stakeholders">
               <div class="pull-right panel-info" style="margin-top: -2px">
-                <img src="{% avatar user 20 %}"
-                     alt="{{ user.profile.get_display_name }}"
-                     class="img-circle"
-                     style="margin-left: 5px">
+                {% avatar user 20 %}
                 {% for stakeholder in selected_stakeholders %}
-                  <img src="{% avatar stakeholder 20 %}"
-                       alt="{{ stakeholder.profile.get_display_name }}"
-                       class="img-circle"
-                       style="margin-left: 5px">
+                  {% avatar stakeholder 20 %}
                 {% endfor %}
               </div>
               <h4 class="panel-title">

@@ -35,10 +35,10 @@
             {% for deliverable in manager_deliverables %}
               <tr data-href="{% url 'deliverables:deliverable' deliverable.pk %}">
                 <td><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></td>
-                <td>{% avatar_img deliverable.manager 20 %}</td>
+                <td>{% avatar deliverable.manager 20 %}</td>
                 <td>
                   {% for stakeholder in deliverable.stakeholders.all %}
-                    {% avatar_img stakeholder 20 %}
+                    {% avatar stakeholder 20 %}
                   {% endfor %}
                 </td>
                 <td>{{ deliverable.meeting_set.count }}</td>
@@ -69,10 +69,10 @@
             {% for deliverable in stakeholder_deliverables %}
               <tr data-href="{% url 'deliverables:deliverable' deliverable.pk %}">
                 <td><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></td>
-                <td>{% avatar_img deliverable.manager 20 %}</td>
+                <td>{% avatar deliverable.manager 20 %}</td>
                 <td>
                   {% for stakeholder in deliverable.stakeholders.all %}
-                    {% avatar_img stakeholder 20 %}
+                    {% avatar stakeholder 20 %}
                   {% endfor %}
                 </td>
                 <td>{{ deliverable.meeting_set.count }}</td>

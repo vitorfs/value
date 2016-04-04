@@ -7,10 +7,7 @@
     <div class="panel-body bg-warning text-warning">
       <div class="row">
         <div class="col-md-11">
-          <img src="{% avatar stakeholder 32 %}"
-               alt="{{ display_name }}"
-               class="img-circle"
-               style="margin-right: 10px">
+          {% avatar stakeholder 32 10 %}
           {{ display_name }}
           {% if stakeholder.groups.exists %}
             <small class="text-muted text-warning">({% for group in stakeholder.groups.all %}{{ group.name }}{% if not forloop.last %}, {% endif %}{% endfor %})</small>

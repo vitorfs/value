@@ -79,7 +79,7 @@
                   <div class="panel-body{% if checkbox.is_checked %} bg-success text-success{% endif %}">
                     <div class="row">
                       <div class="col-md-11">
-                        <img src="{% avatar_id checkbox.choice_value 32 %}" alt="{{ checkbox.choice_label }}" class="img-circle" style="margin-right: 10px">
+                        {% avatar_id checkbox.choice_value 32 10 %}
                         {{ checkbox.choice_label|safe }}
                         <input type="checkbox"
                                name="{{ checkbox.name }}"

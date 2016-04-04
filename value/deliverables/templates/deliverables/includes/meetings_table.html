@@ -29,7 +29,7 @@
         </td>
         <td>
           {% for meeting_stakeholder in meeting.meetingstakeholder_set.all %}
-            {% avatar_img meeting_stakeholder.stakeholder 20 %}
+            {% avatar meeting_stakeholder.stakeholder 20 %}
           {% endfor %}
         </td>
         <td>{{ meeting.meetingitem_set.count }}</td>
