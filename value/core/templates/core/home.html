@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load i18n avatar %}
+{% load i18n %}
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
@@ -12,11 +12,4 @@
   <p class="lead">
     {% trans 'You are signed in as' %} <strong>{{ user.profile.get_display_name }}</strong>
   </p>
-
-  {% avatar user %}
-
-  {% avatar user 64 %}
-
-  {% avatar user 32 %}
-
 {% endblock content %}
