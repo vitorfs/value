@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from django.shortcuts import redirect
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, Http404
 from django.contrib import messages
 from django.utils.translation import ugettext as _
 
@@ -26,7 +26,7 @@ def user_is_meeting_stakeholder(function):
             else:
                 return permission_denied(request)
         except Meeting.DoesNotExist:
-            return permission_denied(request)
+            raise Http404
     wrap.__doc__ = function.__doc__
     wrap.__name__ = function.__name__
     return wrap
@@ -41,7 +41,7 @@ def meeting_is_analysing_or_closed(function):
             else:
                 return redirect('deliverables:meetings:dashboard', meeting.deliverable.pk, meeting.pk)
         except Meeting.DoesNotExist:
-            return permission_denied(request)
+            raise Http404
     wrap.__doc__ = function.__doc__
     wrap.__name__ = function.__name__
     return wrap

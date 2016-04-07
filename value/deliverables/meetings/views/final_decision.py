@@ -8,6 +8,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.forms.models import modelformset_factory
+from django.utils.translation import ugettext as _
 
 from value.deliverables.meetings.models import Meeting, MeetingItem, Rationale
 from value.deliverables.meetings.forms import MeetingItemFinalDecisionForm
