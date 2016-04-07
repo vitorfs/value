@@ -1,7 +1,7 @@
 $(function () {
 
   $(".js-factor-description").popover();
-  
+
   var factorsCount = $(".panel-group-evaluation .panel:eq(0) .table-evaluate tbody tr").length;
   $(".panel-group-evaluation .panel .table-evaluate tbody").each(function () {
     if ($("tr.selected", this).length === factorsCount) {
@@ -44,7 +44,7 @@ $(function () {
           $(container).siblings(".js-rationale").removeClass("no-comment");
         }
         else {
-          $(container).siblings(".js-rationale").addClass("no-comment"); 
+          $(container).siblings(".js-rationale").addClass("no-comment");
         }
         $(container).popover("hide");
         updateMeetingProgress(data);
@@ -66,7 +66,7 @@ $(function () {
       var rationale = $(this).attr("data-rationale");
       var id = uuid();
       var template = $('#rationale-template').html();
-      var rendered = Mustache.render(template, { 
+      var rendered = Mustache.render(template, {
         'rationale': rationale,
         'id': id
       });
@@ -126,7 +126,7 @@ $(function () {
       if (!$(target).is(":visible")) {
         $(target).slideDown();
       }
-    });    
+    });
   });
 
   $(".js-hide-all").click(function () {
@@ -139,35 +139,13 @@ $(function () {
     });
   });
 
-  $(".evaluable").click(function () {
-
-    var do_evaluate = true
-
-    if ($(".glyphicon", this).hasClass("glyphicon-check")) {
-      do_evaluate = false;
-    }
-
-    var row = $(this).closest("tr");
-    $(row).removeClass("selected");
-    $(".evaluable", row).each(function () {
-      $(this).css("background-color", "transparent");
-      $(".glyphicon", this).removeClass("glyphicon-check").addClass("glyphicon-unchecked");
-    });
-
-    if (do_evaluate) {
-      $(row).addClass("selected");
-      var color = $(this).attr("data-color");
-      $(this).css("background-color", color);
-      $(".glyphicon", this).removeClass("glyphicon-unchecked").addClass("glyphicon-check");
-    }
-
-    var panel = $(this).closest(".panel");
+  $.fn.updatePanelProgress = function (option) {
+    var panel = $(this);
 
     var rows_count = $(panel).find(".table tbody > tr").length;
-    var selected_rows_count = $(this).closest(".panel").find(".table tbody > tr.selected").length;
+    var selected_rows_count = $(option).closest(".panel").find(".table tbody > tr.selected").length;
     var percent = (selected_rows_count / rows_count) * 100;
     percent = Math.round(percent, 1);
-    var panel = $(this).closest(".panel");
     if (percent === 100) {
       $(panel).removeClass("panel-default").addClass("panel-success");
     }
@@ -191,16 +169,25 @@ $(function () {
       $(".measure-percent[data-measure-id='" + key + "']", panel).text(display_percent);
       $(".measure-percent[data-measure-id='" + key + "']", panel).closest(".progress-bar").css("width", percent + "%");
     }
+  };
 
-    var url = $(this).closest("form").attr("action");
+  $(".evaluable").click(function () {
+
+    var do_evaluate = true
+    var option = $(this);
+    var row = $(option).closest("tr");
+    var panel = $(option).closest(".panel");
+
+    if ($(".glyphicon", option).hasClass("glyphicon-check")) {
+      do_evaluate = false;
+    }
+
+    var url = $(option).closest("form").attr("action");
     var csrf = getCSRF();
-
-    var meeting_item_id = $(this).closest("table").attr("data-meeting-item-id");
-
-    var factor_id = $(this).closest("tr").attr("data-factor-id");
-    var measure_id = $(this).closest("tr").attr("data-measure-id");
-    
-    var measure_value_id = do_evaluate ? $(this).attr("data-measure-value-id") : "";
+    var meeting_item_id = $(option).closest("table").attr("data-meeting-item-id");
+    var factor_id = $(row).attr("data-factor-id");
+    var measure_id = $(row).attr("data-measure-id");
+    var measure_value_id = do_evaluate ? $(option).attr("data-measure-value-id") : "";
 
     $.ajax({
       url: url,
@@ -212,7 +199,34 @@ $(function () {
         'measure_value_id': measure_value_id
       },
       type: 'post',
-      success: updateMeetingProgress
+      beforeSend: function () {
+        $(row).removeClass("selected");
+        $(".evaluable", row).each(function () {
+          $(this).css("background-color", "transparent");
+          $(".glyphicon", this).removeClass("glyphicon-check").addClass("glyphicon-unchecked");
+        });
+        $("span", option).removeClass().addClass("fa fa-spinner fa-spin");
+      },
+      success: function (data) {
+        var icon = "";
+        $(option).html('<span class="glyphicon glyphicon-ok"></span> Saved!');
+        if (do_evaluate) {
+          var color = $(option).attr("data-color");
+          $(row).addClass("selected");
+          $(option).css("background-color", color);
+          icon = '<span class="glyphicon glyphicon-check"></span>'
+        }
+        else {
+          icon = '<span class="glyphicon glyphicon-unchecked"></span>'
+        }
+
+        setTimeout(function () {
+          $(option).html(icon);
+          $(panel).updatePanelProgress(option);
+        }, 500);
+
+        updateMeetingProgress(data);
+      }
     });
 
   });
