@@ -85,6 +85,7 @@ class Meeting(models.Model):
     rationales = models.ManyToManyField(Rationale)
     rationales_count = models.PositiveIntegerField(_('rationales count'), default=0)
     progress = models.FloatField(_('progress'), default=0.0)
+    meeting_decision_rationale = models.ForeignKey(Rationale, null=True, related_name='final_decision_meetings')
 
     class Meta:
         db_table = 'meetings'
@@ -295,6 +296,7 @@ class MeetingItem(models.Model):
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
     decision_item = models.ForeignKey(DecisionItem, on_delete=models.PROTECT)
     meeting_decision = models.BooleanField(_('meeting decision'), default=False)
+    meeting_decision_rationale = models.ForeignKey(Rationale, null=True, related_name='final_decision_meeting_items')
     rationales = models.ManyToManyField(Rationale)
     has_rationales = models.BooleanField(_('has rationales?'), default=False)
     value_ranking = models.FloatField(_('value ranking'), default=0.0)

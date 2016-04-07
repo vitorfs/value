@@ -265,4 +265,19 @@ $(function () {
     }
   });
 
+  /* Placebo Save Button */
+
+  $(".js-placebo-save").click(function () {
+    var btn = $(this);
+    $(btn).prop("disabled", true);
+    $(btn).html("<span class='fa fa-spinner fa-spin'></span> Saving…");
+    setTimeout(function () {
+      $(btn).html("<span class='glyphicon glyphicon-ok'></span> Done!");
+      setTimeout(function () {
+        $(btn).prop("disabled", false);
+        $(btn).html("<span class='glyphicon glyphicon-ok'></span> Save changes");
+      }, 500)
+    }, 1000);
+  });
+
 });

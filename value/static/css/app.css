@@ -570,3 +570,8 @@ input[type="radio"] {
   display: inline-block;
   text-align: center;
 }
+
+.popover {
+  min-width: 500px;
+  z-index: 1020;
+}

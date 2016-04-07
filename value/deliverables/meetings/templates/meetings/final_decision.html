@@ -7,6 +7,49 @@
   <script src="{% static 'js/meetings/decision.js' %}"></script>
 {% endblock javascript %}
 
+{% block mustache %}
+  {% if meeting.is_closed %}
+    {% verbatim %}
+      <script id="rationale-template" type="x-tmpl-mustache">
+        <div class="form-group">
+          <textarea class="form-control final-decision-rationale"
+                    style="resize: none; height: 150px;"
+                    maxlength="2000" readonly>{{ rationale }}</textarea>
+          <span class="help-block"></span>
+        </div>
+        <div class="form-group text-right">
+          <button type="button"
+                  class="btn btn-sm btn-default"
+                  onclick="$(this).closest('.popover').popover('hide');">
+            {% endverbatim %}{% trans 'Cancel' %}{% verbatim %}
+          </button>
+        </div>
+      </script>
+    {% endverbatim %}
+  {% else %}
+    {% verbatim %}
+      <script id="rationale-template" type="x-tmpl-mustache">
+        <div class="form-group">
+          <textarea class="form-control final-decision-rationale"
+                    style="resize: none; height: 150px;"
+                    maxlength="2000">{{ rationale }}</textarea>
+          <span class="help-block"></span>
+        </div>
+        <div class="form-group text-right">
+          <button type="button"
+                  class="btn btn-sm btn-default"
+                  onclick="$(this).closest('.popover').popover('hide');">
+            {% endverbatim %}{% trans 'Cancel' %}{% verbatim %}
+          </button>
+          <button type="button" class="btn btn-sm btn-primary js-save-rationale">
+            {% endverbatim %}{% trans 'Save' %}{% verbatim %}
+          </button>
+        </div>
+      </script>
+    {% endverbatim %}
+  {% endif %}
+{% endblock mustache %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
@@ -38,8 +81,33 @@
       {% endif %}
     </div>
   {% else %}
+
     <div class="row">
-      <div class="col-lg-8 col-md-10 col-sm-12 col-lg-offset-2 col-md-offset-1">
+      <div class="col-md-10 col-md-offset-1">
+        {% comment %}
+        <button type="button" class="btn btn-primary pull-right js-placebo-save">
+          <span class="glyphicon glyphicon-ok"></span> {% trans 'Save changes' %}
+        </button>
+
+        <p class="lead">Meeting decision</p>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <span class="fa fa-comment"></span> {% trans 'Notes' %}
+            </h3>
+          </div>
+          <div class="panel-body">
+            <form id="form-final-decision-rationale"
+                  method="post"
+                  action="{% url 'deliverables:meetings:save_final_decision_rationale' meeting.deliverable.pk meeting.pk %}">
+              {% csrf_token %}
+              <textarea class="form-control expanding" rows="3" id="final-decision-rationale"></textarea>
+            </form>
+          </div>
+        </div>
+        {% endcomment %}
+
         <form id="form-final-decision"
               method="post"
               action="{% url 'deliverables:meetings:save_final_decision' meeting.deliverable.pk meeting.pk %}">
@@ -47,15 +115,19 @@
           {{ formset.management_form }}
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h3 class="panel-title">{% trans 'Final Decision' %}</h3>
+              <h3 class="panel-title">
+                <span class="fa fa-gavel"></span>
+                {% trans 'Final Decision' %}
+              </h3>
             </div>
             <table class="table table-bordered" id="table-final-decision">
               <thead>
                 <th>{% trans 'Name' %}</th>
-                <th>{% trans 'Summary' %}</th>
+                <th style="width: 200px;">{% trans 'Summary' %}</th>
                 <th style="width: 140px;">{% trans 'Value Ranking' %}</th>
                 <th style="width: 100px;">{% trans 'Decision' %}</th>
                 <th style="width: 150px;">{% trans 'Meeting Ranking' %}</th>
+                <th style="width: 150px;">{% trans 'Decision rationale' %}</th>
               </thead>
               <tbody>
                 {% for form in formset %}
@@ -74,10 +146,30 @@
                     <td style="vertical-align: middle; text-align: right;">
                       {{ form.instance.value_ranking_as_html|safe }}
                     </td>
-                    <td style="vertical-align: middle; text-align: center;">
-                      {% if not meeting.is_closed %}
-                        {{ form.meeting_decision }}
-                      {% else %}
+                    {% if meeting.deliverable.manager == request.user %}
+                      <td style="vertical-align: middle; text-align: center;">
+                        {% if not meeting.is_closed %}
+                          {{ form.meeting_decision }}
+                        {% else %}
+                          <span class="decision-text">
+                            {% if form.instance.meeting_decision %}
+                              Yes
+                            {% else %}
+                              No
+                            {% endif %}
+                          </span>
+                        {% endif %}
+                      </td>
+                      <td style="vertical-align: middle; text-align: center;">
+                        {% if not meeting.is_closed %}
+                          <span class="hide">{{ form.meeting_ranking.value }}</span>
+                          {{ form.meeting_ranking }}
+                        {% else %}
+                          {{ form.meeting_ranking.value }}
+                        {% endif %}
+                      </td>
+                    {% else %}
+                      <td style="vertical-align: middle; text-align: center;">
                         <span class="decision-text">
                           {% if form.instance.meeting_decision %}
                             Yes
@@ -85,15 +177,22 @@
                             No
                           {% endif %}
                         </span>
-                      {% endif %}
-                    </td>
-                    <td style="vertical-align: middle; text-align: center;">
-                      {% if not meeting.is_closed %}
-                        <span class="hide">{{ form.meeting_ranking.value }}</span>
-                        {{ form.meeting_ranking }}
-                      {% else %}
+                      </td>
+                      <td style="vertical-align: middle; text-align: center;">
                         {{ form.meeting_ranking.value }}
-                      {% endif %}
+                      </td>
+                    {% endif %}
+                    <td>
+                      <button type="button"
+                              class="btn btn-sm btn-block js-rationale {% if form.instance.meeting_decision_rationale %}btn-primary{% else %}btn-default{% endif %}"
+                              title="{% trans 'Add a rationale for ' %} {{ form.instance.decision_item.name }}"
+                              data-toggle="popover"
+                              data-placement="left"
+                              data-content=""
+                              data-rationale="{{ form.instance.meeting_decision_rationale.text }}"
+                              data-save-url="{% url 'deliverables:meetings:save_final_decision_item_rationale' meeting.deliverable.pk meeting.pk form.instance.pk %}">
+                        <span class="fa fa-comment"></span> {% trans 'Rationale' %}
+                      </button>
                     </td>
                   </tr>
                 {% endfor %}

@@ -22,8 +22,13 @@ def meeting_item(meeting_item_id):
 
 @register.simple_tag
 def display_evaluation_summary(instance):
-    html = u'<div class="progress help-cursor" style="margin-bottom: 0" title="{0}">'.format(
-        _('Decision Item Evaluation Summary')
+    html = u'''<div class="progress help-cursor"
+                    style="margin-bottom: 0"
+                    data-toggle="tooltip"
+                    data-container="body"
+                    data-placement="top"
+                    title="{0}">'''.format(
+        _('Decision&nbsp;Item&nbsp;Evaluation&nbsp;Summary')
     )
 
     evaluation_summary = instance.evaluation_summary.all().select_related('measure_value')
@@ -48,6 +53,9 @@ def display_ranking_label(ranking):
     elif ranking == 0:
         label = 'label-warning'
     html = u'''<span class="label {0} pull-right help-cursor"
+                     data-toggle="tooltip"
+                     data-container="body"
+                     data-placement="top"
                      style="margin-right: 10px; margin-top: 2px;"
                      title="{1}">{2}</span>'''.format(
         label,

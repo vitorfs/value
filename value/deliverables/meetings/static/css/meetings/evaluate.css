@@ -27,15 +27,6 @@
   color: #bbb;
 }
 
-.popover {
-  min-width: 500px;
-  z-index: 1020;
-}
-
-.popover .arrow {
-  /*top: 25px!important;*/
-}
-
 #factor-description-container .popover {
   min-width: 50px;
 }
