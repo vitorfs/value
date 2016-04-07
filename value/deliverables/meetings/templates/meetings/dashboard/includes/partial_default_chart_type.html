@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<div class="btn-group pull-right" style="margin-top: -6px;">
+<div class="btn-group pull-right" style="margin-top: -6px; margin-left: 5px">
   <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     <span class="fa fa-bar-chart"></span>
     {% trans 'Type' %} {% for key, value in chart_types_options.iteritems %}{% if chart_type == key %}<strong>{{ value.label }}</strong>{% endif %}{% endfor %}

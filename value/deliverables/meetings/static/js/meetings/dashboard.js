@@ -3,7 +3,7 @@ $.fn.loadchart = function (callback) {
   callback = callback || function () {};
 
   var form = $(this).closest("form");
-  
+
   var container = $(this);
   var chart_container = $(this).closest(".panel").find(".panel-body");
 
@@ -43,11 +43,11 @@ $.fn.loadpopupchart = function (options, removeExtra) {
   $(".chart-options .btn-chart-toggle").remove();
   $(".chart-options .btn-chart-expand").remove();
   $(".chart-options .btn-chart-modal").remove();
-  
+
   removeExtra();
 
   // Remove "a" element from panel title to avoid hover effect
-  // and chart toggle action, preserving the text only. 
+  // and chart toggle action, preserving the text only.
   $(".panel-title").text($(".panel-title").text());
 
   $(this).highcharts(options);
@@ -142,13 +142,12 @@ $(function () {
     setTimeout(function () {
       $("#modal-chart-container").highcharts(chart.options);
     }, 250);
-    
+
 
   });
 
-  $(document).on("click", ".btn-chart-toggle", function () {
-
-    var container = $(this).closest(".panel-heading");
+  $.fn.toggleChart = function () {
+    var container = $(this);
     var target = $(container).attr("data-target");
 
     if ($(target).is(":visible")) {
@@ -165,7 +164,11 @@ $(function () {
         }
       });
     }
+  };
 
+  $(document).on("click", ".btn-chart-toggle", function () {
+    var container = $(this).closest(".panel-heading");
+    $(container).toggleChart();
   });
 
   $(document).on("click", ".btn-chart-reload", function () {
@@ -215,7 +218,7 @@ $(function () {
     var url = $(this).attr("data-remote-url");
     var type = $(this).closest("form").attr("data-type");
     var modal;
-    
+
     if (type === "scenario") {
       modal = $("#modal-scenario-details");
     }
@@ -260,6 +263,16 @@ $(function () {
       },
       success: function (data) {
         $("#modal-rationale .modal-body").html(data);
+      }
+    });
+  });
+
+  $(document).on("click", ".js-expand-all", function () {
+    $(".charts .panel").each(function () {
+      var container = $(".panel-heading", this);
+      var target = $(container).attr("data-target");
+      if (!$(target).is(":visible")) {
+        $(container).toggleChart();
       }
     });
   });

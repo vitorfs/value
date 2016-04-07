@@ -280,12 +280,20 @@ def save_imported_decision_items(request, deliverable_id):
 @user_is_manager
 def add_decision_item(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    decision_item = DecisionItem(deliverable=deliverable)
     fields = DecisionItemLookup.get_all_fields()
     DecisionItemForm = modelform_factory(DecisionItem, fields=fields.keys())
+    AttachmentFormset = inlineformset_factory(DecisionItem, DecisionItemAttachment, fields=('attachment',))
     if request.method == 'POST':
-        form = DecisionItemForm(request.POST, instance=DecisionItem(deliverable=deliverable))
-        if form.is_valid():
+        form = DecisionItemForm(request.POST, instance=decision_item)
+        formset = AttachmentFormset(request.POST, request.FILES, instance=decision_item)
+        if form.is_valid() and formset.is_valid():
             decision_item = form.save()
+            for form in formset:
+                if form.is_valid() and form.instance.attachment:
+                    form.instance.decision_item = decision_item
+                    form.save()
+            formset.save()
             deliverable.save()
             messages.success(request, _(u'The decision item {0} was added successfully.').format(decision_item.name))
             return redirect(reverse('deliverables:decision_items', args=(deliverable.pk,)))
@@ -293,10 +301,12 @@ def add_decision_item(request, deliverable_id):
             messages.error(request, _(u'Please correct the error below.'))
     else:
         form = DecisionItemForm()
+        formset = AttachmentFormset(instance=decision_item)
     return render(request, 'deliverables/decision_items/add.html', {
         'deliverable': deliverable,
         'fields': fields,
-        'form': form
+        'form': form,
+        'formset': formset
     })
 
 

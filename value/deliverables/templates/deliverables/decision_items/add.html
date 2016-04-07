@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load attr fieldtype i18n static %}
+{% load i18n static %}
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
@@ -17,50 +17,8 @@
 {% endblock tabs %}
 
 {% block content %}
-  <h1 class="lead">{% trans 'Add decision item' %}</h1>
-  <form class="form-horizontal" method="post">
-    {% csrf_token %}
-    {% for hidden in form.hidden_fields %}
-      {{ hidden }}
-    {% endfor %}
-    {% for field in form.visible_fields %}
-      <div class="form-group{% if field.errors %} has-error{% endif %}">
-        <label for="{{ field.id_for_label }}" class="col-md-2 col-sm-4 control-label">
-          {{ fields|dictkey:field.name|dictkey:"label" }}
-        </label>
-        <div class="col-md-10 col-sm-8">
-          {% if field|fieldtype == 'Textarea' %}
-            <textarea class="form-control"
-                      id="{{ field.id_for_label }}"
-                      name="{{ field.html_name }}"
-                      maxlength="{{ field.field.max_length }}"
-                      rows="4">{{ field.value|default_if_none:'' }}</textarea>
-          {% else %}
-            <input type="text"
-                   class="form-control"
-                   value="{{ field.value|default_if_none:'' }}"
-                   id="{{ field.id_for_label }}"
-                   name="{{ field.html_name }}"
-                   maxlength="{{ field.field.max_length }}">
-          {% endif %}
-          {% for error in field.errors %}
-            <p class="help-block">{{ error }}</p>
-          {% endfor %}
-          {% if field.help_text %}
-            <span class="help-block">{{ field.help_text }}</span>
-          {% endif %}
-        </div>
-      </div>
-    {% endfor %}
-    <div class="form-group">
-      <div class="col-sm-offset-4 col-sm-8 col-md-offset-2 col-md-10">
-        <button type="submit" class="btn btn-primary">
-          {% trans 'Save' %}
-        </button>
-        <a href="{% url 'deliverables:decision_items' deliverable.pk %}" class="btn btn-default">
-          {% trans 'Cancel' %}
-        </a>
-      </div>
-    </div>
-  </form>
+  <div class="col-md-8 col-md-offset-2">
+    <h1 class="lead">{% trans 'Add decision item' %}</h1>
+    {% include 'deliverables/decision_items/includes/decision_item_form.html' %}
+  </div>
 {% endblock content %}
