@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-31 10:34+0300\n"
+"POT-Creation-Date: 2016-04-07 11:31+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -285,7 +285,7 @@ msgid "Display"
 msgstr "Exibir"
 
 #: value/application_settings/templates/application_settings/items.html:74
-#: value/factors/forms.py:41 value/factors/templates/factors/index.html.py:31
+#: value/factors/forms.py:42 value/factors/templates/factors/index.html.py:31
 #: value/measures/forms.py:22 value/measures/templates/measures/index.html:23
 #: value/users/templates/users/index.html:24
 msgid "Active"
@@ -351,7 +351,9 @@ msgstr "Permissão negada."
 
 #: value/deliverables/forms.py:54 value/deliverables/forms.py:101
 msgid "Select value factors to be used within the decision-making meetings"
-msgstr "Selecione os fatores de valor para serem usados nas reuniões de tomada de decisão"
+msgstr ""
+"Selecione os fatores de valor para serem usados nas reuniões de tomada de "
+"decisão"
 
 #: value/deliverables/forms.py:60 value/deliverables/forms.py:114
 msgid "Select the measure to be used within the decision-making meetings"
@@ -661,9 +663,9 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:38
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:54
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:83
-#: value/deliverables/meetings/templates/meetings/new.html:119
-#: value/deliverables/meetings/templates/meetings/new.html:126
-#: value/deliverables/meetings/templates/meetings/new.html:165
+#: value/deliverables/meetings/templates/meetings/new.html:113
+#: value/deliverables/meetings/templates/meetings/new.html:120
+#: value/deliverables/meetings/templates/meetings/new.html:159
 #: value/deliverables/templates/deliverables/decision_items/includes/modal.html:7
 #: value/deliverables/templates/deliverables/includes/add_stakeholders.html:5
 #: value/deliverables/templates/deliverables/includes/import_decision_items.html:21
@@ -677,10 +679,10 @@ msgstr ""
 #: value/templates/registration/login.html:37
 #: value/users/templates/users/add.html:22
 #: value/users/templates/users/edit.html:19
-#: value/users/templates/users/password.html:20
-#: value/users/templates/users/roles.html:120
-#: value/users/templates/users/roles.html:141
-#: value/users/templates/users/roles.html:175
+#: value/users/templates/users/password.html:24
+#: value/users/templates/users/roles.html:114
+#: value/users/templates/users/roles.html:135
+#: value/users/templates/users/roles.html:169
 msgid "Close"
 msgstr ""
 
@@ -914,7 +916,7 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:91
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:103
 #: value/deliverables/meetings/templates/meetings/evaluate.html:83
-#: value/deliverables/meetings/templates/meetings/new.html:246
+#: value/deliverables/meetings/templates/meetings/new.html:240
 #: value/deliverables/templates/deliverables/decision_items/add.html:61
 #: value/deliverables/templates/deliverables/decision_items/delete.html:52
 #: value/deliverables/templates/deliverables/decision_items/delete_list.html:38
@@ -928,14 +930,14 @@ msgstr ""
 #: value/factors/templates/factors/groups.html:110
 #: value/factors/templates/factors/groups.html:162
 #: value/measures/templates/measures/add.html:32
-#: value/measures/templates/measures/delete.html:23
+#: value/measures/templates/measures/delete.html:27
 #: value/measures/templates/measures/edit.html:38
 #: value/users/templates/users/add.html:61
-#: value/users/templates/users/delete.html:21
-#: value/users/templates/users/edit.html:83
-#: value/users/templates/users/password.html:57
-#: value/users/templates/users/roles.html:127
-#: value/users/templates/users/roles.html:148
+#: value/users/templates/users/delete.html:26
+#: value/users/templates/users/edit.html:89
+#: value/users/templates/users/password.html:61
+#: value/users/templates/users/roles.html:121
+#: value/users/templates/users/roles.html:142
 msgid "Cancel"
 msgstr ""
 
@@ -970,7 +972,7 @@ msgid "Scenario builder"
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_scenarios_empty_state.html:5
-msgid "You haven"
+msgid "You haven't created any scenario yet."
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_scenarios_empty_state.html:6
@@ -1003,9 +1005,9 @@ msgstr ""
 #: value/measures/templates/measures/add.html:31
 #: value/measures/templates/measures/edit.html:37
 #: value/users/templates/users/add.html:60
-#: value/users/templates/users/edit.html:82
-#: value/users/templates/users/roles.html:128
-#: value/users/templates/users/roles.html:149
+#: value/users/templates/users/edit.html:88
+#: value/users/templates/users/roles.html:122
+#: value/users/templates/users/roles.html:143
 msgid "Save"
 msgstr ""
 
@@ -1016,7 +1018,7 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:57
 #: value/deliverables/templates/deliverables/stakeholders.html:99
 #: value/factors/templates/factors/groups.html:134
-#: value/users/templates/users/roles.html:178
+#: value/users/templates/users/roles.html:172
 msgid "Are you sure?"
 msgstr ""
 
@@ -1112,38 +1114,38 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/new.html:109
+#: value/deliverables/meetings/templates/meetings/new.html:103
 msgid "2. Review the stakeholders"
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/new.html:122
+#: value/deliverables/meetings/templates/meetings/new.html:116
 msgid "Click to remove a stakeholder from the meeting."
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/new.html:145
+#: value/deliverables/meetings/templates/meetings/new.html:139
 msgid "items to discuss"
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/new.html:154
+#: value/deliverables/meetings/templates/meetings/new.html:148
 msgid "3. Select the decision items"
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/new.html:168
+#: value/deliverables/meetings/templates/meetings/new.html:162
 msgid "Select at least one decision item before starting the meeting."
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/new.html:200
+#: value/deliverables/meetings/templates/meetings/new.html:194
 #: value/deliverables/templates/deliverables/decision_items/includes/decision_items_table.html:47
 #: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:61
 #: value/deliverables/templates/deliverables/includes/meetings_table.html:57
 msgid "No data"
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/new.html:218
+#: value/deliverables/meetings/templates/meetings/new.html:212
 msgid "4. Advanced settings"
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/new.html:243
+#: value/deliverables/meetings/templates/meetings/new.html:237
 msgid "Start the meeting"
 msgstr ""
 
@@ -1185,6 +1187,7 @@ msgid "Scenario {0} successfully deleted!"
 msgstr ""
 
 #: value/deliverables/meetings/views/dashboard/scenarios.py:226
+#: value/deliverables/views.py:151
 msgid "An unexpected error ocurred."
 msgstr ""
 
@@ -1195,11 +1198,11 @@ msgstr ""
 
 #: value/deliverables/meetings/views/meetings.py:81
 #: value/deliverables/meetings/views/meetings.py:262
-#: value/deliverables/views.py:93 value/deliverables/views.py:282
-#: value/deliverables/views.py:313 value/factors/views.py:32
+#: value/deliverables/views.py:93 value/deliverables/views.py:293
+#: value/deliverables/views.py:324 value/factors/views.py:32
 #: value/factors/views.py:50 value/measures/views.py:46
 #: value/measures/views.py:79 value/users/views.py:42 value/users/views.py:61
-#: value/users/views.py:80 value/users/views.py:208 value/users/views.py:223
+#: value/users/views.py:80 value/users/views.py:221 value/users/views.py:236
 msgid "Please correct the error below."
 msgstr ""
 
@@ -1353,8 +1356,8 @@ msgstr ""
 #: value/deliverables/templates/deliverables/includes/import_decision_items.html:30
 #: value/deliverables/templates/deliverables/stakeholders.html:84
 #: value/factors/templates/factors/delete.html:21
-#: value/measures/templates/measures/delete.html:22
-#: value/users/templates/users/delete.html:20
+#: value/measures/templates/measures/delete.html:26
+#: value/users/templates/users/delete.html:25
 msgid "Confirm"
 msgstr ""
 
@@ -1427,7 +1430,7 @@ msgid "Historical Dashboard"
 msgstr ""
 
 #: value/deliverables/templates/deliverables/historical_dashboard.html:18
-msgid "There"
+msgid "There's no enough data to display the Historical Dashboard."
 msgstr ""
 
 #: value/deliverables/templates/deliverables/includes/add_stakeholders.html:8
@@ -1447,9 +1450,10 @@ msgid "Info:"
 msgstr ""
 
 #: value/deliverables/templates/deliverables/includes/decision_items_import_table.html:7
+#, python-format
 msgid ""
-"Imported <strong>{{ formset|length }}</strong> entries from file "
-"<strong>{{ filename }}</strong>."
+"Imported <strong>%(len)s</strong> entries from file <strong>%(filename)s</"
+"strong>."
 msgstr ""
 
 #: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:6
@@ -1600,7 +1604,7 @@ msgid "Transfer this deliverable to another user."
 msgstr ""
 
 #: value/deliverables/templates/deliverables/settings/details.html:103
-msgid "Select the new owner\\"
+msgid "Select the new owner's name:"
 msgstr ""
 
 #: value/deliverables/templates/deliverables/settings/factors.html:11
@@ -1663,61 +1667,69 @@ msgstr ""
 msgid "The deliverable {0} was added successfully."
 msgstr ""
 
-#: value/deliverables/views.py:184
+#: value/deliverables/views.py:148
+msgid "Invalid file type. Supported extensions are .xls or .xlsx"
+msgstr ""
+
+#: value/deliverables/views.py:149
+msgid "Invalid form data."
+msgstr ""
+
+#: value/deliverables/views.py:195
 msgid "The stakeholders were added successfully."
 msgstr ""
 
-#: value/deliverables/views.py:186
+#: value/deliverables/views.py:197
 msgid "No stakeholder were selected. Nothing changed."
 msgstr ""
 
-#: value/deliverables/views.py:200
+#: value/deliverables/views.py:211
 msgid "The stakeholders were removed successfully."
 msgstr ""
 
-#: value/deliverables/views.py:202
+#: value/deliverables/views.py:213
 msgid "An error ocurred while trying to remove the selected stakeholders."
 msgstr ""
 
-#: value/deliverables/views.py:224
+#: value/deliverables/views.py:235
 msgid "The selected decision items were deleted successfully."
 msgstr ""
 
-#: value/deliverables/views.py:279
+#: value/deliverables/views.py:290
 #, python-brace-format
 msgid "The decision item {0} was added successfully."
 msgstr ""
 
-#: value/deliverables/views.py:310
+#: value/deliverables/views.py:321
 #, python-brace-format
 msgid "The decision item {0} was saved successfully."
 msgstr ""
 
-#: value/deliverables/views.py:333
+#: value/deliverables/views.py:344
 #, python-brace-format
 msgid "The decision item {0} was deleted successfully."
 msgstr ""
 
-#: value/deliverables/views.py:373 value/deliverables/views.py:393
-#: value/deliverables/views.py:414
+#: value/deliverables/views.py:384 value/deliverables/views.py:404
+#: value/deliverables/views.py:425
 #, python-brace-format
 msgid "The deliverable {0} was saved successfully."
 msgstr ""
 
-#: value/deliverables/views.py:439
+#: value/deliverables/views.py:450
 #, python-brace-format
 msgid "The deliverable {0} was successfully transferred to {1}."
 msgstr ""
 
-#: value/deliverables/views.py:445
+#: value/deliverables/views.py:456
 msgid "Something went wrong. Nothing changed."
 msgstr ""
 
-#: value/factors/forms.py:19 value/factors/forms.py:25
+#: value/factors/forms.py:20 value/factors/forms.py:26
 msgid "Select…"
 msgstr ""
 
-#: value/factors/forms.py:42
+#: value/factors/forms.py:43
 msgid "Unselect this instead of deleting factors."
 msgstr ""
 
@@ -1765,17 +1777,19 @@ msgid "Are you sure you want to delete the factor"
 msgstr ""
 
 #: value/factors/templates/factors/delete.html:30
-msgid "The value factor <strong>{{ factor.name }}</strong> cannot be deleted."
+#, python-format
+msgid "The value factor <strong>%(name)s</strong> cannot be deleted."
 msgstr ""
 
-#: value/factors/templates/factors/delete.html:33
+#: value/factors/templates/factors/delete.html:35
 msgid ""
 "There's already deliverables and meetings associated with this value factor. "
 "Change its status to <strong>inactive</strong> instead."
 msgstr ""
 
-#: value/factors/templates/factors/delete.html:39
-#: value/measures/templates/measures/delete.html:38
+#: value/factors/templates/factors/delete.html:41
+#: value/measures/templates/measures/delete.html:46
+#: value/users/templates/users/delete.html:45
 msgid "Back"
 msgstr ""
 
@@ -1817,7 +1831,7 @@ msgid "New factor group"
 msgstr ""
 
 #: value/factors/templates/factors/groups.html:137
-msgid "The associated value factors won"
+msgid "The associated value factors won't be deleted."
 msgstr ""
 
 #: value/factors/templates/factors/groups.html:141
@@ -1949,15 +1963,18 @@ msgstr ""
 msgid "Add measure"
 msgstr ""
 
-#: value/measures/templates/measures/delete.html:17
-msgid "Are you sure you want to delete the measure {{ measure.name }}?"
+#: value/measures/templates/measures/delete.html:18
+#, fuzzy, python-format
+#| msgid "Are you sure you want to proceed"
+msgid "Are you sure you want to delete the measure %(name)s?"
+msgstr "Você tem certeza que deseja prosseguir"
+
+#: value/measures/templates/measures/delete.html:35
+#, python-format
+msgid "The measure <strong>%(name)s</strong> cannot be deleted."
 msgstr ""
 
-#: value/measures/templates/measures/delete.html:30
-msgid "The measure <strong>{{ measure.name }}</strong> cannot be deleted."
-msgstr ""
-
-#: value/measures/templates/measures/delete.html:32
+#: value/measures/templates/measures/delete.html:40
 msgid ""
 "There's already deliverables and meetings associated with this measure. "
 "Change its status to <strong>inactive</strong> instead."
@@ -2050,7 +2067,7 @@ msgid "Internal server error"
 msgstr ""
 
 #: value/templates/500.html:45
-msgid "Something went wrong. That"
+msgid "Something went wrong. That's all we know."
 msgstr ""
 
 #: value/templates/base_site.html:13 value/templates/base_site.html.py:14
@@ -2121,12 +2138,12 @@ msgstr ""
 #: value/users/templates/users/change_password.html:23
 #: value/users/templates/users/includes/menu.html:10
 #: value/users/templates/users/password.html:10
-#: value/users/templates/users/password.html:56
+#: value/users/templates/users/password.html:60
 msgid "Change password"
 msgstr ""
 
 #: value/templates/registration/password_reset_confirm.html:17
-#: value/users/templates/users/password.html:32
+#: value/users/templates/users/password.html:36
 msgid "New password"
 msgstr ""
 
@@ -2211,11 +2228,11 @@ msgstr ""
 msgid "Email address"
 msgstr ""
 
-#: value/users/models.py:13
+#: value/users/models.py:14
 msgid "profile"
 msgstr ""
 
-#: value/users/models.py:14
+#: value/users/models.py:15
 msgid "profiles"
 msgstr ""
 
@@ -2231,15 +2248,38 @@ msgid "Add user"
 msgstr ""
 
 #: value/users/templates/users/add.html:18
-msgid "First, enter a username and password. Then, you"
+msgid ""
+"First, enter a username and password. Then, you'll be able to edit more user "
+"options."
 msgstr ""
 
-#: value/users/templates/users/delete.html:15
-msgid "Are you sure you want to delete the user {{ delete_user.username }}?"
+#: value/users/templates/users/delete.html:17
+#, fuzzy, python-format
+#| msgid "Are you sure you want to proceed"
+msgid "Are you sure you want to delete the user %(username)s?"
+msgstr "Você tem certeza que deseja prosseguir"
+
+#: value/users/templates/users/delete.html:34
+#, python-format
+msgid "The user <strong>%(username)s</strong> cannot be deleted."
+msgstr ""
+
+#: value/users/templates/users/delete.html:39
+msgid ""
+"There's already deliverables and meetings associated with this user. Change "
+"its status to <strong>inactive</strong> instead."
 msgstr ""
 
 #: value/users/templates/users/edit.html:16
 msgid "Edit user"
+msgstr ""
+
+#: value/users/templates/users/edit.html:46
+#, python-format
+msgid ""
+"Raw passwords are not stored, so there is no way to see this user's "
+"password, but you can change the password using <a href=\"%(password_url)s"
+"\">this form</a>."
 msgstr ""
 
 #: value/users/templates/users/includes/menu.html:4
@@ -2252,11 +2292,15 @@ msgstr ""
 msgid "Language preferences"
 msgstr ""
 
-#: value/users/templates/users/password.html:17
-msgid "Change password for {{ form.user.username }}"
+#: value/users/templates/users/password.html:18
+#, python-format
+msgid ""
+"\n"
+"          Change password for %(username)s\n"
+"        "
 msgstr ""
 
-#: value/users/templates/users/password.html:44
+#: value/users/templates/users/password.html:48
 msgid "Re-type new password"
 msgstr ""
 
@@ -2272,35 +2316,35 @@ msgstr ""
 msgid "Available Users"
 msgstr ""
 
-#: value/users/templates/users/roles.html:62
+#: value/users/templates/users/roles.html:59
 msgid "Click to remove the role"
 msgstr ""
 
-#: value/users/templates/users/roles.html:72
+#: value/users/templates/users/roles.html:69
 msgid "Click to edit the role"
 msgstr ""
 
-#: value/users/templates/users/roles.html:107
+#: value/users/templates/users/roles.html:101
 msgid "The roles directory is empty."
 msgstr ""
 
-#: value/users/templates/users/roles.html:109
+#: value/users/templates/users/roles.html:103
 msgid "Add the first role"
 msgstr ""
 
-#: value/users/templates/users/roles.html:123
+#: value/users/templates/users/roles.html:117
 msgid "New role"
 msgstr ""
 
-#: value/users/templates/users/roles.html:144
+#: value/users/templates/users/roles.html:138
 msgid "Edit role"
 msgstr ""
 
-#: value/users/templates/users/roles.html:181
-msgid "The associated users won"
+#: value/users/templates/users/roles.html:175
+msgid "The associated users won't be deleted."
 msgstr ""
 
-#: value/users/templates/users/roles.html:185
+#: value/users/templates/users/roles.html:179
 msgid "Delete role"
 msgstr ""
 
@@ -2314,30 +2358,30 @@ msgstr ""
 msgid "The user {0} was changed successfully."
 msgstr ""
 
-#: value/users/views.py:75 value/users/views.py:220
+#: value/users/views.py:75 value/users/views.py:233
 msgid "Password changed successfully."
 msgstr "Senha alterada com sucesso."
 
-#: value/users/views.py:92
+#: value/users/views.py:105
 #, python-brace-format
 msgid "The user {0} was deleted successfully."
 msgstr ""
 
-#: value/users/views.py:130
+#: value/users/views.py:143
 #, python-brace-format
 msgid "Role {0} successfully added!"
 msgstr ""
 
-#: value/users/views.py:153
+#: value/users/views.py:166
 #, python-brace-format
 msgid "Role {0} successfully edited!"
 msgstr ""
 
-#: value/users/views.py:172
+#: value/users/views.py:185
 #, python-brace-format
 msgid "The role {0} was deleted successfully."
 msgstr ""
 
-#: value/users/views.py:206
+#: value/users/views.py:219
 msgid "Your profile was changed successfully."
 msgstr "O seu perfil foi atualizado com sucesso."
