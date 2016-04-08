@@ -1,6 +1,40 @@
 {% extends 'base.html' %}
 
-{% load i18n %}
+{% load i18n meeting_item %}
+
+{% block stylesheet %}
+  <style type="text/css">
+    .table-meetings-summary {
+      border-left: 0;
+      border-right: 0;
+    }
+    .table-meetings-summary tbody tr td {
+      min-width: 150px;
+    }
+    .table-meetings-summary thead tr td:first-child,
+    .table-meetings-summary thead tr th:first-child,
+    .table-meetings-summary tbody tr td:first-child,
+    .table-meetings-summary tbody tr th:first-child {
+      border-left: 0;
+    }
+    .table-meetings-summary thead tr td:last-child,
+    .table-meetings-summary thead tr th:last-child,
+    .table-meetings-summary tbody tr td:last-child,
+    .table-meetings-summary tbody tr th:last-child {
+      border-right: 0;
+    }
+    .meeting-details {
+      font-weight: normal;
+      font-size: 12px;
+      color: #777;
+      padding: 0;
+      margin-top: 5px;
+    }
+    .meeting-details li {
+      list-style: none;
+    }
+  </style>
+{% endblock %}
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
@@ -13,8 +47,96 @@
 
 {% block content %}
   {% include 'deliverables/includes/menu.html' with active='historical_dashboard' deliverable=deliverable %}
-  <div class="well blank-state">
-    <span class="fa fa-line-chart"></span>
-    <h3>{% trans "There's no enough data to display the Historical Dashboard." %}</h3>
-  </div>
+  {% if meetings %}
+    <!--div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <span class="fa fa-filter"></span> {% trans 'Filter' %}
+        </h3>
+      </div>
+      <div class="panel-body">
+
+      </div>
+    </div-->
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <span class="fa fa-line-chart"></span>
+          {% trans 'Meetings Summary' %}
+        </h3>
+      </div>
+      <div class="panel-body text-center">
+        <p class="lead" style="margin-bottom: 0">Decision Items</p>
+      </div>
+      <div class="clearfix" style="overflow-y: scroll; padding: 0">
+
+        <table class="table table-bordered table-meetings-summary" style="margin: 0">
+          <thead>
+            <tr>
+              <th></th>
+              {% for decision_item in decision_items %}
+                <th style="white-space:nowrap">
+                  {% if decision_item.name|length > 20 %}
+                    <span class="help-cursor" data-toggle="tooltip" data-placement="top" title="{{ decision_item.name }}" data-container="body">
+                      {{ decision_item.name|truncatechars:20 }}
+                    </span>
+                  {% else %}
+                    {{ decision_item.name }}
+                  {% endif %}
+                </th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for meeting in meetings %}
+              <tr>
+                <th style="white-space:nowrap">
+                  {{ meeting.name }}
+                  <ul class="meeting-details">
+                    <li><span class="fa fa-calendar"></span> {{ meeting.created_at }}</li>
+                    <li><span class="fa fa-users"></span> Stakeholders: {{ meeting.stakeholders_count }}</li>
+                    <li><span class="fa fa-list"></span> Decision Items: {{ meeting.items_count }}</li>
+                  </ul>
+                </th>
+                {% for decision_item in meeting.items %}
+                  <td data-evaluated="{{ decision_item.evaluated }}" data-selected="{{ decision_item.meeting_item.meeting_decision }}">
+                    {% if decision_item.evaluated %}
+                      <p>
+                        {% if decision_item.meeting_item.meeting_decision %}
+                          <span class="label label-success"><span class="glyphicon glyphicon-ok"></span> {% trans 'Selected' %}</span>
+                        {% else %}
+                          <span class="label label-danger"><span class="glyphicon glyphicon-remove"></span> {% trans 'Not selected' %}</span>
+                        {% endif %}
+                      </p>
+                      <div class="progress" style="margin-bottom: 10px">
+                        {% for r in decision_item.meeting_item.evaluation_summary.all %}
+                          <div class="progress-bar" style="width: {{ r.percentage_votes }}%; background-color: {{ r.measure_value.color }}">
+                            {{ r.get_percentage_votes_display }}%
+                          </div>
+                        {% endfor %}
+                      </div>
+                      <div>
+                        <small><strong>{% trans 'Value Ranking' %}</strong> {{ decision_item.meeting_item.value_ranking_as_html|safe }}</small>
+                      </div>
+                      <div>
+                        <small><strong>{% trans 'Meeting Ranking' %}</strong> {{ decision_item.meeting_item.meeting_ranking }}</span></small>
+                      </div>
+                    {% else %}
+                      <span class="glyphicon glyphicon-remove text-danger"></span> {% trans 'Not evaluated' %}
+                    {% endif %}
+                  </td>
+                {% endfor %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% else %}
+    <div class="well blank-state">
+      <span class="fa fa-line-chart"></span>
+      <h3>{% trans "There's no enough data to display the Historical Dashboard." %}</h3>
+    </div>
+  {% endif %}
 {% endblock content %}

@@ -12,6 +12,7 @@ from django.views.decorators.http import require_POST
 from django.template.loader import render_to_string
 from django.forms.models import modelform_factory, modelformset_factory, inlineformset_factory
 from django.db import transaction
+from django.db.models import Count
 from django.db.models.functions import Lower
 from django.utils.translation import ugettext as _
 
@@ -469,5 +470,34 @@ def transfer(request, deliverable_id):
 
 @login_required
 def historical_dashboard(request, deliverable_id):
+    import copy
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    return render(request, 'deliverables/historical_dashboard.html', {'deliverable': deliverable})
+    meetings = deliverable.meeting_set \
+        .annotate(items_count=Count('meetingitem', distinct=True)) \
+        .annotate(stakeholders_count=Count('meetingstakeholder', distinct=True)) \
+        .all() \
+        .order_by('-created_at')
+    decision_items = deliverable.decisionitem_set \
+        .prefetch_related('meetingitem_set__meeting', 'meetingitem_set__evaluation_summary__measure_value') \
+        .all() \
+        .order_by(Lower('name'))
+
+    for decision_item in decision_items:
+        decision_item.meetings = dict()
+        for item in decision_item.meetingitem_set.all():
+            decision_item.meetings[item.meeting.pk] = item
+
+    for meeting in meetings:
+        meeting.items = list()
+        for decision_item in decision_items:
+            item = copy.copy(decision_item)
+            item.evaluated = (meeting.pk in decision_item.meetings.keys())
+            if item.evaluated:
+                item.meeting_item = decision_item.meetings[meeting.pk]
+            meeting.items.append(item)
+
+    return render(request, 'deliverables/historical_dashboard.html', {
+        'deliverable': deliverable,
+        'meetings': meetings,
+        'decision_items': decision_items
+    })
