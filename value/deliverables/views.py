@@ -1,5 +1,7 @@
 # coding: utf-8
 
+import copy
+from colour import Color
 import xlrd
 
 from django.http import HttpResponse, HttpResponseBadRequest, Http404
@@ -21,7 +23,7 @@ from value.factors.models import Factor
 from value.measures.models import Measure
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
 from value.deliverables.models import Deliverable, DecisionItem, DecisionItemAttachment, DecisionItemLookup
-from value.deliverables.meetings.models import Evaluation
+from value.deliverables.meetings.models import Evaluation, Meeting
 from value.deliverables.forms import UploadFileForm, DeliverableForm, DeliverableBasicDataForm, \
     DeliverableFactorsForm, DeliverableMeasureForm, DeliverableRemoveStakeholdersForm
 from value.deliverables.utils import excel_column_map
@@ -469,8 +471,8 @@ def transfer(request, deliverable_id):
 
 
 @login_required
+@user_is_stakeholder
 def historical_dashboard(request, deliverable_id):
-    import copy
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     meetings = deliverable.meeting_set \
         .annotate(items_count=Count('meetingitem', distinct=True)) \
@@ -500,4 +502,58 @@ def historical_dashboard(request, deliverable_id):
         'deliverable': deliverable,
         'meetings': meetings,
         'decision_items': decision_items
+    })
+
+
+@login_required
+@user_is_stakeholder
+def historical_dashboard_meeting(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    items = meeting.meetingitem_set.all().order_by('-meeting_decision', '-meeting_ranking', '-value_ranking')
+
+    green_count = items.filter(meeting_decision=True).count()
+    if green_count > 5:
+        strong_green = Color('#166006')
+        light_green = Color('#a0dc93')
+    else:
+        strong_green = Color('#30841e')
+        light_green = Color('#71c060')
+
+    red_count = items.filter(meeting_decision=False).count()
+    if red_count > 5:
+        light_red = Color('#ff9081')
+        strong_red = Color('#891000')
+    else:
+        light_red = Color('#cf5140')
+        strong_red = Color('#901909')
+
+    if green_count > 0:
+        green_gradient = strong_green.range_to(light_green, green_count)
+        green_colors = list(green_gradient)
+    else:
+        green_colors = list()
+
+    if red_count > 0:
+        red_gradient = light_red.range_to(strong_red, red_count)
+        red_colors = list(red_gradient)
+    else:
+        red_colors = list()
+
+    green_index = 0
+    red_index = 0
+    for item in items:
+        if item.meeting_decision:
+            color = green_colors[green_index]
+            item.background_color = color.get_hex()
+            item.color = '#fff'
+            green_index += 1
+        else:
+            color = red_colors[red_index]
+            item.background_color = color.get_hex()
+            item.color = '#fff'
+            red_index += 1
+
+    return render(request, 'deliverables/partial_meeting_historical_dashboard.html', {
+        'meeting': meeting,
+        'items': items
     })

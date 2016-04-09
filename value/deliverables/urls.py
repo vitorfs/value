@@ -26,6 +26,8 @@ urlpatterns = [
     url(r'^(?P<deliverable_id>\d+)/decision-items/(?P<decision_item_id>\d+)/details/$', views.details_decision_item,
         name='details_decision_item'),
     url(r'^(?P<deliverable_id>\d+)/dashboard/$', views.historical_dashboard, name='historical_dashboard'),
+    url(r'^(?P<deliverable_id>\d+)/dashboard/(?P<meeting_id>\d+)/$', views.historical_dashboard_meeting,
+        name='historical_dashboard_meeting'),
 
     url(r'^(?P<deliverable_id>\d+)/settings/$', views.settings, name='settings'),
     url(r'^(?P<deliverable_id>\d+)/settings/factors/$', views.factors_settings, name='factors_settings'),

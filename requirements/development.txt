@@ -12,3 +12,4 @@ coverage==4.0.3
 model-mommy==1.2.6
 pep8==1.7.0
 flake8==2.5.4
+colour==0.1.2

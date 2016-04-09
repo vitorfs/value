@@ -36,6 +36,33 @@
   </style>
 {% endblock %}
 
+{% block javascript %}
+  <script type="text/javascript">
+    $(function () {
+      $(".js-meeting-details").click(function () {
+        var url = $(this).attr("data-url");
+        var name = $(this).attr("data-name");
+        $.ajax({
+          url: url,
+          type: 'get',
+          cache: false,
+          beforeSend: function () {
+            $("#modal-meeting-details .modal-title").text(name);
+            $("#modal-meeting-details").modal('show');
+
+          },
+          success: function (data) {
+            $("#modal-meeting-details .modal-body").html(data);
+          },
+          error: function () {
+
+          }
+        });
+      });
+    });
+  </script>
+{% endblock %}
+
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
@@ -48,7 +75,7 @@
 {% block content %}
   {% include 'deliverables/includes/menu.html' with active='historical_dashboard' deliverable=deliverable %}
   {% if meetings %}
-    <!--div class="panel panel-default">
+    <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
           <span class="fa fa-filter"></span> {% trans 'Filter' %}
@@ -57,7 +84,7 @@
       <div class="panel-body">
 
       </div>
-    </div-->
+    </div>
 
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -70,7 +97,6 @@
         <p class="lead" style="margin-bottom: 0">Decision Items</p>
       </div>
       <div class="clearfix" style="overflow-y: scroll; padding: 0">
-
         <table class="table table-bordered table-meetings-summary" style="margin: 0">
           <thead>
             <tr>
@@ -98,6 +124,12 @@
                     <li><span class="fa fa-users"></span> Stakeholders: {{ meeting.stakeholders_count }}</li>
                     <li><span class="fa fa-list"></span> Decision Items: {{ meeting.items_count }}</li>
                   </ul>
+                  <button type="button"
+                          class="btn btn-sm btn-default js-meeting-details"
+                          data-name="{{ meeting.name }}"
+                          data-url="{% url 'deliverables:historical_dashboard_meeting' meeting.deliverable.pk meeting.pk %}">
+                    <span class="glyphicon glyphicon-info-sign"></span> More details
+                  </button>
                 </th>
                 {% for decision_item in meeting.items %}
                   <td data-evaluated="{{ decision_item.evaluated }}" data-selected="{{ decision_item.meeting_item.meeting_decision }}">
@@ -122,6 +154,11 @@
                       <div>
                         <small><strong>{% trans 'Meeting Ranking' %}</strong> {{ decision_item.meeting_item.meeting_ranking }}</span></small>
                       </div>
+                      <div style="margin-top: 10px">
+                        <button type="button" class="btn btn-sm {% if decision_item.meeting_item.has_rationales %}btn-primary{% else %}btn-default{% endif %}">
+                          <span class="fa fa-comments"></span> Notes
+                        </button>
+                      </div>
                     {% else %}
                       <span class="glyphicon glyphicon-remove text-danger"></span> {% trans 'Not evaluated' %}
                     {% endif %}
@@ -131,6 +168,24 @@
             {% endfor %}
           </tbody>
         </table>
+      </div>
+    </div>
+    <div class="modal fade" id="modal-meeting-details">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title"></h4>
+          </div>
+          <div class="modal-body">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Close' %}</button>
+          </div>
+        </div>
       </div>
     </div>
   {% else %}

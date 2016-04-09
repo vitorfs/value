@@ -1,0 +1,30 @@
+{% load i18n %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>{% trans 'Decision items' %}</th>
+      <th>{% trans 'Selected?' %}</th>
+      <th>{% trans 'Meeting Ranking' %}</th>
+      <th>{% trans 'Value Ranking' %}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for item in items %}
+    <tr style="background-color: {{ item.background_color }}; color: {{ item.color }}">
+      <td>{{ item.decision_item.name }}</td>
+      <td class="text-center">
+        {% if item.meeting_decision %}
+          <span class="label label-success"><span class="glyphicon glyphicon-ok"></span> {% trans 'Selected' %}</span>
+        {% else %}
+          <span class="label label-danger"><span class="glyphicon glyphicon-remove"></span> {% trans 'Not selected' %}</span>
+        {% endif %}
+      </td>
+      <td class="text-right">{{ item.meeting_ranking }}</td>
+      <td class="text-right">
+        {{ item.get_value_ranking_display }}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
