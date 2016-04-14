@@ -1,6 +1,5 @@
 # coding: utf-8
 
-import copy
 from colour import Color
 import xlrd
 
@@ -473,12 +472,19 @@ def transfer(request, deliverable_id):
 @login_required
 @user_is_stakeholder
 def historical_dashboard(request, deliverable_id):
-    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    try:
+        deliverable = Deliverable.objects \
+            .select_related('manager') \
+            .get(pk=deliverable_id)
+    except Deliverable.DoesNotExist:
+        raise Http404
+
     meetings = deliverable.meeting_set \
         .annotate(items_count=Count('meetingitem', distinct=True)) \
         .annotate(stakeholders_count=Count('meetingstakeholder', distinct=True)) \
+        .select_related('deliverable') \
         .all() \
-        .order_by('-created_at')
+        .order_by('created_at')
     decision_items = deliverable.decisionitem_set \
         .prefetch_related('meetingitem_set__meeting', 'meetingitem_set__evaluation_summary__measure_value') \
         .all() \
@@ -486,17 +492,10 @@ def historical_dashboard(request, deliverable_id):
 
     for decision_item in decision_items:
         decision_item.meetings = dict()
+        for meeting in meetings:
+            decision_item.meetings[meeting.pk] = None
         for item in decision_item.meetingitem_set.all():
             decision_item.meetings[item.meeting.pk] = item
-
-    for meeting in meetings:
-        meeting.items = list()
-        for decision_item in decision_items:
-            item = copy.copy(decision_item)
-            item.evaluated = (meeting.pk in decision_item.meetings.keys())
-            if item.evaluated:
-                item.meeting_item = decision_item.meetings[meeting.pk]
-            meeting.items.append(item)
 
     return render(request, 'deliverables/historical_dashboard.html', {
         'deliverable': deliverable,
