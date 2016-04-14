@@ -9,21 +9,6 @@ var updateMeetingProgress = function (data) {
 };
 
 $(function () {
-  
-  $(document).on("click", ".js-decision-item-details", function () {
-    $(this).tooltip("hide");
-    var url = $(this).attr("data-remote-url");
-    $.ajax({
-      url: url,
-      cache: false,
-      beforeSend: function () {
-        $("#modal-decision-item-details .modal-body").html("");
-      },
-      success: function (data) {
-        $("#modal-decision-item-details .modal-body").html(data);
-      }
-    });
-  });
 
   $(".js-change-meeting-status").click(function () {
     var option = $(this).attr("data-option");

@@ -50,28 +50,6 @@ $.fn.updateFormsetIndex = function () {
 
 };
 
-$.fn.selectizeUsers = function (options, maxItems) {
-
-  maxItems = typeof maxItems !== 'undefined' ? maxItems : 1;
-
-  $(this).selectize({
-    maxItems: maxItems,
-    valueField: 'pk',
-    labelField: 'name',
-    searchField: ['name'],
-    options: options,
-    render: {
-      item: function (item, escape) {
-        return "<div>" + item.name + "</div>"
-      },
-      option: function (item, escape) {
-        return "<div><img src='" + item.img + "' alt='" + item.name + "' class='img-circle' style='margin-right: 10px;'><span style='line-height: 20px;'>" + item.name + "</span></div>";
-      }
-    }
-  });
-
-};
-
 var colorLuminance = function (hex, lum) {
   hex = String(hex).replace(/[^0-9a-f]/gi, '');
   if (hex.length < 6) {
@@ -115,41 +93,6 @@ var initializeCheckAll = function () {
     $("thead tr th input[type='checkbox']", table).prop("checked", all_checked_flag);
   });
 };
-
-
-$.fn.initialsAvatar = function () {
-  var colours = ["#1abc9c", "#2ecc71", "#3498db", "#9b59b6", "#34495e", "#16a085", "#27ae60", "#2980b9", "#8e44ad", "#2c3e50", "#f1c40f", "#e67e22", "#e74c3c", "#95a5a6", "#f39c12", "#d35400", "#c0392b", "#bdc3c7", "#7f8c8d"];
-
-  var name = $(this).attr("data-name"),
-      nameSplit = name.split(" "),
-      initials = nameSplit[0].charAt(0).toUpperCase() + nameSplit[1].charAt(0).toUpperCase();
-
-  var charIndex = initials.charCodeAt(0) - 65,
-      colourIndex = charIndex % 19;
-
-  var canvas = $(this).get(0);
-  var context = canvas.getContext("2d");
-
-  var canvasWidth = $(canvas).attr("width"),
-      canvasHeight = $(canvas).attr("height"),
-      canvasCssWidth = canvasWidth,
-      canvasCssHeight = canvasHeight;
-
-  if (window.devicePixelRatio) {
-      $(canvas).attr("width", canvasWidth * window.devicePixelRatio);
-      $(canvas).attr("height", canvasHeight * window.devicePixelRatio);
-      $(canvas).css("width", canvasCssWidth);
-      $(canvas).css("height", canvasCssHeight);
-      context.scale(window.devicePixelRatio, window.devicePixelRatio);
-  }
-
-  context.fillStyle = colours[colourIndex];
-  context.fillRect (0, 0, canvas.width, canvas.height);
-  context.font = "12px Arial";
-  context.textAlign = "center";
-  context.fillStyle = "#FFF";
-  context.fillText(initials, canvasCssWidth / 2, canvasCssHeight / 1.5);
-}
 
 $(function () {
 
@@ -207,6 +150,21 @@ $(function () {
   $(".table-clickable-row tbody tr").click(function (e) {
     e.stopPropagation();
     location.href = $(this).attr("data-href");
+  });
+
+  $("body").on("click", ".js-decision-item-details", function () {
+    $(this).tooltip("hide");
+    var url = $(this).attr("data-remote-url");
+    $.ajax({
+      url: url,
+      cache: false,
+      beforeSend: function () {
+        $("#modal-decision-item-details .modal-body").html("");
+      },
+      success: function (data) {
+        $("#modal-decision-item-details .modal-body").html(data);
+      }
+    });
   });
 
   /* Active/Inactive grid buttons */

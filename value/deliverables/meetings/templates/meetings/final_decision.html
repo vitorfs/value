@@ -135,7 +135,7 @@
                       {% if meeting.is_closed %} class="{% if form.instance.meeting_decision %}bg-success{% else %}bg-danger{% endif %}"{% endif %}>
                     <td style="vertical-align: middle;">
                       {{ form.instance.decision_item.name }}
-                      {% display_info_button form.instance %}
+                      {% display_info_button form.instance.decision_item %}
                       {% for hidden in form.hidden_fields %}
                         {{ hidden }}
                       {% endfor %}

@@ -100,7 +100,7 @@
         <table class="table table-bordered table-meetings-summary" style="margin: 0">
           <thead>
             <tr>
-              <th></th>
+              <th style="min-width: 180px"></th>
               {% for meeting in meetings %}
                 <th style="white-space:nowrap">
                   {% if meeting.name|length > 30 %}
@@ -132,18 +132,9 @@
           <tbody>
             {% for decision_item in decision_items %}
               <tr>
-                <th style="white-space:nowrap">
-                  {% if decision_item.name|length > 30 %}
-                    <span class="help-cursor"
-                          data-toggle="tooltip"
-                          data-placement="top"
-                          title="{{ decision_item.name }}"
-                          data-container="body">
-                      {{ decision_item.name|truncatechars:30 }}
-                    </span>
-                  {% else %}
-                    {{ decision_item.name }}
-                  {% endif %}
+                <th>
+                  {{ decision_item.name }}
+                  {% display_info_button decision_item %}
                 </th>
                 {% for meeting, meeting_item in decision_item.meetings.iteritems %}
                   {% if meeting_item != None %}
@@ -212,6 +203,7 @@
         </div>
       </div>
     </div>
+    {% include 'deliverables/decision_items/includes/modal.html' %}
   {% else %}
     <div class="well blank-state">
       <span class="fa fa-line-chart"></span>

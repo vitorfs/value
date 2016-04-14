@@ -5,8 +5,6 @@
 {% block javascript %}
   <script>
     $(function () {
-      var options = [{% for stakeholder in users %}{ name: "{{ stakeholder.profile.get_display_name }}", pk: {{ stakeholder.pk }}, img: "{% avatar stakeholder 20 %}" }{% if not forloop.last %}, {% endif %}{% endfor %}];
-      $("#id_user").selectizeUsers(options);
 
       $("#id_user").change(function () {
         if ($(this).val() !== "") {
@@ -101,7 +99,11 @@
           </div>
           <div class="modal-body">
             <label for="id_user" class="control-label">{% trans "Select the new owner's name:" %}</label>
-            <select id="id_user" name="user"></select>
+            <select id="id_user" name="user">
+              {% for stakeholder in deliverable.stakeholders.all %}
+                <option value="{{ stakeholder.pk }}">{{ stakeholder.profile.get_display_name }}</option>
+              {% endfor %}
+            </select>
           </div>
           <div class="modal-footer">
             <button type="submit" id="confirm-transfer" class="btn btn-danger btn-block" disabled>

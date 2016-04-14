@@ -66,10 +66,10 @@ def display_ranking_label(ranking):
 
 
 @register.simple_tag
-def display_info_button(meeting_item):
+def display_info_button(decision_item):
     remote = reverse(
         'deliverables:details_decision_item',
-        args=(meeting_item.meeting.deliverable.pk, meeting_item.decision_item.pk)
+        args=(decision_item.deliverable.pk, decision_item.pk)
     )
     html = u'''
         <span data-toggle="tooltip"

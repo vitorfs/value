@@ -11,7 +11,7 @@
             <tr>
               <td style="width: {% if measure_values.count > 5 %} 25% {% else %} 40% {% endif %};">
                 <span class="pull-right" style="padding: 0 15px;">
-                  {% display_info_button meeting_item %}
+                  {% display_info_button meeting_item.decision_item %}
                 </span>
                 <a href="javascript:void(0);" class="btn-toggle">{{ meeting_item.decision_item.name }}</a>
               </td>
