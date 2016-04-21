@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% load i18n static %}
+
+{% block javascript %}
+  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
+  <script type="text/javascript">
+  $(function () {
+    $('#container').highcharts({
+      chart: { type: 'line' },
+      title: { text: '{{ chart_item.name }}' },
+      xAxis: {
+        categories: [{% for mi in meeting_items %}'{{ mi.meeting.name }} ({{ mi.meeting.created_at|date:"M j, Y" }})'{% if not forloop.last %}, {% endif %}{% endfor %}]
+      },
+      yAxis: {
+        title: {
+          text: "{% trans 'Value Ranking' %}"
+        },
+        max: 100,
+        min: -100
+      },
+      plotOptions: {
+        line: {
+          dataLabels: {
+            enabled: true
+          },
+          enableMouseTracking: false
+        }
+      },
+      series: [
+        {
+          name: '{{ chart_item.name }}',
+          data: [{% for mi in meeting_items %}{{ mi.value_ranking }}{% if not forloop.last %}, {% endif %}{% endfor %}]
+        }
+      ]
+    });
+  });
+  </script>
+{% endblock %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'deliverables:index' %}">{% trans 'Deliverables' %}</a></li>
+    <li><a href="{% url 'deliverables:deliverable' deliverable.pk %}">{{ deliverable.name }}</a></li>
+    <li><a href="{% url 'deliverables:historical_dashboard' deliverable.pk %}">{% trans 'Historical Dashboard' %}</a></li>
+    <li class="active">{% trans 'Decision Items Progress' %}</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+  {% include 'deliverables/includes/menu.html' with active='historical_dashboard' deliverable=deliverable %}
+  <div class="row">
+    <div class="col-md-12">
+      {% include 'deliverables/historical_dashboard/includes/menu.html' with active='decision_items_progress' %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3 col-sm-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            {% trans 'Decision Items' %}
+          </h3>
+        </div>
+        <div class="list-group">
+          {% for decision_item in decision_items %}
+            <a href="?id={{ decision_item.pk }}" class="list-group-item{% if chart_item.pk == decision_item.pk %} active{% endif %}">
+              {{ decision_item.name }}
+              <small>
+                <strong>
+                  (Meetings: {{ decision_item.items_count }})
+                </strong>
+              </small>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9 col-sm-8">
+      {% if meeting_items %}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              {% trans 'Decision Item Progress' %}
+            </h3>
+          </div>
+          <div class="panel-body" id="container" style="height: 500px">
+
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">{% trans 'Details' %}</h3>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Meeting</th>
+                <th>Date</th>
+                <th>Value Ranking</th>
+                <th>Meeting Ranking</th>
+                <th>Was selected?</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for mi in meeting_items %}
+                <tr class="{% if mi.meeting_decision %}success{% else %}danger{% endif %}">
+                  <td>{{ mi.meeting.name }}</td>
+                  <td>{{ mi.meeting.created_at|date:"M j, Y" }}</td>
+                  <td>{{ mi.value_ranking }}</td>
+                  <td>{{ mi.meeting_ranking }}</td>
+                  <td>
+                    {{ mi.meeting_decision|yesno }}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="well blank-state">
+          <span class="fa fa-line-chart"></span>
+          <h3>{% trans "There's no enough data to display the Decision Item Progress." %}</h3>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock content %}

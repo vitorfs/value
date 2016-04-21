@@ -1,0 +1,16 @@
+{% load i18n %}
+
+<ul class="nav nav-pills" style="margin-bottom: 20px">
+  <li role="presentation"{% if active == 'summary' %} class="active"{% endif %}>
+    <a href="{% url 'deliverables:historical_dashboard' deliverable.pk %}">
+      <span class="fa fa-list-alt"></span>
+      {% trans 'Summary' %}
+    </a>
+  </li>
+  <li role="presentation"{% if active == 'decision_items_progress' %} class="active"{% endif %}>
+    <a href="{% url 'deliverables:historical_dashboard_progress' deliverable.pk %}">
+      <span class="fa fa-line-chart"></span>
+      {% trans 'Decision Items Progress' %}
+    </a>
+  </li>
+</ul>

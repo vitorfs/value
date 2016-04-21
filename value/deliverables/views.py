@@ -497,10 +497,44 @@ def historical_dashboard(request, deliverable_id):
         for item in decision_item.meetingitem_set.all():
             decision_item.meetings[item.meeting.pk] = item
 
-    return render(request, 'deliverables/historical_dashboard.html', {
+    return render(request, 'deliverables/historical_dashboard/summary.html', {
         'deliverable': deliverable,
         'meetings': meetings,
         'decision_items': decision_items
+    })
+
+
+@login_required
+@user_is_stakeholder
+def historical_dashboard_progress(request, deliverable_id):
+    try:
+        deliverable = Deliverable.objects \
+            .select_related('manager') \
+            .get(pk=deliverable_id)
+    except Deliverable.DoesNotExist:
+        raise Http404
+
+    decision_item_id = request.GET.get('id', None)
+    if decision_item_id:
+        try:
+            chart_item = deliverable.decisionitem_set.get(pk=decision_item_id)
+        except DecisionItem.DoesNotExist:
+            return redirect(reverse('deliverables:historical_dashboard_progress', args=(deliverable.pk, )))
+    else:
+        chart_item = deliverable.decisionitem_set.all().order_by(Lower('name')).first()
+
+    meeting_items = chart_item.meetingitem_set.order_by('meeting__created_at').select_related('meeting')
+    decision_items = deliverable \
+        .decisionitem_set \
+        .all() \
+        .annotate(items_count=Count('meetingitem')) \
+        .order_by(Lower('name'))
+
+    return render(request, 'deliverables/historical_dashboard/decision_items_progress.html', {
+        'deliverable': deliverable,
+        'meeting_items': meeting_items,
+        'decision_items': decision_items,
+        'chart_item': chart_item
     })
 
 
@@ -552,7 +586,7 @@ def historical_dashboard_meeting(request, deliverable_id, meeting_id):
             item.color = '#fff'
             red_index += 1
 
-    return render(request, 'deliverables/partial_meeting_historical_dashboard.html', {
+    return render(request, 'deliverables/historical_dashboard/includes/partial_meeting.html', {
         'meeting': meeting,
         'items': items
     })
