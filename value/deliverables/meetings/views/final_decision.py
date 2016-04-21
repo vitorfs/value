@@ -54,7 +54,20 @@ def save_final_decision(request, deliverable_id, meeting_id):
 @require_POST
 @transaction.atomic
 def save_final_decision_rationale(request, deliverable_id, meeting_id):
-    pass
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    if meeting.meeting_decision_rationale:
+        rationale = meeting.meeting_decision_rationale
+    else:
+        rationale = Rationale.objects.create(created_by=request.user)
+        meeting.meeting_decision_rationale = rationale
+        meeting.save()
+
+    form = RationaleForm(request.POST, instance=rationale)
+    if form.is_valid():
+        rationale = form.save()
+        return HttpResponse()
+    else:
+        return HttpResponseBadRequest()
 
 
 @login_required
@@ -94,10 +107,12 @@ def save_final_decision_item_rationale(request, deliverable_id, meeting_id, meet
             rationale = mi.meeting_decision_rationale
             mi.meeting_decision_rationale = None
             mi.save()
-
             rationale.delete()
             mi.meeting.deliverable.save()
             mi.meeting.calculate_meeting_related_rationales_count()
+            context = get_meeting_progress(mi.meeting)
+            return HttpResponse(json.dumps(context), content_type='application/json')
+        else:
             context = get_meeting_progress(mi.meeting)
             return HttpResponse(json.dumps(context), content_type='application/json')
 

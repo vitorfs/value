@@ -84,10 +84,11 @@
 
     <div class="row">
       <div class="col-md-10 col-md-offset-1">
-        {% comment %}
-        <button type="button" class="btn btn-primary pull-right js-placebo-save">
-          <span class="glyphicon glyphicon-ok"></span> {% trans 'Save changes' %}
-        </button>
+        {% if not meeting.is_closed %}
+          <button type="button" class="btn btn-primary pull-right js-placebo-save">
+            <span class="glyphicon glyphicon-ok"></span> {% trans 'Save changes' %}
+          </button>
+        {% endif %}
 
         <p class="lead">Meeting decision</p>
 
@@ -98,15 +99,22 @@
             </h3>
           </div>
           <div class="panel-body">
-            <form id="form-final-decision-rationale"
-                  method="post"
-                  action="{% url 'deliverables:meetings:save_final_decision_rationale' meeting.deliverable.pk meeting.pk %}">
-              {% csrf_token %}
-              <textarea class="form-control expanding" rows="3" id="final-decision-rationale"></textarea>
-            </form>
+            {% if meeting.is_closed %}
+              {% if meeting.meeting_decision_rationale %}
+                {{ meeting.meeting_decision_rationale.text|default_if_none:''|linebreaks }}
+              {% else %}
+                <em class="text-muted">{% trans 'No description' %}</em>
+              {% endif %}
+            {% else %}
+              <form id="form-meeting-decision-rationale"
+                    method="post"
+                    action="{% url 'deliverables:meetings:save_final_decision_rationale' meeting.deliverable.pk meeting.pk %}">
+                {% csrf_token %}
+                <textarea class="form-control expanding" rows="3" id="meeting-decision-rationale" name="text">{{ meeting.meeting_decision_rationale.text|default_if_none:'' }}</textarea>
+              </form>
+            {% endif %}
           </div>
         </div>
-        {% endcomment %}
 
         <form id="form-final-decision"
               method="post"

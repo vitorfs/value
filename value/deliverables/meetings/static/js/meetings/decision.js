@@ -98,4 +98,17 @@ $(function () {
 
   });
 
+  var saveMeetingRationale = function () {
+    var form = $("#form-meeting-decision-rationale");
+    $.ajax({
+      url: $(form).attr("action"),
+      type: 'post',
+      data: $(form).serialize()
+    });
+    return false;
+  };
+
+  $("#meeting-decision-rationale").blur(saveMeetingRationale);
+  $("#form-meeting-decision-rationale").submit(saveMeetingRationale);
+
 });
