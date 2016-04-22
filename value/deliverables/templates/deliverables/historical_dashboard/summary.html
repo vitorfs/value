@@ -135,6 +135,8 @@
                     {% for meeting, meeting_item in decision_item.meetings.iteritems %}
                       {% if meeting_item != None %}
                         <td data-evaluated="True" data-selected="{{ meeting_item.meeting_decision }}">
+                          {{ meeting_item.meeting.pk }}
+                          {{ meeting_item.meeting.name }}
                           <p>
                             {% if meeting_item.meeting_decision %}
                               <span class="label label-success">
@@ -156,6 +158,13 @@
                           <div>
                             <small>
                               <strong>{% trans 'Value Ranking' %}</strong> {{ meeting_item.value_ranking_as_html|safe }}
+                              {% if meeting_item.variance == 0.0 %}
+                                <span class="glyphicon glyphicon-minus text-warning"></span>
+                              {% elif meeting_item.variance > 0.0 %}
+                                <span class="glyphicon glyphicon-triangle-top text-success"></span>
+                              {% else %}
+                                <span class="glyphicon glyphicon-triangle-bottom text-danger"></span>
+                              {% endif %}
                             </small>
                           </div>
                           <div>

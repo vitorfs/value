@@ -2,6 +2,7 @@
 
 from colour import Color
 import xlrd
+from collections import OrderedDict
 
 from django.http import HttpResponse, HttpResponseBadRequest, Http404
 from django.core.urlresolvers import reverse
@@ -491,11 +492,27 @@ def historical_dashboard(request, deliverable_id):
         .order_by(Lower('name'))
 
     for decision_item in decision_items:
-        decision_item.meetings = dict()
+        item_meetings = dict()
         for meeting in meetings:
-            decision_item.meetings[meeting.pk] = None
+            item_meetings[meeting.pk] = None
         for item in decision_item.meetingitem_set.all():
-            decision_item.meetings[item.meeting.pk] = item
+            item_meetings[item.meeting.pk] = item
+            print u'{0} => {1}'.format(item.meeting.pk, item.value_ranking)
+        # Put the meeting items in the correct order
+        item_meetings = OrderedDict(sorted(item_meetings.items()))
+
+        # Calculate the value ranking variation
+        previous_item = None
+        for meeting, item in item_meetings.iteritems():
+            if item is not None:
+                if previous_item is not None:
+                    variance = item.value_ranking - previous_item.value_ranking
+                else:
+                    variance = 0
+                item.variance = round(variance, 2)
+                previous_item = item
+
+        decision_item.meetings = item_meetings
 
     return render(request, 'deliverables/historical_dashboard/summary.html', {
         'deliverable': deliverable,
