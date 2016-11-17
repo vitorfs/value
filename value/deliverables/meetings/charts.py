@@ -82,6 +82,25 @@ class Highcharts(object):
         }
         return options
 
+    def fix_serie_data_percentage(self, series):
+        if series:
+            size = len(series[0]['data'])
+            na_serie = list()
+            for i in range(0, size):
+                na_serie.append(100.0)
+            for serie in series:
+                for index, value in enumerate(serie['data']):
+                    na_serie[index] -= value
+            na_serie = map(lambda x: round(x, 2), na_serie)
+            display_serie = reduce(lambda x, y: x + y, na_serie)
+            if display_serie > 0:
+                series.insert(0, {
+                    'name': 'N/A',
+                    'data': na_serie,
+                    'color': '#cccccc'
+                })
+        return series
+
     ''' Summary Charts '''
 
     def stakeholders_input_bar_chart(self, meeting):
@@ -303,6 +322,8 @@ class Highcharts(object):
                     'color': measure_value.color
                 })
 
+            series = self.fix_serie_data_percentage(series)
+
             options = self._base_stacked_chart(categories, series, chart_type)
             groups_text = get_stakeholders_group_names(stakeholder_ids)
             options['subtitle'] = {'text': u'{0} {1}'.format(groups_text, _('opinion'))}
@@ -340,7 +361,7 @@ class Highcharts(object):
             evaluations = evaluations.select_related('factor', 'factor__group', 'measure', 'measure_value')
             measure = evaluations.first().measure
 
-            data = {}
+            data = dict()
             measure_values = measure.measurevalue_set.values_list('description', flat=True)
             for evaluation in evaluations:
                 if evaluation.factor.group:
@@ -350,7 +371,7 @@ class Highcharts(object):
                     )
                 else:
                     label = evaluation.factor.name
-                data[label] = {}
+                data[label] = dict()
                 for value in measure_values:
                     data[label][value] = 0
 
@@ -366,17 +387,19 @@ class Highcharts(object):
 
             sorted_data = sorted(data.items(), key=operator.itemgetter(0))
 
-            categories = []
+            categories = list()
             for factor in sorted_data:
                 categories.append(factor[0])
 
-            series = []
+            series = list()
             for value in measure.measurevalue_set.all():
-                serie_data = []
+                serie_data = list()
                 for factor in sorted_data:
                     percentage = get_votes_percentage(max_votes, factor[1][value.description])
                     serie_data.append(percentage)
                 series.append({'name': value.description, 'data': serie_data, 'color': value.color})
+
+            series = self.fix_serie_data_percentage(series)
 
             options = self._base_stacked_chart(categories, series, chart_type)
 
