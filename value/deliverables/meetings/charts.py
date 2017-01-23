@@ -94,7 +94,7 @@ class Highcharts(object):
             na_serie = map(lambda x: round(x, 2), na_serie)
             display_serie = reduce(lambda x, y: x + y, na_serie)
             if display_serie > 0:
-                series.insert(0, {
+                series.append({
                     'name': 'N/A',
                     'data': na_serie,
                     'color': '#cccccc'

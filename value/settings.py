@@ -83,7 +83,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Europe/Helsinki'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
