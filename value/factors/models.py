@@ -7,7 +7,7 @@ from value.measures.models import Measure
 
 
 class Group(models.Model):
-    name = models.CharField(_('name'), max_length=255, unique=True)
+    name = models.CharField(_('name'), max_length=255)
 
     class Meta:
         db_table = 'factors_groups'
@@ -19,7 +19,7 @@ class Group(models.Model):
 
 
 class Factor(models.Model):
-    name = models.CharField(_('name'), max_length=255, unique=True)
+    name = models.CharField(_('name'), max_length=255)
     description = models.TextField(_('description'), max_length=2000, null=True, blank=True)
     measure = models.ForeignKey(Measure, null=True, blank=True, on_delete=models.SET_NULL)
     is_active = models.BooleanField(_('active'), default=True)

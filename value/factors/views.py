@@ -15,7 +15,7 @@ from value.factors.forms import CreateFactorForm, ChangeFactorForm, GroupForm
 @login_required
 @user_passes_test(lambda user: user.is_superuser)
 def index(request):
-    factors = Factor.objects.all()
+    factors = Factor.objects.objects.select_related('group').order_by('group__name', 'name')
     return render(request, 'factors/index.html', {'factors': factors})
 
 

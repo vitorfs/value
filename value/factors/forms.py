@@ -22,7 +22,7 @@ class BaseFactorForm(forms.ModelForm):
     )
     group = forms.ModelChoiceField(
         widget=forms.Select(),
-        queryset=Group.objects.all(),
+        queryset=Group.objects.order_by('name'),
         empty_label=_('Select…'),
         required=False
     )
