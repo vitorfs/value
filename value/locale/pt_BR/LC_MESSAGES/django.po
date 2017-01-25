@@ -357,25 +357,25 @@ msgstr ""
 
 #: value/deliverables/forms.py:60 value/deliverables/forms.py:114
 msgid "Select the measure to be used within the decision-making meetings"
-msgstr ""
+msgstr "Selecione a medida para ser utilizada nas reuniões de tomada de decisão"
 
 #: value/deliverables/meetings/apps.py:9
 #: value/deliverables/meetings/models.py:92
 msgid "meetings"
-msgstr ""
+msgstr "reuniões"
 
 #: value/deliverables/meetings/charts.py:50
 msgid "Percentage of evaluations"
-msgstr ""
+msgstr "Percentual de avaliações"
 
 #: value/deliverables/meetings/charts.py:55
 #: value/deliverables/meetings/charts.py:79
 msgid "Percentage:"
-msgstr ""
+msgstr "Percentual:"
 
 #: value/deliverables/meetings/charts.py:110
 msgid "100% means the stakeholder evaluated all the meeting's decision items."
-msgstr ""
+msgstr "100% significa que o stakeholder avaliou todos os itens de decisão ra reunião"
 
 #: value/deliverables/meetings/charts.py:115
 #: value/deliverables/meetings/charts.py:120
@@ -385,7 +385,7 @@ msgstr ""
 #: value/deliverables/meetings/charts.py:117
 #: value/deliverables/meetings/charts.py:166
 msgid "Usage percentage:"
-msgstr ""
+msgstr "Percentual de utilização"
 
 #: value/deliverables/meetings/charts.py:158
 msgid "Overall Value Factors Usage"
@@ -684,11 +684,11 @@ msgstr ""
 #: value/users/templates/users/roles.html:135
 #: value/users/templates/users/roles.html:169
 msgid "Close"
-msgstr ""
+msgstr "Fechar"
 
 #: value/deliverables/meetings/templates/meetings/dashboard/base_charts.html:66
 msgid "Discussion"
-msgstr ""
+msgstr "Discussão"
 
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_chart.html:6
 #: value/deliverables/meetings/templates/meetings/dashboard/decision_items_acceptance/chart.html:10
@@ -698,11 +698,11 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/chart.html:10
 #: value/deliverables/meetings/templates/meetings/dashboard/value_ranking/chart.html:6
 msgid "Chart Options"
-msgstr ""
+msgstr "Opções do Gráfico"
 
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:41
 msgid "The meeting is still ongoing."
-msgstr ""
+msgstr "A reunião ainda está em andamento."
 
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:43
 msgid ""

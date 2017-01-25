@@ -91,6 +91,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+'''
 LANGUAGES = (
     ('en-us', 'English'),
     ('pt-br', 'Portuguese')
@@ -99,7 +100,7 @@ LANGUAGES = (
 LOCALE_PATHS = (
     PROJECT_DIR.child('locale'),
 )
-
+'''
 
 STATIC_ROOT = PROJECT_DIR.parent.parent.child('static')
 STATIC_URL = '/static/'
@@ -155,3 +156,46 @@ ENVIRONMENT_NAME = config('ENVIRONMENT_NAME', default='')
 FIXTURE_DIRS = (
     PROJECT_DIR.child('fixtures'),
 )
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'mail_admins'],
+            'level': 'INFO',
+        },
+        'django.security.DisallowedHost': {
+            'handlers': ['null'],
+            'propagate': False,
+        },
+        'py.warnings': {
+            'handlers': ['console'],
+        },
+    }
+}
