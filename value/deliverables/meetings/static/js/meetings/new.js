@@ -41,13 +41,21 @@ $(function () {
       });
     }
     else if (target === "collapse-decision-items") {
-      $("#heading-decision-items .panel-info .selected-items-count").html($("#decisionItemsTable tbody tr td input[type='checkbox']:checked").length);
+      $("#heading-decision-items .panel-info .selected-items-count").html($("table.table-decision-items tbody tr td input[type='checkbox']:checked").length);
     }
   });
 
   $("#new-meeting").submit(function () {
     $(".btn-start-meeting").prop("disabled", true);
     $(".btn-start-meeting").text("Starting the meeting…");
+  });
+
+  $("table.table-check-all.table-decision-items").each(function () {
+    var totalInputs = $("tbody tr", this).length;
+    var totalInputsChecked = $("tbody tr td input[type='checkbox']:checked", this).length;
+    if (totalInputs === totalInputsChecked) {
+      $("thead tr th input[type='checkbox']", this).prop("checked", true);
+    }
   });
 
 });

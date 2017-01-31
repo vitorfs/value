@@ -91,16 +91,16 @@ USE_L10N = False
 
 USE_TZ = True
 
-'''
+
 LANGUAGES = (
     ('en-us', 'English'),
-    ('pt-br', 'Portuguese')
+    #('pt-br', 'Portuguese')
 )
 
 LOCALE_PATHS = (
     PROJECT_DIR.child('locale'),
 )
-'''
+
 
 STATIC_ROOT = PROJECT_DIR.parent.parent.child('static')
 STATIC_URL = '/static/'

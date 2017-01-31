@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db.models import Q, Count, Case, Value, When, BooleanField
 from django.db import transaction
 from django.utils import timezone
 from django.utils.html import mark_safe
@@ -37,7 +37,17 @@ def index(request, deliverable_id):
 def new(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     decision_items_fields = DecisionItemLookup.get_visible_fields()
-    decision_items = deliverable.decisionitem_set.all()
+
+    decision_items = deliverable.decisionitem_set.all() \
+        .annotate(meeting_count=Count('meetingitem')) \
+        .annotate(
+            is_new=Case(
+                When(meeting_count=0, then=Value(True)),
+                When(meeting_count__gt=0, then=Value(False)),
+                default=Value(True),
+                output_field=BooleanField(),
+            )
+        ).order_by('-is_new', 'name',)
 
     meeting = Meeting(deliverable=deliverable)
     if request.method == 'POST':
@@ -85,7 +95,7 @@ def new(request, deliverable_id):
             .filter(is_active=True) \
             .order_by('first_name', 'last_name', 'username')
         selected_stakeholders = meeting_stakeholders
-        selected_decision_items = decision_items
+        selected_decision_items = decision_items.filter(is_new=True)
     available_stakeholders = User.objects \
         .exclude(id__in=deliverable.stakeholders.all()) \
         .exclude(id__in=selected_stakeholders) \

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load avatar attr i18n static %}
+{% load avatar i18n static %}
 
 {% block javascript %}
   <script src="{% static 'js/meetings/new.js' %}"></script>
@@ -120,7 +120,7 @@
                     <button type="button" class="close" data-dismiss="alert" aria-label="{% trans 'Close' %}">
                       <span aria-hidden="true">&times;</span>
                     </button>
-                    Select at least one stakeholder before starting the meeting.
+                    {% trans 'Select at least one stakeholder before starting the meeting.' %}
                   </div>
                 {% endif %}
                 <div class="deliverable-manager" style="margin-bottom: 20px">
@@ -162,41 +162,13 @@
                     {% trans 'Select at least one decision item before starting the meeting.' %}
                   </div>
                 {% endif %}
-                <table id="decisionItemsTable"
-                       class="table table-striped table-bordered table-sortable table-check-all"
-                       style="margin-bottom: 0;">
-                  <thead>
-                    <tr>
-                      <th>
-                        <input type="checkbox"{% if decision_items.count == selected_decision_items.count %} checked{% endif %}>
-                      </th>
-                      {% for name, field in decision_items_fields.items %}
-                        <th>{{ field.label }}</th>
-                      {% endfor %}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for item in decision_items %}
-                    <tr>
-                      <td>
-                        <input type="checkbox"
-                               name="decision_item"
-                               value="{{ item.pk }}"
-                               {% if item in selected_decision_items %} checked{% endif %}>
-                      </td>
-                      {% for name, field in decision_items_fields.items %}
-                        <td>{{ item|attr:name }}</td>
-                      {% endfor %}
-                    </tr>
-                    {% empty %}
-                      <tr>
-                        <td colspan="{{ decision_items_fields.items|length|add:'1' }}">
-                          {% trans 'No data' %}
-                        </td>
-                      </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
+
+                {% regroup decision_items by is_new as decision_items_list %}
+                {% for grouped_decision_items in decision_items_list %}
+                  <p><strong>{% if grouped_decision_items.grouper == True %}{% trans 'New decision items' %}{% else %}{% trans 'Past decision items' %}{% endif %}</strong></p>
+                  {% include 'meetings/includes/partial_decision_items_table.html' with decision_items=grouped_decision_items.list %}
+                {% endfor %}
+
               </div>
             </div>
           </div>
