@@ -208,6 +208,14 @@ $(function () {
         $("span", option).removeClass().addClass("fa fa-spinner fa-spin");
       },
       success: function (data) {
+        // Force clean state in case of delay on evaluation
+        $(row).removeClass("selected");
+        $(".evaluable", row).each(function () {
+          $(this).css("background-color", "transparent");
+          $(".glyphicon", this).removeClass("glyphicon-check").addClass("glyphicon-unchecked");
+        });
+
+        // Proceed to success animation
         var icon = "";
         $(option).html('<span class="glyphicon glyphicon-ok"></span> Saved!');
         if (do_evaluate) {
