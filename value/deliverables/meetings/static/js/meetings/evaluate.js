@@ -208,29 +208,29 @@ $(function () {
         $("span", option).removeClass().addClass("fa fa-spinner fa-spin");
       },
       success: function (data) {
-        // Force clean state in case of delay on evaluation
-        $(row).removeClass("selected");
-        $(".evaluable", row).each(function () {
-          $(this).css("background-color", "transparent");
-          $(".glyphicon", this).removeClass("glyphicon-check").addClass("glyphicon-unchecked");
-        });
-
-        // Proceed to success animation
-        var icon = "";
         $(option).html('<span class="glyphicon glyphicon-ok"></span> Saved!');
-        if (do_evaluate) {
-          var color = $(option).attr("data-color");
-          $(row).addClass("selected");
-          $(option).css("background-color", color);
-          icon = '<span class="glyphicon glyphicon-check"></span>'
-        }
-        else {
-          icon = '<span class="glyphicon glyphicon-unchecked"></span>'
-        }
 
         setTimeout(function () {
-          $(option).html(icon);
+          // Clear state
+          $("td.evaluable", row).not(option).each(function () {
+            $(this).css("background-color", "transparent");
+            $(".glyphicon", this).removeClass("glyphicon-check").addClass("glyphicon-unchecked");
+          });
+
+          // Update factor evaluation interface
+          if (do_evaluate) {
+            var color = $(option).attr("data-color");
+            $(row).addClass("selected");
+            $(option).css("background-color", color);
+            $(option).html('<span class="glyphicon glyphicon-check"></span>');
+          }
+          else {
+            $(option).html('<span class="glyphicon glyphicon-unchecked"></span>');
+          }
+
           $(panel).updatePanelProgress(option);
+
+
         }, 500);
 
         updateMeetingProgress(data);
