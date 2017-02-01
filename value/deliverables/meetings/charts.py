@@ -294,15 +294,54 @@ class Highcharts(object):
         }
         return options
 
+    def _build_evaluation_grid(self, meeting, evaluations, meeting_items):
+        evaluation_list = evaluations.select_related('measure_value', 'meeting_item') \
+            .values('meeting_item', 'measure_value') \
+            .annotate(votes=Count('measure_value')) \
+            .order_by('meeting_item', 'measure_value__order')
+        evaluation_grid = list()
+
+        measure_values = meeting.measure.measurevalue_set.all()
+        measure_value_count = measure_values.count()
+        for meeting_item in meeting_items:
+            meeting_item_data = [meeting_item.pk, meeting_item.decision_item.name, ] + map(lambda x: 0, range(measure_value_count))
+            for index, measure_value in enumerate(measure_values):
+                for evaluation in evaluation_list:
+                    if evaluation['meeting_item'] == meeting_item.pk and evaluation['measure_value'] == measure_value.pk:
+                        meeting_item_data[index + 2] = evaluation['votes']
+            evaluation_grid.append(meeting_item_data)
+
+        return evaluation_grid
+
     def _decision_items_overview(self, meeting, chart_type, stakeholder_ids, evaluations, meeting_items):
         options = dict()
         if evaluations.exists():
+
+            PK = 0
+            NAME = 1
+            OFFSET = len((PK, NAME, ))
+
             measure = meeting.measure
             stakeholders_count = len(stakeholder_ids)
             factors_count = meeting.factors.count()
             max_votes = stakeholders_count * factors_count
 
-            categories = categories = map(lambda mi: mi.decision_item.name, meeting_items)
+            eg = self._build_evaluation_grid(meeting, evaluations, meeting_items)
+            seg = sorted(eg, key=lambda e: (-e[2], -e[3]))
+            print seg
+
+            categories = map(lambda item: item[NAME], seg)
+            series = list()
+
+            for index, measure_value in enumerate(measure.measurevalue_set.all()):
+                series.append({
+                    'name': measure_value.description,
+                    'data': map(lambda item: get_votes_percentage(max_votes, item[index + OFFSET]), seg),
+                    'color': measure_value.color
+                })
+
+            '''
+            categories = map(lambda mi: mi.decision_item.name, meeting_items)
             series = list()
 
             evaluations_list = list(evaluations.select_related('measure_value', 'meeting_item'))
@@ -321,6 +360,7 @@ class Highcharts(object):
                     'data': serie_data,
                     'color': measure_value.color
                 })
+            '''
 
             series = self.fix_serie_data_percentage(series)
 
