@@ -497,7 +497,6 @@ def historical_dashboard(request, deliverable_id):
             item_meetings[meeting.pk] = None
         for item in decision_item.meetingitem_set.all():
             item_meetings[item.meeting.pk] = item
-            print u'{0} => {1}'.format(item.meeting.pk, item.value_ranking)
         # Put the meeting items in the correct order
         item_meetings = OrderedDict(sorted(item_meetings.items()))
 

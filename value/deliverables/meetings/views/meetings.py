@@ -87,7 +87,6 @@ def new(request, deliverable_id):
             messages.success(request, _(u'The meeting {0} was created successfully.').format(meeting.name))
             return redirect(reverse('deliverables:meetings:meeting', args=(deliverable.pk, meeting.pk,)))
         else:
-            print form.errors
             messages.error(request, _(u'Please correct the error below.'))
     else:
         form = NewMeetingForm(instance=meeting, initial={'started_at': timezone.now()})
