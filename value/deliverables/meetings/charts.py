@@ -326,24 +326,20 @@ class Highcharts(object):
             factors_count = meeting.factors.count()
             max_votes = stakeholders_count * factors_count
 
-            evaluation_grid = self._build_evaluation_grid(meeting, evaluations, meeting_items)
+            eg = self._build_evaluation_grid(meeting, evaluations, meeting_items)
 
             measure_value_count = measure.measurevalue_set.count()
             ordering_middle_point = int(round(measure_value_count / 2.0))
 
-            for index, measure_value in enumerate(measure.measurevalue_set.all()):
-                if (index + 1) > ordering_middle_point:
-                    evaluation_grid = sorted(evaluation_grid, key=operator.itemgetter(OFFSET + index))
-                else:
-                    evaluation_grid = sorted(evaluation_grid, key=operator.itemgetter(OFFSET + index), reverse=True)
+            seg = sorted(eg, key=operator.itemgetter(2))
 
-            categories = map(lambda item: item[NAME], evaluation_grid)
+            categories = map(lambda item: item[NAME], seg)
             series = list()
 
             for index, measure_value in enumerate(measure.measurevalue_set.all()):
                 series.append({
                     'name': measure_value.description,
-                    'data': map(lambda item: get_votes_percentage(max_votes, item[index + OFFSET]), evaluation_grid),
+                    'data': map(lambda item: get_votes_percentage(max_votes, item[index + OFFSET]), seg),
                     'color': measure_value.color
                 })
 
