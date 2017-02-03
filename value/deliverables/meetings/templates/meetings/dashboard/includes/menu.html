@@ -18,6 +18,10 @@
        href="{% url 'deliverables:meetings:value_ranking' meeting.deliverable.pk meeting.pk %}">
       {% trans 'Value Ranking' %}
     </a>
+    <a class="list-group-item{% if active == 'stakeholders_agreement' %} active{% endif %}"
+       href="{% url 'deliverables:meetings:stakeholders_agreement' meeting.deliverable.pk meeting.pk %}">
+      {% trans 'Stakeholder\'s Agreement Matrix' %}
+    </a>
   </div>
 </div>
 <div class="panel panel-default panel-menu">

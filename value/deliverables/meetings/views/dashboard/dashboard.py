@@ -268,7 +268,7 @@ def stakeholders_agreement(request, deliverable_id, meeting_id):
                         agreement_sum += 1
             ''' Translate the raw result into percentages '''
             percentage_agreement_sum = get_votes_percentage(max_agreement, agreement_sum)
-            stakeholder_agreement_row[1].append(percentage_agreement_sum)
+            stakeholder_agreement_row[1].append((ms_2, percentage_agreement_sum, ))
         stakeholders_agreement_list.append(stakeholder_agreement_row)
 
     return render(request, 'meetings/dashboard/stakeholders_agreement.html', {
