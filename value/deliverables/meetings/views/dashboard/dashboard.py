@@ -1,6 +1,8 @@
 # coding: utf-8
 
 import json
+import itertools
+import operator
 
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
@@ -238,7 +240,8 @@ def stakeholders_agreement(request, deliverable_id, meeting_id):
         for mi in meeting_items:
             dataset[ms.stakeholder.pk][mi.pk] = list()
             for mf in meeting_factors:
-                dataset[ms.stakeholder.pk][mi.pk].append(0)
+                # set 0 as a invalid id for measure value, and 99 as a very high order, so to have least priority
+                dataset[ms.stakeholder.pk][mi.pk].append((0, 99))
 
     ''' Create a lookup for the value factors, for fast access '''
     factors_lookup = dict()
@@ -246,12 +249,14 @@ def stakeholders_agreement(request, deliverable_id, meeting_id):
         factors_lookup[factor['id']] = index
 
     ''' Generate the evaluation matrix, filling the dataset with all the existing evaluations '''
-    evaluations = meeting.get_evaluations().values_list('user', 'meeting_item', 'factor', 'measure_value')
+    evaluations = meeting.get_evaluations() \
+        .select_related('measure_value') \
+        .values_list('user', 'meeting_item', 'factor', 'measure_value', 'measure_value__order')
     for e in evaluations:
         user_index = e[0]
         item_index = e[1]
         factor_index = factors_lookup[e[2]]
-        measure_value = e[3]
+        measure_value = (e[3], e[4],)
         dataset[user_index][item_index][factor_index] = measure_value
 
     ''' Calculate the level of agreement between the stakeholders '''
@@ -264,15 +269,42 @@ def stakeholders_agreement(request, deliverable_id, meeting_id):
             agreement_sum = 0
             for mi in meeting_items:
                 for i in factors_indexes:
-                    if dataset[ms_1.stakeholder.pk][mi.pk][i] == dataset[ms_2.stakeholder.pk][mi.pk][i]:
+                    if dataset[ms_1.stakeholder.pk][mi.pk][i][0] == dataset[ms_2.stakeholder.pk][mi.pk][i][0]:
                         agreement_sum += 1
-            ''' Translate the raw result into percentages '''
+            # Translate the raw result into percentages
             percentage_agreement_sum = get_votes_percentage(max_agreement, agreement_sum)
             stakeholder_agreement_row[1].append((ms_2, percentage_agreement_sum, ))
         stakeholders_agreement_list.append(stakeholder_agreement_row)
 
+
+    ''' Modify dataset to become overall evaluation of each item '''
+    for msk in dataset.keys():  # meeting stakeholder key
+        for mik in dataset[msk].keys():  # meeting item key
+            mie = dataset[msk][mik]  # meeting item evaluations
+            mie.sort(key=lambda m: m[1])
+            groups = itertools.groupby(mie, key=lambda m: (m[0], m[1],))
+            groups_count = map(lambda x: x[0] + (len(list(x[1])),), groups)
+            groups_count.sort(key=lambda x: (-x[2], x[1]))
+            dataset[msk][mik] = groups_count[0][0]
+
+    ''' Calculate the level of agreement between the stakeholders based on the overall decision items value '''
+    max_agreement = meeting_items.count()
+    stakeholders_agreement_items_list = list()
+    for ms_1 in meeting_stakeholders:
+        stakeholder_agreement_row = (ms_1, list())
+        for ms_2 in meeting_stakeholders:
+            agreement_sum = 0
+            for mi in meeting_items:
+                if dataset[ms_1.stakeholder.pk][mi.pk] == dataset[ms_2.stakeholder.pk][mi.pk]:
+                    agreement_sum += 1
+            # Translate the raw result into percentages
+            percentage_agreement_sum = get_votes_percentage(max_agreement, agreement_sum)
+            stakeholder_agreement_row[1].append((ms_2, percentage_agreement_sum, ))
+        stakeholders_agreement_items_list.append(stakeholder_agreement_row)
+
     return render(request, 'meetings/dashboard/stakeholders_agreement.html', {
         'meeting': meeting,
         'meeting_stakeholders': meeting_stakeholders,
-        'stakeholders_agreement_list': stakeholders_agreement_list
+        'stakeholders_agreement_list': stakeholders_agreement_list,
+        'stakeholders_agreement_items_list': stakeholders_agreement_items_list
     })

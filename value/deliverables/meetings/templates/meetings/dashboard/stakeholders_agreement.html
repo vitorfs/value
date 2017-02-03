@@ -55,34 +55,81 @@
       {% include 'meetings/dashboard/includes/menu.html' with active='stakeholders_agreement' meeting=meeting %}
     </div>
     <div class="col-md-9 col-sm-8">
-      <div class="panel panel-default panel-chart">
+      <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">{% trans 'Stakeholders\' Agreement' %}</h3>
+          <h3 class="panel-title">{% trans 'Stakeholders\' Agreement Matrix' %}</h3>
         </div>
-        <table class="table table-bordered table-stakeholders-agreement">
-          <thead>
-            <tr>
-              <th>&nbsp;</th>
-              {% for meeting_stakeholder in meeting_stakeholders %}
-                <th>{{ meeting_stakeholder.stakeholder.profile.get_display_name }}</th>
-              {% endfor %}
-            </tr>
-          </thead>
-          <tbody>
-            {% for row in stakeholders_agreement_list %}
-              <tr>
-                <th>{{ row.0.stakeholder.profile.get_display_name }}</th>
-                {% for col in row.1 %}
-                  {% if forloop.counter > forloop.parentloop.counter %}
-                    <td class="has-value" style="text-align: center; color: #fff; background-color: {{ col.1|matrix_cell_color }} ">{{ col.1 }}%</td>
-                  {% else %}
-                    <td>&nbsp;</td>
-                  {% endif %}
+        <div class="panel-body">
+          <ul class="nav nav-tabs" style="margin-bottom: 20px;">
+            <li role="presentation" class="active">
+              <a href="#">
+                {% trans 'Raw Measure Values' %}
+              </a>
+            </li>
+            <li role="presentation">
+              <a href="#">
+                {% trans 'Grouped Measure Values' %}
+              </a>
+            </li>
+          </ul>
+
+          <div class="panel panel-default panel-chart">
+            <div class="panel-heading">{% trans 'Stakeholders\' Agreement Based on Each Value Factor' %}</div>
+            <table class="table table-bordered table-stakeholders-agreement">
+              <thead>
+                <tr>
+                  <th>&nbsp;</th>
+                  {% for meeting_stakeholder in meeting_stakeholders %}
+                    <th>{{ meeting_stakeholder.stakeholder.profile.get_display_name }}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in stakeholders_agreement_list %}
+                  <tr>
+                    <th>{{ row.0.stakeholder.profile.get_display_name }}</th>
+                    {% for col in row.1 %}
+                      {% if forloop.counter > forloop.parentloop.counter %}
+                        <td class="has-value" style="text-align: center; color: #fff; background-color: {{ col.1|matrix_cell_color }} ">{{ col.1 }}%</td>
+                      {% else %}
+                        <td>&nbsp;</td>
+                      {% endif %}
+                    {% endfor %}
+                  </tr>
                 {% endfor %}
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="panel panel-default panel-chart">
+            <div class="panel-heading">{% trans 'Stakeholders\' Agreement Based on the Overall Decision Item Evaluation' %}</div>
+            <table class="table table-bordered table-stakeholders-agreement">
+              <thead>
+                <tr>
+                  <th>&nbsp;</th>
+                  {% for meeting_stakeholder in meeting_stakeholders %}
+                    <th>{{ meeting_stakeholder.stakeholder.profile.get_display_name }}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in stakeholders_agreement_items_list %}
+                  <tr>
+                    <th>{{ row.0.stakeholder.profile.get_display_name }}</th>
+                    {% for col in row.1 %}
+                      {% if forloop.counter > forloop.parentloop.counter %}
+                        <td class="has-value" style="text-align: center; color: #fff; background-color: {{ col.1|matrix_cell_color }} ">{{ col.1 }}%</td>
+                      {% else %}
+                        <td>&nbsp;</td>
+                      {% endif %}
+                    {% endfor %}
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
