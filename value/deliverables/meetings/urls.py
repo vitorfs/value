@@ -27,6 +27,9 @@ urlpatterns = [
     # Dashboard URLs
     url(r'^(?P<meeting_id>\d+)/dashboard/$', views.dashboard, name='dashboard'),
 
+    # Meta Charts
+    url(r'^(?P<meeting_id>\d+)/dashboard/agreement/$', views.stakeholders_agreement, name='stakeholders_agreement'),
+
     # Summary Charts URLs
     url(r'^(?P<meeting_id>\d+)/dashboard/factors-usage/$', views.dashboard_factors_usage_chart,
         name='dashboard_factors_usage_chart'),

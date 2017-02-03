@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% load i18n static dashboard_helpers %}
+
+{% block stylesheet %}
+  <link href="{% static 'css/meetings/dashboard.css' %}" rel="stylesheet">
+{% endblock stylesheet %}
+
+{% block javascript %}
+  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
+  <script src="{% static 'js/meetings/dashboard.js' %}"></script>
+  <script src="{% static 'js/meetings/meetings.js' %}"></script>
+{% endblock javascript %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'deliverables:index' %}">{% trans 'Deliverables' %}</a></li>
+    <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a></li>
+    <li><a href="{% url 'deliverables:meetings:index' meeting.deliverable.pk %}">{% trans 'Meetings' %}</a></li>
+    <li><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
+    <li><a href="{% url 'deliverables:meetings:dashboard' meeting.deliverable.pk meeting.pk %}">{% trans 'Dashboard' %}</a></li>
+    <li class="active">{% trans 'Stakeholders\' Agreement' %}</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+  {% include 'meetings/includes/menu.html' with active='dashboard' meeting=meeting %}
+  <div class="row">
+    <div class="col-md-3 col-sm-4">
+      {% include 'meetings/dashboard/includes/menu.html' with meeting=meeting %}
+    </div>
+    <div class="col-md-9 col-sm-8">
+      <div class="panel panel-default panel-chart">
+        <div class="panel-heading">
+          <h3 class="panel-title">{% trans 'Stakeholders\' Agreement' %}</h3>
+        </div>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>&nbsp;</th>
+              {% for meeting_stakeholder in meeting_stakeholders %}
+                <th>{{ meeting_stakeholder.stakeholder.profile.get_display_name }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in stakeholders_agreement_list %}
+              <tr>
+                <th>{{ row.0.stakeholder.profile.get_display_name }}</th>
+                {% for col in row.1 %}
+                  <td style="background-color: {{ col|matrix_cell_color }} ">{{ col }}%</td>
+                {% endfor %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}
