@@ -364,9 +364,21 @@ class MeetingItem(models.Model):
                 object_id=self.pk
             ).order_by('measure_value__order')
 
-            highest = rankings.first()
-            lowest = rankings.last()
-            self.value_ranking = highest.percentage_votes - lowest.percentage_votes
+            if measure.measurevalue_set.count() <= 3:
+                highest = rankings.first()
+                lowest = rankings.last()
+                self.value_ranking = highest.percentage_votes - lowest.percentage_votes
+            else:
+                grouped_measure_values = measure.get_grouped_measure_values()
+                highest_group = grouped_measure_values[0]
+                highest_ids = map(lambda measure_value: measure_value.pk, highest_group)
+                highest_sum = rankings.filter(measure_value__in=highest_ids).aggregate(Sum('percentage_votes'))
+
+                lowest_group = grouped_measure_values[-1]
+                lowest_ids = map(lambda measure_value: measure_value.pk, lowest_group)
+                lowest_sum = rankings.filter(measure_value__in=lowest_ids).aggregate(Sum('percentage_votes'))
+
+                self.value_ranking = highest_sum['percentage_votes__sum'] - lowest_sum['percentage_votes__sum']
             self.save()
 
     def get_evaluations_with_rationale(self):
