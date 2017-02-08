@@ -6,7 +6,7 @@ from value.deliverables.meetings.utils import get_votes_percentage
 
 class StakeholdersAgreement(object):
 
-    def __init__(self, meeting):
+    def __init__(self, meeting, group_measures=False):
         self.meeting = meeting
         self.meeting_stakeholders = meeting.meetingstakeholder_set \
             .select_related('stakeholder', 'stakeholder__profile') \
@@ -14,9 +14,9 @@ class StakeholdersAgreement(object):
         self.meeting_items = meeting.meetingitem_set \
             .select_related('decision_item') \
             .order_by('decision_item__name')
-        self.dataset = self._generate_evaluaton_dataset()
+        self.dataset = self._generate_evaluaton_dataset(group_measures)
 
-    def _generate_evaluaton_dataset(self):
+    def _generate_evaluaton_dataset(self, group_measures):
         '''
         Following a sample of the output of the dataset, considering:
 
@@ -77,6 +77,11 @@ class StakeholdersAgreement(object):
         for index, factor in enumerate(meeting_factors):
             factors_lookup[factor['id']] = index
 
+        ''' Create a lookup for measure values, for fast access '''
+        measure_values_lookup = None
+        if group_measures:
+            measure_values_lookup = self.get_measure_values_lookup()
+
         ''' Generate the evaluation matrix, filling the dataset with all the existing evaluations '''
         evaluations = self.meeting.get_evaluations() \
             .select_related('measure_value') \
@@ -85,7 +90,13 @@ class StakeholdersAgreement(object):
             user_index = e[0]
             item_index = e[1]
             factor_index = factors_lookup[e[2]]
-            measure_value = (e[3], e[4],)
+
+            if group_measures:
+                grouped_measure_value = measure_values_lookup[e[3]]
+                measure_value = (grouped_measure_value, e[4], )
+            else:
+                measure_value = (e[3], e[4],)
+
             dataset[user_index][item_index][factor_index] = measure_value
 
         ''' Append to the dataset the overall evaluation of each item '''
@@ -99,6 +110,37 @@ class StakeholdersAgreement(object):
                 dataset[msk][mik] = (groups_count[0][0], dataset[msk][mik], )
 
         return dataset
+
+    def get_measure_values_lookup(self):
+        '''
+        Generate index for grouping measure values
+        In the grouping the following values means:
+        1 = positive
+        2 = neutral
+        3 = negative
+        '''
+        measure_values_lookup = dict()
+        measure_values = self.meeting.measure.measurevalue_set.order_by('order')
+        total_values = measure_values.count()
+        half_index = int(round(total_values / 2.0))
+        if total_values % 2 == 0:
+            # The measure values are evenly distributed (half good / half bad) or (half positive / half negative)
+            for index, measure_value in enumerate(measure_values):
+                if (index + 1) <= half_index:
+                    measure_values_lookup[measure_value.pk] = 1
+                else:
+                    measure_values_lookup[measure_value.pk] = 3
+        else:
+            # Means there is a central point, usually (neutral / medium / normal)
+            for index, measure_value in enumerate(measure_values):
+                if (index + 1) < half_index:
+                    measure_values_lookup[measure_value.pk] = 1
+                elif (index + 1) == half_index:
+                    measure_values_lookup[measure_value.pk] = 2
+                else:
+                    measure_values_lookup[measure_value.pk] = 3
+        return measure_values_lookup
+
 
     def matrix_by_factors(self):
         meeting_factors_count = self.meeting.factors.count()

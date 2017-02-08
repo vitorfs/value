@@ -60,18 +60,20 @@
           <h3 class="panel-title">{% trans 'Stakeholders\' Agreement Matrix' %}</h3>
         </div>
         <div class="panel-body">
-          <ul class="nav nav-tabs" style="margin-bottom: 20px;">
-            <li role="presentation" class="active">
-              <a href="#">
-                {% trans 'Raw Measure Values' %}
-              </a>
-            </li>
-            <li role="presentation">
-              <a href="#">
-                {% trans 'Grouped Measure Values' %}
-              </a>
-            </li>
-          </ul>
+          {% if meeting.measure.measurevalue_set.count > 3 %}
+            <ul class="nav nav-tabs" style="margin-bottom: 20px;">
+              <li role="presentation"{% if active_tab == 'raw' %} class="active"{% endif %}>
+                <a href="{% url 'deliverables:meetings:stakeholders_agreement' meeting.deliverable.pk meeting.pk %}">
+                  {% trans 'Raw Measure Values' %}
+                </a>
+              </li>
+              <li role="presentation"{% if active_tab == 'grouped' %} class="active"{% endif %}>
+                <a href="{% url 'deliverables:meetings:stakeholders_agreement_grouped' meeting.deliverable.pk meeting.pk %}">
+                  {% trans 'Grouped Measure Values' %}
+                </a>
+              </li>
+            </ul>
+          {% endif %}
 
           <div class="panel panel-default panel-chart">
             <div class="panel-heading">{% trans 'Stakeholders\' Agreement Based on Each Value Factor' %}</div>
