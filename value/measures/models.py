@@ -37,6 +37,36 @@ class Measure(models.Model):
             )
         return u', '.join(string_values)
 
+    def get_grouped_measure_values(self):
+        grouped_measure_values = list()
+        measure_values = self.measurevalue_set.order_by('order')
+        total_values = measure_values.count()
+        half_index = int(round(total_values / 2.0))
+
+        positive_list = list()
+        neutral_list = list()
+        negative_list = list()
+
+        if total_values % 2 == 0:
+            # The measure values are evenly distributed (half good / half bad) or (half positive / half negative)
+            for index, measure_value in enumerate(measure_values):
+                if (index + 1) <= half_index:
+                    positive_list.append(measure_value)
+                else:
+                    negative_list.append(measure_value)
+            grouped_measure_values = [positive_list, negative_list, ]
+        else:
+            # Means there is a central point, usually (neutral / medium / normal)
+            for index, measure_value in enumerate(measure_values):
+                if (index + 1) < half_index:
+                    positive_list.append(measure_value)
+                elif (index + 1) == half_index:
+                    neutral_list.append(measure_value)
+                else:
+                    negative_list.append(measure_value)
+            grouped_measure_values = [positive_list, neutral_list, negative_list, ]
+        return grouped_measure_values
+
 
 class MeasureValue(models.Model):
 

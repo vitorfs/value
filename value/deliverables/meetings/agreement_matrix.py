@@ -115,30 +115,14 @@ class StakeholdersAgreement(object):
         '''
         Generate index for grouping measure values
         In the grouping the following values means:
-        1 = positive
-        2 = neutral
-        3 = negative
+        Odd number of values: 1 = positive, 2 = neutral, 3 = negative
+        Even number of values: 1 = positive, 2 = negative
         '''
         measure_values_lookup = dict()
-        measure_values = self.meeting.measure.measurevalue_set.order_by('order')
-        total_values = measure_values.count()
-        half_index = int(round(total_values / 2.0))
-        if total_values % 2 == 0:
-            # The measure values are evenly distributed (half good / half bad) or (half positive / half negative)
-            for index, measure_value in enumerate(measure_values):
-                if (index + 1) <= half_index:
-                    measure_values_lookup[measure_value.pk] = 1
-                else:
-                    measure_values_lookup[measure_value.pk] = 3
-        else:
-            # Means there is a central point, usually (neutral / medium / normal)
-            for index, measure_value in enumerate(measure_values):
-                if (index + 1) < half_index:
-                    measure_values_lookup[measure_value.pk] = 1
-                elif (index + 1) == half_index:
-                    measure_values_lookup[measure_value.pk] = 2
-                else:
-                    measure_values_lookup[measure_value.pk] = 3
+        grouped_measure_value = self.meeting.measure.get_grouped_measure_values()
+        for index, group in enumerate(grouped_measure_value):
+            for measure_value in group:
+                measure_values_lookup[measure_value.pk] = (index + 1)
         return measure_values_lookup
 
 
