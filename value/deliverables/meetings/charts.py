@@ -295,6 +295,15 @@ class Highcharts(object):
         return options
 
     def _build_evaluation_grid(self, meeting, evaluations, meeting_items):
+        '''
+        Resulting list:
+        [
+            [336, u'Feature 1', -5.55, 9, 11, 11, 14, 9],
+            [337, u'Feature 2', 7.40, 10, 11, 16, 9, 8],
+            ...
+        ]
+        id, decision_item_name, value_ranking, measure_value_1, measure_value_2, ..., measure_value_n
+        '''
         evaluation_list = evaluations.select_related('measure_value', 'meeting_item') \
             .values('meeting_item', 'measure_value') \
             .annotate(votes=Count('measure_value')) \
@@ -304,11 +313,16 @@ class Highcharts(object):
         measure_values = meeting.measure.measurevalue_set.all()
         measure_value_count = measure_values.count()
         for meeting_item in meeting_items:
-            meeting_item_data = [meeting_item.pk, meeting_item.decision_item.name, ] + map(lambda x: 0, range(measure_value_count))
+            meeting_item_data = [
+                meeting_item.pk,
+                meeting_item.decision_item.name,
+                meeting_item.value_ranking,
+            ] + map(lambda x: 0, range(measure_value_count))
+
             for index, measure_value in enumerate(measure_values):
                 for evaluation in evaluation_list:
                     if evaluation['meeting_item'] == meeting_item.pk and evaluation['measure_value'] == measure_value.pk:
-                        meeting_item_data[index + 2] = evaluation['votes']
+                        meeting_item_data[index + 3] = evaluation['votes']
             evaluation_grid.append(meeting_item_data)
 
         return evaluation_grid
@@ -317,9 +331,10 @@ class Highcharts(object):
         options = dict()
         if evaluations.exists():
 
-            PK = 0
+            ID = 0
             NAME = 1
-            OFFSET = len((PK, NAME, ))
+            VALUE_RANKING = 2
+            OFFSET = len((ID, NAME, VALUE_RANKING, ))
 
             measure = meeting.measure
             stakeholders_count = len(stakeholder_ids)
@@ -327,19 +342,7 @@ class Highcharts(object):
             max_votes = stakeholders_count * factors_count
 
             evaluation_grid = self._build_evaluation_grid(meeting, evaluations, meeting_items)
-
-            '''
-            measure_value_count = measure.measurevalue_set.count()
-            ordering_middle_point = int(round(measure_value_count / 2.0))
-
-            for index, measure_value in enumerate(measure.measurevalue_set.all()):
-                if (index + 1) > ordering_middle_point:
-                    evaluation_grid = sorted(evaluation_grid, key=operator.itemgetter(OFFSET + index))
-                else:
-                    evaluation_grid = sorted(evaluation_grid, key=operator.itemgetter(OFFSET + index), reverse=True)
-            '''
-
-            evaluation_grid = sorted(evaluation_grid, key=lambda x: (-x[2], -x[3], x[4]))
+            evaluation_grid.sort(key=lambda x: (-x[2], -x[3]))
 
             categories = map(lambda item: item[NAME], evaluation_grid)
             series = list()
@@ -351,30 +354,7 @@ class Highcharts(object):
                     'color': measure_value.color
                 })
 
-            '''
-            categories = map(lambda mi: mi.decision_item.name, meeting_items)
-            series = list()
-
-            evaluations_list = list(evaluations.select_related('measure_value', 'meeting_item'))
-
-            for measure_value in measure.measurevalue_set.all():
-                serie_data = list()
-                for meeting_item in meeting_items:
-                    votes = len(filter(
-                        lambda e: e.measure_value == measure_value and e.meeting_item == meeting_item,
-                        evaluations_list
-                    ))
-                    percentage = get_votes_percentage(max_votes, votes)
-                    serie_data.append(percentage)
-                series.append({
-                    'name': measure_value.description,
-                    'data': serie_data,
-                    'color': measure_value.color
-                })
-            '''
-
             series = self.fix_serie_data_percentage(series)
-
             options = self._base_stacked_chart(categories, series, chart_type)
             groups_text = get_stakeholders_group_names(stakeholder_ids)
             options['subtitle'] = {'text': u'{0} {1}'.format(groups_text, _('opinion'))}
