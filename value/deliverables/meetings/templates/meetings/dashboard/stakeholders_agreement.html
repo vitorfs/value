@@ -79,18 +79,23 @@
               <thead>
                 <tr>
                   <th>&nbsp;</th>
-                  {% for meeting_stakeholder in meeting_stakeholders %}
+                  {% for meeting_stakeholder in stakeholders_agreement.meeting_stakeholders %}
                     <th>{{ meeting_stakeholder.stakeholder.profile.get_display_name }}</th>
                   {% endfor %}
                 </tr>
               </thead>
               <tbody>
-                {% for row in stakeholders_agreement_list %}
+                {% for row in stakeholders_agreement.matrix_by_factors %}
                   <tr>
                     <th>{{ row.0.stakeholder.profile.get_display_name }}</th>
                     {% for col in row.1 %}
                       {% if forloop.counter > forloop.parentloop.counter %}
-                        <td class="has-value" style="text-align: center; color: #fff; background-color: {{ col.1|matrix_cell_color }} ">{{ col.1 }}%</td>
+                        <td class="has-value"
+                            style="text-align: center; color: #fff; background-color: {{ col.1|matrix_cell_color }} "
+                            data-toggle=""
+                            data-target="">
+                          {{ col.1 }}%
+                        </td>
                       {% else %}
                         <td>&nbsp;</td>
                       {% endif %}
@@ -107,13 +112,13 @@
               <thead>
                 <tr>
                   <th>&nbsp;</th>
-                  {% for meeting_stakeholder in meeting_stakeholders %}
+                  {% for meeting_stakeholder in stakeholders_agreement.meeting_stakeholders %}
                     <th>{{ meeting_stakeholder.stakeholder.profile.get_display_name }}</th>
                   {% endfor %}
                 </tr>
               </thead>
               <tbody>
-                {% for row in stakeholders_agreement_items_list %}
+                {% for row in stakeholders_agreement.matrix_by_items %}
                   <tr>
                     <th>{{ row.0.stakeholder.profile.get_display_name }}</th>
                     {% for col in row.1 %}
@@ -129,6 +134,23 @@
             </table>
           </div>
 
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-agreement-value-factors">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">{% trans 'Stakeholders\' Agreement Based on Each Value Factor' %}</h4>
+        </div>
+        <div class="modal-body">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>

@@ -1,0 +1,146 @@
+import itertools
+import operator
+
+from value.deliverables.meetings.utils import get_votes_percentage
+
+
+class StakeholdersAgreement(object):
+
+    def __init__(self, meeting):
+        self.meeting = meeting
+        self.meeting_stakeholders = meeting.meetingstakeholder_set \
+            .select_related('stakeholder', 'stakeholder__profile') \
+            .order_by('stakeholder__first_name', 'stakeholder__last_name', 'stakeholder__username')
+        self.meeting_items = meeting.meetingitem_set \
+            .select_related('decision_item') \
+            .order_by('decision_item__name')
+        self.dataset = self._generate_evaluaton_dataset()
+
+    def _generate_evaluaton_dataset(self):
+        '''
+        Following a sample of the output of the dataset, considering:
+
+        * 2 stakeholders
+        * 6 decision items
+        * 9 value factors
+        * 3 measure values
+
+        {
+          1:
+          {
+            324: (2, [(3, 2), (2, 1), (2, 1), (2, 1), (3, 2), (3, 2), (1, 0), (2, 1), (1, 0)]),
+            325: (1, [(1, 0), (1, 0), (2, 1), (1, 0), (3, 2), (3, 2), (3, 2), (2, 1), (2, 1)]),
+            326: (2, [(3, 2), (2, 1), (1, 0), (2, 1), (2, 1), (2, 1), (1, 0), (2, 1), (1, 0)]),
+            327: (3, [(1, 0), (3, 2), (3, 2), (2, 1), (2, 1), (3, 2), (3, 2), (3, 2), (3, 2)]),
+            328: (3, [(3, 2), (3, 2), (3, 2), (2, 1), (2, 1), (3, 2), (3, 2), (3, 2), (2, 1)]),
+            329: (2, [(3, 2), (3, 2), (1, 0), (2, 1), (2, 1), (2, 1), (2, 1), (2, 1), (1, 0)])
+          },
+         2:
+          {
+            324: (1, [(1, 0), (1, 0), (1, 0), (1, 0), (1, 0), (1, 0), (1, 0), (1, 0), (0, 99)]),
+            325: (2, [(1, 0), (1, 0), (2, 1), (2, 1), (2, 1), (3, 2), (3, 2), (3, 2), (2, 1)]),
+            326: (1, [(1, 0), (1, 0), (1, 0), (3, 2), (1, 0), (2, 1), (3, 2), (1, 0), (2, 1)]),
+            327: (3, [(2, 1), (3, 2), (1, 0), (2, 1), (3, 2), (2, 1), (1, 0), (3, 2), (3, 2)]),
+            328: (2, [(3, 2), (2, 1), (1, 0), (2, 1), (2, 1), (1, 0), (1, 0), (2, 1), (3, 2)]),
+            329: (1, [(1, 0), (2, 1), (1, 0), (1, 0), (3, 2), (3, 2), (3, 2), (1, 0), (2, 1)])
+          }
+        }
+
+        The outmost items in the dataset (1 and 2) are keys represented by the ID of the stakeholder
+        Accessing the dict using the ID of a stakeholder (dataset[1]) returns a new dict, this time identified by
+        the IDs of the decision items (324, 325, 326, 327, 328, 329 are all IDs).
+        Acessing one decision item (dataset[1][324]) returns a tuple, where the first item is the overall evaluation of
+        this stakeholder.
+        In the first row, dataset[1][324] = (2, [(3, 2), (2, 1), (2, 1), (2, 1), (3, 2), (3, 2), (1, 0), (2, 1), (1, 0)])
+        means `2` was the most common measure value (Neutral votes). The second item in the tuple is a list, composed by
+        tuples that represent: measure_value_id, measure_value_order.
+        The measure_value_id is used to compare, and the order is used to set the priority of the most important measure
+        value.
+        When the measure_value_order is set to `99`, means this is related to empty (N/A) measure value, where the
+        stakeholder didn't give any assessment.
+        '''
+
+        meeting_factors = self.meeting.factors.values('id', 'name').order_by('group', 'name')
+
+        ''' Initialize the dataset, adding a default of 0 to all evaluations '''
+        dataset = dict()
+        for ms in self.meeting_stakeholders:
+            dataset[ms.stakeholder.pk] = dict()
+            for mi in self.meeting_items:
+                dataset[ms.stakeholder.pk][mi.pk] = list()
+                for mf in meeting_factors:
+                    # set 0 as a invalid id for measure value, and 99 as a very high order, so to have least priority
+                    dataset[ms.stakeholder.pk][mi.pk].append((0, 99))
+
+        ''' Create a lookup for the value factors, for fast access '''
+        factors_lookup = dict()
+        for index, factor in enumerate(meeting_factors):
+            factors_lookup[factor['id']] = index
+
+        ''' Generate the evaluation matrix, filling the dataset with all the existing evaluations '''
+        evaluations = self.meeting.get_evaluations() \
+            .select_related('measure_value') \
+            .values_list('user', 'meeting_item', 'factor', 'measure_value', 'measure_value__order')
+        for e in evaluations:
+            user_index = e[0]
+            item_index = e[1]
+            factor_index = factors_lookup[e[2]]
+            measure_value = (e[3], e[4],)
+            dataset[user_index][item_index][factor_index] = measure_value
+
+        ''' Append to the dataset the overall evaluation of each item '''
+        for msk in dataset.keys():  # meeting stakeholder key
+            for mik in dataset[msk].keys():  # meeting item key
+                mie = dataset[msk][mik]  # meeting item evaluations
+                smie = sorted(mie, key=lambda m: m[1])  # sorted meeting item evaluations
+                groups = itertools.groupby(smie, key=lambda m: (m[0], m[1],))
+                groups_count = map(lambda x: x[0] + (len(list(x[1])),), groups)
+                groups_count.sort(key=lambda x: (-x[2], x[1]))
+                dataset[msk][mik] = (groups_count[0][0], dataset[msk][mik], )
+
+        return dataset
+
+    def matrix_by_factors(self):
+        meeting_factors_count = self.meeting.factors.count()
+
+        ''' Calculate the level of agreement between the stakeholders '''
+        factors_indexes = range(0, meeting_factors_count)
+        max_agreement = self.meeting_items.count() * meeting_factors_count
+        factors_agreement = list()
+
+        for ms_1 in self.meeting_stakeholders:
+            factors_agreement_row = (ms_1, list())
+            for ms_2 in self.meeting_stakeholders:
+                agreement_sum = 0
+                for mi in self.meeting_items:
+                    for i in factors_indexes:
+                        if self.dataset[ms_1.stakeholder.pk][mi.pk][1][i][0] == self.dataset[ms_2.stakeholder.pk][mi.pk][1][i][0]:
+                            agreement_sum += 1
+                # Translate the raw result into percentages
+                percentage_agreement_sum = get_votes_percentage(max_agreement, agreement_sum)
+                factors_agreement_row[1].append((ms_2, percentage_agreement_sum, ))
+            factors_agreement.append(factors_agreement_row)
+
+        return factors_agreement
+
+
+    def matrix_by_items(self):
+        ''' Calculate the level of agreement between the stakeholders based on the overall decision items value '''
+        max_agreement = self.meeting_items.count()
+        items_agreement = list()
+
+        for ms_1 in self.meeting_stakeholders:
+            items_agreement_row = (ms_1, list())
+            for ms_2 in self.meeting_stakeholders:
+                agreement_sum = 0
+                for mi in self.meeting_items:
+                    # The `self.dataset[ms_1.stakeholder.pk][mi.pk][0]` returns the most used measure value for a
+                    # given item a given stakeholder evaluated
+                    if self.dataset[ms_1.stakeholder.pk][mi.pk][0] == self.dataset[ms_2.stakeholder.pk][mi.pk][0]:
+                        agreement_sum += 1
+                # Translate the raw result into percentages
+                percentage_agreement_sum = get_votes_percentage(max_agreement, agreement_sum)
+                items_agreement_row[1].append((ms_2, percentage_agreement_sum, ))
+            items_agreement.append(items_agreement_row)
+
+        return items_agreement

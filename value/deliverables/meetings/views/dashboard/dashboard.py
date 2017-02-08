@@ -11,10 +11,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
 
 from value.measures.models import MeasureValue
-from value.deliverables.meetings.models import Meeting
-from value.deliverables.meetings.charts import Highcharts
 from value.deliverables.decorators import user_is_manager
+from value.deliverables.meetings.agreement_matrix import StakeholdersAgreement
+from value.deliverables.meetings.charts import Highcharts
 from value.deliverables.meetings.decorators import meeting_is_analysing_or_closed
+from value.deliverables.meetings.models import Meeting
 from value.deliverables.meetings.utils import *
 
 
@@ -223,88 +224,8 @@ def features_comparison_chart(request, deliverable_id, meeting_id, measure_value
 @login_required
 @meeting_is_analysing_or_closed
 def stakeholders_agreement(request, deliverable_id, meeting_id):
-    ''' Retrieve the necessary data from the database '''
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    meeting_stakeholders = meeting.meetingstakeholder_set \
-        .select_related('stakeholder', 'stakeholder__profile') \
-        .order_by('stakeholder__first_name', 'stakeholder__last_name', 'stakeholder__username')
-    meeting_items = meeting.meetingitem_set \
-        .select_related('decision_item') \
-        .order_by('decision_item__name')
-    meeting_factors = meeting.factors.values('id', 'name').order_by('group', 'name')
-
-    ''' Initialize the dataset, adding a default of 0 to all evaluations '''
-    dataset = dict()
-    for ms in meeting_stakeholders:
-        dataset[ms.stakeholder.pk] = dict()
-        for mi in meeting_items:
-            dataset[ms.stakeholder.pk][mi.pk] = list()
-            for mf in meeting_factors:
-                # set 0 as a invalid id for measure value, and 99 as a very high order, so to have least priority
-                dataset[ms.stakeholder.pk][mi.pk].append((0, 99))
-
-    ''' Create a lookup for the value factors, for fast access '''
-    factors_lookup = dict()
-    for index, factor in enumerate(meeting_factors):
-        factors_lookup[factor['id']] = index
-
-    ''' Generate the evaluation matrix, filling the dataset with all the existing evaluations '''
-    evaluations = meeting.get_evaluations() \
-        .select_related('measure_value') \
-        .values_list('user', 'meeting_item', 'factor', 'measure_value', 'measure_value__order')
-    for e in evaluations:
-        user_index = e[0]
-        item_index = e[1]
-        factor_index = factors_lookup[e[2]]
-        measure_value = (e[3], e[4],)
-        dataset[user_index][item_index][factor_index] = measure_value
-
-    ''' Calculate the level of agreement between the stakeholders '''
-    factors_indexes = range(0, meeting_factors.count())
-    max_agreement = meeting_items.count() * meeting_factors.count()
-    stakeholders_agreement_list = list()
-    for ms_1 in meeting_stakeholders:
-        stakeholder_agreement_row = (ms_1, list())
-        for ms_2 in meeting_stakeholders:
-            agreement_sum = 0
-            for mi in meeting_items:
-                for i in factors_indexes:
-                    if dataset[ms_1.stakeholder.pk][mi.pk][i][0] == dataset[ms_2.stakeholder.pk][mi.pk][i][0]:
-                        agreement_sum += 1
-            # Translate the raw result into percentages
-            percentage_agreement_sum = get_votes_percentage(max_agreement, agreement_sum)
-            stakeholder_agreement_row[1].append((ms_2, percentage_agreement_sum, ))
-        stakeholders_agreement_list.append(stakeholder_agreement_row)
-
-
-    ''' Modify dataset to become overall evaluation of each item '''
-    for msk in dataset.keys():  # meeting stakeholder key
-        for mik in dataset[msk].keys():  # meeting item key
-            mie = dataset[msk][mik]  # meeting item evaluations
-            mie.sort(key=lambda m: m[1])
-            groups = itertools.groupby(mie, key=lambda m: (m[0], m[1],))
-            groups_count = map(lambda x: x[0] + (len(list(x[1])),), groups)
-            groups_count.sort(key=lambda x: (-x[2], x[1]))
-            dataset[msk][mik] = groups_count[0][0]
-
-    ''' Calculate the level of agreement between the stakeholders based on the overall decision items value '''
-    max_agreement = meeting_items.count()
-    stakeholders_agreement_items_list = list()
-    for ms_1 in meeting_stakeholders:
-        stakeholder_agreement_row = (ms_1, list())
-        for ms_2 in meeting_stakeholders:
-            agreement_sum = 0
-            for mi in meeting_items:
-                if dataset[ms_1.stakeholder.pk][mi.pk] == dataset[ms_2.stakeholder.pk][mi.pk]:
-                    agreement_sum += 1
-            # Translate the raw result into percentages
-            percentage_agreement_sum = get_votes_percentage(max_agreement, agreement_sum)
-            stakeholder_agreement_row[1].append((ms_2, percentage_agreement_sum, ))
-        stakeholders_agreement_items_list.append(stakeholder_agreement_row)
-
     return render(request, 'meetings/dashboard/stakeholders_agreement.html', {
         'meeting': meeting,
-        'meeting_stakeholders': meeting_stakeholders,
-        'stakeholders_agreement_list': stakeholders_agreement_list,
-        'stakeholders_agreement_items_list': stakeholders_agreement_items_list
+        'stakeholders_agreement': StakeholdersAgreement(meeting)
     })
