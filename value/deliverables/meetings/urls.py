@@ -73,6 +73,8 @@ urlpatterns = [
 
     # Stakeholders Individual Opinion
     url(r'^(?P<meeting_id>\d+)/dashboard/opinion/$', views.stakeholders_opinion, name='stakeholders_opinion'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/opinion/grouped/$', views.stakeholders_opinion_grouped,
+        name='stakeholders_opinion_grouped'),
 
     # Scenarios URLs
     url(r'^(?P<meeting_id>\d+)/dashboard/scenarios/add/$', views.add_scenario, name='add_scenario'),

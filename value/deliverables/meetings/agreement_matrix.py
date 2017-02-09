@@ -1,12 +1,15 @@
 import itertools
 import operator
 
+from colour import Color
+
 from value.deliverables.meetings.utils import get_votes_percentage
 
 
 class StakeholdersAgreement(object):
 
     def __init__(self, meeting, group_measures=False):
+        self.group_measures = group_measures
         self.meeting = meeting
         self.meeting_stakeholders = meeting.meetingstakeholder_set \
             .select_related('stakeholder', 'stakeholder__profile') \
@@ -134,8 +137,19 @@ class StakeholdersAgreement(object):
             'color': '#ccc',
             'description': 'N/A'
         }
-        for measure_value in self.meeting.measure.measurevalue_set.values('id', 'description', 'color'):
-            measure_values_lookup[measure_value['id']] = measure_value
+        if self.group_measures:
+            grouped_measure_value = self.meeting.measure.get_grouped_measure_values()
+            for index, group in enumerate(grouped_measure_value):
+                color_1 = Color(group[0].color)
+                color_2 = Color(group[-1].color)
+                resulting_color = list(color_1.range_to(color_2, 5))
+                measure_values_lookup[index + 1] = {
+                    'color': resulting_color[2].get_hex(),
+                    'description': '/'.join(map(lambda x: x.description, group))
+                }
+        else:
+            for measure_value in self.meeting.measure.measurevalue_set.values('id', 'description', 'color'):
+                measure_values_lookup[measure_value['id']] = measure_value
 
         stakeholders_opinion = list()
         for mi in self.meeting_items:

@@ -60,7 +60,38 @@
           <h3 class="panel-title">{% trans 'Stakeholders\' Individual Opinion' %}</h3>
         </div>
         <div class="panel-body">
+          {% if meeting.measure.measurevalue_set.count > 3 %}
+            <ul class="nav nav-tabs" style="margin-bottom: 20px;">
+              <li role="presentation"{% if active_tab == 'raw' %} class="active"{% endif %}>
+                <a href="{% url 'deliverables:meetings:stakeholders_opinion' meeting.deliverable.pk meeting.pk %}">
+                  {% trans 'Raw Measure Values' %}
+                </a>
+              </li>
+              <li role="presentation"{% if active_tab == 'grouped' %} class="active"{% endif %}>
+                <a href="{% url 'deliverables:meetings:stakeholders_opinion_grouped' meeting.deliverable.pk meeting.pk %}">
+                  {% trans 'Grouped Measure Values' %}
+                </a>
+              </li>
+            </ul>
+          {% endif %}
 
+          {% if active_tab == 'grouped' %}
+            <div class="alert alert-info">
+              <p>
+                <span class="glyphicon glyphicon-info-sign"></span>
+                {% trans 'The data below presents the agreement between the stakeholders by grouping the evaluations as described below:' %}
+              </p>
+              <ul>
+                {% for group in meeting.measure.get_grouped_measure_values %}
+                  <li>
+                    {% for measure_value in group %}
+                      {{ measure_value }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
           <div class="panel panel-default panel-chart">
             <div class="panel-heading">{% trans 'Stakeholders\' Opinion Based on Each Decision Item' %}</div>
             <table class="table table-bordered table-condensed">
