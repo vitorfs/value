@@ -127,6 +127,10 @@ class StakeholdersAgreement(object):
 
     def get_stakeholders_opinion(self):
         measure_values_lookup = dict()
+        measure_values_lookup[0] = {
+            'color': '#ccc',
+            'description': 'N/A'
+        }
         for measure_value in self.meeting.measure.measurevalue_set.values('id', 'description', 'color'):
             measure_values_lookup[measure_value['id']] = measure_value
 
