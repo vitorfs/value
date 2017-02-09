@@ -125,6 +125,35 @@ class StakeholdersAgreement(object):
                 measure_values_lookup[measure_value.pk] = (index + 1)
         return measure_values_lookup
 
+    def get_stakeholders_opinion(self):
+        measure_values_lookup = dict()
+        for measure_value in self.meeting.measure.measurevalue_set.values('id', 'description', 'color'):
+            measure_values_lookup[measure_value['id']] = measure_value
+
+        stakeholders_opinion = list()
+        for mi in self.meeting_items:
+            meeting_item_row = (mi, list())
+            for ms in self.meeting_stakeholders:
+                winner = self.dataset[ms.stakeholder.pk][mi.pk][0]
+                votes = self.dataset[ms.stakeholder.pk][mi.pk][1]
+                winner_count = len(filter(lambda x: x[0] == winner, votes))
+                winner_percentage = get_votes_percentage(len(votes), winner_count)
+                meeting_item_row[1].append({
+                    'color': measure_values_lookup[winner]['color'],
+                    'description': measure_values_lookup[winner]['description'],
+                    'percentage': winner_percentage
+                })
+            group_winner = mi.evaluation_summary \
+                .select_related('measure_value') \
+                .order_by('-raw_votes', 'measure_value__order') \
+                .first()
+            meeting_item_row[1].append({
+                'color': group_winner.measure_value.color,
+                'description': group_winner.measure_value.description,
+                'percentage': group_winner.get_percentage_votes_display()
+            })
+            stakeholders_opinion.append(meeting_item_row)
+        return stakeholders_opinion
 
     def matrix_by_factors(self):
         meeting_factors_count = self.meeting.factors.count()

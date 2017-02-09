@@ -240,3 +240,14 @@ def stakeholders_agreement_grouped(request, deliverable_id, meeting_id):
         'stakeholders_agreement': StakeholdersAgreement(meeting, group_measures=True),
         'active_tab': 'grouped'
     })
+
+''' Stakeholders Individual Opinion '''
+@login_required
+@meeting_is_analysing_or_closed
+def stakeholders_opinion(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    return render(request, 'meetings/dashboard/stakeholders_opinion.html', {
+        'meeting': meeting,
+        'stakeholders_agreement': StakeholdersAgreement(meeting),
+        'active_tab': 'raw'
+    })

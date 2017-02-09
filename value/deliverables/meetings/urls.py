@@ -71,6 +71,9 @@ urlpatterns = [
     url(r'^(?P<meeting_id>\d+)/dashboard/acceptance/scenarios/(?P<scenario_id>\d+)/$',
         views.features_acceptance_scenario_chart, name='features_acceptance_scenario_chart'),
 
+    # Stakeholders Individual Opinion
+    url(r'^(?P<meeting_id>\d+)/dashboard/opinion/$', views.stakeholders_opinion, name='stakeholders_opinion'),
+
     # Scenarios URLs
     url(r'^(?P<meeting_id>\d+)/dashboard/scenarios/add/$', views.add_scenario, name='add_scenario'),
     url(r'^(?P<meeting_id>\d+)/dashboard/scenarios/builder/$', views.scenario_builder, name='scenario_builder'),

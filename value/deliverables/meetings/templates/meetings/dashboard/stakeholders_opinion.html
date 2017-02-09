@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% load i18n static dashboard_helpers %}
+
+{% block stylesheet %}
+  <link href="{% static 'css/meetings/dashboard.css' %}" rel="stylesheet">
+{% endblock stylesheet %}
+
+{% block javascript %}
+  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
+  <script src="{% static 'js/meetings/dashboard.js' %}"></script>
+  <script src="{% static 'js/meetings/meetings.js' %}"></script>
+  <script type="text/javascript">
+    $(function () {
+      $(".table-stakeholders-agreement tbody tr td.has-value").hover(
+        function () {
+          var column_index = $(this).index();
+          var row = $(this).closest("tr");
+          var table = $(this).closest("table");
+
+          $(this).css("text-decoration", "underline");
+          $("th", row).addClass("bg-primary");
+          $("thead th:eq(" + column_index + ")", table).addClass("bg-primary")
+        },
+        function () {
+          var column_index = $(this).index();
+          var row = $(this).closest("tr");
+          var table = $(this).closest("table");
+
+          $(this).css("text-decoration", "none");
+          $("th", row).removeClass("bg-primary");
+          $("thead th:eq(" + column_index + ")", table).removeClass("bg-primary")
+        }
+      );
+    });
+  </script>
+{% endblock javascript %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'deliverables:index' %}">{% trans 'Deliverables' %}</a></li>
+    <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a></li>
+    <li><a href="{% url 'deliverables:meetings:index' meeting.deliverable.pk %}">{% trans 'Meetings' %}</a></li>
+    <li><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
+    <li><a href="{% url 'deliverables:meetings:dashboard' meeting.deliverable.pk meeting.pk %}">{% trans 'Dashboard' %}</a></li>
+    <li class="active">{% trans 'Stakeholders\' Opinion' %}</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+  {% include 'meetings/includes/menu.html' with active='dashboard' meeting=meeting %}
+  <div class="row">
+    <div class="col-md-3 col-sm-4">
+      {% include 'meetings/dashboard/includes/menu.html' with active='stakeholders_opinion' meeting=meeting %}
+    </div>
+    <div class="col-md-9 col-sm-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">{% trans 'Stakeholders\' Individual Opinion' %}</h3>
+        </div>
+        <div class="panel-body">
+
+          <div class="panel panel-default panel-chart">
+            <div class="panel-heading">{% trans 'Stakeholders\' Opinion Based on Each Decision Item' %}</div>
+            <table class="table table-bordered table-condensed">
+              <thead>
+                <tr>
+                  <th style="width: 15%">&nbsp;</th>
+                  {% for meeting_stakeholder in stakeholders_agreement.meeting_stakeholders %}
+                    <th>{{ meeting_stakeholder.stakeholder.profile.get_display_name }}</th>
+                  {% endfor %}
+                  <th>Group Opinion</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in stakeholders_agreement.get_stakeholders_opinion %}
+                  <tr>
+                    <th>{{ row.0.decision_item.name }}</th>
+                    {% for col in row.1 %}
+                      <td style="color: #fff; background-color: {{ col.color }}; text-align: center">
+                        <small>{{ col.description }}<br>({{ col.percentage }}%)</small>
+                      </td>
+                    {% endfor %}
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

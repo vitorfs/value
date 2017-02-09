@@ -42,6 +42,10 @@
        href="{% url 'deliverables:meetings:features_acceptance' meeting.deliverable.pk meeting.pk %}">
       {% trans 'Decision Items Acceptance' %}
     </a>
+    <a class="list-group-item{% if active == 'stakeholders_opinion' %} active{% endif %}"
+       href="{% url 'deliverables:meetings:stakeholders_opinion' meeting.deliverable.pk meeting.pk %}">
+      {% trans 'Stakeholder\'s Individual Opinion' %}
+    </a>
   </div>
 </div>
 <div class="panel panel-default panel-menu" id="scenarios-menu">
