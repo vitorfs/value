@@ -145,7 +145,7 @@ class StakeholdersAgreement(object):
                 resulting_color = list(color_1.range_to(color_2, 5))
                 measure_values_lookup[index + 1] = {
                     'color': resulting_color[2].get_hex(),
-                    'description': '/'.join(map(lambda x: x.description, group))
+                    'description': ' / '.join(map(lambda x: x.description, group))
                 }
         else:
             for measure_value in self.meeting.measure.measurevalue_set.values('id', 'description', 'color'):
