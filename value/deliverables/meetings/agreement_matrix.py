@@ -102,14 +102,17 @@ class StakeholdersAgreement(object):
         ''' Append to the dataset the overall evaluation of each item '''
         for msk in dataset.keys():  # meeting stakeholder key
             for mik in dataset[msk].keys():  # meeting item key
-                mie = dataset[msk][mik]  # meeting item evaluations
-                smie = sorted(mie, key=lambda m: m[1])  # sorted meeting item evaluations
-                groups = itertools.groupby(smie, key=lambda m: (m[0], m[1],))
-                groups_count = map(lambda x: x[0] + (len(list(x[1])),), groups)
-                groups_count.sort(key=lambda x: (-x[2], x[1]))
-                dataset[msk][mik] = (groups_count[0][0], dataset[msk][mik], )
+                top_vote = self._get_most_common_item_ordered(dataset[msk][mik])
+                dataset[msk][mik] = (top_vote, dataset[msk][mik], )
 
         return dataset
+
+    def _get_most_common_item_ordered(self, votes_list):
+        smie = sorted(votes_list, key=lambda m: m[1])  # sorted meeting item evaluations
+        groups = itertools.groupby(smie, key=lambda m: (m[0], m[1],))
+        groups_count = map(lambda x: x[0] + (len(list(x[1])),), groups)
+        groups_count.sort(key=lambda x: (-x[2], x[1]))
+        return groups_count[0][0]
 
     def get_measure_values_lookup(self):
         '''
@@ -147,14 +150,19 @@ class StakeholdersAgreement(object):
                     'description': measure_values_lookup[winner]['description'],
                     'percentage': winner_percentage
                 })
-            group_winner = mi.evaluation_summary \
-                .select_related('measure_value') \
-                .order_by('-raw_votes', 'measure_value__order') \
-                .first()
+
+            mi_dataset = list()
+            for stakeholder_id, stakeholder_meeting_items in self.dataset.iteritems():
+                mi_dataset += stakeholder_meeting_items[mi.pk][1]
+
+            overall_winner = self._get_most_common_item_ordered(mi_dataset)
+            overall_winner_count = len(filter(lambda x: x[0] == overall_winner, mi_dataset))
+            overall_winner_percentage = get_votes_percentage(len(mi_dataset), overall_winner_count)
+
             meeting_item_row[1].append({
-                'color': group_winner.measure_value.color,
-                'description': group_winner.measure_value.description,
-                'percentage': group_winner.get_percentage_votes_display()
+                'color': measure_values_lookup[overall_winner]['color'],
+                'description': measure_values_lookup[overall_winner]['description'],
+                'percentage': overall_winner_percentage
             })
             stakeholders_opinion.append(meeting_item_row)
         return stakeholders_opinion
