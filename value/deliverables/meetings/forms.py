@@ -1,6 +1,7 @@
 # coding: utf-8
 
 from django import forms
+from django.contrib.auth.models import User
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
@@ -146,3 +147,11 @@ class RationaleForm(forms.ModelForm):
     class Meta:
         model = Rationale
         fields = ['text', ]
+
+
+class CompareStakeholdersOpinion(forms.Form):
+    stakeholder_1 = forms.ModelChoiceField(queryset=User.objects.all())
+    stakeholder_2 = forms.ModelChoiceField(queryset=User.objects.all())
+
+    class Meta:
+        fields = ('stakeholder_1', 'stakeholder_2', )

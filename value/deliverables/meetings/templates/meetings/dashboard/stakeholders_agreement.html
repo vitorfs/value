@@ -12,6 +12,30 @@
   <script src="{% static 'js/meetings/meetings.js' %}"></script>
   <script type="text/javascript">
     $(function () {
+
+      $(".table-stakeholders-agreement .compare-stakeholders").click(function () {
+        var stakeholder_1 = $(this).attr("data-stakeholder-one");
+        var stakeholder_2 = $(this).attr("data-stakeholder-two");
+        var url = $(this).closest("table").attr("data-remote");
+        $.ajax({
+          url: url,
+          data: {
+            'stakeholder_1': stakeholder_1,
+            'stakeholder_2': stakeholder_2
+          },
+          beforeSend: function () {
+            $("#modal-agreement-value-factors .modal-body").html("<p>Loading...</p>");
+            $("#modal-agreement-value-factors").modal("show");
+          },
+          success: function (data) {
+            $("#modal-agreement-value-factors .modal-body").html(data);
+          },
+          error: function () {
+            $("#modal-agreement-value-factors .modal-body").html("<p>An error ocurred.</p>");
+          }
+        });
+      });
+
       $(".table-stakeholders-agreement tbody tr td.has-value").hover(
         function () {
           var column_index = $(this).index();
@@ -95,7 +119,12 @@
 
           <div class="panel panel-default panel-chart">
             <div class="panel-heading">{% trans 'Stakeholders\' Agreement Based on Each Value Factor' %}</div>
-            <table class="table table-bordered table-stakeholders-agreement">
+            <table class="table table-bordered table-stakeholders-agreement"
+                   {% if active_tab == 'raw' %}
+                   data-remote="{% url 'deliverables:meetings:stakeholders_agreement_details_factors' meeting.deliverable.pk meeting.pk %}">
+                   {% else %}
+                   data-remote="{% url 'deliverables:meetings:stakeholders_agreement_grouped_details_factors' meeting.deliverable.pk meeting.pk %}">
+                   {% endif %}
               <thead>
                 <tr>
                   <th>&nbsp;</th>
@@ -110,10 +139,10 @@
                     <th>{{ row.0.stakeholder.profile.get_display_name }}</th>
                     {% for col in row.1 %}
                       {% if forloop.counter > forloop.parentloop.counter %}
-                        <td class="has-value"
+                        <td class="has-value compare-stakeholders"
                             style="text-align: center; color: #fff; background-color: {{ col.1|matrix_cell_color }} "
-                            data-toggle=""
-                            data-target="">
+                            data-stakeholder-one="{{ row.0.stakeholder.pk }}"
+                            data-stakeholder-two="{{ col.0.stakeholder.pk }}">
                           {{ col.1 }}%
                         </td>
                       {% else %}

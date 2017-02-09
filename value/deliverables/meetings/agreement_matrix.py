@@ -19,6 +19,13 @@ class StakeholdersAgreement(object):
             .order_by('decision_item__name')
         self.dataset = self._generate_evaluaton_dataset(group_measures)
 
+    def _get_most_common_item_ordered(self, votes_list):
+        smie = sorted(votes_list, key=lambda m: m[1])  # sorted meeting item evaluations
+        groups = itertools.groupby(smie, key=lambda m: (m[0], m[1],))
+        groups_count = map(lambda x: x[0] + (len(list(x[1])),), groups)
+        groups_count.sort(key=lambda x: (-x[2], x[1]))
+        return groups_count[0][0]
+
     def _generate_evaluaton_dataset(self, group_measures):
         '''
         Following a sample of the output of the dataset, considering:
@@ -81,9 +88,9 @@ class StakeholdersAgreement(object):
             factors_lookup[factor['id']] = index
 
         ''' Create a lookup for measure values, for fast access '''
-        measure_values_lookup = None
+        grouped_measure_values_lookup = None
         if group_measures:
-            measure_values_lookup = self.get_measure_values_lookup()
+            grouped_measure_values_lookup = self._get_grouped_measure_values_lookup_for_ids()
 
         ''' Generate the evaluation matrix, filling the dataset with all the existing evaluations '''
         evaluations = self.meeting.get_evaluations() \
@@ -95,7 +102,7 @@ class StakeholdersAgreement(object):
             factor_index = factors_lookup[e[2]]
 
             if group_measures:
-                grouped_measure_value = measure_values_lookup[e[3]]
+                grouped_measure_value = grouped_measure_values_lookup[e[3]]
                 measure_value = (grouped_measure_value, e[4], )
             else:
                 measure_value = (e[3], e[4],)
@@ -110,14 +117,7 @@ class StakeholdersAgreement(object):
 
         return dataset
 
-    def _get_most_common_item_ordered(self, votes_list):
-        smie = sorted(votes_list, key=lambda m: m[1])  # sorted meeting item evaluations
-        groups = itertools.groupby(smie, key=lambda m: (m[0], m[1],))
-        groups_count = map(lambda x: x[0] + (len(list(x[1])),), groups)
-        groups_count.sort(key=lambda x: (-x[2], x[1]))
-        return groups_count[0][0]
-
-    def get_measure_values_lookup(self):
+    def _get_grouped_measure_values_lookup_for_ids(self):
         '''
         Generate index for grouping measure values
         In the grouping the following values means:
@@ -131,7 +131,7 @@ class StakeholdersAgreement(object):
                 measure_values_lookup[measure_value.pk] = (index + 1)
         return measure_values_lookup
 
-    def get_stakeholders_opinion(self):
+    def _get_measure_values_lookup(self):
         measure_values_lookup = dict()
         measure_values_lookup[0] = {
             'color': '#ccc',
@@ -150,7 +150,10 @@ class StakeholdersAgreement(object):
         else:
             for measure_value in self.meeting.measure.measurevalue_set.values('id', 'description', 'color'):
                 measure_values_lookup[measure_value['id']] = measure_value
+        return measure_values_lookup
 
+    def get_stakeholders_opinion(self):
+        measure_values_lookup = self._get_measure_values_lookup()
         stakeholders_opinion = list()
         for mi in self.meeting_items:
             meeting_item_row = (mi, list())
@@ -225,3 +228,36 @@ class StakeholdersAgreement(object):
             items_agreement.append(items_agreement_row)
 
         return items_agreement
+
+    def compare_agreement_by_factors(self, stakeholder_1, stakeholder_2):
+        data = {
+            'stakeholder_1': stakeholder_1,
+            'stakeholder_2': stakeholder_2,
+            'meeting_items': list()
+        }
+
+        measure_values_lookup = self._get_measure_values_lookup()
+
+        meeting_factors = self.meeting.factors.all()
+        meeting_factors_count = meeting_factors.count()
+        factors_indexes = range(0, meeting_factors_count)
+
+        for meeting_item in self.meeting_items:
+            meeting_item_row = {
+                'meeting_item': meeting_item,
+                'factors': list()
+            }
+            for i in factors_indexes:
+                factor = meeting_factors[i]
+                stakeholder_1_measure_id = self.dataset[stakeholder_1.pk][meeting_item.pk][1][i][0]
+                stakeholder_1_measure = measure_values_lookup[stakeholder_1_measure_id]
+
+                stakeholder_2_measure_id = self.dataset[stakeholder_2.pk][meeting_item.pk][1][i][0]
+                stakeholder_2_measure = measure_values_lookup[stakeholder_2_measure_id]
+
+                meeting_item_row['factors'].append(
+                    (factor, stakeholder_1_measure, stakeholder_2_measure)
+                )
+            data['meeting_items'].append(meeting_item_row)
+
+        return data

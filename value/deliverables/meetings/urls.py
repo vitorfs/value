@@ -29,8 +29,12 @@ urlpatterns = [
 
     # Meta Charts
     url(r'^(?P<meeting_id>\d+)/dashboard/agreement/$', views.stakeholders_agreement, name='stakeholders_agreement'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/agreement/details/factors/$', views.stakeholders_agreement_details_factors,
+        name='stakeholders_agreement_details_factors'),
     url(r'^(?P<meeting_id>\d+)/dashboard/agreement/grouped/$', views.stakeholders_agreement_grouped,
         name='stakeholders_agreement_grouped'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/agreement/grouped/details/factors/$', views.stakeholders_agreement_grouped_details_factors,
+        name='stakeholders_agreement_grouped_details_factors'),
 
     # Summary Charts URLs
     url(r'^(?P<meeting_id>\d+)/dashboard/factors-usage/$', views.dashboard_factors_usage_chart,

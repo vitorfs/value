@@ -1,0 +1,34 @@
+
+{% for table in comparison_table.meeting_items %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ table.meeting_item.decision_item.name }}</h3>
+    </div>
+    <table class="table table-condensed table-bordered">
+      <thead>
+        <tr>
+          <th>&nbsp;</th>
+          <th class="text-center">{{ comparison_table.stakeholder_1.profile.get_display_name }}</th>
+          <th class="text-center">{{ comparison_table.stakeholder_2.profile.get_display_name }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in table.factors %}
+          <tr>
+            {% for col in row %}
+              {% if forloop.first %}
+                <th><small class="text-muted">[{{ col.group.name }}]</small> {{ col.name }}</th>
+              {% else %}
+                <td style="background-color: {{ col.color }}; color: #fff; text-align: center">
+                  <small>
+                    {{ col.description }}
+                  </small>
+                </td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endfor %}

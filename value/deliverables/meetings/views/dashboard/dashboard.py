@@ -4,7 +4,7 @@ import json
 import itertools
 import operator
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -12,6 +12,7 @@ from django.utils.translation import ugettext as _
 
 from value.measures.models import MeasureValue
 from value.deliverables.decorators import user_is_manager
+from value.deliverables.meetings.forms import CompareStakeholdersOpinion
 from value.deliverables.meetings.agreement_matrix import StakeholdersAgreement
 from value.deliverables.meetings.charts import Highcharts
 from value.deliverables.meetings.decorators import meeting_is_analysing_or_closed
@@ -233,6 +234,24 @@ def stakeholders_agreement(request, deliverable_id, meeting_id):
 
 @login_required
 @meeting_is_analysing_or_closed
+def stakeholders_agreement_details_factors(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    form = CompareStakeholdersOpinion(request.GET)
+    if form.is_valid():
+        stakeholders_agreement = StakeholdersAgreement(meeting)
+        comparison_table = stakeholders_agreement.compare_agreement_by_factors(
+            form.cleaned_data.get('stakeholder_1'),
+            form.cleaned_data.get('stakeholder_2')
+        )
+        return render(request, 'meetings/dashboard/includes/individual_agreement_factor_table.html', {
+            'meeting': meeting,
+            'comparison_table': comparison_table,
+        })
+    else:
+        return HttpResponseBadRequest()
+
+@login_required
+@meeting_is_analysing_or_closed
 def stakeholders_agreement_grouped(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     return render(request, 'meetings/dashboard/stakeholders_agreement.html', {
@@ -240,6 +259,22 @@ def stakeholders_agreement_grouped(request, deliverable_id, meeting_id):
         'stakeholders_agreement': StakeholdersAgreement(meeting, group_measures=True),
         'active_tab': 'grouped'
     })
+
+def stakeholders_agreement_grouped_details_factors(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    form = CompareStakeholdersOpinion(request.GET)
+    if form.is_valid():
+        stakeholders_agreement = StakeholdersAgreement(meeting, group_measures=True)
+        comparison_table = stakeholders_agreement.compare_agreement_by_factors(
+            form.cleaned_data.get('stakeholder_1'),
+            form.cleaned_data.get('stakeholder_2')
+        )
+        return render(request, 'meetings/dashboard/includes/individual_agreement_factor_table.html', {
+            'meeting': meeting,
+            'comparison_table': comparison_table,
+        })
+    else:
+        return HttpResponseBadRequest()
 
 ''' Stakeholders Individual Opinion '''
 @login_required
