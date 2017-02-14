@@ -68,7 +68,7 @@
     <li><a href="{% url 'deliverables:meetings:index' meeting.deliverable.pk %}">{% trans 'Meetings' %}</a></li>
     <li><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
     <li><a href="{% url 'deliverables:meetings:dashboard' meeting.deliverable.pk meeting.pk %}">{% trans 'Dashboard' %}</a></li>
-    <li class="active">{% trans 'Stakeholders\' Agreement' %}</li>
+    <li class="active">{% trans "Stakeholders' Agreement" %}</li>
   </ol>
 {% endblock breadcrumb %}
 
@@ -81,7 +81,7 @@
     <div class="col-md-9 col-sm-8">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">{% trans 'Stakeholders\' Agreement Matrix' %}</h3>
+          <h3 class="panel-title">{% trans "Stakeholders' Agreement Matrix" %}</h3>
         </div>
         <div class="panel-body">
           {% if meeting.measure.measurevalue_set.count > 3 %}
@@ -118,7 +118,7 @@
           {% endif %}
 
           <div class="panel panel-default panel-chart">
-            <div class="panel-heading">{% trans 'Stakeholders\' Agreement Based on Each Value Factor' %}</div>
+            <div class="panel-heading">{% trans "Stakeholders' Agreement Based on Each Value Factor" %}</div>
             <table class="table table-bordered table-stakeholders-agreement"
                    {% if active_tab == 'raw' %}
                    data-remote="{% url 'deliverables:meetings:stakeholders_agreement_details_factors' meeting.deliverable.pk meeting.pk %}">
@@ -156,7 +156,7 @@
           </div>
 
           <div class="panel panel-default panel-chart">
-            <div class="panel-heading">{% trans 'Stakeholders\' Agreement Based on the Overall Decision Item Evaluation' %}</div>
+            <div class="panel-heading">{% trans "Stakeholders' Agreement Based on the Overall Decision Item Evaluation" %}</div>
             <table class="table table-bordered table-stakeholders-agreement">
               <thead>
                 <tr>
@@ -193,7 +193,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">{% trans 'Stakeholders\' Agreement Based on Each Value Factor' %}</h4>
+          <h4 class="modal-title">{% trans "Stakeholders' Agreement Based on Each Value Factor" %}</h4>
         </div>
         <div class="modal-body">
 
