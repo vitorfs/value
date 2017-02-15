@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% load i18n static dashboard_helpers %}
+
+{% block stylesheet %}
+  <link href="{% static 'css/meetings/dashboard.css' %}" rel="stylesheet">
+{% endblock stylesheet %}
+
+{% block javascript %}
+  <script src="{% static 'js/meetings/dashboard.js' %}"></script>
+  <script src="{% static 'js/meetings/meetings.js' %}"></script>
+  <script>
+    $(function () {
+      $(".factors").sortable({
+        onSort: function (evt) {
+          $(".sortable.factors .list-group-item").each(function () {
+            var order = $(this).index() + 1;
+            $(".priority", this).text(order);
+            $("input[type='hidden']", this).val(order);
+          });
+        }
+      });
+    });
+  </script>
+{% endblock javascript %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'deliverables:index' %}">{% trans 'Deliverables' %}</a></li>
+    <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a></li>
+    <li><a href="{% url 'deliverables:meetings:index' meeting.deliverable.pk %}">{% trans 'Meetings' %}</a></li>
+    <li><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
+    <li><a href="{% url 'deliverables:meetings:dashboard' meeting.deliverable.pk meeting.pk %}">{% trans 'Dashboard' %}</a></li>
+    <li class="active">{% trans 'Priority List' %}</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+  {% include 'meetings/includes/menu.html' with active='dashboard' meeting=meeting %}
+  <div class="row">
+    <div class="col-md-3 col-sm-4">
+      {% include 'meetings/dashboard/includes/menu.html' with active='priority_list' meeting=meeting %}
+    </div>
+    <div class="col-md-9 col-sm-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">{% trans 'Priority List' %}</h3>
+        </div>
+        <div class="panel-body">
+          <form method="get" action="{% url 'deliverables:meetings:priority_list_results' meeting.deliverable.pk meeting.pk %}">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    {% trans 'Set the priority of the value factors (drag and drop):' %}
+                  </div>
+                  <ul class="list-group sortable factors" style="margin-bottom: 0">
+                    {% for factor in meeting.factors.all %}
+                      <li class="list-group-item">
+                        <input type="hidden" name="f_{{ factor.pk }}" value="{{ forloop.counter }}">
+                        <span class="priority">{{ forloop.counter }}</span>.
+                        {{ factor.name }}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <p><strong>Order the decision items, using the value factors priority, using the following score:</strong></p>
+                    {% for measure_group in meeting.measure.get_grouped_measure_values %}
+                      {% if measure_group|length > 1 %}
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="priority_measure" value="mg_{{ forloop.counter }}">
+                            {% for measure_value in measure_group %}{{ measure_value.description }}{% if not forloop.last %} + {% endif %}{% endfor %}
+                          </label>
+                        </div>
+                      {% endif %}
+                      {% for measure_value in measure_group %}
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="priority_measure" value="mv_{{ measure_value.pk }}">
+                            {{ measure_value.description }}
+                          </label>
+                        </div>
+                      {% endfor %}
+                    {% endfor %}
+                    <!--div class="radio">
+                      <label>
+                        <input type="radio" name="priority_measure" value="vr" checked>
+                        {% trans 'Value Ranking' %}
+                      </label>
+                    </div-->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">Generate priority list</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

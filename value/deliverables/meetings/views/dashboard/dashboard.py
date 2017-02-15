@@ -296,3 +296,105 @@ def stakeholders_opinion_grouped(request, deliverable_id, meeting_id):
         'stakeholders_agreement': StakeholdersAgreement(meeting, group_measures=True),
         'active_tab': 'grouped'
     })
+
+
+''' Priority List '''
+
+@login_required
+@meeting_is_analysing_or_closed
+def priority_list(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    return render(request, 'meetings/dashboard/priority_list.html', {
+        'meeting': meeting
+    })
+
+
+@login_required
+@meeting_is_analysing_or_closed
+def priority_list_results(request, deliverable_id, meeting_id):
+    '''
+    Sample GET data
+    f_12=3&f_8=4&f_9=2&f_5=5&f_10=6&f_6=7&f_7=8&f_11=9&f_13=1&priority_measure=vr
+    '''
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    factors_order_lookup = dict()
+    for factor in meeting.factors.all():
+        try:
+            order = int(request.GET.get('f_{}'.format(factor.pk)))
+        except:
+            order = 99
+        factors_order_lookup[order] = factor
+    #print factors_order_lookup
+
+    if 'priority_measure' in request.GET:
+        priority_measure = request.GET.get('priority_measure')
+        group_measures = priority_measure.startswith('mg_')
+        matrix = StakeholdersAgreement(meeting, group_measures=group_measures)
+
+        results = dict()
+        for meeting_item in meeting.meetingitem_set.all():
+            results[meeting_item.pk] = {
+                'object': meeting_item,
+                'factors': dict()
+            }
+            for factor in meeting.factors.all():
+                results[meeting_item.pk]['factors'][factor.pk] = {
+                    'object': factor,
+                    'measure_values': {
+                        0: {
+                            'object': {
+                                'description': 'N/A',
+                                'color': '#ccc',
+                                'order': 99
+                            },
+                            'count': 0
+                        }
+                    }
+                }
+                if group_measures:
+                    grouped_measure_values = meeting.measure.get_grouped_measure_values()
+                    for index, group in enumerate(grouped_measure_values):
+                        results[meeting_item.pk]['factors'][factor.pk]['measure_values'][index + 1] = {
+                            'list': group,
+                            'count': 0
+                        }
+                else:
+                    for measure_value in meeting.measure.measurevalue_set.all():
+                        results[meeting_item.pk]['factors'][factor.pk]['measure_values'][measure_value.pk] = {
+                            'object': measure_value,
+                            'count': 0
+                        }
+
+        factors_lookup = dict()
+        for index, factor in enumerate(meeting.factors.all()):
+            factors_lookup[index] = factor.pk
+
+        for stakeholder_id, meeting_items in matrix.dataset.iteritems():
+            for meeting_item_id, evaluations in meeting_items.iteritems():
+                eval_list = map(lambda x: x[0], evaluations[1])
+                for index, measure_value in enumerate(eval_list):
+                    factor_id = factors_lookup[index]
+                    results[meeting_item_id]['factors'][factor_id]['measure_values'][measure_value]['count'] += 1
+
+    # TODO: fix that
+    priority_factor = factors_order_lookup[1]
+
+    final_ordering = list()
+
+    if priority_measure.startswith('mv_') or priority_measure.startswith('mg_'):
+        measure_value_id = int(priority_measure[3:])
+        for meeting_item_id, meeting_item_dict in results.iteritems():
+            count = meeting_item_dict['factors'][priority_factor.pk]['measure_values'][measure_value_id]['count']
+            final_ordering.append(
+                (meeting_item_dict['object'], count, )
+            )
+    else: # vr = value ranking. also fallback to default value
+        pass
+
+    final_ordering.sort(key=lambda x: -x[1])
+
+    return render(request, 'meetings/dashboard/priority_list_result.html', {
+        'meeting': meeting,
+        'final_ordering': final_ordering,
+        'priority_factor': priority_factor
+    })

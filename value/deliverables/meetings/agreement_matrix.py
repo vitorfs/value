@@ -54,6 +54,9 @@ class StakeholdersAgreement(object):
             328: (2, [(3, 2), (2, 1), (1, 0), (2, 1), (2, 1), (1, 0), (1, 0), (2, 1), (3, 2)]),
             329: (1, [(1, 0), (2, 1), (1, 0), (1, 0), (3, 2), (3, 2), (3, 2), (1, 0), (2, 1)])
           }
+
+          ...
+
         }
 
         The outmost items in the dataset (1 and 2) are keys represented by the ID of the stakeholder
@@ -89,8 +92,10 @@ class StakeholdersAgreement(object):
 
         ''' Create a lookup for measure values, for fast access '''
         grouped_measure_values_lookup = None
+        grouped_measure_values_order_lookup = None
         if group_measures:
             grouped_measure_values_lookup = self._get_grouped_measure_values_lookup_for_ids()
+            grouped_measure_values_order_lookup = self._get_grouped_measure_values_order_lookup_for_ids()
 
         ''' Generate the evaluation matrix, filling the dataset with all the existing evaluations '''
         evaluations = self.meeting.get_evaluations() \
@@ -103,7 +108,8 @@ class StakeholdersAgreement(object):
 
             if group_measures:
                 grouped_measure_value = grouped_measure_values_lookup[e[3]]
-                measure_value = (grouped_measure_value, e[4], )
+                grouped_measure_order = grouped_measure_values_order_lookup[e[4]]
+                measure_value = (grouped_measure_value, grouped_measure_order, )
             else:
                 measure_value = (e[3], e[4],)
 
@@ -129,6 +135,20 @@ class StakeholdersAgreement(object):
         for index, group in enumerate(grouped_measure_value):
             for measure_value in group:
                 measure_values_lookup[measure_value.pk] = (index + 1)
+        return measure_values_lookup
+
+    def _get_grouped_measure_values_order_lookup_for_ids(self):
+        '''
+        Generate index for grouping measure values
+        In the grouping the following values means:
+        Odd number of values: 1 = positive, 2 = neutral, 3 = negative
+        Even number of values: 1 = positive, 2 = negative
+        '''
+        measure_values_lookup = dict()
+        grouped_measure_value = self.meeting.measure.get_grouped_measure_values()
+        for index, group in enumerate(grouped_measure_value):
+            for measure_value in group:
+                measure_values_lookup[measure_value.order] = index
         return measure_values_lookup
 
     def _get_measure_values_lookup(self):

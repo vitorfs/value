@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% load i18n static dashboard_helpers meeting_item %}
+
+{% block stylesheet %}
+  <link href="{% static 'css/meetings/dashboard.css' %}" rel="stylesheet">
+{% endblock stylesheet %}
+
+{% block javascript %}
+  <script src="{% static 'js/meetings/dashboard.js' %}"></script>
+  <script src="{% static 'js/meetings/meetings.js' %}"></script>
+  <script>
+    $(function () {
+      $(".factors").sortable({
+        onSort: function (evt) {
+          $(".sortable.factors .list-group-item").each(function () {
+            var order = $(this).index() + 1;
+            $(".priority", this).text(order);
+            $("input[type='hidden']", this).val(order);
+          });
+        }
+      });
+    });
+  </script>
+{% endblock javascript %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'deliverables:index' %}">{% trans 'Deliverables' %}</a></li>
+    <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a></li>
+    <li><a href="{% url 'deliverables:meetings:index' meeting.deliverable.pk %}">{% trans 'Meetings' %}</a></li>
+    <li><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
+    <li><a href="{% url 'deliverables:meetings:dashboard' meeting.deliverable.pk meeting.pk %}">{% trans 'Dashboard' %}</a></li>
+    <li class="active">{% trans 'Priority List' %}</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+  {% include 'meetings/includes/menu.html' with active='dashboard' meeting=meeting %}
+  <div class="row">
+    <div class="col-md-3 col-sm-4">
+      {% include 'meetings/dashboard/includes/menu.html' with active='priority_list' meeting=meeting %}
+    </div>
+    <div class="col-md-9 col-sm-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">{% trans 'Priority List' %}</h3>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{% trans 'Name' %}</th>
+              <th>{% trans 'Summary' %}</th>
+              <th>{% trans 'Value Ranking' %}</th>
+              <th>{{ priority_factor.name }} Frequency</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for meeting_item, count in final_ordering %}
+              <tr>
+                <td>{{ meeting_item.decision_item.name }}</td>
+                <td>{% display_evaluation_summary meeting_item %}</td>
+                <td>{{ meeting_item.value_ranking_as_html|safe }}</td>
+                <td>{{ count }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="panel-body">
+          <a href="{% url 'deliverables:meetings:priority_list' meeting.deliverable.pk meeting.pk %}" class="btn btn-default">Change parameters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -27,15 +27,6 @@ urlpatterns = [
     # Dashboard URLs
     url(r'^(?P<meeting_id>\d+)/dashboard/$', views.dashboard, name='dashboard'),
 
-    # Meta Charts
-    url(r'^(?P<meeting_id>\d+)/dashboard/agreement/$', views.stakeholders_agreement, name='stakeholders_agreement'),
-    url(r'^(?P<meeting_id>\d+)/dashboard/agreement/details/factors/$', views.stakeholders_agreement_details_factors,
-        name='stakeholders_agreement_details_factors'),
-    url(r'^(?P<meeting_id>\d+)/dashboard/agreement/grouped/$', views.stakeholders_agreement_grouped,
-        name='stakeholders_agreement_grouped'),
-    url(r'^(?P<meeting_id>\d+)/dashboard/agreement/grouped/details/factors/$', views.stakeholders_agreement_grouped_details_factors,
-        name='stakeholders_agreement_grouped_details_factors'),
-
     # Summary Charts URLs
     url(r'^(?P<meeting_id>\d+)/dashboard/factors-usage/$', views.dashboard_factors_usage_chart,
         name='dashboard_factors_usage_chart'),
@@ -46,6 +37,24 @@ urlpatterns = [
     url(r'^(?P<meeting_id>\d+)/dashboard/measures/$', views.features_comparison, name='features_comparison'),
     url(r'^(?P<meeting_id>\d+)/dashboard/measures/(?P<measure_value_id>\d+)/$', views.features_comparison_chart,
         name='features_comparison_chart'),
+
+    # Meta Charts
+    url(r'^(?P<meeting_id>\d+)/dashboard/agreement/$', views.stakeholders_agreement, name='stakeholders_agreement'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/agreement/details/factors/$', views.stakeholders_agreement_details_factors,
+        name='stakeholders_agreement_details_factors'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/agreement/grouped/$', views.stakeholders_agreement_grouped,
+        name='stakeholders_agreement_grouped'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/agreement/grouped/details/factors/$', views.stakeholders_agreement_grouped_details_factors,
+        name='stakeholders_agreement_grouped_details_factors'),
+
+    # Stakeholders Individual Opinion
+    url(r'^(?P<meeting_id>\d+)/dashboard/opinion/$', views.stakeholders_opinion, name='stakeholders_opinion'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/opinion/grouped/$', views.stakeholders_opinion_grouped,
+        name='stakeholders_opinion_grouped'),
+
+    # Priority List
+    url(r'^(?P<meeting_id>\d+)/dashboard/priority/$', views.priority_list, name='priority_list'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/priority/results/$', views.priority_list_results, name='priority_list_results'),
 
     # Detailed Charts URLs
     # Factors Comparison URLs
@@ -74,11 +83,6 @@ urlpatterns = [
         name='features_acceptance_scenarios'),
     url(r'^(?P<meeting_id>\d+)/dashboard/acceptance/scenarios/(?P<scenario_id>\d+)/$',
         views.features_acceptance_scenario_chart, name='features_acceptance_scenario_chart'),
-
-    # Stakeholders Individual Opinion
-    url(r'^(?P<meeting_id>\d+)/dashboard/opinion/$', views.stakeholders_opinion, name='stakeholders_opinion'),
-    url(r'^(?P<meeting_id>\d+)/dashboard/opinion/grouped/$', views.stakeholders_opinion_grouped,
-        name='stakeholders_opinion_grouped'),
 
     # Scenarios URLs
     url(r'^(?P<meeting_id>\d+)/dashboard/scenarios/add/$', views.add_scenario, name='add_scenario'),
