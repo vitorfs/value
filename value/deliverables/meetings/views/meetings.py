@@ -34,6 +34,7 @@ def index(request, deliverable_id):
 
 @login_required
 @user_is_manager
+@transaction.atomic
 def new(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
     decision_items_fields = DecisionItemLookup.get_visible_fields()
@@ -83,6 +84,10 @@ def new(request, deliverable_id):
             initial_measure_value = form.cleaned_data.get('default_evaluation')
             if initial_measure_value:
                 meeting.initial_data(initial_measure_value)
+
+            retrieve_evaluations = form.cleaned_data.get('retrieve_evaluations', False)
+            if retrieve_evaluations:
+                meeting.load_past_meeting_evaluations()
 
             messages.success(request, _(u'The meeting {0} was created successfully.').format(meeting.name))
             return redirect(reverse('deliverables:meetings:meeting', args=(deliverable.pk, meeting.pk,)))

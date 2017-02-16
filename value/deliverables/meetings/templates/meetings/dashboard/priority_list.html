@@ -74,7 +74,7 @@
                       {% if measure_group|length > 1 %}
                         <div class="radio">
                           <label>
-                            <input type="radio" name="priority_measure" value="mg_{{ forloop.counter }}">
+                            <input type="radio" name="priority_measure" value="mg_{{ forloop.counter }}"{% if forloop.first %} checked{% endif %}>
                             {% for measure_value in measure_group %}{{ measure_value.description }}{% if not forloop.last %} + {% endif %}{% endfor %}
                           </label>
                         </div>

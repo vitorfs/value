@@ -38,10 +38,16 @@ class NewMeetingForm(AbstractMeetingForm):
         queryset=MeasureValue.objects.none(),
         required=False
     )
+    retrieve_evaluations = forms.BooleanField(
+        widget=forms.CheckboxInput(),
+        required=False,
+        label=_('Use decisions from past meetings')
+    )
 
     class Meta:
         model = Meeting
-        fields = ['deliverable', 'name', 'started_at', 'location', 'description', 'default_evaluation']
+        fields = ['deliverable', 'name', 'started_at', 'location', 'description', 'default_evaluation',
+            'retrieve_evaluations']
 
     def __init__(self, *args, **kwargs):
         super(NewMeetingForm, self).__init__(*args, **kwargs)

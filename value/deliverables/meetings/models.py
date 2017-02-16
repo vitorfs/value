@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models, transaction
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Max
 from django.db.models.signals import m2m_changed
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -263,6 +263,34 @@ class Meeting(models.Model):
                         evaluated_at=timezone.now()
                     )
                 meeting_item.calculate_ranking()
+
+    def load_past_meeting_evaluations(self):
+        for stakeholder in self.meetingstakeholder_set.all():
+            for meeting_item in self.meetingitem_set.select_related('decision_item').all():
+                evaluations = Evaluation.objects.exclude(meeting=self).filter(
+                    user=stakeholder.stakeholder_id,
+                    meeting_item__decision_item__id=meeting_item.decision_item_id,
+                    measure=self.measure,
+                    factor__in=self.factors.all()
+                )
+                if evaluations.exists():
+                    result = evaluations.aggregate(Max('meeting_item_id'))
+                    filtered_evaluations = evaluations.filter(meeting_item_id=result['meeting_item_id__max'])
+                    for evaluation in filtered_evaluations:
+                        obj, created = Evaluation.objects.update_or_create(
+                            meeting=self,
+                            meeting_item=meeting_item,
+                            user_id=evaluation.user_id,
+                            factor_id=evaluation.factor_id,
+                            measure_id=evaluation.measure_id,
+                            defaults={'evaluated_at': timezone.now(), 'measure_value_id': evaluation.measure_value_id}
+                        )
+                        if evaluation.rationale:
+                            rationale = Rationale.objects.create(created_by_id=stakeholder.stakeholder_id, text=evaluation.rationale.text)
+                            obj.rationale = rationale
+                            obj.save()
+                meeting_item.calculate_ranking()
+        self.calculate_progress()
 
 
 class Ranking(models.Model):

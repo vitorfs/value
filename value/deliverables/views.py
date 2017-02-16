@@ -433,8 +433,6 @@ def measure_settings(request, deliverable_id):
         form = DeliverableMeasureForm(request.POST, instance=deliverable)
         if form.is_valid():
             deliverable = form.save()
-            for meeting in deliverable.meeting_set.all():
-                meeting.calculate_all_rankings()
             messages.success(request, _(u'The deliverable {0} was saved successfully.').format(deliverable.name))
             # redirect after post to avoid form re-submition
             return redirect(reverse('deliverables:measure_settings', args=(deliverable.pk,)))
