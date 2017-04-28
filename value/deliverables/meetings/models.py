@@ -458,7 +458,7 @@ class Evaluation(models.Model):
         verbose_name_plural = _('evaluations')
 
     def __unicode__(self):
-        return '{0} - {1}'.format(self.meeting.name, self.meeting_item.decision_item.name)
+        return u'{0} - {1}'.format(self.meeting.name, self.meeting_item.decision_item.name)
 
     @staticmethod
     def _list(meeting):
