@@ -19,6 +19,9 @@ class ApplicationSetting(models.Model):
     PLAIN_TEXT_STARTING_LINE = 'PLAIN_TEXT_STARTING_LINE'
     DECISION_ITEMS_DEFAULT_ORDERING = 'DECISION_ITEMS_DEFAULT_ORDERING'
     DECISION_ITEMS_COLUMNS_DISPLAY = 'DECISION_ITEMS_COLUMNS_DISPLAY'
+    JIRA_INTEGRATION_FLAG = 'JIRA_INTEGRATION_FLAG'
+    JIRA_VALUE_RANKING_FIELD = 'JIRA_VALUE_RANKING_FIELD'
+    JIRA_VALUE_EXTRA_DATA_FIELD = 'JIRA_VALUE_EXTRA_DATA_FIELD'
 
     APPLICATION_SETTINGS = (
         (EXCEL_SHEET_INDEX, _('Excel sheet index')),
@@ -29,6 +32,9 @@ class ApplicationSetting(models.Model):
         (PLAIN_TEXT_STARTING_LINE, _('Plain text starting line')),
         (DECISION_ITEMS_DEFAULT_ORDERING, _('Decision items default ordering')),
         (DECISION_ITEMS_COLUMNS_DISPLAY, _('Decision items columns display')),
+        (JIRA_INTEGRATION_FLAG, _('JIRA integration flag')),
+        (JIRA_VALUE_RANKING_FIELD, _('Value ranking custom field id')),
+        (JIRA_VALUE_EXTRA_DATA_FIELD, _('Value extra data custom field id')),
     )
 
     name = models.CharField(_('name'), max_length=255, primary_key=True, choices=APPLICATION_SETTINGS)
@@ -64,6 +70,12 @@ class ApplicationSetting(models.Model):
                     settings[setting.name] = int(setting.value)
                 except:
                     settings[setting.name] = 0
+
+            elif setting.name == ApplicationSetting.JIRA_INTEGRATION_FLAG:
+                try:
+                    settings[setting.name] = bool(setting.value)
+                except:
+                    settings[setting.name] = False
 
             elif setting.name == ApplicationSetting.DECISION_ITEMS_COLUMNS_DISPLAY:
                 try:

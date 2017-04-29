@@ -199,3 +199,7 @@ LOGGING = {
         },
     }
 }
+
+JIRA_URL = config('JIRA_URL', default='http://localhost:8080/')
+JIRA_USERNAME = config('JIRA_USERNAME', default='admin')
+JIRA_PASSWORD = config('JIRA_PASSWORD', default='123')

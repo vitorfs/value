@@ -25,6 +25,12 @@ urlpatterns = [
         name='delete_decision_item'),
     url(r'^(?P<deliverable_id>\d+)/decision-items/(?P<decision_item_id>\d+)/details/$', views.details_decision_item,
         name='details_decision_item'),
+
+    # JIRA Integration
+    url(r'^(?P<deliverable_id>\d+)/decision-items/jira-import/$', views.jira_import, name='jira_import'),
+    url(r'^(?P<deliverable_id>\d+)/decision-items/jira-import/(?P<project_key>[-\w]+)/$', views.jira_project_issues,
+        name='jira_project_issues'),
+
     url(r'^(?P<deliverable_id>\d+)/dashboard/$', views.historical_dashboard, name='historical_dashboard'),
     url(r'^(?P<deliverable_id>\d+)/dashboard/progress/$', views.historical_dashboard_progress,
         name='historical_dashboard_progress'),

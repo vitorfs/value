@@ -42,10 +42,16 @@
               data-csrf-token="{{ csrf_token }}">
           {% include 'deliverables/includes/import_decision_items.html' %}
         </span>
+
+        <a href="{% url 'deliverables:jira_import' deliverable.pk %}" class="btn btn-primary" role="button">
+          <span class="fa fa-bitbucket"></span> {% trans 'Import from JIRA' %}
+        </a>
+
         <button type="button" class="btn btn-default js-delete-selected" disabled="disabled">
           <span class="glyphicon glyphicon-trash"></span>
           {% trans 'Remove selected items' %}
         </button>
+
       </div>
     {% endif %}
     {% include 'deliverables/decision_items/includes/decision_items_table.html' with deliverable=deliverable %}
