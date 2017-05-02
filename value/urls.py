@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^account/language/$', login_required(TemplateView.as_view(template_name='users/language.html')),
         name='language'),
 
+    url(r'^api/', include('value.api.urls', namespace='api')),
     url(r'^settings/', include('value.application_settings.urls', namespace='settings')),
     url(r'^factors/', include('value.factors.urls', namespace='factors')),
     url(r'^measures/', include('value.measures.urls', namespace='measures')),

@@ -307,12 +307,24 @@ class Meeting(models.Model):
             .filter(decision_item__is_managed=True)
         for item in items:
             issue = jira.issue(item.decision_item.name)
+
             value_ranking_field_name = u'customfield_{}'.format(
                 app_settings.get(ApplicationSetting.JIRA_VALUE_RANKING_FIELD)
             )
+            value_summary_field_name = u'customfield_{}'.format(
+                app_settings.get(ApplicationSetting.JIRA_VALUE_EXTRA_DATA_FIELD)
+            )
+
+            item_summary_output = u''
+            for ranking in item.evaluation_summary.all():
+                bars = int(round(ranking.percentage_votes)) * u'|'
+                item_summary_output += u'{color:' + ranking.measure_value.color + '}' + bars + '{color}'
+
             fields = {
-                value_ranking_field_name: item.value_ranking
+                value_ranking_field_name: item.value_ranking,
+                value_summary_field_name: item_summary_output
             }
+
             issue.update(**fields)
 
 
