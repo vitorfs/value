@@ -413,8 +413,10 @@ def jira_project_issues(request, deliverable_id, project_key):
             item, created = DecisionItem.objects.update_or_create(
                 deliverable=deliverable,
                 name=key,
+                is_managed=True,
                 defaults={
-                    'description': issue.fields.summary
+                    'description': issue.fields.summary,
+                    'column_1': issue.permalink()
                 }
             )
             if created:

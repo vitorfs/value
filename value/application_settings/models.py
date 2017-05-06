@@ -22,6 +22,7 @@ class ApplicationSetting(models.Model):
     JIRA_INTEGRATION_FLAG = 'JIRA_INTEGRATION_FLAG'
     JIRA_VALUE_RANKING_FIELD = 'JIRA_VALUE_RANKING_FIELD'
     JIRA_VALUE_EXTRA_DATA_FIELD = 'JIRA_VALUE_EXTRA_DATA_FIELD'
+    JIRA_VALUE_URL = 'JIRA_VALUE_URL'
 
     APPLICATION_SETTINGS = (
         (EXCEL_SHEET_INDEX, _('Excel sheet index')),
@@ -35,6 +36,7 @@ class ApplicationSetting(models.Model):
         (JIRA_INTEGRATION_FLAG, _('JIRA integration flag')),
         (JIRA_VALUE_RANKING_FIELD, _('Value ranking custom field id')),
         (JIRA_VALUE_EXTRA_DATA_FIELD, _('Value extra data custom field id')),
+        (JIRA_VALUE_URL, _('Value decision item URL')),
     )
 
     name = models.CharField(_('name'), max_length=255, primary_key=True, choices=APPLICATION_SETTINGS)
@@ -72,10 +74,7 @@ class ApplicationSetting(models.Model):
                     settings[setting.name] = 0
 
             elif setting.name == ApplicationSetting.JIRA_INTEGRATION_FLAG:
-                try:
-                    settings[setting.name] = bool(setting.value)
-                except:
-                    settings[setting.name] = False
+                settings[setting.name] = (setting.value == 'True')
 
             elif setting.name == ApplicationSetting.DECISION_ITEMS_COLUMNS_DISPLAY:
                 try:

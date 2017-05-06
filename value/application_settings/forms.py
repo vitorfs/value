@@ -17,6 +17,11 @@ class JIRAForm(forms.Form):
         max_length=255,
         required=False
     )
+    value_url = forms.CharField(
+        label=_(u'Value URL JIRA Custom Field ID'),
+        max_length=255,
+        required=False
+    )
 
     class Meta:
-        fields = ('value_ranking', 'value_ranking_summary',)
+        fields = ('enabled', 'value_ranking', 'value_ranking_summary', 'value_url')

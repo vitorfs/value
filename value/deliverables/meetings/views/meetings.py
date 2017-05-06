@@ -139,13 +139,6 @@ def change_meeting_status(request, deliverable_id, meeting_id):
     if form.is_valid():
         meeting = form.save()
         meeting.deliverable.save()
-
-        if meeting.status == Meeting.CLOSED:
-            app_settings = ApplicationSetting.get()
-            jira_is_enabled = app_settings.get(ApplicationSetting.JIRA_INTEGRATION_FLAG)
-            if jira_is_enabled:
-                meeting.update_managed_items()
-
         new_status = meeting.get_status_display()
         messages.success(request, _(u'The meeting status was changed from {0} to {1}.').format(old_status, new_status))
     else:
@@ -162,6 +155,16 @@ def update_meeting_progress(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     context = get_meeting_progress(meeting)
     return HttpResponse(json.dumps(context), content_type='application/json')
+
+
+@login_required
+def sync_jira(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    app_settings = ApplicationSetting.get()
+    jira_is_enabled = app_settings.get(ApplicationSetting.JIRA_INTEGRATION_FLAG)
+    if jira_is_enabled:
+        meeting.update_managed_items(request)
+    return HttpResponse()
 
 
 @login_required

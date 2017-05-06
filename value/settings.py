@@ -130,6 +130,8 @@ TEMPLATES = [
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
+
+                'value.application_settings.context_processors.application_settings',
             ],
             'debug': DEBUG
         }
@@ -202,7 +204,7 @@ LOGGING = {
 }
 
 JIRA_URL = config('JIRA_URL', default='http://localhost:8080/')
-JIRA_USERNAME = config('JIRA_USERNAME', default='admin')
+JIRA_USERNAME = config('JIRA_USERNAME', default='value')
 JIRA_PASSWORD = config('JIRA_PASSWORD', default='123')
 
 DEBUG_TOOLBAR_CONFIG = {

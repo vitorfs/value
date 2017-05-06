@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^(?P<meeting_id>\d+)/status/$', views.change_meeting_status, name='change_meeting_status'),
     url(r'^(?P<meeting_id>\d+)/progress/$', views.update_meeting_progress, name='update_meeting_progress'),
     url(r'^(?P<meeting_id>\d+)/rationales/$', views.rationales, name='rationales'),
+    url(r'^(?P<meeting_id>\d+)/sync-jira/$', views.sync_jira, name='sync_jira'),
 
     # Evaluate URLs
     url(r'^(?P<meeting_id>\d+)/evaluate/$', views.evaluate, name='evaluate'),

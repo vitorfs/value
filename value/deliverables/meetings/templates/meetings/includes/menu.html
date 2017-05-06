@@ -20,7 +20,7 @@
         <h4 class="modal-title">New note</h4>
       </div>
       <div class="modal-body">
-        
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -31,10 +31,25 @@
 </div>
 
 {% if meeting.is_ongoing %}
+  {% if jira_is_enabled %}
+    <button type="button" class="btn btn-default pull-right" disabled style="margin-left: 10px">
+      <span class="fa fa-bitbucket"></span> Sync JIRA</span>
+    </button>
+  {% endif %}
   <button type="button" class="btn btn-default pull-right" disabled>
     <span class="fa fa-comments"></span> Meeting notes <span class="fa fa-lock" style="margin-left: 5px;"></span>
   </button>
 {% else %}
+  {% if jira_is_enabled %}
+    <button type="button" class="btn btn-default pull-right js-sync-jira" style="margin-left: 10px" data-remote="{% url 'deliverables:meetings:sync_jira' meeting.deliverable.pk meeting.pk %}">
+      <span class="btn-state-default">
+        <span class="fa fa-bitbucket"></span> Sync JIRA</span>
+      </span>
+      <span class="btn-state-loading" style="display: none;">
+        <span class="fa fa-spinner fa-spin"></span> Syncing...</span>
+      </span>
+    </button>
+  {% endif %}
   <button type="button" class="btn btn-default pull-right js-meeting-notes" data-toggle="modal" data-target="#modal-meeting-notes" data-remote-url="{% url 'deliverables:meetings:rationales' meeting.deliverable.pk meeting.pk %}">
     <span class="fa fa-comments"></span> Meeting notes <span class="badge js-meeting-notes-count">{{ meeting.rationales_count }}</span>
   </button>
@@ -53,7 +68,7 @@
 </h3>
 
 <ul class="nav nav-tabs" style="margin-bottom: 20px">
-  
+
   <li role="presentation"{% if active == 'evaluate' %} class="active"{% endif %}>
     <a href="{% url 'deliverables:meetings:evaluate' meeting.deliverable.pk meeting.pk %}">
       <span class="fa fa-balance-scale"></span> Evaluate

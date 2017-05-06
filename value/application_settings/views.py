@@ -183,13 +183,20 @@ def jira_integration(request):
             jira_summary.value = form.cleaned_data.get('value_ranking_summary')
             jira_summary.save()
 
+            jira_url, created = ApplicationSetting.objects.get_or_create(
+                name=ApplicationSetting.JIRA_VALUE_URL
+            )
+            jira_url.value = form.cleaned_data.get('value_url')
+            jira_url.save()
+
             messages.success(request, _(u'JIRA integration information saved successfully.'))
             return redirect(reverse('settings:jira_integration'))
     else:
         form = JIRAForm({
             'enabled': app_settings.get(ApplicationSetting.JIRA_INTEGRATION_FLAG, False),
             'value_ranking': app_settings.get(ApplicationSetting.JIRA_VALUE_RANKING_FIELD, ''),
-            'value_ranking_summary': app_settings.get(ApplicationSetting.JIRA_VALUE_EXTRA_DATA_FIELD, '')
+            'value_ranking_summary': app_settings.get(ApplicationSetting.JIRA_VALUE_EXTRA_DATA_FIELD, ''),
+            'value_url': app_settings.get(ApplicationSetting.JIRA_VALUE_URL, '')
         })
     return render(request, 'application_settings/jira.html', {
         'form': form
