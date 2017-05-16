@@ -17,6 +17,7 @@ from django.utils.translation import ugettext as _
 
 from value.deliverables.models import DecisionItemLookup
 from value.application_settings.models import ApplicationSetting
+from value.application_settings.forms import JIRAForm
 
 
 @login_required
@@ -155,3 +156,48 @@ def save_import_templates(request):
 
     messages.success(request, _(u'Import templates saved successfully.'))
     return redirect(reverse('settings:import'))
+
+
+@login_required
+@user_passes_test(lambda user: user.is_superuser)
+def jira_integration(request):
+    app_settings = ApplicationSetting.get()
+    if request.method == 'POST':
+        form = JIRAForm(request.POST)
+        if form.is_valid():
+            jira_flag, created = ApplicationSetting.objects.get_or_create(
+                name=ApplicationSetting.JIRA_INTEGRATION_FLAG
+            )
+            jira_flag.value = form.cleaned_data.get('enabled')
+            jira_flag.save()
+
+            jira_value_ranking, created = ApplicationSetting.objects.get_or_create(
+                name=ApplicationSetting.JIRA_VALUE_RANKING_FIELD
+            )
+            jira_value_ranking.value = form.cleaned_data.get('value_ranking')
+            jira_value_ranking.save()
+
+            jira_summary, created = ApplicationSetting.objects.get_or_create(
+                name=ApplicationSetting.JIRA_VALUE_EXTRA_DATA_FIELD
+            )
+            jira_summary.value = form.cleaned_data.get('value_ranking_summary')
+            jira_summary.save()
+
+            jira_url, created = ApplicationSetting.objects.get_or_create(
+                name=ApplicationSetting.JIRA_VALUE_URL
+            )
+            jira_url.value = form.cleaned_data.get('value_url')
+            jira_url.save()
+
+            messages.success(request, _(u'JIRA integration information saved successfully.'))
+            return redirect(reverse('settings:jira_integration'))
+    else:
+        form = JIRAForm({
+            'enabled': app_settings.get(ApplicationSetting.JIRA_INTEGRATION_FLAG, False),
+            'value_ranking': app_settings.get(ApplicationSetting.JIRA_VALUE_RANKING_FIELD, ''),
+            'value_ranking_summary': app_settings.get(ApplicationSetting.JIRA_VALUE_EXTRA_DATA_FIELD, ''),
+            'value_url': app_settings.get(ApplicationSetting.JIRA_VALUE_URL, '')
+        })
+    return render(request, 'application_settings/jira.html', {
+        'form': form
+    })

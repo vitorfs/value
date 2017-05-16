@@ -1,14 +1,19 @@
 # coding: utf-8
 
+from jira import JIRA
+
 from django.contrib.auth.models import User, Group
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
+from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models, transaction
 from django.db.models import Count, Sum, Max
 from django.db.models.signals import m2m_changed
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+from value.application_settings.models import ApplicationSetting
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
 from value.deliverables.models import Deliverable, DecisionItem, DecisionItemLookup
@@ -291,6 +296,54 @@ class Meeting(models.Model):
                             obj.save()
                 meeting_item.calculate_ranking()
         self.calculate_progress()
+
+    def update_managed_items(self, request):
+        app_settings = ApplicationSetting.get()
+        jira = JIRA(
+            server=settings.JIRA_URL,
+            basic_auth=(settings.JIRA_USERNAME, settings.JIRA_PASSWORD)
+        )
+        items = self.meetingitem_set \
+            .select_related('decision_item') \
+            .filter(decision_item__is_managed=True)
+        for item in items:
+            issue = jira.issue(item.decision_item.name)
+
+            value_ranking_field_name = u'customfield_{}'.format(
+                app_settings.get(ApplicationSetting.JIRA_VALUE_RANKING_FIELD)
+            )
+            value_summary_field_name = u'customfield_{}'.format(
+                app_settings.get(ApplicationSetting.JIRA_VALUE_EXTRA_DATA_FIELD)
+            )
+            value_url_field_name = u'customfield_{}'.format(
+                app_settings.get(ApplicationSetting.JIRA_VALUE_URL)
+            )
+
+            item_summary_output = u''
+            for ranking in item.evaluation_summary.all():
+                bars = int(round(ranking.percentage_votes)) * u'|'
+                item_summary_output += u'{color:' + ranking.measure_value.color + '}' + bars + '{color}'
+
+            stakeholder_ids = item.meeting.meetingstakeholder_set.values_list('stakeholder', flat=True)
+            url = request.build_absolute_uri(
+                reverse('deliverables:meetings:features_chart', args=(
+                    item.meeting.deliverable_id,
+                    item.meeting_id,
+                    item.pk
+                ))
+            )
+            params = u'?stakeholder={}&chart_type=stacked_bars'.format(
+                '&stakeholder='.join(map(lambda x: str(x), stakeholder_ids))
+            )
+            item_value_url = u'{}{}'.format(url, params)
+
+            fields = {
+                value_ranking_field_name: item.value_ranking,
+                value_summary_field_name: item_summary_output,
+                value_url_field_name: item_value_url,
+            }
+
+            issue.update(**fields)
 
 
 class Ranking(models.Model):

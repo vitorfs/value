@@ -42,6 +42,32 @@ $(function () {
     });
   });
 
+  $(".js-sync-jira").click(function () {
+    var btn = $(this);
+    var url = btn.attr("data-remote");
+    $.ajax({
+      url: url,
+      cache: false,
+      beforeSend: function () {
+        btn.prop("disabled", true);
+        $(".btn-state-default", btn).hide();
+        $(".btn-state-loading", btn).show();
+      },
+      success: function (data) {
+        toastr.success("JIRA synced with success!");
+      },
+      error: function (xhr) {
+        $("#jira-error-body").text(xhr.responseText);
+        $("#modal-jira-error").modal();
+      },
+      complete: function () {
+        btn.prop("disabled", false);
+        $(".btn-state-default", btn).show();
+        $(".btn-state-loading", btn).hide();
+      }
+    });
+  });
+
   var checkMeetingProgress = function () {
     var url = $("#meeting-progress").attr("data-remote-url");
     var status = $("#meeting-progress").attr("data-meeting-status");

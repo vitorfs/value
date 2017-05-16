@@ -11,3 +11,4 @@ django-widget-tweaks==1.4.1
 setproctitle==1.1.9
 gunicorn==19.4.5
 colour==0.1.2
+jira==1.0.10

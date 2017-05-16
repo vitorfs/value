@@ -1,11 +1,14 @@
 # coding: utf-8
 
-from colour import Color
-import xlrd
 from collections import OrderedDict
+
+from colour import Color
+from jira import JIRA
+import xlrd
 
 from django.http import HttpResponse, HttpResponseBadRequest, Http404
 from django.core.urlresolvers import reverse
+from django.conf import settings as django_settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -375,6 +378,60 @@ def details_decision_item(request, deliverable_id, decision_item_id):
         'deliverable': deliverable,
         'item': decision_item,
         'fields': fields
+    })
+
+
+@login_required
+@user_is_manager
+def jira_import(request, deliverable_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    jira = JIRA(
+        server=django_settings.JIRA_URL,
+        basic_auth=(django_settings.JIRA_USERNAME, django_settings.JIRA_PASSWORD)
+    )
+    jira_projects = jira.projects()
+    return render(request, 'deliverables/decision_items/jira_import.html', {
+        'deliverable': deliverable,
+        'projects': jira_projects
+    })
+
+
+@login_required
+@user_is_manager
+def jira_project_issues(request, deliverable_id, project_key):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    jira = JIRA(
+        server=django_settings.JIRA_URL,
+        basic_auth=(django_settings.JIRA_USERNAME, django_settings.JIRA_PASSWORD)
+    )
+    project = jira.project(project_key)
+
+    if request.method == 'POST':
+        count = 0
+        for key in request.POST.getlist('issues'):
+            issue = jira.issue(key, fields='summary')
+            item, created = DecisionItem.objects.update_or_create(
+                deliverable=deliverable,
+                name=key,
+                is_managed=True,
+                defaults={
+                    'description': issue.fields.summary,
+                    'column_1': issue.permalink()
+                }
+            )
+            if created:
+                count += 1
+        if count > 0:
+            messages.success(request, _(u'{0} new item(s) imported from JIRA.').format(count))
+        else:
+            messages.warning(request, _(u'No items imported from JIRA.'))
+        return redirect('deliverables:decision_items', deliverable.pk)
+
+    issues = jira.search_issues(u'project={0}'.format(project_key))
+    return render(request, 'deliverables/decision_items/jira_project_issues.html', {
+        'deliverable': deliverable,
+        'project': project,
+        'issues': issues,
     })
 
 

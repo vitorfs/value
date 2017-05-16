@@ -2,7 +2,7 @@
 
 import json
 
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, HttpResponseBadRequest, Http404
 from django.views.decorators.http import require_POST
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -15,6 +15,7 @@ from django.utils import timezone
 from django.utils.html import mark_safe
 from django.utils.translation import ugettext as _
 
+from value.application_settings.models import ApplicationSetting
 from value.deliverables.models import Deliverable, DecisionItemLookup, DecisionItem
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
 from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder
@@ -154,6 +155,19 @@ def update_meeting_progress(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     context = get_meeting_progress(meeting)
     return HttpResponse(json.dumps(context), content_type='application/json')
+
+
+@login_required
+def sync_jira(request, deliverable_id, meeting_id):
+    try:
+        meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+        app_settings = ApplicationSetting.get()
+        jira_is_enabled = app_settings.get(ApplicationSetting.JIRA_INTEGRATION_FLAG)
+        if jira_is_enabled:
+            meeting.update_managed_items(request)
+        return HttpResponse()
+    except Exception, e:
+        return HttpResponseBadRequest(e.message)
 
 
 @login_required

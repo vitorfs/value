@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'widget_tweaks',
 
+    'value.api',
     'value.core',
     'value.deliverables',
     'value.deliverables.meetings',
@@ -66,7 +67,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 ROOT_URLCONF = 'value.urls'
@@ -129,6 +130,8 @@ TEMPLATES = [
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
+
+                'value.application_settings.context_processors.application_settings',
             ],
             'debug': DEBUG
         }
@@ -199,3 +202,7 @@ LOGGING = {
         },
     }
 }
+
+JIRA_URL = config('JIRA_URL', default='')
+JIRA_USERNAME = config('JIRA_USERNAME', default='')
+JIRA_PASSWORD = config('JIRA_PASSWORD', default='')

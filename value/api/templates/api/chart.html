@@ -1,0 +1,27 @@
+{% load static meeting_item %}<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VALUE Chart</title>
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+</head>
+<body>
+  <a href="{{ url }}" target="_blank">More details</a>
+  <br>
+  <div id="chart"></div>
+
+  <script src="{% static 'js/jquery-2.1.3.min.js' %}"></script>
+  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
+  <script src="{% static 'js/highcharts/highcharts-more.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/data.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/treemap.js' %}"></script>
+  <script src="{% static 'js/highcharts/modules/drilldown.js' %}"></script>
+  <script>
+    $(function () {
+      $("#chart").highcharts({{ dump|safe }});
+    });
+  </script>
+</body>
+</html>

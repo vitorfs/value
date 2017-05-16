@@ -63,6 +63,7 @@ class DecisionItem(models.Model):
     deliverable = models.ForeignKey(Deliverable)
     name = models.CharField(_('name'), max_length=255)
     description = models.TextField(_('description'), max_length=2000, null=True, blank=True)
+    is_managed = models.BooleanField(default=False)
     column_1 = models.CharField(max_length=255, null=True, blank=True)
     column_2 = models.CharField(max_length=255, null=True, blank=True)
     column_3 = models.CharField(max_length=255, null=True, blank=True)
