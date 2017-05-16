@@ -23,14 +23,14 @@
 \maketitle
 
 \begin{abstract}
-This document describes to process of integrating the VALUE tool with Atlassian's JIRA and Confluence. The instructions presented herein are meant to be used with VALUE tool version 1.5 or higher. To execute all steps it is required to have administrator access on all applications, as well as access to the VALUE tool application server.
+This document describes the process of integrating the VALUE tool with Atlassian's JIRA and Confluence. The instructions presented herein are meant to be used with VALUE tool version 1.5 or higher. To execute all steps below, it is required to have an administrator account on all applications, as well as access to the VALUE tool's application server.
 \end{abstract}
 
 \tableofcontents
 
 \section{JIRA}
 \label{jira}
-\subsection{Creating an Application User}
+\subsection{Creating A User Application}
 \label{jira_app_user}
 
 To perform this action you will need to be signed in with a JIRA administrator user. In JIRA's administration site, open the \textbf{User management} tab and create a new user to be used by the VALUE tool.
@@ -46,7 +46,7 @@ To perform this action you will need to be signed in with a JIRA administrator u
 
 \subsection{Creating Custom Fields}
 \label{jira_custom_fields}
-Still in the JIRA's administration site, access the \textbf{Issues} tab and open the \textbf{Custom fields} screen. Create the three custom fields described in the Table \ref{tbl:custom_fields} below.
+Still in the JIRA's administration site, access the \textbf{Issues} tab and open the \textbf{Custom fields} screen. Create the three custom fields described in Table \ref{tbl:custom_fields} below.
 
 \begin{table}[!ht]
     \renewcommand{\arraystretch}{2}
@@ -56,9 +56,9 @@ Still in the JIRA's administration site, access the \textbf{Issues} tab and open
     \textbf{Field name} & \textbf{Description} & \textbf{Field type}\\
     \hline
     Value Ranking & \makecell[l]{Provide the value ranking from\\the VALUE tool} & Number Field\\
-    
+
     Value Summary & \makecell[l]{Provide the group assessment\\summary from the VALUE tool} & Text Field (multi-line)\\
-    
+
     Value URL & \makecell[l]{URL of the issue on the\\VALUE tool} & URL Field\\
     \hline
     \end{tabular}
@@ -82,7 +82,7 @@ In the \textbf{Issues} tab, access the \textbf{Field configurations} and click o
 \subsection{Connecting with JIRA's REST API}
 To perform this task you will need access to the application server where the VALUE tool is deployed.
 
-Edit the \textbf{.env} file located in the project root (\url{/opt/value_tool/value/.env}). Add the following environment variables accordingly to Figure \ref{fig:value_env}.
+Edit the \textbf{.env} file located in the project root (\url{/opt/value_tool/value/.env}). Add the following environment variables accordingly, as per Figure \ref{fig:value_env}.
 
 \begin{itemize}
     \item \texttt{JIRA\_URL}: base URL of the JIRA installation
@@ -149,8 +149,8 @@ desc=Width of the chart
 ## @param Height:title=Height|type=string|default=400|
 desc=Height of the chart
 
-<iframe style="border:0;padding:0;margin:0;" 
-width="$paramWidth" height="$paramHeight" 
+<iframe style="border:0;padding:0;margin:0;"
+width="$paramWidth" height="$paramHeight"
 src="https://<VALUE_TOOL_DOMAIN>/api/charts/
 ?id=$paramIssueId&chartType=$paramChartType"></iframe>
 \end{lstlisting}
@@ -181,7 +181,7 @@ Change the \texttt{\textless INSTALLER\_NAME\textgreater} and \texttt{\textless 
 ## @param IssueId:title=IssueId|type=string|
 required=true|desc=JIRA Issue ID
 
-<iframe style="border:0;padding:0;margin:0;" width="100%" 
+<iframe style="border:0;padding:0;margin:0;" width="100%"
 height="20" src="https://<VALUE_TOOL_DOMAIN>/api/summary/
 ?id=$paramIssueId"></iframe>
 
@@ -195,7 +195,7 @@ Change the \texttt{\textless INSTALLER\_NAME\textgreater} and \texttt{\textless 
 \begin{figure}[H]
     \centering
     \captionsetup{labelformat=empty}
-    \caption{Import issues from JIRA directly in the VALUE tool}
+    \caption{Import issues from JIRA directly into the VALUE tool}
     \noindent\makebox[\textwidth]{
         \includegraphics[width=\textwidth]{media/appendix_1.png}
     }
