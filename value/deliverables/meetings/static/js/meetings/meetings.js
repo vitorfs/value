@@ -56,8 +56,9 @@ $(function () {
       success: function (data) {
         toastr.success("JIRA synced with success!");
       },
-      error: function () {
-        toastr.error("An error occurred.");
+      error: function (xhr) {
+        $("#jira-error-body").text(xhr.responseText);
+        $("#modal-jira-error").modal();
       },
       complete: function () {
         btn.prop("disabled", false);

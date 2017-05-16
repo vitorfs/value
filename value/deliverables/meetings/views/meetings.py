@@ -2,7 +2,7 @@
 
 import json
 
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, HttpResponseBadRequest, Http404
 from django.views.decorators.http import require_POST
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -159,12 +159,15 @@ def update_meeting_progress(request, deliverable_id, meeting_id):
 
 @login_required
 def sync_jira(request, deliverable_id, meeting_id):
-    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    app_settings = ApplicationSetting.get()
-    jira_is_enabled = app_settings.get(ApplicationSetting.JIRA_INTEGRATION_FLAG)
-    if jira_is_enabled:
-        meeting.update_managed_items(request)
-    return HttpResponse()
+    try:
+        meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+        app_settings = ApplicationSetting.get()
+        jira_is_enabled = app_settings.get(ApplicationSetting.JIRA_INTEGRATION_FLAG)
+        if jira_is_enabled:
+            meeting.update_managed_items(request)
+        return HttpResponse()
+    except Exception, e:
+        return HttpResponseBadRequest(e.message)
 
 
 @login_required

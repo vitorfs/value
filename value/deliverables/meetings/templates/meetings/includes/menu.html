@@ -1,11 +1,13 @@
 {% include 'meetings/includes/partial_status.html' %}
 
+{% load i18n %}
+
 <div class="modal fade" id="modal-meeting-notes" data-modal-index="1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Meeting notes</h4>
+        <h4 class="modal-title">{% trans 'Meeting notes' %}</h4>
       </div>
       <div class="modal-body" style="min-height: 400px;"></div>
     </div>
@@ -17,14 +19,14 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">New note</h4>
+        <h4 class="modal-title">{% trans 'New note' %}</h4>
       </div>
       <div class="modal-body">
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
+        <button type="button" class="btn btn-primary">{% trans 'Save' %}</button>
       </div>
     </div>
   </div>
@@ -33,25 +35,25 @@
 {% if meeting.is_ongoing %}
   {% if jira_is_enabled %}
     <button type="button" class="btn btn-default pull-right" disabled style="margin-left: 10px">
-      <span class="fa fa-bitbucket"></span> Sync JIRA</span>
+      <span class="fa fa-bitbucket"></span> {% trans 'Sync JIRA' %}</span>
     </button>
   {% endif %}
   <button type="button" class="btn btn-default pull-right" disabled>
-    <span class="fa fa-comments"></span> Meeting notes <span class="fa fa-lock" style="margin-left: 5px;"></span>
+    <span class="fa fa-comments"></span> {% trans 'Meeting notes' %} <span class="fa fa-lock" style="margin-left: 5px;"></span>
   </button>
 {% else %}
   {% if jira_is_enabled %}
     <button type="button" class="btn btn-default pull-right js-sync-jira" style="margin-left: 10px" data-remote="{% url 'deliverables:meetings:sync_jira' meeting.deliverable.pk meeting.pk %}">
       <span class="btn-state-default">
-        <span class="fa fa-bitbucket"></span> Sync JIRA</span>
+        <span class="fa fa-bitbucket"></span> {% trans 'Sync JIRA' %}</span>
       </span>
       <span class="btn-state-loading" style="display: none;">
-        <span class="fa fa-spinner fa-spin"></span> Syncing...</span>
+        <span class="fa fa-spinner fa-spin"></span> {% trans 'Syncing...' %}</span>
       </span>
     </button>
   {% endif %}
   <button type="button" class="btn btn-default pull-right js-meeting-notes" data-toggle="modal" data-target="#modal-meeting-notes" data-remote-url="{% url 'deliverables:meetings:rationales' meeting.deliverable.pk meeting.pk %}">
-    <span class="fa fa-comments"></span> Meeting notes <span class="badge js-meeting-notes-count">{{ meeting.rationales_count }}</span>
+    <span class="fa fa-comments"></span> {% trans 'Meeting notes' %} <span class="badge js-meeting-notes-count">{{ meeting.rationales_count }}</span>
   </button>
 {% endif %}
 
@@ -71,7 +73,7 @@
 
   <li role="presentation"{% if active == 'evaluate' %} class="active"{% endif %}>
     <a href="{% url 'deliverables:meetings:evaluate' meeting.deliverable.pk meeting.pk %}">
-      <span class="fa fa-balance-scale"></span> Evaluate
+      <span class="fa fa-balance-scale"></span> {% trans 'Evaluate' %}
       {% if meeting.is_closed %}
         <span class="fa fa-lock text-muted" style="margin-left: 5px;"></span>
       {% endif %}
@@ -80,7 +82,7 @@
 
   <li role="presentation"{% if active == 'dashboard' %} class="active"{% endif %}>
     <a href="{% url 'deliverables:meetings:dashboard' meeting.deliverable.pk meeting.pk %}">
-      <span class="fa fa-bar-chart"></span> Dashboard
+      <span class="fa fa-bar-chart"></span> {% trans 'Dashboard' %}
       {% if meeting.is_ongoing %}
         <span class="fa fa-lock text-muted" style="margin-left: 5px;"></span>
       {% endif %}
@@ -89,7 +91,7 @@
 
   <li role="presentation"{% if active == 'decision' %} class="active"{% endif %}>
     <a href="{% url 'deliverables:meetings:final_decision' meeting.deliverable.pk meeting.pk %}">
-      <span class="fa fa-gavel"></span> Final Decision
+      <span class="fa fa-gavel"></span> {% trans 'Final Decision' %}
       {% if meeting.is_ongoing %}
         <span class="fa fa-lock text-muted" style="margin-left: 5px;"></span>
       {% endif %}
@@ -99,9 +101,31 @@
   {% if user == meeting.deliverable.manager %}
     <li role="presentation"{% if active == 'settings' %} class="active"{% endif %}>
       <a href="{% url 'deliverables:meetings:settings' meeting.deliverable.pk meeting.pk %}">
-        <span class="fa fa-wrench"></span> Settings
+        <span class="fa fa-wrench"></span> {% trans 'Settings' %}
       </a>
     </li>
   {% endif %}
 
 </ul>
+
+<div class="modal fade" id="modal-jira-error">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title text-danger"><span class="fa fa-warning"></span> {% trans 'An Error Occurred' %}</h4>
+      </div>
+      <div class="modal-body">
+        <p>
+          {% trans 'It was not possible to sync with JIRA. Possibly because some configuration is missing.' %}<br>
+          {% trans 'Please contact the system administrator.' %}
+        </p>
+        <p>See below details of the error:</p>
+        <pre><code id="jira-error-body"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

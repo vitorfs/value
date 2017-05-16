@@ -203,10 +203,6 @@ LOGGING = {
     }
 }
 
-JIRA_URL = config('JIRA_URL', default='http://localhost:8080/')
-JIRA_USERNAME = config('JIRA_USERNAME', default='value')
-JIRA_PASSWORD = config('JIRA_PASSWORD', default='123')
-
-DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': lambda r: False,
-}
+JIRA_URL = config('JIRA_URL', default='')
+JIRA_USERNAME = config('JIRA_USERNAME', default='')
+JIRA_PASSWORD = config('JIRA_PASSWORD', default='')
