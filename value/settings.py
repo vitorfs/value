@@ -6,10 +6,6 @@ from django.contrib.messages import constants as message_constants
 PROJECT_DIR = Path(__file__).parent
 
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=True, cast=bool)
-
-
 ADMINS = (
     ('Vitor Freitas', 'vitor.freitas@oulu.fi'),
 )
