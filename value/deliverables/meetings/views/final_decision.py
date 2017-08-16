@@ -19,7 +19,6 @@ from value.deliverables.meetings.forms import RationaleForm
 
 
 @login_required
-@user_is_meeting_stakeholder
 def final_decision(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     MeetingItemFormset = modelformset_factory(MeetingItem, form=MeetingItemFinalDecisionForm, extra=0)
