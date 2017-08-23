@@ -15,8 +15,13 @@ def index(request):
 
 def value_summary(request):
     try:
-        issue_id = request.GET.get('id')
-        item = MeetingItem.objects.filter(decision_item__name=issue_id).order_by('-meeting').first()
+        issue_id = request.GET.get('id', '')
+        meeting_id = request.GET.get('meetingId', '')
+        item = MeetingItem.objects.filter(decision_item__name=issue_id)
+        if meeting_id != '$paramMeetingId':
+            item = item.filter(meeting_id=meeting_id).first()
+        else:
+            item = item.order_by('-meeting').first()
         return render(request, 'api/summary.html', {'item': item})
     except:
         return HttpResponse(u'Issue not found.')
@@ -24,11 +29,16 @@ def value_summary(request):
 
 def charts(request):
     try:
-        issue_id = request.GET.get('id')
         chart_type = request.GET.get('chartType')
+        issue_id = request.GET.get('id', '')
+        meeting_id = request.GET.get('meetingId', '')
         charts = Highcharts()
         if chart_type == 'factors_comparison':
-            item = MeetingItem.objects.filter(decision_item__name=issue_id).order_by('-meeting').first()
+            item = MeetingItem.objects.filter(decision_item__name=issue_id)
+            if meeting_id != '$paramMeetingId':
+                item = item.filter(meeting_id=meeting_id).first()
+            else:
+                item = item.order_by('-meeting').first()
             stakeholder_ids = item.meeting.meetingstakeholder_set.values_list('stakeholder', flat=True)
             options = charts.factors_comparison(item.meeting_id, item.pk, 'stacked_bars', stakeholder_ids)
             dump = json.dumps(options)
@@ -39,7 +49,7 @@ def charts(request):
                 ))
             )
         else:
-            meeting = Meeting.objects.get(pk=issue_id)
+            meeting = Meeting.objects.get(pk=meeting_id)
             if chart_type == 'decision_items_overview':
                 stakeholder_ids = meeting.meetingstakeholder_set.values_list('stakeholder', flat=True)
                 options = charts.decision_items_overview(meeting, 'stacked_columns', stakeholder_ids)

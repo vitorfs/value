@@ -28,7 +28,7 @@ from value.deliverables.decorators import user_is_manager, user_is_stakeholder
 from value.deliverables.models import Deliverable, DecisionItem, DecisionItemAttachment, DecisionItemLookup
 from value.deliverables.meetings.models import Evaluation, Meeting
 from value.deliverables.forms import UploadFileForm, DeliverableForm, DeliverableBasicDataForm, \
-    DeliverableFactorsForm, DeliverableMeasureForm, DeliverableRemoveStakeholdersForm
+    DeliverableFactorsForm, DeliverableMeasureForm, DeliverableRemoveStakeholdersForm, JiraSearchIssuesForm
 from value.deliverables.utils import excel_column_map
 
 
@@ -383,56 +383,68 @@ def details_decision_item(request, deliverable_id, decision_item_id):
 
 @login_required
 @user_is_manager
-def jira_import(request, deliverable_id):
+def jira_search_issues(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    jira = JIRA(
-        server=django_settings.JIRA_URL,
-        basic_auth=(django_settings.JIRA_USERNAME, django_settings.JIRA_PASSWORD)
-    )
-    jira_projects = jira.projects()
-    return render(request, 'deliverables/decision_items/jira_import.html', {
+
+    try:
+        jira = JIRA(
+            server=django_settings.JIRA_URL,
+            basic_auth=(django_settings.JIRA_USERNAME, django_settings.JIRA_PASSWORD)
+        )
+    except:
+        messages.error(request, _('It was not possible to connect to the JIRA server. Either the JIRA credentials are wrong or misconfigurated. Please contact the server administrator.'))
+        return redirect('deliverables:decision_items', deliverable_id)
+
+    issues = list()
+
+    if request.method == 'POST':
+        form = JiraSearchIssuesForm(request.POST, jira=jira)
+        if form.is_valid():
+            issues = form.issues
+    else:
+        form = JiraSearchIssuesForm()
+
+    return render(request, 'deliverables/decision_items/jira_search_issues.html', {
         'deliverable': deliverable,
-        'projects': jira_projects
+        'form': form,
+        'issues': issues
     })
 
 
 @login_required
 @user_is_manager
-def jira_project_issues(request, deliverable_id, project_key):
+@require_POST
+def jira_import_issues(request, deliverable_id):
     deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
-    jira = JIRA(
-        server=django_settings.JIRA_URL,
-        basic_auth=(django_settings.JIRA_USERNAME, django_settings.JIRA_PASSWORD)
-    )
-    project = jira.project(project_key)
 
-    if request.method == 'POST':
-        count = 0
-        for key in request.POST.getlist('issues'):
-            issue = jira.issue(key, fields='summary')
-            item, created = DecisionItem.objects.update_or_create(
-                deliverable=deliverable,
-                name=key,
-                is_managed=True,
-                defaults={
-                    'description': issue.fields.summary,
-                    'column_1': issue.permalink()
-                }
-            )
-            if created:
-                count += 1
-        if count > 0:
-            messages.success(request, _(u'{0} new item(s) imported from JIRA.').format(count))
-        else:
-            messages.warning(request, _(u'No items imported from JIRA.'))
-        return redirect('deliverables:decision_items', deliverable.pk)
+    try:
+        jira = JIRA(
+            server=django_settings.JIRA_URL,
+            basic_auth=(django_settings.JIRA_USERNAME, django_settings.JIRA_PASSWORD)
+        )
+    except:
+        messages.error(request, _('It was not possible to connect to the JIRA server. Either the JIRA credentials are wrong or misconfigurated. Please contact the server administrator.'))
+        return redirect('deliverables:decision_items', deliverable_id)
 
-    issues = jira.search_issues(u'project={0}'.format(project_key))
-    return render(request, 'deliverables/decision_items/jira_project_issues.html', {
-        'deliverable': deliverable,
-        'project': project,
-        'issues': issues,
-    })
+    count = 0
+    for key in request.POST.getlist('issues'):
+        issue = jira.issue(key, fields='summary')
+        item, created = DecisionItem.objects.update_or_create(
+            deliverable=deliverable,
+            name=key,
+            is_managed=True,
+            defaults={
+                'description': issue.fields.summary,
+                'column_1': issue.permalink()
+            }
+        )
+        if created:
+            count += 1
+    if count > 0:
+        messages.success(request, _(u'{0} new item(s) imported from JIRA.').format(count))
+    else:
+        messages.warning(request, _(u'No items imported from JIRA.'))
+    return redirect('deliverables:decision_items', deliverable.pk)
 
 
 @login_required

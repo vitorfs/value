@@ -7,7 +7,7 @@
 {% endblock stylesheet %}
 
 {% block javascript %}
-  <script src="{% static 'js/deliverables/new.js' %}"></script>
+  <script src="{% static 'js/deliverables/new.js' %}?v=1"></script>
   <script src="{% static 'js/deliverables/import_decision_items.js' %}"></script>
 {% endblock javascript %}
 
@@ -185,16 +185,23 @@
           <div class="panel-body">
             <div class="form-group{% if form.factors.errors %} has-error{% endif %}">
               <label for="{{ form.factors.id_for_label }}" class="control-label">{{ form.factors.label }}</label>
-              {% for checkbox in form.factors %}
-                <div class="checkbox">
-                  <label>
-                    {{ checkbox.tag }} {{ checkbox.choice_label|safe }}
-                  </label>
-                </div>
-              {% endfor %}
-              {% for error in form.factors.errors %}
-                <p class="help-block">{{ error }}</p>
-              {% endfor %}
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" class="js-select-all-factors" checked> {% trans 'Select all / unselect all' %}
+                </label>
+              </div>
+              <div class="factors-checkboxes">
+                {% for checkbox in form.factors %}
+                  <div class="checkbox">
+                    <label>
+                      {{ checkbox.tag }} {{ checkbox.choice_label|safe }}
+                    </label>
+                  </div>
+                {% endfor %}
+                {% for error in form.factors.errors %}
+                  <p class="help-block">{{ error }}</p>
+                {% endfor %}
+              </div>
             </div>
             <div class="form-group{% if form.measure.errors %} has-error{% endif %}">
               <label for="{{ form.measure.id_for_label }}" class="control-label">{{ form.measure.label }}</label>

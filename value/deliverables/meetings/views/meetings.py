@@ -167,7 +167,7 @@ def sync_jira(request, deliverable_id, meeting_id):
             meeting.update_managed_items(request)
         return HttpResponse()
     except Exception, e:
-        return HttpResponseBadRequest(e.message)
+        return HttpResponseBadRequest(e.text)
 
 
 @login_required

@@ -44,7 +44,7 @@
         </span>
 
         {% if jira_is_enabled %}
-          <a href="{% url 'deliverables:jira_import' deliverable.pk %}" class="btn btn-primary" role="button">
+          <a href="{% url 'deliverables:jira_search_issues' deliverable.pk %}" class="btn btn-primary" role="button">
             <span class="fa fa-bitbucket"></span> {% trans 'Import from JIRA' %}
           </a>
         {% endif %}

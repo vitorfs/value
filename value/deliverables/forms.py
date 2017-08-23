@@ -4,6 +4,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
+from jira.exceptions import JIRAError
+
 from value.factors.models import Factor
 from value.measures.models import Measure
 from value.deliverables.models import Deliverable
@@ -120,3 +122,25 @@ class DeliverableMeasureForm(forms.ModelForm):
     class Meta:
         model = Deliverable
         fields = ['measure', ]
+
+
+class JiraSearchIssuesForm(forms.Form):
+    query = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': '3'}),
+        max_length=4000,
+        label=_('JQL Query')
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.jira = kwargs.pop('jira', None)
+        super(JiraSearchIssuesForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super(JiraSearchIssuesForm, self).clean()
+        query = cleaned_data.get('query', '')
+        try:
+            self.issues = self.jira.search_issues(query)
+        except JIRAError, je:
+            print je
+            self.add_error('query', je.text)
+        return cleaned_data

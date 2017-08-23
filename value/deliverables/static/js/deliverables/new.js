@@ -38,4 +38,29 @@ $(function () {
     }).modal("hide");
   });
 
+  $(".js-select-all-factors").click(function () {
+    var is_checked = $(this).prop("checked");
+    $(".factors-checkboxes input[type='checkbox']").each(function () {
+      $(this).prop("checked", is_checked);
+    });
+  });
+
+  $(".factors-checkboxes input[type='checkbox']").click(function () {
+    var all_checked = true;
+    $(".factors-checkboxes input[type='checkbox']").each(function () {
+      if (!$(this).is(":checked")) {
+        all_checked = false;
+      }
+    });
+    $(".js-select-all-factors").prop("checked", all_checked);
+  });
+
+  // On Page Load
+  $(".factors-checkboxes input[type='checkbox']").each(function () {
+    if (!$(this).is(":checked")) {
+      $(".js-select-all-factors").prop("checked", false);
+    }
+  });
+
+
 });
