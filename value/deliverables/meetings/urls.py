@@ -19,6 +19,11 @@ urlpatterns = [
     url(r'^(?P<meeting_id>\d+)/evaluate/save/$', views.save_evaluation, name='save_evaluation'),
     url(r'^(?P<meeting_id>\d+)/evaluate/rationale/save/$', views.save_rationale, name='save_rationale'),
 
+    # Survey URLs
+    url(r'^(?P<meeting_id>\d+)/survey/$', views.evaluate, name='survey'),
+    url(r'^(?P<meeting_id>\d+)/survey/save/$', views.save_evaluation, name='save_survey'),
+    url(r'^(?P<meeting_id>\d+)/survey/rationale/save/$', views.save_rationale, name='save_survey'),
+
     # Rationale URLs
     url(r'^(?P<meeting_id>\d+)/rationale/item/(?P<meeting_item_id>\d+)/$', views.meeting_item_rationale,
         name='meeting_item_rationale'),
