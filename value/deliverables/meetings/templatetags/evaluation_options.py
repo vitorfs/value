@@ -54,7 +54,7 @@ def evaluation_options(evaluations, meeting_item, factor, measure, measure_value
 
     factor_name = factor.name
     if factor.group:
-        factor_name = u'<small class=\'text-muted\'>[{0}]</small> {1}'.format(escape(factor.group.name), escape(factor.name))
+        factor_name = u'{0}: <strong>{1}</strong>'.format(escape(factor.group.name), escape(factor.name))
 
     factor_description = _('No description')
     if factor.description:
