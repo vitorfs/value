@@ -280,6 +280,7 @@ def add_decision_items(request, deliverable_id, meeting_id):
 @login_required
 def settings(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    survey_url = request.build_absolute_uri(reverse('survey', args=(meeting.survey_id, )))
     if request.method == 'POST':
         form = MeetingForm(request.POST, instance=meeting)
         if form.is_valid():
@@ -292,7 +293,9 @@ def settings(request, deliverable_id, meeting_id):
         form = MeetingForm(instance=meeting)
     return render(request, 'meetings/settings/details.html', {
         'meeting': meeting,
-        'form': form})
+        'form': form,
+        'survey_url': survey_url
+    })
 
 
 @login_required

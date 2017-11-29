@@ -47,7 +47,7 @@ class NewMeetingForm(AbstractMeetingForm):
     class Meta:
         model = Meeting
         fields = ['deliverable', 'name', 'started_at', 'location', 'description', 'default_evaluation',
-            'retrieve_evaluations']
+            'retrieve_evaluations', 'is_survey']
 
     def __init__(self, *args, **kwargs):
         super(NewMeetingForm, self).__init__(*args, **kwargs)
@@ -57,7 +57,7 @@ class NewMeetingForm(AbstractMeetingForm):
 class MeetingForm(AbstractMeetingForm):
     class Meta:
         model = Meeting
-        fields = ['deliverable', 'name', 'started_at', 'location', 'description']
+        fields = ['deliverable', 'name', 'started_at', 'location', 'description', 'is_survey']
 
 
 class MeetingStatusForm(forms.ModelForm):

@@ -24,7 +24,7 @@
 {% endblock breadcrumb %}
 
 {% block tabs %}
-  {% include 'meetings/includes/menu.html' with meeting=meeting active='settings' %}  
+  {% include 'meetings/includes/menu.html' with meeting=meeting active='settings' %}
 {% endblock tabs %}
 
 {% block content %}
@@ -41,6 +41,7 @@
           </div>
           <div class="panel-body">
             {% include 'includes/form_vertical.html' with form=form %}
+            {% if meeting.is_survey %}<p>Share URL: <a href="{{ survey_url }}">{{ survey_url }}</a></p>{% endif %}
           </div>
           <div class="panel-footer">
             <button type="submit" class="btn btn-primary">Save changes</button>

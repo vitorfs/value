@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% load i18n static %}
+
+{% block stylesheet %}
+  <link href="{% static 'css/meetings/evaluate.css' %}" rel="stylesheet">
+{% endblock stylesheet %}
+
+{% block javascript %}
+  <script src="{% static 'js/meetings/meetings.js' %}"></script>
+  <script src="{% static 'js/meetings/evaluate.js' %}?v=1"></script>
+  <script type="text/javascript">
+    $(function () {
+      $(".panel-group-evaluation .panel").each(function () {
+        var container = $(".panel-heading", this);
+        var target = $(container).attr("data-target");
+        if (!$(target).is(":visible")) {
+          $(target).slideDown();
+        }
+      });
+    });
+  </script>
+{% endblock javascript %}
+
+{% block mustache %}
+  {% if meeting.is_closed %}
+    {% verbatim %}
+      <script id="rationale-template" type="x-tmpl-mustache">
+        <div role="tabpanel">
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+              <a href="#rationale_{{ id }}" aria-controls="rationale_{{ id }}" role="tab" data-toggle="tab">
+                {% endverbatim %}{% trans 'Rationale' %}{% verbatim %}
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content" style="margin-top: 15px;">
+            <div role="tabpanel" class="tab-pane fade in active" id="rationale_{{ id }}">
+              <div class="form-group">
+                <textarea class="form-control evaluation-rationale"
+                          style="resize: none; height: 150px;"
+                          maxlength="2000"
+                          readonly>{{ rationale }}</textarea>
+                <span class="help-block"></span>
+              </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="attachments_{{ id }}" style="height: 165px;">
+
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 text-right">
+            <button type="button"
+                    class="btn btn-sm btn-default"
+                    onclick="$(this).closest('.popover').popover('hide');">
+              Close
+            </button>
+          </div>
+        </div>
+      </script>
+    {% endverbatim %}
+  {% else %}
+    {% verbatim %}
+      <script id="rationale-template" type="x-tmpl-mustache">
+        <div role="tabpanel">
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+              <a href="#rationale_{{ id }}" aria-controls="rationale_{{ id }}" role="tab" data-toggle="tab">
+                {% endverbatim %}{% trans 'Rationale' %}{% verbatim %}
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content" style="margin-top: 15px;">
+            <div role="tabpanel" class="tab-pane fade in active" id="rationale_{{ id }}">
+              <div class="form-group">
+                <textarea class="form-control evaluation-rationale"
+                          style="resize: none; height: 150px;"
+                          maxlength="2000">{{ rationale }}</textarea>
+                <span class="help-block"></span>
+              </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="attachments_{{ id }}" style="height: 165px;">
+
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6"></div>
+          <div class="col-xs-6 text-right">
+            <button type="button"
+                    class="btn btn-sm btn-default"
+                    onclick="$(this).closest('.popover').popover('hide');">
+              {% endverbatim %}{% trans 'Cancel' %}{% verbatim %}
+            </button>
+            <button type="button" class="btn btn-sm btn-primary js-save-rationale">
+              {% endverbatim %}{% trans 'Save' %}{% verbatim %}
+            </button>
+          </div>
+        </div>
+      </script>
+    {% endverbatim %}
+  {% endif %}
+{% endblock mustache %}
+
+{% block content %}
+  <h3 style="margin-top: 0">{{ meeting.name }}</h3>
+  <p>{{ meeting.description }}</p>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel-group panel-group-evaluation" role="tablist" aria-multiselectable="true">
+        {% include 'meetings/includes/evaluation_panels.html' with meeting=meeting meeting_items=meeting_items factors=factors measure_values=measure_values evaluations=evaluations %}
+      </div>
+    </div>
+  </div>
+  {% if not meeting.is_closed %}
+    <p>
+      <button type="button" class="btn btn-primary js-placebo-save">
+        <span class="glyphicon glyphicon-ok"></span> {% trans 'Save changes' %}
+      </button>
+    </p>
+  {% endif %}
+  {% include 'deliverables/decision_items/includes/modal.html' %}
+  <div id="factor-description-container"></div>
+{% endblock content %}

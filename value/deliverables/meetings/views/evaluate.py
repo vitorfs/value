@@ -18,7 +18,7 @@ from value.deliverables.meetings.utils import get_meeting_progress
 
 
 @login_required
-def evaluate(request, deliverable_id, meeting_id):
+def evaluate(request, deliverable_id, meeting_id, template_name='meetings/evaluate.html'):
     try:
         meeting = Meeting.objects \
             .select_related('deliverable', 'measure') \
@@ -57,7 +57,7 @@ def evaluate(request, deliverable_id, meeting_id):
     search_query = request.GET.get('search')
     if search_query:
         meeting_items = meeting_items.filter(decision_item__name__icontains=search_query)
-    return render(request, 'meetings/evaluate.html', {
+    return render(request, template_name, {
         'meeting': meeting,
         'factors': factors,
         'measure': measure,

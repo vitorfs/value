@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from jira import JIRA
+import uuid
 
 from django.contrib.auth.models import User, Group
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
@@ -12,6 +12,8 @@ from django.db.models import Count, Sum, Max
 from django.db.models.signals import m2m_changed
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+
+from jira import JIRA
 
 from value.application_settings.models import ApplicationSetting
 from value.factors.models import Factor
@@ -91,6 +93,8 @@ class Meeting(models.Model):
     rationales_count = models.PositiveIntegerField(_('rationales count'), default=0)
     progress = models.FloatField(_('progress'), default=0.0)
     meeting_decision_rationale = models.ForeignKey(Rationale, null=True, related_name='final_decision_meetings')
+    is_survey = models.BooleanField(_('accept external input?'), default=False)
+    survey_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     class Meta:
         db_table = 'meetings'
@@ -485,6 +489,7 @@ class MeetingStakeholder(models.Model):
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
     stakeholder = models.ForeignKey(User, on_delete=models.PROTECT)
     meeting_input = models.FloatField(_('meeting input'), default=0.0)
+    is_external = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'meeting_stakeholders'

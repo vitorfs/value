@@ -8,6 +8,7 @@ from django.utils.text import slugify
 
 class Profile(models.Model):
     user = models.OneToOneField(User)
+    is_external = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'auth_user_profile'

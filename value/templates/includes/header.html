@@ -11,7 +11,7 @@
         </button>
         <a href="{% url 'home' %}" class="navbar-brand value-brand">Value</a>
       </div>
-      {% if user.is_authenticated %}
+      {% if user.is_authenticated and not user.profile.is_external %}
         <div class="collapse navbar-collapse" id="header-menu">
           <ul class="nav navbar-nav">
             <li{% if '/deliverables/' in request.path %} class="active"{% endif %}>
