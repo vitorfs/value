@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'^deliverables/', include('value.deliverables.urls', namespace='deliverables')),
 
     url(r'^survey/(?P<uuid>[^/]+)/$', core_views.survey, name='survey'),
+    url(r'^thanks/(?P<uuid>[^/]+)/$', core_views.thanks, name='thanks'),
 
     url(r'^i18n/', include('django.conf.urls.i18n')),
 ]
