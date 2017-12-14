@@ -1,116 +1,12 @@
 {% extends 'base.html' %}
 
-{% load i18n static %}
-
-{% block stylesheet %}
-  <link href="{% static 'css/meetings/evaluate.css' %}" rel="stylesheet">
-{% endblock stylesheet %}
-
-{% block javascript %}
-  <script src="{% static 'js/meetings/meetings.js' %}"></script>
-  <script src="{% static 'js/meetings/evaluate.js' %}?v=1"></script>
-  <script type="text/javascript">
-    $(function () {
-      $(".panel-group-evaluation .panel").each(function () {
-        var container = $(".panel-heading", this);
-        var target = $(container).attr("data-target");
-        if (!$(target).is(":visible")) {
-          $(target).slideDown();
-        }
-      });
-    });
-  </script>
-{% endblock javascript %}
-
-{% block mustache %}
-  {% if meeting.is_closed %}
-    {% verbatim %}
-      <script id="rationale-template" type="x-tmpl-mustache">
-        <div role="tabpanel">
-          <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
-              <a href="#rationale_{{ id }}" aria-controls="rationale_{{ id }}" role="tab" data-toggle="tab">
-                {% endverbatim %}{% trans 'Rationale' %}{% verbatim %}
-              </a>
-            </li>
-          </ul>
-          <div class="tab-content" style="margin-top: 15px;">
-            <div role="tabpanel" class="tab-pane fade in active" id="rationale_{{ id }}">
-              <div class="form-group">
-                <textarea class="form-control evaluation-rationale"
-                          style="resize: none; height: 150px;"
-                          maxlength="2000"
-                          readonly>{{ rationale }}</textarea>
-                <span class="help-block"></span>
-              </div>
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="attachments_{{ id }}" style="height: 165px;">
-
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12 text-right">
-            <button type="button"
-                    class="btn btn-sm btn-default"
-                    onclick="$(this).closest('.popover').popover('hide');">
-              Close
-            </button>
-          </div>
-        </div>
-      </script>
-    {% endverbatim %}
-  {% else %}
-    {% verbatim %}
-      <script id="rationale-template" type="x-tmpl-mustache">
-        <div role="tabpanel">
-          <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
-              <a href="#rationale_{{ id }}" aria-controls="rationale_{{ id }}" role="tab" data-toggle="tab">
-                {% endverbatim %}{% trans 'Rationale' %}{% verbatim %}
-              </a>
-            </li>
-          </ul>
-          <div class="tab-content" style="margin-top: 15px;">
-            <div role="tabpanel" class="tab-pane fade in active" id="rationale_{{ id }}">
-              <div class="form-group">
-                <textarea class="form-control evaluation-rationale"
-                          style="resize: none; height: 150px;"
-                          maxlength="2000">{{ rationale }}</textarea>
-                <span class="help-block"></span>
-              </div>
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="attachments_{{ id }}" style="height: 165px;">
-
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-6"></div>
-          <div class="col-xs-6 text-right">
-            <button type="button"
-                    class="btn btn-sm btn-default"
-                    onclick="$(this).closest('.popover').popover('hide');">
-              {% endverbatim %}{% trans 'Cancel' %}{% verbatim %}
-            </button>
-            <button type="button" class="btn btn-sm btn-primary js-save-rationale">
-              {% endverbatim %}{% trans 'Save' %}{% verbatim %}
-            </button>
-          </div>
-        </div>
-      </script>
-    {% endverbatim %}
-  {% endif %}
-{% endblock mustache %}
-
 {% block content %}
   <h3 style="margin-top: 0">Thank you!</h3>
   <p>We are grateful for you participating in the present study concerning quality assessment in empirical software engineering (ESE) research. The study investigates whether is relevant and feasible to assess a set of quality criteria for {{ meeting.name }}.</p>
-  
-  <p>After filling the form, you will receive an e-mail asking for some extra demographic characteristics. Those few questions are intended to collect updated information about your research experience. We greatly appreciate your cooperation.</p>
-  
-  <p>If you know of any acquaintances that are eligible to participate in this study, we request that you not discuss it with them until after they have had the opportunity to participate. Prior knowledge of questions asked during the study can invalidate the results.</p>
-  
-  <p>If you have any questions regarding this study, please feel free to ask the researcher at this time. (email: <a href="mailto:jefferson.molleri@gmail.com">jefferson.molleri@gmail.com</a>).</p>
 
+  <p>After filling the form, you will receive an e-mail asking for some extra demographic characteristics. Those few questions are intended to collect updated information about your research experience. We greatly appreciate your cooperation.</p>
+
+  <p>If you know of any acquaintances that are eligible to participate in this study, we request that you not discuss it with them until after they have had the opportunity to participate. Prior knowledge of questions asked during the study can invalidate the results.</p>
+
+  <p>If you have any questions regarding this study, please feel free to ask the researcher at this time. (email: <a href="mailto:jefferson.molleri@gmail.com">jefferson.molleri@gmail.com</a>).</p>
 {% endblock content %}
