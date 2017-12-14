@@ -69,3 +69,7 @@ def survey(request, uuid):
                 return redirect('survey', uuid=uuid)
 
         return render(request, 'core/survey_login.html', {'form': form, 'meeting': meeting})
+
+
+def thanks(request):
+    return render(request, 'core/thanks.html')
