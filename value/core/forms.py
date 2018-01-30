@@ -10,10 +10,18 @@ class SurveyUserForm(forms.Form):
         fields = ('email',)
 
     def save(self):
+        email = self.cleaned_data.get('email')
+        try:
+            username = email.split('@')[0]
+            if User.objects.filter(username=username).exists():
+                username = '{}_{}'.format(username, get_random_string(5))
+        except Exception, e:
+            username = get_random_string(10)
+
         user = User.objects.create_user(
-            username=get_random_string(10),
+            username=username,
             password=None,
-            email=self.cleaned_data.get('email')
+            email=email
         )
         user.refresh_from_db()
         user.profile.is_external = True

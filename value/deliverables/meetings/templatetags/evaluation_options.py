@@ -54,10 +54,7 @@ def evaluation_options(evaluations, meeting_item, factor, measure, measure_value
 
     factor_name = factor.name
     if factor.group:
-      if meeting_item.meeting.is_survey:
-        factor_name = u'What is the <strong>{0}</strong> of assessing the <strong>{1}</strong> of {2}?'.format(escape(factor.name), escape(meeting_item.decision_item.name), escape(meeting_item.meeting.name))
-      else:
-        factor_name = u'{0}: <strong>{1}</strong>'.format(escape(factor.group.name), escape(factor.name))
+      factor_name = u'{0}: <strong>{1}</strong>'.format(escape(factor.group.name), escape(factor.name))
 
     factor_description = _('No description')
     if factor.description:

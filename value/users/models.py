@@ -77,4 +77,9 @@ class Profile(models.Model):
             'z': '#AA3C39'
         }
 
-        return (initials.upper(), colors[initials[:1].lower()])
+        try:
+            color = colors[initials[:1].lower()]
+        except KeyError:
+            color = '#E1E1E1'
+
+        return (initials.upper(), color)
