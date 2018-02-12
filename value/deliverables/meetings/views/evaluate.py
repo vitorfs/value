@@ -27,7 +27,7 @@ def evaluate(request, deliverable_id, meeting_id, template_name='meetings/evalua
     except Meeting.DoesNotExist:
         raise Http404
 
-    factors = meeting.factors.all()
+    factors = meeting.factors.order_by('group__name', 'name')
     measure = meeting.measure
     measure_values = measure.measurevalue_set.all()
 
