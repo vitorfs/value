@@ -498,6 +498,15 @@ class MeetingStakeholder(models.Model):
     def __unicode__(self):
         return '{0} - {1}'.format(self.meeting.name, self.stakeholder.username)
 
+    def update_meeting_input(self):
+        evaluations_count = Evaluation.get_evaluations_by_meeting(self.meeting).filter(user=self.stakeholder).count()
+        factors_count = self.meeting.factors.count()
+        meeting_items_count = self.meeting.meetingitem_set.count()
+        max_input = factors_count * meeting_items_count
+        self.meeting_input = get_votes_percentage(max_input, evaluations_count)
+        self.save()
+        return self.meeting_input
+
 
 class Evaluation(models.Model):
     meeting = models.ForeignKey(Meeting, on_delete=models.PROTECT)

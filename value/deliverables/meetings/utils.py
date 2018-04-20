@@ -89,7 +89,7 @@ def get_or_set_scenario_charts_order_session(request, meeting, cookie_name):
 
 
 def get_stakeholders_ids(meeting, stakeholders=None):
-    stakeholder_ids = list(meeting.meetingstakeholder_set.all().values_list('stakeholder__id', flat=True))
+    stakeholder_ids = list(meeting.meetingstakeholder_set.filter(meeting_input__gt=0).values_list('stakeholder__id', flat=True))
     if hasattr(stakeholders, '__iter__'):
         try:
             stakeholder_ids = map(int, stakeholders)

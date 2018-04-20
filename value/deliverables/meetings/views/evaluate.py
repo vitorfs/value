@@ -2,6 +2,7 @@
 
 import json
 
+from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseBadRequest, Http404
@@ -13,7 +14,7 @@ from django.utils.translation import ugettext as _
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
 from value.deliverables.meetings.forms import RationaleForm
-from value.deliverables.meetings.models import Meeting, MeetingItem, Evaluation
+from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
 from value.deliverables.meetings.utils import get_meeting_progress
 
 
@@ -88,20 +89,24 @@ def save_evaluation(request, deliverable_id, meeting_id):
     else:
         measure_value = None
 
-    Evaluation.objects.update_or_create(
-        meeting=meeting,
-        meeting_item=meeting_item,
-        user=request.user,
-        factor=factor,
-        measure=measure,
-        defaults={'evaluated_at': timezone.now(), 'measure_value': measure_value}
-    )
+    with transaction.atomic():
+        Evaluation.objects.update_or_create(
+            meeting=meeting,
+            meeting_item=meeting_item,
+            user=request.user,
+            factor=factor,
+            measure=measure,
+            defaults={'evaluated_at': timezone.now(), 'measure_value': measure_value}
+        )
 
-    meeting_item.calculate_ranking()
-    for scenario in meeting_item.scenarios.all():
-        scenario.calculate_ranking()
-    meeting.deliverable.save()
-    meeting.calculate_progress()
+        meeting_item.calculate_ranking()
+        for scenario in meeting_item.scenarios.all():
+            scenario.calculate_ranking()
+        meeting.deliverable.save()
+        meeting.calculate_progress()
+        meeting_stakeholder, created = MeetingStakeholder.objects.get_or_create(meeting=meeting, stakeholder=request.user)
+        meeting_stakeholder.update_meeting_input()
+
     context = get_meeting_progress(meeting)
     return HttpResponse(json.dumps(context), content_type='application/json')
 
