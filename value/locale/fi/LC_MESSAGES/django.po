@@ -1,14 +1,14 @@
-# VALUE Portuguese Translations
+# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the VALUE package.
-# Vitor Freitas <vitor@freitas.com>, 2016.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 10:08+0300\n"
+"POT-Creation-Date: 2018-05-02 10:05+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: value/application_settings/forms.py:7
 msgid "Enable JIRA integration"
@@ -36,35 +36,35 @@ msgstr ""
 
 #: value/application_settings/models.py:28
 msgid "Excel sheet index"
-msgstr "Índice planilha Excel"
+msgstr ""
 
 #: value/application_settings/models.py:29
 msgid "Excel entry orientation"
-msgstr "Orientação registro Excel"
+msgstr ""
 
 #: value/application_settings/models.py:30
 msgid "Excel starting row/column"
-msgstr "Excel linha/coluna inicial"
+msgstr ""
 
 #: value/application_settings/models.py:31
 msgid "Excel import template"
-msgstr "Modelo de importação Excel"
+msgstr ""
 
 #: value/application_settings/models.py:32
 msgid "Plain text separator"
-msgstr "Separador plain/text"
+msgstr ""
 
 #: value/application_settings/models.py:33
 msgid "Plain text starting line"
-msgstr "Linha inicial plain/text"
+msgstr ""
 
 #: value/application_settings/models.py:34
 msgid "Decision items default ordering"
-msgstr "Ordenação padrão dos Itens de Decisão"
+msgstr ""
 
 #: value/application_settings/models.py:35
 msgid "Decision items columns display"
-msgstr "Colunas de exibiçnao dos Itens de Decisão"
+msgstr ""
 
 #: value/application_settings/models.py:36
 msgid "JIRA integration flag"
@@ -79,10 +79,8 @@ msgid "Value extra data custom field id"
 msgstr ""
 
 #: value/application_settings/models.py:39
-#, fuzzy
-#| msgid "Decision items"
 msgid "Value decision item URL"
-msgstr "Itens de decisão"
+msgstr ""
 
 #: value/application_settings/models.py:42
 #: value/application_settings/templates/application_settings/items.html:66
@@ -92,11 +90,11 @@ msgstr "Itens de decisão"
 #: value/factors/models.py:22 value/help/models.py:16
 #: value/measures/models.py:13
 msgid "name"
-msgstr "nome"
+msgstr ""
 
 #: value/application_settings/models.py:43
 msgid "value"
-msgstr "valor"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/base.html:7
 #: value/application_settings/templates/application_settings/import.html:16
@@ -148,75 +146,73 @@ msgstr "valor"
 #: value/users/templates/users/password.html:7
 #: value/users/templates/users/roles.html:11
 msgid "Home"
-msgstr "Inicial"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/base.html:8
 #: value/application_settings/templates/application_settings/import.html:17
 #: value/application_settings/templates/application_settings/items.html:27
 msgid "Application settings"
-msgstr "Configurações da aplicação"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/import.html:18
 #: value/application_settings/templates/application_settings/import.html:27
 msgid "Import template"
-msgstr "Modelo de importação"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/import.html:30
 msgid ""
 "You may import decision items for a given deliverable or meeting from a "
 "external file"
 msgstr ""
-"Você pode importar os Itens de Decisão para um Entregável ou Reunião a "
-"partir de um arquivo externo"
 
 #: value/application_settings/templates/application_settings/import.html:46
 msgid "Orientation"
-msgstr "Orientação"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/import.html:49
 msgid "One entry per row"
-msgstr "Um registro por linha"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/import.html:52
 msgid "One entry per column"
-msgstr "Um registro por coluna"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/import.html:62
 msgid "Starting row"
-msgstr "Linha inicial"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/import.html:69
 msgid "Starting column"
-msgstr "Coluna inicial"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/import.html:77
 msgid "Spreadsheet template"
-msgstr "Modelo da planilha"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/import.html:81
 msgid "Field"
-msgstr "Campo"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/import.html:83
 #: value/application_settings/templates/application_settings/items.html:70
 msgid "Column"
-msgstr "Coluna"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/import.html:86
 msgid "Row"
-msgstr "Linha"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/import.html:88
 msgid "Import"
-msgstr "Importar"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/import.html:112
 msgid "Sheet index"
-msgstr "Índice da planilha"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/import.html:112
 msgid "Zero based index. Leave empty for all"
-msgstr "Índice iniciando em zero. Deixe em branco para considerar todas."
+msgstr ""
 
 #: value/application_settings/templates/application_settings/import.html:123
 #: value/application_settings/templates/application_settings/index.html:106
@@ -232,77 +228,75 @@ msgstr "Índice iniciando em zero. Deixe em branco para considerar todas."
 #: value/users/templates/users/change_password.html:58
 #: value/users/templates/users/language.html:39
 msgid "Save changes"
-msgstr "Salvar alterações"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/index.html:17
 msgid "You are about to remove yourself as a system administrator"
-msgstr "Você está por se remover como administrador do sistema"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/index.html:18
 msgid "You will no longer be able to access the admin panel"
-msgstr "Você não conseguirá acessar o painel do administrador"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/index.html:19
 msgid "Are you sure you want to proceed"
-msgstr "Você tem certeza que deseja prosseguir"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/index.html:32
 msgid "Permissions"
-msgstr "Permissões"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/index.html:35
 msgid "Select the users you want to grant/revoke administrator permissions"
 msgstr ""
-"Selecione os usuários que você queria conceder/remover permissões de "
-"administrador"
 
 #: value/application_settings/templates/application_settings/index.html:42
 msgid "Administrators"
-msgstr "Administradores"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/index.html:43
 msgid "Revoke access"
-msgstr "Remover acesso"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/index.html:55
 msgid "you"
-msgstr "você"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/index.html:66
 #: value/application_settings/templates/application_settings/index.html:96
 msgid "No available users"
-msgstr "Nenhum usuário disponível"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/index.html:76
 msgid "Other users"
-msgstr "Outros usuários"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/index.html:77
 msgid "Grant access"
-msgstr "Conceder acesso"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:28
 #: value/application_settings/templates/application_settings/items.html:38
 #: value/deliverables/templates/deliverables/historical_dashboard/includes/partial_meeting.html:6
 msgid "Decision items"
-msgstr "Itens de decisão"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:42
 msgid "Define the column display order"
-msgstr "Defina a ordem de exibição das colunas"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:63
 msgid "Custom fields"
-msgstr "Campos customizados"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:66
 msgid ""
 "Add custom fields to the decision items model. Please note that the fields"
-msgstr "Adicione campos customizados ao modelo dos itens de decisão. Por favor"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:66
 msgid "and"
-msgstr "e"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:66
 #: value/application_settings/templates/application_settings/items.html:90
@@ -310,11 +304,11 @@ msgstr "e"
 #: value/factors/models.py:23 value/help/models.py:18
 #: value/measures/models.py:113
 msgid "description"
-msgstr "descrição"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:66
 msgid "are fixed"
-msgstr "são fixos"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:71
 msgid "Label"
@@ -322,18 +316,18 @@ msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:72
 msgid "Data type"
-msgstr "Tipo de dado"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:73
 msgid "Display"
-msgstr "Exibir"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:74
 #: value/factors/forms.py:42 value/factors/templates/factors/index.html.py:31
 #: value/measures/forms.py:22 value/measures/templates/measures/index.html:23
 #: value/users/templates/users/index.html:24
 msgid "Active"
-msgstr "Ativo"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:80
 #: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:53
@@ -345,24 +339,24 @@ msgstr "Ativo"
 #: value/factors/templates/factors/index.html:28
 #: value/measures/templates/measures/index.html:21
 msgid "Name"
-msgstr "Nome"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:83
 #: value/application_settings/templates/application_settings/items.html:94
 #: value/deliverables/models.py:138
 msgid "String"
-msgstr "Texto"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:91
 #: value/deliverables/meetings/templates/meetings/new.html:80
 #: value/deliverables/models.py:167
 #: value/factors/templates/factors/index.html:29
 msgid "Description"
-msgstr "Descrição"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/items.html:103
 msgid "column_"
-msgstr "coluna_"
+msgstr ""
 
 #: value/application_settings/templates/application_settings/jira.html:10
 msgid "JIRA Integration"
@@ -370,51 +364,46 @@ msgstr ""
 
 #: value/application_settings/views.py:45
 msgid "Administrators settings saved successfully!"
-msgstr "Configurações de administrador salvas com sucesso!"
+msgstr ""
 
 #: value/application_settings/views.py:76
 msgid "Ordering and column display saved successfully."
-msgstr "Ordenação e exibição de colunas salvas com sucesso."
+msgstr ""
 
 #: value/application_settings/views.py:78
 #: value/deliverables/meetings/views/evaluate.py:154
 #: value/deliverables/meetings/views/final_decision.py:119
 msgid "An error ocurred while trying to save your data."
-msgstr "Ocorreu um erro equanto tentamos salvar seus dados."
+msgstr ""
 
 #: value/application_settings/views.py:111
 msgid "Custom fields were saved successfully."
-msgstr "Campos customizados foram salvos com sucesso."
+msgstr ""
 
 #: value/application_settings/views.py:157
 msgid "Import templates saved successfully."
-msgstr "Modelos de importação salvos com sucesso."
+msgstr ""
 
 #: value/application_settings/views.py:192
-#, fuzzy
-#| msgid "Administrators settings saved successfully!"
 msgid "JIRA integration information saved successfully."
-msgstr "Configurações de administrador salvas com sucesso!"
+msgstr ""
 
 #: value/core/templates/core/home.html:13
 msgid "You are signed in as"
-msgstr "Você está logado como"
+msgstr ""
 
 #: value/deliverables/decorators.py:15
 #: value/deliverables/meetings/decorators.py:15
 msgid "Permission denied."
-msgstr "Permissão negada."
+msgstr ""
 
 #: value/deliverables/forms.py:56 value/deliverables/forms.py:103
 msgid "Select value factors to be used within the decision-making meetings"
 msgstr ""
-"Selecione os fatores de valor para serem usados nas reuniões de tomada de "
-"decisão"
 
 #: value/deliverables/forms.py:62 value/deliverables/forms.py:116
 msgid "Select the measure to be used within the decision-making meetings"
 msgstr ""
-"Selecione a medida para ser utilizada nas reuniões de tomada de decisão"
 
 #: value/deliverables/forms.py:131
 msgid "JQL Query"
@@ -423,21 +412,20 @@ msgstr ""
 #: value/deliverables/meetings/apps.py:9
 #: value/deliverables/meetings/models.py:98
 msgid "meetings"
-msgstr "reuniões"
+msgstr ""
 
 #: value/deliverables/meetings/charts.py:50
 msgid "Percentage of evaluations"
-msgstr "Percentual de avaliações"
+msgstr ""
 
 #: value/deliverables/meetings/charts.py:55
 #: value/deliverables/meetings/charts.py:79
 msgid "Percentage:"
-msgstr "Percentual:"
+msgstr ""
 
 #: value/deliverables/meetings/charts.py:129
 msgid "100% means the stakeholder evaluated all the meeting's decision items."
 msgstr ""
-"100% significa que o stakeholder avaliou todos os itens de decisão ra reunião"
 
 #: value/deliverables/meetings/charts.py:134
 #: value/deliverables/meetings/charts.py:139
@@ -447,7 +435,7 @@ msgstr ""
 #: value/deliverables/meetings/charts.py:136
 #: value/deliverables/meetings/charts.py:185
 msgid "Usage percentage:"
-msgstr "Percentual de utilização"
+msgstr ""
 
 #: value/deliverables/meetings/charts.py:177
 msgid "Overall Value Factors Usage"
@@ -775,11 +763,11 @@ msgstr ""
 #: value/users/templates/users/roles.html:135
 #: value/users/templates/users/roles.html:169
 msgid "Close"
-msgstr "Fechar"
+msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/dashboard/base_charts.html:66
 msgid "Discussion"
-msgstr "Discussão"
+msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_chart.html:6
 #: value/deliverables/meetings/templates/meetings/dashboard/decision_items_acceptance/chart.html:10
@@ -789,11 +777,11 @@ msgstr "Discussão"
 #: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/chart.html:10
 #: value/deliverables/meetings/templates/meetings/dashboard/value_ranking/chart.html:6
 msgid "Chart Options"
-msgstr "Opções do Gráfico"
+msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:41
 msgid "The meeting is still ongoing."
-msgstr "A reunião ainda está em andamento."
+msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:43
 msgid ""
@@ -1273,10 +1261,8 @@ msgid "Meeting Ranking"
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/final_decision.html:138
-#, fuzzy
-#| msgid "Decision items"
 msgid "Decision rationale"
-msgstr "Itens de decisão"
+msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/final_decision.html:196
 msgid "Add a rationale for "
@@ -1289,10 +1275,8 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/includes/menu.html:10
 #: value/deliverables/meetings/templates/meetings/includes/menu.html:42
 #: value/deliverables/meetings/templates/meetings/includes/menu.html:56
-#, fuzzy
-#| msgid "meetings"
 msgid "Meeting notes"
-msgstr "reuniões"
+msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/includes/menu.html:22
 msgid "New note"
@@ -1378,16 +1362,12 @@ msgid "Select at least one decision item before starting the meeting."
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/new.html:168
-#, fuzzy
-#| msgid "Decision items"
 msgid "New decision items"
-msgstr "Itens de decisão"
+msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/new.html:168
-#, fuzzy
-#| msgid "Decision items"
 msgid "Past decision items"
-msgstr "Itens de decisão"
+msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/new.html:184
 msgid "4. Advanced settings"
@@ -1689,16 +1669,12 @@ msgstr ""
 
 #: value/deliverables/templates/deliverables/historical_dashboard/decision_items_progress.html:47
 #: value/deliverables/templates/deliverables/historical_dashboard/includes/menu.html:13
-#, fuzzy
-#| msgid "Decision items"
 msgid "Decision Items Progress"
-msgstr "Itens de decisão"
+msgstr ""
 
 #: value/deliverables/templates/deliverables/historical_dashboard/decision_items_progress.html:85
-#, fuzzy
-#| msgid "Decision items"
 msgid "Decision Item Progress"
-msgstr "Itens de decisão"
+msgstr ""
 
 #: value/deliverables/templates/deliverables/historical_dashboard/decision_items_progress.html:124
 msgid "There's no enough data to display the Decision Item Progress."
@@ -2274,10 +2250,9 @@ msgid "Add measure"
 msgstr ""
 
 #: value/measures/templates/measures/delete.html:18
-#, fuzzy, python-format
-#| msgid "Are you sure you want to proceed"
+#, python-format
 msgid "Are you sure you want to delete the measure %(name)s?"
-msgstr "Você tem certeza que deseja prosseguir"
+msgstr ""
 
 #: value/measures/templates/measures/delete.html:35
 #, python-format
@@ -2564,10 +2539,9 @@ msgid ""
 msgstr ""
 
 #: value/users/templates/users/delete.html:17
-#, fuzzy, python-format
-#| msgid "Are you sure you want to proceed"
+#, python-format
 msgid "Are you sure you want to delete the user %(username)s?"
-msgstr "Você tem certeza que deseja prosseguir"
+msgstr ""
 
 #: value/users/templates/users/delete.html:34
 #, python-format
@@ -2670,7 +2644,7 @@ msgstr ""
 
 #: value/users/views.py:75 value/users/views.py:233
 msgid "Password changed successfully."
-msgstr "Senha alterada com sucesso."
+msgstr ""
 
 #: value/users/views.py:105
 #, python-brace-format
@@ -2694,4 +2668,4 @@ msgstr ""
 
 #: value/users/views.py:219
 msgid "Your profile was changed successfully."
-msgstr "O seu perfil foi atualizado com sucesso."
+msgstr ""

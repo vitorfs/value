@@ -57,7 +57,7 @@ INSTALLED_APPS = (
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
-    #'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -92,7 +92,8 @@ USE_TZ = True
 
 LANGUAGES = (
     ('en-us', 'English'),
-    #('pt-br', 'Portuguese')
+    ('pt-br', 'Portuguese'),
+    ('fi', 'Finnish'),
 )
 
 LOCALE_PATHS = (
