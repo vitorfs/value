@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-29 09:48+0300\n"
+"POT-Creation-Date: 2018-05-29 09:52+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -790,6 +790,7 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/new.html:113
 #: value/deliverables/meetings/templates/meetings/new.html:120
 #: value/deliverables/meetings/templates/meetings/new.html:159
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:61
 #: value/deliverables/templates/deliverables/decision_items/includes/modal.html:7
 #: value/deliverables/templates/deliverables/historical_dashboard/summary.html:199
 #: value/deliverables/templates/deliverables/historical_dashboard/summary.html:208
