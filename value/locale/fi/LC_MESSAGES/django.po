@@ -64,7 +64,7 @@ msgstr "Päätettävien asioiden oletusjärjestys"
 
 #: value/application_settings/models.py:35
 msgid "Decision items columns display"
-msgstr "Päätettävien asioiden sarakkeiden näyttö"
+msgstr "Päätettävien asioiden sarakkeiden näyttäminen"
 
 #: value/application_settings/models.py:36
 msgid "JIRA integration flag"
@@ -163,7 +163,7 @@ msgstr "Tuo templaatti"
 msgid ""
 "You may import decision items for a given deliverable or meeting from a "
 "external file"
-msgstr "Voit tuoda päätösasioita annetulle päätöskokonaisuudelle tai kokoukselle"
+msgstr "Voit tuoda päätösasioita annetulle toimitukselle tai kokoukselle "
 "ulkoisesta tiedostosta"
 
 #: value/application_settings/templates/application_settings/import.html:46
@@ -321,7 +321,7 @@ msgstr "Tietotyyppi"
 
 #: value/application_settings/templates/application_settings/items.html:73
 msgid "Display"
-msgstr "Näyttö"
+msgstr "Näytä"
 
 #: value/application_settings/templates/application_settings/items.html:74
 #: value/factors/forms.py:42 value/factors/templates/factors/index.html.py:31
@@ -369,7 +369,7 @@ msgstr "Pääkäyttäjän asetukset tallennettu!"
 
 #: value/application_settings/views.py:76
 msgid "Ordering and column display saved successfully."
-msgstr "Järjestys ja sarakkeiden näyttö tallennettu."
+msgstr "Järjestys ja sarakkeiden nayttäminen tallennettu."
 
 #: value/application_settings/views.py:78
 #: value/deliverables/meetings/views/evaluate.py:154
@@ -609,7 +609,7 @@ msgstr "Meneillään"
 
 #: value/deliverables/meetings/models.py:62
 msgid "Analysing"
-msgstr "Analysoidaan"
+msgstr "Analyysi"
 
 #: value/deliverables/meetings/models.py:63
 msgid "Closed"
@@ -706,7 +706,7 @@ msgstr "arvioinnit"
 #: value/deliverables/templates/deliverables/stakeholders.html:12
 #: value/templates/includes/header.html:19
 msgid "Deliverables"
-msgstr "Päätöskokonaisuus"
+msgstr "Toimitukset"
 
 #: value/deliverables/meetings/templates/meetings/dashboard/base_charts.html:25
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:27
@@ -1497,11 +1497,11 @@ msgstr "Kokous {0} poistettiin."
 
 #: value/deliverables/models.py:30
 msgid "deliverable"
-msgstr "Toimitussisältö"
+msgstr "Toimitus"
 
 #: value/deliverables/models.py:31
 msgid "deliverables"
-msgstr "Toimitussisällöt"
+msgstr "Toimitukset"
 
 #: value/deliverables/models.py:100
 msgid "decision item"
@@ -1550,7 +1550,7 @@ msgstr "Sarakkeen tyyppi"
 
 #: value/deliverables/models.py:148
 msgid "column display"
-msgstr "Sarakkeen näyttö"
+msgstr "Sarakkeen näyttäminen"
 
 #: value/deliverables/models.py:152
 msgid "decision items lookup"
@@ -1736,7 +1736,7 @@ msgstr "Kokous"
 
 #: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:7
 msgid "Deliverable"
-msgstr "Toimitussisältö"
+msgstr "Toimitus"
 
 #: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:8
 #: value/deliverables/templates/deliverables/index.html:22
@@ -1780,7 +1780,7 @@ msgstr "Osallistujat"
 #: value/deliverables/templates/deliverables/new.html:18
 #: value/deliverables/templates/deliverables/new.html:25
 msgid "New deliverable"
-msgstr "Uusi toimitussisältö"
+msgstr "Uusi toimitus"
 
 #: value/deliverables/templates/deliverables/index.html:31
 #: value/deliverables/templates/deliverables/index.html:65
@@ -1793,15 +1793,15 @@ msgstr "Osallistuja"
 
 #: value/deliverables/templates/deliverables/index.html:90
 msgid "Welcome to your repository of deliverables!"
-msgstr "Omat toimitussisältösi."
+msgstr "Omat toimitukset."
 
 #: value/deliverables/templates/deliverables/index.html:91
 msgid "A deliverable can be a project, a product, a release or a service."
-msgstr "Toimitussisältö voi olla projekti, tuote, julkaisu tai palvelu."
+msgstr "Toimitus voi olla projekti, tuote, julkaisu tai palvelu."
 
 #: value/deliverables/templates/deliverables/index.html:93
 msgid "Add your first deliverable"
-msgstr "Lisää ensimmäinen toimitussisältö"
+msgstr "Lisää ensimmäinen toimitus"
 
 #: value/deliverables/templates/deliverables/meetings.html:37
 msgid "Meetings in progress"
@@ -1813,7 +1813,7 @@ msgstr "Edelliset kokoukset"
 
 #: value/deliverables/templates/deliverables/meetings.html:53
 msgid "This deliverable had no meeting yet."
-msgstr "Toimitussisällöllä ei ole vielä kokousta."
+msgstr "Toimituksella ei ole vielä kokousta."
 
 #: value/deliverables/templates/deliverables/meetings.html:56
 msgid "Start a meeting"
@@ -1821,7 +1821,7 @@ msgstr "Aloita kokous"
 
 #: value/deliverables/templates/deliverables/new.html:30
 msgid "1. Provide the deliverable details"
-msgstr "1. Anna toimitussisällön tiedot"
+msgstr "1. Anna toimituksen tiedot"
 
 #: value/deliverables/templates/deliverables/new.html:52
 msgid "2. Assign the users who participated in the decision-making process"
@@ -1854,7 +1854,7 @@ msgstr "Valitse kaikki / poista valinnat"
 #: value/deliverables/templates/deliverables/settings/details.html:53
 #: value/deliverables/templates/deliverables/settings/includes/menu.html:7
 msgid "Deliverable details"
-msgstr "Toimitussisällön tiedot"
+msgstr "Toimituksen tiedot"
 
 #: value/deliverables/templates/deliverables/settings/details.html:66
 msgid "Danger zone"
@@ -1868,11 +1868,11 @@ msgstr "Siirrä"
 #: value/deliverables/templates/deliverables/settings/details.html:98
 #: value/deliverables/templates/deliverables/settings/details.html:110
 msgid "Transfer ownership"
-msgstr "Vaihka kokouksen vetäjä"
+msgstr "Vaihda kokouksen vetäjää"
 
 #: value/deliverables/templates/deliverables/settings/details.html:77
 msgid "Transfer this deliverable to another user."
-msgstr "Siirrä toimitussisältö toiselle käyttäjälle"
+msgstr "Siirrä toimitus toiselle käyttäjälle"
 
 #: value/deliverables/templates/deliverables/settings/details.html:101
 msgid "Select the new owner's name:"
@@ -1886,7 +1886,7 @@ msgstr "Arvoperusteet"
 
 #: value/deliverables/templates/deliverables/settings/includes/menu.html:3
 msgid "Delivearble settings"
-msgstr "Toimitussisällön asetukset"
+msgstr "Toimituksen asetukset"
 
 #: value/deliverables/templates/deliverables/settings/includes/menu.html:15
 #: value/deliverables/templates/deliverables/settings/measure.html:11
@@ -1907,7 +1907,7 @@ msgstr "Poista valittu"
 
 #: value/deliverables/templates/deliverables/stakeholders.html:52
 msgid "There is no stakeholder associated to the deliverable."
-msgstr "Toimitussisällöllä ei ole osallistujia"
+msgstr "Toimituksella ei ole osallistujia"
 
 #: value/deliverables/templates/deliverables/stakeholders.html:103
 #, python-format
@@ -1915,7 +1915,7 @@ msgid ""
 "Removing the selected stakeholders will basically remove their access to the "
 "deliverable <strong>%(name)s</strong>. They will no longer be able to access "
 "its data."
-msgstr "[%(name)s]: Osallistujan poistaminen katkaisee pääsyn toimitussisältöön."
+msgstr "[%(name)s]: Osallistujan poistaminen estää pääsyn toimitukseen."
 
 #: value/deliverables/templates/deliverables/stakeholders.html:112
 msgid "Remove selected stakeholders"
@@ -1936,7 +1936,7 @@ msgstr "Ei aktiivisa arvoja. Määritä arvoperustat asetuksissa."
 #: value/deliverables/views.py:96
 #, python-brace-format
 msgid "The deliverable {0} was added successfully."
-msgstr "Toimitussisältö {0} lisätty."
+msgstr "Toimitus {0} lisätty."
 
 #: value/deliverables/views.py:154
 msgid "Invalid file type. Supported extensions are .xls or .xlsx"
@@ -2001,12 +2001,12 @@ msgstr "Ei tuotuja arvoja."
 #: value/deliverables/views.py:505
 #, python-brace-format
 msgid "The deliverable {0} was saved successfully."
-msgstr "Toimitussisältö {0} tallennettu."
+msgstr "Toimitus {0} tallennettu."
 
 #: value/deliverables/views.py:530
 #, python-brace-format
 msgid "The deliverable {0} was successfully transferred to {1}."
-msgstr "Toimitussisältä {0} siirretty kohteeseen {1}."
+msgstr "Toimitus {0} siirretty kohteeseen {1}."
 
 #: value/deliverables/views.py:536
 msgid "Something went wrong. Nothing changed."
@@ -2018,7 +2018,7 @@ msgstr "Valitse..."
 
 #: value/factors/forms.py:43
 msgid "Unselect this instead of deleting factors."
-msgstr ""
+msgstr "Poista valinta arvon poistamisen sijaan"
 
 #: value/factors/models.py:14
 msgid "value factors group"
@@ -2111,7 +2111,7 @@ msgstr "Klikkaa muokataksesi ryhmää"
 
 #: value/factors/templates/factors/groups.html:90
 msgid "Add the first factor group"
-msgstr "Anna ansimmäinen arvoryhmäö"
+msgstr "Anna ansimmäinen arvoryhmä"
 
 #: value/factors/templates/factors/groups.html:104
 msgid "New factor group"
@@ -2153,7 +2153,7 @@ msgstr "Arvo {0} lisätty."
 #: value/factors/views.py:47
 #, python-brace-format
 msgid "The factor {0} was changed successfully."
-msgstr "Arvo {0} muokattu."
+msgstr "Arvoa {0} muokattu."
 
 #: value/factors/views.py:63
 #, python-brace-format
