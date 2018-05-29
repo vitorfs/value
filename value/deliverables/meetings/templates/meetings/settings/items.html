@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load static attr fieldtype %}
+{% load static attr fieldtype i18n %}
 
 {% block javascript %}
   <script src="{% static 'js/meetings/meetings.js' %}"></script>
@@ -17,17 +17,17 @@
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'deliverables:index' %}">{% trans 'Deliverables' %}</a></li>
     <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a></li>
     <li><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
-    <li><a href="{% url 'deliverables:meetings:settings' meeting.deliverable.pk meeting.pk %}">Settings</a></li>
-    <li class="active">Decision items</li>
+    <li><a href="{% url 'deliverables:meetings:settings' meeting.deliverable.pk meeting.pk %}">{% trans 'Settings' %}</a></li>
+    <li class="active">{% trans 'Decision items' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
 {% block tabs %}
-  {% include 'meetings/includes/menu.html' with meeting=meeting active='settings' %}  
+  {% include 'meetings/includes/menu.html' with meeting=meeting active='settings' %}
 {% endblock tabs %}
 
 {% block content %}
@@ -38,7 +38,7 @@
     <div class="col-md-9 col-sm-8">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">Meeting decision items</h3>
+          <h3 class="panel-title">{% trans 'Meeting decision items' %}</h3>
         </div>
         <div class="panel-body">
 
@@ -46,15 +46,15 @@
             <div style="margin-bottom: 20px;">
               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-decision-items">
                 <span class="glyphicon glyphicon-plus"></span>
-                Add decision items
+                {% trans 'Add decision items' %}
               </button>
               <button type="button" class="btn btn-default js-remove-selected">
                 <span class="glyphicon glyphicon-trash"></span>
-                Remove selected items
+                {% trans 'Remove selected items' %}
               </button>
             </div>
           {% endif %}
-          
+
           <form id="form-remove-decision-items" method="post" action="{% url 'deliverables:meetings:remove_decision_items' meeting.deliverable.pk meeting.pk %}">
             {% csrf_token %}
             {% with fields=meeting.deliverable.get_decision_items_fields %}
@@ -77,7 +77,7 @@
                     </tr>
                   {% empty %}
                     <tr>
-                      <td colspan="{{ fields.items|length|add:'1' }}">No data</td>
+                      <td colspan="{{ fields.items|length|add:'1' }}">{% trans 'No data' %}</td>
                     </tr>
                   {% endfor %}
                 </tbody>
@@ -95,8 +95,8 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="add-decision-items-title">Add decision items</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="add-decision-items-title">{% trans 'Add decision items' %}</h4>
           </div>
           <div class="modal-body">
             {% if available_decision_items %}
@@ -121,7 +121,7 @@
                     </tr>
                     {% empty %}
                       <tr>
-                        <td colspan="{{ fields.items|length|add:'1' }}">No data</td>
+                        <td colspan="{{ fields.items|length|add:'1' }}">{% trans 'No data' %}</td>
                       </tr>
                     {% endfor %}
                   </tbody>
@@ -132,15 +132,15 @@
               <div class="well" style="margin-bottom: 0">
                 <div class="text-center" style="padding: 2em 0;">
                   <span class="fa fa-list text-muted" style="font-size: 2.5em"></span>
-                  <h4 style="margin: 1em 0;">There is no decision item available.</h4>
-                  <a href="{% url 'deliverables:decision_items' meeting.deliverable.pk %}" class="btn btn-primary">Create new decision item</a>
+                  <h4 style="margin: 1em 0;">{% trans 'There is no decision item available.' %}</h4>
+                  <a href="{% url 'deliverables:decision_items' meeting.deliverable.pk %}" class="btn btn-primary">{% trans 'Create new decision item' %}</a>
                 </div>
               </div>
             {% endif %}
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Confirm</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> {% trans 'Confirm' %}</button>
           </div>
         </div>
       </div>

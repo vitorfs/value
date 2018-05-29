@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-29 09:52+0300\n"
+"POT-Creation-Date: 2018-05-29 10:03+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -111,6 +111,9 @@ msgstr "arvo"
 #: value/deliverables/meetings/templates/meetings/final_decision.html:55
 #: value/deliverables/meetings/templates/meetings/new.html:11
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:23
+#: value/deliverables/meetings/templates/meetings/settings/details.html:18
+#: value/deliverables/meetings/templates/meetings/settings/items.html:20
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:22
 #: value/deliverables/templates/deliverables/decision_items/add.html:7
 #: value/deliverables/templates/deliverables/decision_items/delete.html:7
 #: value/deliverables/templates/deliverables/decision_items/delete_list.html:7
@@ -224,6 +227,7 @@ msgstr "Arvo ei voi olla 0. Käytä tyhjää arvoa"
 #: value/application_settings/templates/application_settings/jira.html:20
 #: value/deliverables/meetings/templates/meetings/evaluate.html:169
 #: value/deliverables/meetings/templates/meetings/final_decision.html:89
+#: value/deliverables/meetings/templates/meetings/settings/details.html:46
 #: value/deliverables/templates/deliverables/settings/details.html:59
 #: value/deliverables/templates/deliverables/settings/factors.html:35
 #: value/deliverables/templates/deliverables/settings/measure.html:35
@@ -281,6 +285,7 @@ msgstr "Anna oikeus"
 #: value/application_settings/templates/application_settings/items.html:28
 #: value/application_settings/templates/application_settings/items.html:38
 #: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:7
+#: value/deliverables/meetings/templates/meetings/settings/items.html:25
 #: value/deliverables/templates/deliverables/historical_dashboard/includes/partial_meeting.html:6
 msgid "Decision items"
 msgstr "Päätösasiat"
@@ -725,6 +730,9 @@ msgstr "arvioinnit"
 #: value/deliverables/meetings/templates/meetings/final_decision.html:56
 #: value/deliverables/meetings/templates/meetings/new.html:12
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:24
+#: value/deliverables/meetings/templates/meetings/settings/details.html:19
+#: value/deliverables/meetings/templates/meetings/settings/items.html:21
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:23
 #: value/deliverables/templates/deliverables/decision_items/add.html:8
 #: value/deliverables/templates/deliverables/decision_items/delete.html:8
 #: value/deliverables/templates/deliverables/decision_items/delete_list.html:8
@@ -783,6 +791,11 @@ msgstr "Työpöytä"
 #: value/deliverables/meetings/templates/meetings/new.html:120
 #: value/deliverables/meetings/templates/meetings/new.html:159
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:61
+#: value/deliverables/meetings/templates/meetings/settings/items.html:98
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:50
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:73
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:79
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:109
 #: value/deliverables/templates/deliverables/decision_items/includes/modal.html:7
 #: value/deliverables/templates/deliverables/historical_dashboard/summary.html:199
 #: value/deliverables/templates/deliverables/historical_dashboard/summary.html:208
@@ -1031,6 +1044,8 @@ msgstr "Päivitä kuvaaja"
 
 #: value/deliverables/meetings/templates/meetings/dashboard/includes/stakeholders_toolbar.html:10
 #: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:8
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:27
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:43
 #: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:9
 #: value/deliverables/templates/deliverables/includes/menu.html:16
 #: value/deliverables/templates/deliverables/index.html:29
@@ -1074,6 +1089,8 @@ msgstr "Yleiset asiat"
 #: value/deliverables/meetings/templates/meetings/final_decision.html:42
 #: value/deliverables/meetings/templates/meetings/includes/menu.html:28
 #: value/deliverables/meetings/templates/meetings/new.html:219
+#: value/deliverables/meetings/templates/meetings/settings/items.html:142
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:94
 #: value/deliverables/templates/deliverables/decision_items/delete.html:52
 #: value/deliverables/templates/deliverables/decision_items/delete_list.html:38
 #: value/deliverables/templates/deliverables/decision_items/delete_list.html:79
@@ -1174,6 +1191,7 @@ msgstr "Muokkaa skenaariota"
 
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:57
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:62
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:110
 #: value/deliverables/templates/deliverables/stakeholders.html:99
 #: value/factors/templates/factors/groups.html:134
 #: value/users/templates/users/roles.html:172
@@ -1341,6 +1359,9 @@ msgstr "Synkronoi..."
 
 #: value/deliverables/meetings/templates/meetings/includes/menu.html:104
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:27
+#: value/deliverables/meetings/templates/meetings/settings/details.html:22
+#: value/deliverables/meetings/templates/meetings/settings/items.html:24
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:26
 #: value/deliverables/templates/deliverables/includes/menu.html:32
 #: value/deliverables/templates/deliverables/settings/details.html:35
 #: value/deliverables/templates/deliverables/settings/factors.html:10
@@ -1363,6 +1384,8 @@ msgid "Please contact the system administrator."
 msgstr "Ota yhteyttä pääkäyttäjään."
 
 #: value/deliverables/meetings/templates/meetings/includes/partial_decision_items_table.html:30
+#: value/deliverables/meetings/templates/meetings/settings/items.html:80
+#: value/deliverables/meetings/templates/meetings/settings/items.html:124
 #: value/deliverables/templates/deliverables/decision_items/includes/decision_items_table.html:47
 #: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:61
 #: value/deliverables/templates/deliverables/includes/meetings_table.html:57
@@ -1387,6 +1410,7 @@ msgid "2. Review the stakeholders"
 msgstr "2. Osallistujat"
 
 #: value/deliverables/meetings/templates/meetings/new.html:116
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:51
 msgid "Click to remove a stakeholder from the meeting."
 msgstr "Poista osallistuja klikkaamalla."
 
@@ -1421,6 +1445,10 @@ msgstr "4. Lisäasetukset"
 #: value/deliverables/meetings/templates/meetings/new.html:216
 msgid "Start the meeting"
 msgstr "Aloita kokous"
+
+#: value/deliverables/meetings/templates/meetings/rationales/meeting_item.html:53
+msgid "No rationale recorded for this item."
+msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:45
 #: value/deliverables/templates/deliverables/settings/details.html:66
@@ -1462,23 +1490,104 @@ msgid ""
 "There's already evaluation data associated with this decision making meeting."
 msgstr "Valitse arvot joita käytetätään kokouksen päätöksenteossa."
 
-#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:4
-#, fuzzy
-#| msgid "Meeting Ranking"
-msgid "Meeting settings"
-msgstr "Sijoitus kokouksessa"
-
+#: value/deliverables/meetings/templates/meetings/settings/details.html:40
 #: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:6
 #, fuzzy
 #| msgid "Meeting notes"
 msgid "Meeting details"
 msgstr "Kokousmuistiinpanot"
 
+#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:4
+#, fuzzy
+#| msgid "Meeting Ranking"
+msgid "Meeting settings"
+msgstr "Sijoitus kokouksessa"
+
 #: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:9
 #, fuzzy
 #| msgid "New meeting"
 msgid "Delete meeting"
 msgstr "Uusi kokous"
+
+#: value/deliverables/meetings/templates/meetings/settings/items.html:41
+#, fuzzy
+#| msgid "meeting decision"
+msgid "Meeting decision items"
+msgstr "kokouksen päätös"
+
+#: value/deliverables/meetings/templates/meetings/settings/items.html:49
+#: value/deliverables/meetings/templates/meetings/settings/items.html:99
+#, fuzzy
+#| msgid "Add decision item"
+msgid "Add decision items"
+msgstr "Lisää päätöksentekoasia"
+
+#: value/deliverables/meetings/templates/meetings/settings/items.html:53
+#: value/deliverables/templates/deliverables/decision_items/list.html:54
+msgid "Remove selected items"
+msgstr "Poista valitut"
+
+#: value/deliverables/meetings/templates/meetings/settings/items.html:135
+#, fuzzy
+#| msgid "There is no stakeholder available."
+msgid "There is no decision item available."
+msgstr "Ei osallistujia"
+
+#: value/deliverables/meetings/templates/meetings/settings/items.html:136
+#, fuzzy
+#| msgid "Change decision item"
+msgid "Create new decision item"
+msgstr "Muuta päätösasiaa"
+
+#: value/deliverables/meetings/templates/meetings/settings/items.html:143
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:95
+#: value/deliverables/templates/deliverables/decision_items/delete.html:49
+#: value/deliverables/templates/deliverables/decision_items/delete_list.html:35
+#: value/deliverables/templates/deliverables/includes/import_decision_items.html:30
+#: value/deliverables/templates/deliverables/stakeholders.html:84
+#: value/factors/templates/factors/delete.html:21
+#: value/measures/templates/measures/delete.html:26
+#: value/users/templates/users/delete.html:25
+msgid "Confirm"
+msgstr "Vahvista"
+
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:59
+msgid "Invite"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:74
+#, fuzzy
+#| msgid "2. Review the stakeholders"
+msgid "Invite stakeholder"
+msgstr "2. Osallistujat"
+
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:80
+#, fuzzy
+#| msgid "Click to remove a stakeholder from the meeting."
+msgid "Click to add a stakeholder to the meeting."
+msgstr "Poista osallistuja klikkaamalla."
+
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:87
+#: value/deliverables/templates/deliverables/includes/add_stakeholders.html:15
+msgid "There is no stakeholder available."
+msgstr "Ei osallistujia"
+
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:88
+#: value/deliverables/templates/deliverables/includes/add_stakeholders.html:16
+msgid "Create new user"
+msgstr "Luo uusi käyttäjä"
+
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:113
+#, fuzzy
+#| msgid "Remove selected stakeholders"
+msgid "Remove the stakeholder"
+msgstr "Poista valitut osallistujat"
+
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:116
+#, fuzzy
+#| msgid "Remove?"
+msgid "Remove"
+msgstr "Poista?"
 
 #: value/deliverables/meetings/templatetags/evaluation_options.py:81
 msgid "Add a rationale for"
@@ -1678,16 +1787,6 @@ msgstr "Haluatko poistaa päätöksentekoasian <strong>%(name)s</strong>?"
 msgid "Summary:"
 msgstr "Yhteenveto"
 
-#: value/deliverables/templates/deliverables/decision_items/delete.html:49
-#: value/deliverables/templates/deliverables/decision_items/delete_list.html:35
-#: value/deliverables/templates/deliverables/includes/import_decision_items.html:30
-#: value/deliverables/templates/deliverables/stakeholders.html:84
-#: value/factors/templates/factors/delete.html:21
-#: value/measures/templates/measures/delete.html:26
-#: value/users/templates/users/delete.html:25
-msgid "Confirm"
-msgstr "Vahvista"
-
 #: value/deliverables/templates/deliverables/decision_items/delete_list.html:11
 msgid "Delete decision items"
 msgstr "Poista päätöksentekoasia"
@@ -1760,10 +1859,6 @@ msgstr "Peruuta JIRA tuonti"
 msgid "Add item"
 msgstr "Lisää päätösasia"
 
-#: value/deliverables/templates/deliverables/decision_items/list.html:54
-msgid "Remove selected items"
-msgstr "Poista valitut"
-
 #: value/deliverables/templates/deliverables/historical_dashboard/decision_items_progress.html:46
 #: value/deliverables/templates/deliverables/historical_dashboard/summary.html:71
 #: value/deliverables/templates/deliverables/includes/menu.html:26
@@ -1812,14 +1907,6 @@ msgstr "Ei tarpeeksi tietoa työpöytähistoriaa varten."
 #: value/deliverables/templates/deliverables/includes/add_stakeholders.html:8
 msgid "Select the stakeholders to be associated with the deliverable."
 msgstr "Valitse toimitukseen liittyvät osallistujat."
-
-#: value/deliverables/templates/deliverables/includes/add_stakeholders.html:15
-msgid "There is no stakeholder available."
-msgstr "Ei osallistujia"
-
-#: value/deliverables/templates/deliverables/includes/add_stakeholders.html:16
-msgid "Create new user"
-msgstr "Luo uusi käyttäjä"
 
 #: value/deliverables/templates/deliverables/includes/decision_items_import_table.html:6
 msgid "Info:"

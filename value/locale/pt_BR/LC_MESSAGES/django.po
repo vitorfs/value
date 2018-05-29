@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-29 09:52+0300\n"
+"POT-Creation-Date: 2018-05-29 10:03+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -113,6 +113,9 @@ msgstr "valor"
 #: value/deliverables/meetings/templates/meetings/final_decision.html:55
 #: value/deliverables/meetings/templates/meetings/new.html:11
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:23
+#: value/deliverables/meetings/templates/meetings/settings/details.html:18
+#: value/deliverables/meetings/templates/meetings/settings/items.html:20
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:22
 #: value/deliverables/templates/deliverables/decision_items/add.html:7
 #: value/deliverables/templates/deliverables/decision_items/delete.html:7
 #: value/deliverables/templates/deliverables/decision_items/delete_list.html:7
@@ -226,6 +229,7 @@ msgstr "Índice iniciando em zero. Deixe em branco para considerar todas."
 #: value/application_settings/templates/application_settings/jira.html:20
 #: value/deliverables/meetings/templates/meetings/evaluate.html:169
 #: value/deliverables/meetings/templates/meetings/final_decision.html:89
+#: value/deliverables/meetings/templates/meetings/settings/details.html:46
 #: value/deliverables/templates/deliverables/settings/details.html:59
 #: value/deliverables/templates/deliverables/settings/factors.html:35
 #: value/deliverables/templates/deliverables/settings/measure.html:35
@@ -285,6 +289,7 @@ msgstr "Conceder acesso"
 #: value/application_settings/templates/application_settings/items.html:28
 #: value/application_settings/templates/application_settings/items.html:38
 #: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:7
+#: value/deliverables/meetings/templates/meetings/settings/items.html:25
 #: value/deliverables/templates/deliverables/historical_dashboard/includes/partial_meeting.html:6
 msgid "Decision items"
 msgstr "Itens de decisão"
@@ -733,6 +738,9 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/final_decision.html:56
 #: value/deliverables/meetings/templates/meetings/new.html:12
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:24
+#: value/deliverables/meetings/templates/meetings/settings/details.html:19
+#: value/deliverables/meetings/templates/meetings/settings/items.html:21
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:23
 #: value/deliverables/templates/deliverables/decision_items/add.html:8
 #: value/deliverables/templates/deliverables/decision_items/delete.html:8
 #: value/deliverables/templates/deliverables/decision_items/delete_list.html:8
@@ -791,6 +799,11 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/new.html:120
 #: value/deliverables/meetings/templates/meetings/new.html:159
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:61
+#: value/deliverables/meetings/templates/meetings/settings/items.html:98
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:50
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:73
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:79
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:109
 #: value/deliverables/templates/deliverables/decision_items/includes/modal.html:7
 #: value/deliverables/templates/deliverables/historical_dashboard/summary.html:199
 #: value/deliverables/templates/deliverables/historical_dashboard/summary.html:208
@@ -1035,6 +1048,8 @@ msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/dashboard/includes/stakeholders_toolbar.html:10
 #: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:8
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:27
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:43
 #: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:9
 #: value/deliverables/templates/deliverables/includes/menu.html:16
 #: value/deliverables/templates/deliverables/index.html:29
@@ -1078,6 +1093,8 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/final_decision.html:42
 #: value/deliverables/meetings/templates/meetings/includes/menu.html:28
 #: value/deliverables/meetings/templates/meetings/new.html:219
+#: value/deliverables/meetings/templates/meetings/settings/items.html:142
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:94
 #: value/deliverables/templates/deliverables/decision_items/delete.html:52
 #: value/deliverables/templates/deliverables/decision_items/delete_list.html:38
 #: value/deliverables/templates/deliverables/decision_items/delete_list.html:79
@@ -1178,6 +1195,7 @@ msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:57
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:62
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:110
 #: value/deliverables/templates/deliverables/stakeholders.html:99
 #: value/factors/templates/factors/groups.html:134
 #: value/users/templates/users/roles.html:172
@@ -1349,6 +1367,9 @@ msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/includes/menu.html:104
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:27
+#: value/deliverables/meetings/templates/meetings/settings/details.html:22
+#: value/deliverables/meetings/templates/meetings/settings/items.html:24
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:26
 #: value/deliverables/templates/deliverables/includes/menu.html:32
 #: value/deliverables/templates/deliverables/settings/details.html:35
 #: value/deliverables/templates/deliverables/settings/factors.html:10
@@ -1371,6 +1392,8 @@ msgid "Please contact the system administrator."
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/includes/partial_decision_items_table.html:30
+#: value/deliverables/meetings/templates/meetings/settings/items.html:80
+#: value/deliverables/meetings/templates/meetings/settings/items.html:124
 #: value/deliverables/templates/deliverables/decision_items/includes/decision_items_table.html:47
 #: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:61
 #: value/deliverables/templates/deliverables/includes/meetings_table.html:57
@@ -1395,6 +1418,7 @@ msgid "2. Review the stakeholders"
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/new.html:116
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:51
 msgid "Click to remove a stakeholder from the meeting."
 msgstr ""
 
@@ -1432,6 +1456,10 @@ msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/new.html:216
 msgid "Start the meeting"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/rationales/meeting_item.html:53
+msgid "No rationale recorded for this item."
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:45
@@ -1472,16 +1500,17 @@ msgstr ""
 "Selecione os fatores de valor para serem usados nas reuniões de tomada de "
 "decisão"
 
-#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:4
-#, fuzzy
-#| msgid "meetings"
-msgid "Meeting settings"
-msgstr "reuniões"
-
+#: value/deliverables/meetings/templates/meetings/settings/details.html:40
 #: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:6
 #, fuzzy
 #| msgid "meetings"
 msgid "Meeting details"
+msgstr "reuniões"
+
+#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:4
+#, fuzzy
+#| msgid "meetings"
+msgid "Meeting settings"
 msgstr "reuniões"
 
 #: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:9
@@ -1489,6 +1518,76 @@ msgstr "reuniões"
 #| msgid "meetings"
 msgid "Delete meeting"
 msgstr "reuniões"
+
+#: value/deliverables/meetings/templates/meetings/settings/items.html:41
+#, fuzzy
+#| msgid "meetings"
+msgid "Meeting decision items"
+msgstr "reuniões"
+
+#: value/deliverables/meetings/templates/meetings/settings/items.html:49
+#: value/deliverables/meetings/templates/meetings/settings/items.html:99
+#, fuzzy
+#| msgid "Decision items"
+msgid "Add decision items"
+msgstr "Itens de decisão"
+
+#: value/deliverables/meetings/templates/meetings/settings/items.html:53
+#: value/deliverables/templates/deliverables/decision_items/list.html:54
+msgid "Remove selected items"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/items.html:135
+msgid "There is no decision item available."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/items.html:136
+#, fuzzy
+#| msgid "Decision items"
+msgid "Create new decision item"
+msgstr "Itens de decisão"
+
+#: value/deliverables/meetings/templates/meetings/settings/items.html:143
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:95
+#: value/deliverables/templates/deliverables/decision_items/delete.html:49
+#: value/deliverables/templates/deliverables/decision_items/delete_list.html:35
+#: value/deliverables/templates/deliverables/includes/import_decision_items.html:30
+#: value/deliverables/templates/deliverables/stakeholders.html:84
+#: value/factors/templates/factors/delete.html:21
+#: value/measures/templates/measures/delete.html:26
+#: value/users/templates/users/delete.html:25
+msgid "Confirm"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:59
+msgid "Invite"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:74
+msgid "Invite stakeholder"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:80
+msgid "Click to add a stakeholder to the meeting."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:87
+#: value/deliverables/templates/deliverables/includes/add_stakeholders.html:15
+msgid "There is no stakeholder available."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:88
+#: value/deliverables/templates/deliverables/includes/add_stakeholders.html:16
+msgid "Create new user"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:113
+msgid "Remove the stakeholder"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:116
+msgid "Remove"
+msgstr ""
 
 #: value/deliverables/meetings/templatetags/evaluation_options.py:81
 msgid "Add a rationale for"
@@ -1688,16 +1787,6 @@ msgstr ""
 msgid "Summary:"
 msgstr ""
 
-#: value/deliverables/templates/deliverables/decision_items/delete.html:49
-#: value/deliverables/templates/deliverables/decision_items/delete_list.html:35
-#: value/deliverables/templates/deliverables/includes/import_decision_items.html:30
-#: value/deliverables/templates/deliverables/stakeholders.html:84
-#: value/factors/templates/factors/delete.html:21
-#: value/measures/templates/measures/delete.html:26
-#: value/users/templates/users/delete.html:25
-msgid "Confirm"
-msgstr ""
-
 #: value/deliverables/templates/deliverables/decision_items/delete_list.html:11
 msgid "Delete decision items"
 msgstr ""
@@ -1770,10 +1859,6 @@ msgstr ""
 msgid "Add item"
 msgstr ""
 
-#: value/deliverables/templates/deliverables/decision_items/list.html:54
-msgid "Remove selected items"
-msgstr ""
-
 #: value/deliverables/templates/deliverables/historical_dashboard/decision_items_progress.html:46
 #: value/deliverables/templates/deliverables/historical_dashboard/summary.html:71
 #: value/deliverables/templates/deliverables/includes/menu.html:26
@@ -1825,14 +1910,6 @@ msgstr ""
 
 #: value/deliverables/templates/deliverables/includes/add_stakeholders.html:8
 msgid "Select the stakeholders to be associated with the deliverable."
-msgstr ""
-
-#: value/deliverables/templates/deliverables/includes/add_stakeholders.html:15
-msgid "There is no stakeholder available."
-msgstr ""
-
-#: value/deliverables/templates/deliverables/includes/add_stakeholders.html:16
-msgid "Create new user"
 msgstr ""
 
 #: value/deliverables/templates/deliverables/includes/decision_items_import_table.html:6
