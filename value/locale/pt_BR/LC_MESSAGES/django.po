@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 10:08+0300\n"
+"POT-Creation-Date: 2018-05-29 09:48+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,6 +112,7 @@ msgstr "valor"
 #: value/deliverables/meetings/templates/meetings/evaluate.html:97
 #: value/deliverables/meetings/templates/meetings/final_decision.html:55
 #: value/deliverables/meetings/templates/meetings/new.html:11
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:23
 #: value/deliverables/templates/deliverables/decision_items/add.html:7
 #: value/deliverables/templates/deliverables/decision_items/delete.html:7
 #: value/deliverables/templates/deliverables/decision_items/delete_list.html:7
@@ -283,6 +284,7 @@ msgstr "Conceder acesso"
 
 #: value/application_settings/templates/application_settings/items.html:28
 #: value/application_settings/templates/application_settings/items.html:38
+#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:7
 #: value/deliverables/templates/deliverables/historical_dashboard/includes/partial_meeting.html:6
 msgid "Decision items"
 msgstr "Itens de decisão"
@@ -336,6 +338,8 @@ msgid "Active"
 msgstr "Ativo"
 
 #: value/application_settings/templates/application_settings/items.html:80
+#: value/deliverables/forms.py:75 value/deliverables/meetings/forms.py:18
+#: value/deliverables/meetings/forms.py:119
 #: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:53
 #: value/deliverables/meetings/templates/meetings/final_decision.html:133
 #: value/deliverables/models.py:162
@@ -354,6 +358,7 @@ msgid "String"
 msgstr "Texto"
 
 #: value/application_settings/templates/application_settings/items.html:91
+#: value/deliverables/forms.py:80 value/deliverables/meetings/forms.py:28
 #: value/deliverables/meetings/templates/meetings/new.html:80
 #: value/deliverables/models.py:167
 #: value/factors/templates/factors/index.html:29
@@ -405,18 +410,18 @@ msgstr "Você está logado como"
 msgid "Permission denied."
 msgstr "Permissão negada."
 
-#: value/deliverables/forms.py:56 value/deliverables/forms.py:103
+#: value/deliverables/forms.py:56 value/deliverables/forms.py:105
 msgid "Select value factors to be used within the decision-making meetings"
 msgstr ""
 "Selecione os fatores de valor para serem usados nas reuniões de tomada de "
 "decisão"
 
-#: value/deliverables/forms.py:62 value/deliverables/forms.py:116
+#: value/deliverables/forms.py:62 value/deliverables/forms.py:118
 msgid "Select the measure to be used within the decision-making meetings"
 msgstr ""
 "Selecione a medida para ser utilizada nas reuniões de tomada de decisão"
 
-#: value/deliverables/forms.py:131
+#: value/deliverables/forms.py:133
 msgid "JQL Query"
 msgstr ""
 
@@ -558,27 +563,56 @@ msgstr ""
 msgid "Decision Items"
 msgstr ""
 
-#: value/deliverables/meetings/forms.py:20
+#: value/deliverables/meetings/forms.py:24
 msgid "Starting at"
 msgstr ""
 
-#: value/deliverables/meetings/forms.py:44
+#: value/deliverables/meetings/forms.py:34
+#: value/deliverables/meetings/templates/meetings/new.html:72
+msgid "Location"
+msgstr ""
+
+#: value/deliverables/meetings/forms.py:43
+#, fuzzy
+#| msgid "Percentage of evaluations"
+msgid "Default evaluation"
+msgstr "Percentual de avaliações"
+
+#: value/deliverables/meetings/forms.py:51
 msgid "Use decisions from past meetings"
 msgstr ""
 
-#: value/deliverables/meetings/forms.py:112
+#: value/deliverables/meetings/forms.py:78
+#, fuzzy
+#| msgid "meetings"
+msgid "Meeting decision"
+msgstr "reuniões"
+
+#: value/deliverables/meetings/forms.py:83
+#, fuzzy
+#| msgid "meetings"
+msgid "Meeting ranking"
+msgstr "reuniões"
+
+#: value/deliverables/meetings/forms.py:96
+#, fuzzy
+#| msgid "meetings"
+msgid "Meeting items"
+msgstr "reuniões"
+
+#: value/deliverables/meetings/forms.py:122
 msgid "Number of decision items to compose the scenario"
 msgstr ""
 
-#: value/deliverables/meetings/forms.py:117
+#: value/deliverables/meetings/forms.py:127
 msgid "Related to"
 msgstr ""
 
-#: value/deliverables/meetings/forms.py:121
+#: value/deliverables/meetings/forms.py:131
 msgid "Based on"
 msgstr ""
 
-#: value/deliverables/meetings/forms.py:138
+#: value/deliverables/meetings/forms.py:148
 msgid "Select two scenarios to compare"
 msgstr ""
 
@@ -698,6 +732,7 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/evaluate.html:98
 #: value/deliverables/meetings/templates/meetings/final_decision.html:56
 #: value/deliverables/meetings/templates/meetings/new.html:12
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:24
 #: value/deliverables/templates/deliverables/decision_items/add.html:8
 #: value/deliverables/templates/deliverables/decision_items/delete.html:8
 #: value/deliverables/templates/deliverables/decision_items/delete_list.html:8
@@ -770,7 +805,7 @@ msgstr ""
 #: value/templates/registration/login.html:37
 #: value/users/templates/users/add.html:22
 #: value/users/templates/users/edit.html:19
-#: value/users/templates/users/password.html:24
+#: value/users/templates/users/password.html:22
 #: value/users/templates/users/roles.html:114
 #: value/users/templates/users/roles.html:135
 #: value/users/templates/users/roles.html:169
@@ -892,6 +927,8 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/dashboard/includes/delete_toolbar.html:3
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/list.html:39
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/list.html:42
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:28
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:49
 #: value/deliverables/templates/deliverables/decision_items/delete.html:16
 #: value/deliverables/templates/deliverables/decision_items/includes/decision_item_form.html:80
 #: value/factors/templates/factors/delete.html:10
@@ -996,6 +1033,7 @@ msgid "Reload the chart"
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/dashboard/includes/stakeholders_toolbar.html:10
+#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:8
 #: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:9
 #: value/deliverables/templates/deliverables/includes/menu.html:16
 #: value/deliverables/templates/deliverables/index.html:29
@@ -1056,7 +1094,7 @@ msgstr ""
 #: value/users/templates/users/add.html:61
 #: value/users/templates/users/delete.html:26
 #: value/users/templates/users/edit.html:89
-#: value/users/templates/users/password.html:61
+#: value/users/templates/users/password.html:59
 #: value/users/templates/users/roles.html:121
 #: value/users/templates/users/roles.html:142
 msgid "Cancel"
@@ -1138,6 +1176,7 @@ msgid "Edit scenario"
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:57
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:62
 #: value/deliverables/templates/deliverables/stakeholders.html:99
 #: value/factors/templates/factors/groups.html:134
 #: value/users/templates/users/roles.html:172
@@ -1308,6 +1347,7 @@ msgid "Syncing..."
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/includes/menu.html:104
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:27
 #: value/deliverables/templates/deliverables/includes/menu.html:32
 #: value/deliverables/templates/deliverables/settings/details.html:35
 #: value/deliverables/templates/deliverables/settings/factors.html:10
@@ -1347,10 +1387,6 @@ msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/new.html:39
 msgid "1. Provide the meeting details"
-msgstr ""
-
-#: value/deliverables/meetings/templates/meetings/new.html:72
-msgid "Location"
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/new.html:103
@@ -1396,6 +1432,62 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/new.html:216
 msgid "Start the meeting"
 msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:45
+#: value/deliverables/templates/deliverables/settings/details.html:66
+msgid "Danger zone"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:50
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:78
+msgid "Delete this meeting"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:51
+msgid "Once you delete a meeting, there is no going back. Please be certain."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:66
+#, python-format
+msgid ""
+"This action <strong>CANNOT</strong> be undone. This will permanently delete "
+"the meeting <strong>%(name)s</strong>."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:73
+msgid "I understand the consequences."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:87
+msgid "This meeting cannot be deleted."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:88
+#, fuzzy
+#| msgid "Select value factors to be used within the decision-making meetings"
+msgid ""
+"There's already evaluation data associated with this decision making meeting."
+msgstr ""
+"Selecione os fatores de valor para serem usados nas reuniões de tomada de "
+"decisão"
+
+#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:4
+#, fuzzy
+#| msgid "meetings"
+msgid "Meeting settings"
+msgstr "reuniões"
+
+#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:6
+#, fuzzy
+#| msgid "meetings"
+msgid "Meeting details"
+msgstr "reuniões"
+
+#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:9
+#, fuzzy
+#| msgid "meetings"
+msgid "Delete meeting"
+msgstr "reuniões"
 
 #: value/deliverables/meetings/templatetags/evaluation_options.py:81
 msgid "Add a rationale for"
@@ -1877,10 +1969,6 @@ msgstr ""
 #: value/deliverables/templates/deliverables/settings/details.html:53
 #: value/deliverables/templates/deliverables/settings/includes/menu.html:7
 msgid "Deliverable details"
-msgstr ""
-
-#: value/deliverables/templates/deliverables/settings/details.html:66
-msgid "Danger zone"
 msgstr ""
 
 #: value/deliverables/templates/deliverables/settings/details.html:74
@@ -2448,12 +2536,12 @@ msgstr ""
 #: value/users/templates/users/change_password.html:23
 #: value/users/templates/users/includes/menu.html:10
 #: value/users/templates/users/password.html:10
-#: value/users/templates/users/password.html:60
+#: value/users/templates/users/password.html:58
 msgid "Change password"
 msgstr ""
 
 #: value/templates/registration/password_reset_confirm.html:17
-#: value/users/templates/users/password.html:36
+#: value/users/templates/users/password.html:34
 msgid "New password"
 msgstr ""
 
@@ -2604,13 +2692,10 @@ msgstr ""
 
 #: value/users/templates/users/password.html:18
 #, python-format
-msgid ""
-"\n"
-"          Change password for %(username)s\n"
-"        "
+msgid "Change password for %(username)s"
 msgstr ""
 
-#: value/users/templates/users/password.html:48
+#: value/users/templates/users/password.html:46
 msgid "Re-type new password"
 msgstr ""
 

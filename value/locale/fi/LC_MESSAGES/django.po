@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 10:05+0300\n"
+"POT-Creation-Date: 2018-05-29 09:45+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -110,6 +110,7 @@ msgstr "arvo"
 #: value/deliverables/meetings/templates/meetings/evaluate.html:97
 #: value/deliverables/meetings/templates/meetings/final_decision.html:55
 #: value/deliverables/meetings/templates/meetings/new.html:11
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:23
 #: value/deliverables/templates/deliverables/decision_items/add.html:7
 #: value/deliverables/templates/deliverables/decision_items/delete.html:7
 #: value/deliverables/templates/deliverables/decision_items/delete_list.html:7
@@ -163,8 +164,9 @@ msgstr "Tuo templaatti"
 msgid ""
 "You may import decision items for a given deliverable or meeting from a "
 "external file"
-msgstr "Voit tuoda päätösasioita annetulle toimitukselle tai kokoukselle "
-"ulkoisesta tiedostosta"
+msgstr ""
+"Voit tuoda päätösasioita annetulle toimitukselle tai kokoukselle ulkoisesta "
+"tiedostosta"
 
 #: value/application_settings/templates/application_settings/import.html:46
 msgid "Orientation"
@@ -278,6 +280,7 @@ msgstr "Anna oikeus"
 
 #: value/application_settings/templates/application_settings/items.html:28
 #: value/application_settings/templates/application_settings/items.html:38
+#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:7
 #: value/deliverables/templates/deliverables/historical_dashboard/includes/partial_meeting.html:6
 msgid "Decision items"
 msgstr "Päätösasiat"
@@ -331,6 +334,8 @@ msgid "Active"
 msgstr "Aktiivinen"
 
 #: value/application_settings/templates/application_settings/items.html:80
+#: value/deliverables/forms.py:75 value/deliverables/meetings/forms.py:18
+#: value/deliverables/meetings/forms.py:119
 #: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:53
 #: value/deliverables/meetings/templates/meetings/final_decision.html:133
 #: value/deliverables/models.py:162
@@ -349,6 +354,7 @@ msgid "String"
 msgstr "Merkijono"
 
 #: value/application_settings/templates/application_settings/items.html:91
+#: value/deliverables/forms.py:80 value/deliverables/meetings/forms.py:28
 #: value/deliverables/meetings/templates/meetings/new.html:80
 #: value/deliverables/models.py:167
 #: value/factors/templates/factors/index.html:29
@@ -398,15 +404,15 @@ msgstr "Olet kirjautuneena tunnuksella"
 msgid "Permission denied."
 msgstr "Pääsy kielletty"
 
-#: value/deliverables/forms.py:56 value/deliverables/forms.py:103
+#: value/deliverables/forms.py:56 value/deliverables/forms.py:105
 msgid "Select value factors to be used within the decision-making meetings"
 msgstr "Valitse arvot joita käytetätään kokouksen päätöksenteossa."
 
-#: value/deliverables/forms.py:62 value/deliverables/forms.py:116
+#: value/deliverables/forms.py:62 value/deliverables/forms.py:118
 msgid "Select the measure to be used within the decision-making meetings"
 msgstr "Valitse päätöksenteossa käytettävä mittari."
 
-#: value/deliverables/forms.py:131
+#: value/deliverables/forms.py:133
 msgid "JQL Query"
 msgstr "JQL kysely"
 
@@ -426,7 +432,9 @@ msgstr "Prosenttia:"
 
 #: value/deliverables/meetings/charts.py:129
 msgid "100% means the stakeholder evaluated all the meeting's decision items."
-msgstr "Kaikki osallistujat ovat arvioineet kaikki kokouksen päätösasiat kun 100% on saavutettu."
+msgstr ""
+"Kaikki osallistujat ovat arvioineet kaikki kokouksen päätösasiat kun 100% on "
+"saavutettu."
 
 #: value/deliverables/meetings/charts.py:134
 #: value/deliverables/meetings/charts.py:139
@@ -547,27 +555,56 @@ msgstr "Osallistujien roolit"
 msgid "Decision Items"
 msgstr "Päätöksentekoasiat"
 
-#: value/deliverables/meetings/forms.py:20
+#: value/deliverables/meetings/forms.py:24
 msgid "Starting at"
 msgstr "Alkaen"
 
-#: value/deliverables/meetings/forms.py:44
+#: value/deliverables/meetings/forms.py:34
+#: value/deliverables/meetings/templates/meetings/new.html:72
+msgid "Location"
+msgstr "Sijainti"
+
+#: value/deliverables/meetings/forms.py:43
+#, fuzzy
+#| msgid "evaluation"
+msgid "Default evaluation"
+msgstr "arviointi"
+
+#: value/deliverables/meetings/forms.py:51
 msgid "Use decisions from past meetings"
 msgstr "Käytä edellisen kokouksen päätöksiä"
 
-#: value/deliverables/meetings/forms.py:112
+#: value/deliverables/meetings/forms.py:78
+#, fuzzy
+#| msgid "meeting decision"
+msgid "Meeting decision"
+msgstr "kokouksen päätös"
+
+#: value/deliverables/meetings/forms.py:83
+#, fuzzy
+#| msgid "meeting ranking"
+msgid "Meeting ranking"
+msgstr "kokoussijoitus"
+
+#: value/deliverables/meetings/forms.py:96
+#, fuzzy
+#| msgid "meeting items"
+msgid "Meeting items"
+msgstr "kokousasiat"
+
+#: value/deliverables/meetings/forms.py:122
 msgid "Number of decision items to compose the scenario"
 msgstr "Päätösasioiden lukumäärä skenaariossa"
 
-#: value/deliverables/meetings/forms.py:117
+#: value/deliverables/meetings/forms.py:127
 msgid "Related to"
 msgstr "Liittyy"
 
-#: value/deliverables/meetings/forms.py:121
+#: value/deliverables/meetings/forms.py:131
 msgid "Based on"
 msgstr "Perustuu"
 
-#: value/deliverables/meetings/forms.py:138
+#: value/deliverables/meetings/forms.py:148
 msgid "Select two scenarios to compare"
 msgstr "Valitse kaksi tapausta vertailuun"
 
@@ -687,6 +724,7 @@ msgstr "arvioinnit"
 #: value/deliverables/meetings/templates/meetings/evaluate.html:98
 #: value/deliverables/meetings/templates/meetings/final_decision.html:56
 #: value/deliverables/meetings/templates/meetings/new.html:12
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:24
 #: value/deliverables/templates/deliverables/decision_items/add.html:8
 #: value/deliverables/templates/deliverables/decision_items/delete.html:8
 #: value/deliverables/templates/deliverables/decision_items/delete_list.html:8
@@ -759,7 +797,7 @@ msgstr "Työpöytä"
 #: value/templates/registration/login.html:37
 #: value/users/templates/users/add.html:22
 #: value/users/templates/users/edit.html:19
-#: value/users/templates/users/password.html:24
+#: value/users/templates/users/password.html:22
 #: value/users/templates/users/roles.html:114
 #: value/users/templates/users/roles.html:135
 #: value/users/templates/users/roles.html:169
@@ -805,7 +843,9 @@ msgstr "Kokous on vielä käynnissä!"
 msgid ""
 "In order to analyse the dashboard the meeting manager must change its status "
 "to <strong>Analysing</strong>."
-msgstr "Analyysiä ei voida tehdä ilman tilanvaihtoa. Vauhda tilaksi " "<strong>analysoi</strong>."
+msgstr ""
+"Analyysiä ei voida tehdä ilman tilanvaihtoa. Vauhda tilaksi "
+"<strong>analysoi</strong>."
 
 #: value/deliverables/meetings/templates/meetings/dashboard/decision_items_acceptance/list.html:15
 #: value/deliverables/meetings/templates/meetings/dashboard/decision_items_acceptance/list.html:25
@@ -864,7 +904,9 @@ msgid ""
 "The application is not fully configurated. In order to visualize the "
 "<strong>Factors Groups Comparison</strong> charts the Administrator must "
 "create value factors groups first."
-msgstr "Ohjelmaa ei ole alustettu. Arvoryhmien visualisointi vaatii että pääkäyttäjä perustaa ne."
+msgstr ""
+"Ohjelmaa ei ole alustettu. Arvoryhmien visualisointi vaatii että pääkäyttäjä "
+"perustaa ne."
 
 #: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/empty.html:30
 msgid "Add factors groups"
@@ -881,6 +923,8 @@ msgstr "Kuvaajan tyyppi"
 #: value/deliverables/meetings/templates/meetings/dashboard/includes/delete_toolbar.html:3
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/list.html:39
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/list.html:42
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:28
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:49
 #: value/deliverables/templates/deliverables/decision_items/delete.html:16
 #: value/deliverables/templates/deliverables/decision_items/includes/decision_item_form.html:80
 #: value/factors/templates/factors/delete.html:10
@@ -985,6 +1029,7 @@ msgid "Reload the chart"
 msgstr "Päivitä kuvaaja"
 
 #: value/deliverables/meetings/templates/meetings/dashboard/includes/stakeholders_toolbar.html:10
+#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:8
 #: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:9
 #: value/deliverables/templates/deliverables/includes/menu.html:16
 #: value/deliverables/templates/deliverables/index.html:29
@@ -1045,7 +1090,7 @@ msgstr "Yleiset asiat"
 #: value/users/templates/users/add.html:61
 #: value/users/templates/users/delete.html:26
 #: value/users/templates/users/edit.html:89
-#: value/users/templates/users/password.html:61
+#: value/users/templates/users/password.html:59
 #: value/users/templates/users/roles.html:121
 #: value/users/templates/users/roles.html:142
 msgid "Cancel"
@@ -1127,6 +1172,7 @@ msgid "Edit scenario"
 msgstr "Muokkaa skenaariota"
 
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:57
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:62
 #: value/deliverables/templates/deliverables/stakeholders.html:99
 #: value/factors/templates/factors/groups.html:134
 #: value/users/templates/users/roles.html:172
@@ -1293,6 +1339,7 @@ msgid "Syncing..."
 msgstr "Synkronoi..."
 
 #: value/deliverables/meetings/templates/meetings/includes/menu.html:104
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:27
 #: value/deliverables/templates/deliverables/includes/menu.html:32
 #: value/deliverables/templates/deliverables/settings/details.html:35
 #: value/deliverables/templates/deliverables/settings/factors.html:10
@@ -1334,10 +1381,6 @@ msgstr "Uusi kokous"
 msgid "1. Provide the meeting details"
 msgstr "1. Anna kokouksen tiedot"
 
-#: value/deliverables/meetings/templates/meetings/new.html:72
-msgid "Location"
-msgstr "Sijainti"
-
 #: value/deliverables/meetings/templates/meetings/new.html:103
 msgid "2. Review the stakeholders"
 msgstr "2. Osallistujat"
@@ -1377,6 +1420,64 @@ msgstr "4. Lisäasetukset"
 #: value/deliverables/meetings/templates/meetings/new.html:216
 msgid "Start the meeting"
 msgstr "Aloita kokous"
+
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:45
+#: value/deliverables/templates/deliverables/settings/details.html:66
+msgid "Danger zone"
+msgstr "Kehityksessä olevat ominaisuudet"
+
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:50
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:78
+#, fuzzy
+#| msgid "Start the meeting"
+msgid "Delete this meeting"
+msgstr "Aloita kokous"
+
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:51
+msgid "Once you delete a meeting, there is no going back. Please be certain."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:66
+#, python-format
+msgid ""
+"This action <strong>CANNOT</strong> be undone. This will permanently delete "
+"the meeting <strong>%(name)s</strong>."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:73
+msgid "I understand the consequences."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:87
+#, fuzzy
+#| msgid "Cannot be deleted"
+msgid "This meeting cannot be deleted."
+msgstr "Ei voi poistaa"
+
+#: value/deliverables/meetings/templates/meetings/settings/delete.html:88
+#, fuzzy
+#| msgid "Select value factors to be used within the decision-making meetings"
+msgid ""
+"There's already evaluation data associated with this decision making meeting."
+msgstr "Valitse arvot joita käytetätään kokouksen päätöksenteossa."
+
+#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:4
+#, fuzzy
+#| msgid "Meeting Ranking"
+msgid "Meeting settings"
+msgstr "Sijoitus kokouksessa"
+
+#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:6
+#, fuzzy
+#| msgid "Meeting notes"
+msgid "Meeting details"
+msgstr "Kokousmuistiinpanot"
+
+#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:9
+#, fuzzy
+#| msgid "New meeting"
+msgid "Delete meeting"
+msgstr "Uusi kokous"
 
 #: value/deliverables/meetings/templatetags/evaluation_options.py:81
 msgid "Add a rationale for"
@@ -1728,7 +1829,9 @@ msgstr "Info:"
 msgid ""
 "Imported <strong>%(len)s</strong> entries from file <strong>%(filename)s</"
 "strong>."
-msgstr "Tuodut <strong>%(len)s</strong> arvot tiedostosta <strong>%(filename)s</strong>."
+msgstr ""
+"Tuodut <strong>%(len)s</strong> arvot tiedostosta <strong>%(filename)s</"
+"strong>."
 
 #: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:6
 msgid "Meeting"
@@ -1837,7 +1940,8 @@ msgstr "Ei valintaa"
 
 #: value/deliverables/templates/deliverables/new.html:102
 msgid "3. Define the decision items (e.g. features, ideas, requirements)"
-msgstr "3. Määritä päätösasiat (esim. ominaisuudet, ideat, vaatimukset, UI-kuvat)"
+msgstr ""
+"3. Määritä päätösasiat (esim. ominaisuudet, ideat, vaatimukset, UI-kuvat)"
 
 #: value/deliverables/templates/deliverables/new.html:122
 msgid "Add"
@@ -1855,10 +1959,6 @@ msgstr "Valitse kaikki / poista valinnat"
 #: value/deliverables/templates/deliverables/settings/includes/menu.html:7
 msgid "Deliverable details"
 msgstr "Toimituksen tiedot"
-
-#: value/deliverables/templates/deliverables/settings/details.html:66
-msgid "Danger zone"
-msgstr "Kehityksessä olevat ominaisuudet"
 
 #: value/deliverables/templates/deliverables/settings/details.html:74
 msgid "Transfer"
@@ -2072,7 +2172,9 @@ msgstr "Arvoperustetta <strong>%(name)s</strong> ei voi poistaa."
 msgid ""
 "There's already deliverables and meetings associated with this value factor. "
 "Change its status to <strong>inactive</strong> instead."
-msgstr "Arvoperuste on jo kiinnitetty ja sitä ei voida poistaa. Aseta se passiiviseksi."
+msgstr ""
+"Arvoperuste on jo kiinnitetty ja sitä ei voida poistaa. Aseta se "
+"passiiviseksi."
 
 #: value/factors/templates/factors/delete.html:41
 #: value/measures/templates/measures/delete.html:46
@@ -2416,7 +2518,8 @@ msgstr "Unohditko salasanan?"
 msgid ""
 "Your password has been set. You may go ahead and <a href=\"%(signin_url)s"
 "\">sign in</a> now."
-msgstr "Salasana asetettu. Voit nyt kirjautua <a href=\"%(signin_url)s\">sign in</a>"
+msgstr ""
+"Salasana asetettu. Voit nyt kirjautua <a href=\"%(signin_url)s\">sign in</a>"
 
 #: value/templates/registration/password_reset_confirm.html:11
 #: value/templates/registration/password_reset_confirm.html:30
@@ -2424,12 +2527,12 @@ msgstr "Salasana asetettu. Voit nyt kirjautua <a href=\"%(signin_url)s\">sign in
 #: value/users/templates/users/change_password.html:23
 #: value/users/templates/users/includes/menu.html:10
 #: value/users/templates/users/password.html:10
-#: value/users/templates/users/password.html:60
+#: value/users/templates/users/password.html:58
 msgid "Change password"
 msgstr "Vaihda salasana"
 
 #: value/templates/registration/password_reset_confirm.html:17
-#: value/users/templates/users/password.html:36
+#: value/users/templates/users/password.html:34
 msgid "New password"
 msgstr "Uusi salasana"
 
@@ -2441,7 +2544,8 @@ msgstr "Vahvista salasane"
 msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used. Please request a new password reset."
-msgstr "Salasanen vaihtolinkki virheellinen tai vanhentunut. Kokeile uudelleen."
+msgstr ""
+"Salasanen vaihtolinkki virheellinen tai vanhentunut. Kokeile uudelleen."
 
 #: value/templates/registration/password_reset_done.html:9
 msgid ""
@@ -2565,7 +2669,8 @@ msgid ""
 "Raw passwords are not stored, so there is no way to see this user's "
 "password, but you can change the password using <a href=\"%(password_url)s"
 "\">this form</a>."
-msgstr "Salasanat on kryptattu ja ne voidaan vaihtaa <a href=\"%(password_url)s"
+msgstr ""
+"Salasanat on kryptattu ja ne voidaan vaihtaa <a href=\"%(password_url)s"
 "\">this form</a>."
 
 #: value/users/templates/users/includes/menu.html:4
@@ -2583,7 +2688,7 @@ msgstr "Kieliasetukset"
 msgid "Change password for %(username)s"
 msgstr "Vaihda salasana käyttäjälle %(username)s"
 
-#: value/users/templates/users/password.html:48
+#: value/users/templates/users/password.html:46
 msgid "Re-type new password"
 msgstr "Salasana uudelleen"
 

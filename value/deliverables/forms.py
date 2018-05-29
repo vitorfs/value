@@ -72,10 +72,12 @@ class DeliverableForm(forms.ModelForm):
 
 class DeliverableBasicDataForm(forms.ModelForm):
     name = forms.CharField(
+        label=_('Name'),
         widget=forms.TextInput(attrs={'class': 'form-control'}),
         max_length=255
     )
     description = forms.CharField(
+        label=_('Description'),
         widget=forms.Textarea(attrs={'class': 'form-control expanding', 'rows': '1'}),
         max_length=2000,
         required=False
