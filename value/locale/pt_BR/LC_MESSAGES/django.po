@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-29 10:03+0300\n"
+"POT-Creation-Date: 2018-06-04 14:38+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,10 +105,10 @@ msgstr "valor"
 #: value/deliverables/meetings/templates/meetings/dashboard/base_charts.html:22
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:24
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_list.html:18
-#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:29
-#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:29
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:65
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:41
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:30
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:30
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:66
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:42
 #: value/deliverables/meetings/templates/meetings/evaluate.html:97
 #: value/deliverables/meetings/templates/meetings/final_decision.html:55
 #: value/deliverables/meetings/templates/meetings/new.html:11
@@ -156,12 +156,14 @@ msgstr "Inicial"
 
 #: value/application_settings/templates/application_settings/base.html:8
 #: value/application_settings/templates/application_settings/import.html:17
+#: value/application_settings/templates/application_settings/includes/menu.html:4
 #: value/application_settings/templates/application_settings/items.html:27
 msgid "Application settings"
 msgstr "Configurações da aplicação"
 
 #: value/application_settings/templates/application_settings/import.html:18
 #: value/application_settings/templates/application_settings/import.html:27
+#: value/application_settings/templates/application_settings/includes/menu.html:8
 msgid "Import template"
 msgstr "Modelo de importação"
 
@@ -239,6 +241,23 @@ msgstr "Índice iniciando em zero. Deixe em branco para considerar todas."
 msgid "Save changes"
 msgstr "Salvar alterações"
 
+#: value/application_settings/templates/application_settings/includes/menu.html:6
+msgid "General"
+msgstr ""
+
+#: value/application_settings/templates/application_settings/includes/menu.html:7
+#: value/application_settings/templates/application_settings/items.html:28
+#: value/application_settings/templates/application_settings/items.html:38
+#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:7
+#: value/deliverables/meetings/templates/meetings/settings/items.html:25
+#: value/deliverables/templates/deliverables/historical_dashboard/includes/partial_meeting.html:6
+msgid "Decision items"
+msgstr "Itens de decisão"
+
+#: value/application_settings/templates/application_settings/includes/menu.html:9
+msgid "JIRA integration"
+msgstr ""
+
 #: value/application_settings/templates/application_settings/index.html:17
 msgid "You are about to remove yourself as a system administrator"
 msgstr "Você está por se remover como administrador do sistema"
@@ -286,14 +305,6 @@ msgstr "Outros usuários"
 msgid "Grant access"
 msgstr "Conceder acesso"
 
-#: value/application_settings/templates/application_settings/items.html:28
-#: value/application_settings/templates/application_settings/items.html:38
-#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:7
-#: value/deliverables/meetings/templates/meetings/settings/items.html:25
-#: value/deliverables/templates/deliverables/historical_dashboard/includes/partial_meeting.html:6
-msgid "Decision items"
-msgstr "Itens de decisão"
-
 #: value/application_settings/templates/application_settings/items.html:42
 msgid "Define the column display order"
 msgstr "Defina a ordem de exibição das colunas"
@@ -336,22 +347,23 @@ msgid "Display"
 msgstr "Exibir"
 
 #: value/application_settings/templates/application_settings/items.html:74
-#: value/factors/forms.py:42 value/factors/templates/factors/index.html.py:31
+#: value/factors/forms.py:45 value/factors/templates/factors/index.html.py:31
 #: value/measures/forms.py:22 value/measures/templates/measures/index.html:23
 #: value/users/templates/users/index.html:24
 msgid "Active"
 msgstr "Ativo"
 
 #: value/application_settings/templates/application_settings/items.html:80
-#: value/deliverables/forms.py:75 value/deliverables/meetings/forms.py:18
+#: value/deliverables/forms.py:42 value/deliverables/forms.py:78
+#: value/deliverables/meetings/forms.py:18
 #: value/deliverables/meetings/forms.py:119
-#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:53
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:54
 #: value/deliverables/meetings/templates/meetings/final_decision.html:133
-#: value/deliverables/models.py:162
+#: value/deliverables/meetings/utils.py:78 value/deliverables/models.py:162
 #: value/deliverables/templates/deliverables/includes/meetings_table.html:6
 #: value/deliverables/templates/deliverables/index.html:27
 #: value/deliverables/templates/deliverables/index.html:61
-#: value/factors/templates/factors/index.html:28
+#: value/factors/forms.py:56 value/factors/templates/factors/index.html.py:28
 #: value/measures/templates/measures/index.html:21
 msgid "Name"
 msgstr "Nome"
@@ -363,9 +375,10 @@ msgid "String"
 msgstr "Texto"
 
 #: value/application_settings/templates/application_settings/items.html:91
-#: value/deliverables/forms.py:80 value/deliverables/meetings/forms.py:28
+#: value/deliverables/forms.py:47 value/deliverables/forms.py:83
+#: value/deliverables/meetings/forms.py:28
 #: value/deliverables/meetings/templates/meetings/new.html:80
-#: value/deliverables/models.py:167
+#: value/deliverables/models.py:167 value/factors/forms.py:13
 #: value/factors/templates/factors/index.html:29
 msgid "Description"
 msgstr "Descrição"
@@ -415,18 +428,31 @@ msgstr "Você está logado como"
 msgid "Permission denied."
 msgstr "Permissão negada."
 
-#: value/deliverables/forms.py:56 value/deliverables/forms.py:105
+#: value/deliverables/forms.py:53
+#: value/deliverables/meetings/templates/meetings/dashboard/includes/stakeholders_toolbar.html:10
+#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:8
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:27
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:43
+#: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:9
+#: value/deliverables/templates/deliverables/includes/menu.html:16
+#: value/deliverables/templates/deliverables/index.html:29
+#: value/deliverables/templates/deliverables/index.html:63
+#: value/deliverables/templates/deliverables/stakeholders.html:14
+msgid "Stakeholders"
+msgstr ""
+
+#: value/deliverables/forms.py:59 value/deliverables/forms.py:108
 msgid "Select value factors to be used within the decision-making meetings"
 msgstr ""
 "Selecione os fatores de valor para serem usados nas reuniões de tomada de "
 "decisão"
 
-#: value/deliverables/forms.py:62 value/deliverables/forms.py:118
+#: value/deliverables/forms.py:65 value/deliverables/forms.py:121
 msgid "Select the measure to be used within the decision-making meetings"
 msgstr ""
 "Selecione a medida para ser utilizada nas reuniões de tomada de decisão"
 
-#: value/deliverables/forms.py:133
+#: value/deliverables/forms.py:136
 msgid "JQL Query"
 msgstr ""
 
@@ -474,15 +500,18 @@ msgstr ""
 
 #: value/deliverables/meetings/charts.py:212
 #: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:19
-#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:94
-#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:55
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:95
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:56
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_scenario_form.html:30
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_details.html:9
 #: value/deliverables/meetings/templates/meetings/final_decision.html:135
 #: value/deliverables/meetings/templatetags/meeting_item.py:62
+#: value/deliverables/meetings/utils.py:65
+#: value/deliverables/meetings/utils.py:75
 #: value/deliverables/meetings/views/dashboard/dashboard.py:107
 #: value/deliverables/meetings/views/dashboard/dashboard.py:129
 #: value/deliverables/templates/deliverables/historical_dashboard/decision_items_progress.html:17
+#: value/deliverables/templates/deliverables/historical_dashboard/decision_items_progress.html:101
 #: value/deliverables/templates/deliverables/historical_dashboard/includes/partial_meeting.html:9
 #: value/deliverables/templates/deliverables/historical_dashboard/summary.html:160
 msgid "Value Ranking"
@@ -730,10 +759,10 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/dashboard/base_charts.html:23
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:25
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_list.html:19
-#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:30
-#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:30
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:66
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:42
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:31
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:31
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:67
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:43
 #: value/deliverables/meetings/templates/meetings/evaluate.html:98
 #: value/deliverables/meetings/templates/meetings/final_decision.html:56
 #: value/deliverables/meetings/templates/meetings/new.html:12
@@ -765,10 +794,10 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/dashboard/base_charts.html:25
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:27
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_list.html:21
-#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:32
-#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:32
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:68
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:44
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:33
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:33
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:69
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:45
 #: value/deliverables/meetings/templates/meetings/evaluate.html:100
 #: value/deliverables/meetings/templates/meetings/final_decision.html:58
 #: value/deliverables/templates/deliverables/historical_dashboard/summary.html:93
@@ -782,10 +811,10 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/dashboard/base_charts.html:27
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:29
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_list.html:23
-#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:34
-#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:34
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:70
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:46
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:35
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:35
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:71
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:47
 #: value/deliverables/meetings/templates/meetings/includes/menu.html:85
 msgid "Dashboard"
 msgstr ""
@@ -795,6 +824,9 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:38
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:54
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:83
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:196
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:203
+#: value/deliverables/meetings/templates/meetings/includes/partial_status.html:28
 #: value/deliverables/meetings/templates/meetings/new.html:113
 #: value/deliverables/meetings/templates/meetings/new.html:120
 #: value/deliverables/meetings/templates/meetings/new.html:159
@@ -898,6 +930,7 @@ msgid "Scenarios"
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/dashboard/factors_comparison/list.html:15
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_comparison/list.html:25
 #: value/deliverables/meetings/templates/meetings/dashboard/factors_comparison/scenarios.html:17
 #: value/deliverables/meetings/templates/meetings/dashboard/factors_comparison/scenarios.html:30
 #: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:43
@@ -908,6 +941,7 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/empty.html:6
 #: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/empty.html:13
 #: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/list.html:15
+#: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/list.html:24
 #: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/scenarios.html:17
 #: value/deliverables/meetings/templates/meetings/dashboard/factors_groups_comparison/scenarios.html:29
 #: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:47
@@ -977,7 +1011,7 @@ msgid "View details"
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:6
-#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:54
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:55
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_scenario_form.html:29
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_details.html:8
 #: value/deliverables/meetings/templates/meetings/final_decision.html:134
@@ -991,7 +1025,7 @@ msgid "Decision Items Comparison"
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:23
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:84
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:85
 msgid "Stakeholders' Agreement Matrix"
 msgstr ""
 
@@ -1000,10 +1034,10 @@ msgid "Stakeholder's Individual Opinion"
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:31
-#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:35
-#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:48
-#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:35
-#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:48
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:36
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:49
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:36
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:49
 msgid "Priority List"
 msgstr ""
 
@@ -1046,24 +1080,26 @@ msgstr ""
 msgid "Reload the chart"
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/dashboard/includes/stakeholders_toolbar.html:10
-#: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:8
-#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:27
-#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:43
-#: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:9
-#: value/deliverables/templates/deliverables/includes/menu.html:16
-#: value/deliverables/templates/deliverables/index.html:29
-#: value/deliverables/templates/deliverables/index.html:63
-#: value/deliverables/templates/deliverables/stakeholders.html:14
-msgid "Stakeholders"
-msgstr ""
-
 #: value/deliverables/meetings/templates/meetings/dashboard/includes/toggle_toolbar.html:3
 msgid "Toggle details"
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:56
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:57
 msgid "Set the priority of the value factors (drag and drop):"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:73
+msgid ""
+"Order the decision items, using the value factors priority, using the "
+"following score:"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:104
+msgid "Generate priority list"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:72
+msgid "Change parameters"
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/list.html:26
@@ -1216,46 +1252,50 @@ msgstr ""
 msgid "Scenario details"
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:71
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:72
 msgid "Stakeholders' Agreement"
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:91
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:67
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:92
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:68
 msgid "Raw Measure Values"
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:96
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:72
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:97
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:73
 msgid "Grouped Measure Values"
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:106
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:82
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:107
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:83
 msgid ""
 "The data below presents the agreement between the stakeholders by grouping "
 "the evaluations as described below:"
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:121
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:196
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:122
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:197
 msgid "Stakeholders' Agreement Based on Each Value Factor"
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:159
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:160
 msgid "Stakeholders' Agreement Based on the Overall Decision Item Evaluation"
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:47
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:48
 msgid "Stakeholders' Opinion"
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:60
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:61
 msgid "Stakeholders' Individual Opinion"
 msgstr ""
 
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:96
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:97
 msgid "Stakeholders' Opinion Based on Each Decision Item"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:105
+msgid "Group Opinion"
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/evaluate.html:22
@@ -1312,6 +1352,7 @@ msgid ""
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/final_decision.html:98
+#: value/deliverables/templates/deliverables/historical_dashboard/summary.html:177
 msgid "Notes"
 msgstr ""
 
@@ -1325,6 +1366,7 @@ msgid "Decision"
 msgstr ""
 
 #: value/deliverables/meetings/templates/meetings/final_decision.html:137
+#: value/deliverables/templates/deliverables/historical_dashboard/decision_items_progress.html:102
 #: value/deliverables/templates/deliverables/historical_dashboard/includes/partial_meeting.html:8
 #: value/deliverables/templates/deliverables/historical_dashboard/summary.html:172
 msgid "Meeting Ranking"
@@ -1394,11 +1436,48 @@ msgstr ""
 #: value/deliverables/meetings/templates/meetings/includes/partial_decision_items_table.html:30
 #: value/deliverables/meetings/templates/meetings/settings/items.html:80
 #: value/deliverables/meetings/templates/meetings/settings/items.html:124
-#: value/deliverables/templates/deliverables/decision_items/includes/decision_items_table.html:47
+#: value/deliverables/templates/deliverables/decision_items/includes/decision_items_table.html:45
 #: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:61
 #: value/deliverables/templates/deliverables/includes/meetings_table.html:57
 msgid "No data"
 msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/includes/partial_status.html:15
+msgid "Change meeting status to…"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/includes/partial_status.html:29
+#, fuzzy
+#| msgid "meetings"
+msgid "Close the meeting?"
+msgstr "reuniões"
+
+#: value/deliverables/meetings/templates/meetings/includes/partial_status.html:32
+msgid ""
+"After closing the meeting the evaluation session will be finished. You won't "
+"be able to change the meeting details."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/includes/partial_status.html:33
+#, python-format
+msgid ""
+"It is strongly advised to only close a decision making meeting after the "
+"progress reach 100%%."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/includes/partial_status.html:34
+msgid "Current progress:"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/includes/partial_status.html:42
+msgid "You can re-open the meeting anytime."
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/includes/partial_status.html:45
+#, fuzzy
+#| msgid "meetings"
+msgid "Close the meeting"
+msgstr "reuniões"
 
 #: value/deliverables/meetings/templates/meetings/new.html:14
 msgid "New Meeting"
@@ -1453,6 +1532,12 @@ msgstr "Itens de decisão"
 #: value/deliverables/meetings/templates/meetings/new.html:184
 msgid "4. Advanced settings"
 msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/new.html:215
+#, fuzzy
+#| msgid "meetings"
+msgid "Starting the meeting…"
+msgstr "reuniões"
 
 #: value/deliverables/meetings/templates/meetings/new.html:216
 msgid "Start the meeting"
@@ -1601,6 +1686,38 @@ msgstr ""
 msgid "Click to view details"
 msgstr ""
 
+#: value/deliverables/meetings/utils.py:13
+msgid "Stacked Bars"
+msgstr ""
+
+#: value/deliverables/meetings/utils.py:14
+msgid "Basic Bars"
+msgstr ""
+
+#: value/deliverables/meetings/utils.py:15
+#, fuzzy
+#| msgid "Starting column"
+msgid "Stacked Columns"
+msgstr "Coluna inicial"
+
+#: value/deliverables/meetings/utils.py:16
+#, fuzzy
+#| msgid "Column"
+msgid "Basic Columns"
+msgstr "Coluna"
+
+#: value/deliverables/meetings/utils.py:22
+msgid "Simple Treemap"
+msgstr ""
+
+#: value/deliverables/meetings/utils.py:23
+msgid "Detailed Treemap"
+msgstr ""
+
+#: value/deliverables/meetings/utils.py:24
+msgid "Detailed Pie Chart"
+msgstr ""
+
 #: value/deliverables/meetings/validators.py:9
 msgid "Select exactly two scenarios to compare."
 msgstr ""
@@ -1719,7 +1836,6 @@ msgid "decision item"
 msgstr ""
 
 #: value/deliverables/models.py:101
-#: value/deliverables/templates/deliverables/decision_items/includes/decision_items_table.html:22
 msgid "decision items"
 msgstr ""
 
@@ -1740,6 +1856,7 @@ msgid "Integer"
 msgstr ""
 
 #: value/deliverables/models.py:141
+#: value/deliverables/templates/deliverables/historical_dashboard/decision_items_progress.html:100
 msgid "Date"
 msgstr ""
 
@@ -1831,11 +1948,10 @@ msgid "Remove?"
 msgstr ""
 
 #: value/deliverables/templates/deliverables/decision_items/includes/decision_items_table.html:18
-msgid "Selected:"
-msgstr ""
-
-#: value/deliverables/templates/deliverables/decision_items/includes/decision_items_table.html:20
-msgid "of"
+#, python-format
+msgid ""
+"Selected: <span class=\"count\">%(selected_count)s</span> of %(total_count)s "
+"decision items"
 msgstr ""
 
 #: value/deliverables/templates/deliverables/decision_items/includes/modal.html:10
@@ -1878,6 +1994,15 @@ msgstr "Itens de decisão"
 msgid "Decision Item Progress"
 msgstr "Itens de decisão"
 
+#: value/deliverables/templates/deliverables/historical_dashboard/decision_items_progress.html:99
+#: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:6
+msgid "Meeting"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/historical_dashboard/decision_items_progress.html:103
+msgid "Was selected?"
+msgstr ""
+
 #: value/deliverables/templates/deliverables/historical_dashboard/decision_items_progress.html:124
 msgid "There's no enough data to display the Decision Item Progress."
 msgstr ""
@@ -1900,6 +2025,22 @@ msgstr ""
 msgid "Meetings Summary"
 msgstr ""
 
+#: value/deliverables/templates/deliverables/historical_dashboard/summary.html:115
+msgid "Stakeholders:"
+msgstr ""
+
+#: value/deliverables/templates/deliverables/historical_dashboard/summary.html:116
+#, fuzzy
+#| msgid "Decision items"
+msgid "Decision Items:"
+msgstr "Itens de decisão"
+
+#: value/deliverables/templates/deliverables/historical_dashboard/summary.html:122
+#, fuzzy
+#| msgid "meetings"
+msgid "More details"
+msgstr "reuniões"
+
 #: value/deliverables/templates/deliverables/historical_dashboard/summary.html:183
 msgid "Not evaluated"
 msgstr ""
@@ -1921,10 +2062,6 @@ msgstr ""
 msgid ""
 "Imported <strong>%(len)s</strong> entries from file <strong>%(filename)s</"
 "strong>."
-msgstr ""
-
-#: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:6
-msgid "Meeting"
 msgstr ""
 
 #: value/deliverables/templates/deliverables/includes/deliverable_meetings_table.html:7
@@ -2080,7 +2217,7 @@ msgstr ""
 #: value/deliverables/templates/deliverables/settings/includes/menu.html:15
 #: value/deliverables/templates/deliverables/settings/measure.html:11
 #: value/deliverables/templates/deliverables/settings/measure.html:29
-#: value/factors/templates/factors/index.html:30
+#: value/factors/forms.py:19 value/factors/templates/factors/index.html.py:30
 msgid "Measure"
 msgstr ""
 
@@ -2201,11 +2338,15 @@ msgstr ""
 msgid "Something went wrong. Nothing changed."
 msgstr ""
 
-#: value/factors/forms.py:20 value/factors/forms.py:26
+#: value/factors/forms.py:22 value/factors/forms.py:29
 msgid "Select…"
 msgstr ""
 
-#: value/factors/forms.py:43
+#: value/factors/forms.py:26 value/factors/templates/factors/index.html.py:27
+msgid "Group"
+msgstr ""
+
+#: value/factors/forms.py:46
 msgid "Unselect this instead of deleting factors."
 msgstr ""
 
@@ -2322,10 +2463,6 @@ msgstr ""
 msgid "Available factors"
 msgstr ""
 
-#: value/factors/templates/factors/index.html:27
-msgid "Group"
-msgstr ""
-
 #: value/factors/templates/factors/index.html:58
 msgid "The factors directory is empty."
 msgstr ""
@@ -2348,6 +2485,13 @@ msgstr ""
 #, python-brace-format
 msgid "The factor {0} was deleted successfully."
 msgstr ""
+
+#: value/factors/views.py:77 value/measures/views.py:107
+#: value/users/views.py:119 value/users/views.py:199 value/users/views.py:210
+#, fuzzy
+#| msgid "Password changed successfully."
+msgid "Changes successfully saved!"
+msgstr "Senha alterada com sucesso."
 
 #: value/factors/views.py:102
 #, python-brace-format
@@ -2767,6 +2911,12 @@ msgstr ""
 #: value/users/templates/users/language.html:23
 msgid "Language preferences"
 msgstr ""
+
+#: value/users/templates/users/index.html:16
+#, fuzzy
+#| msgid "No available users"
+msgid "Available users"
+msgstr "Nenhum usuário disponível"
 
 #: value/users/templates/users/password.html:18
 #, python-format

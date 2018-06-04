@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm, AdminPasswordChangeForm, PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms.models import modelform_factory
 from django.template import RequestContext
@@ -116,7 +116,7 @@ def toggle_active(request):
         user = User.objects.get(pk=user_id)
         user.is_active = not user.is_active
         user.save()
-        return HttpResponse()
+        return JsonResponse({'message': _('Changes successfully saved!')})
     except User.DoesNotExist:
         return HttpResponseBadRequest()
 
@@ -196,7 +196,7 @@ def add_user_role(request):
     user_role = User.objects.get(pk=user_id)
     group = Group.objects.get(pk=group_id)
     user_role.groups.add(group)
-    return HttpResponse()
+    return JsonResponse({'message': _('Changes successfully saved!')})
 
 
 @login_required
@@ -207,7 +207,7 @@ def remove_user_role(request):
     user_role = User.objects.get(pk=user_id)
     group = Group.objects.get(pk=group_id)
     user_role.groups.remove(group)
-    return HttpResponse()
+    return JsonResponse({'message': _('Changes successfully saved!')})
 
 
 @login_required

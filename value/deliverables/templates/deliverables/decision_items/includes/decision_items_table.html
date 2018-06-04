@@ -15,11 +15,9 @@
     <tfoot>
       <tr>
         <td colspan="{{ fields.items|length|add:'1' }}">
-          {% trans 'Selected:' %}
-          <span class="count">0</span>
-          {% trans 'of' %}
-          {{ deliverable.decisionitem_set.count }}
-          {% trans 'decision items' %}
+          {% blocktrans trimmed with deliverable.decisionitem_set.count as total_count and 0 as selected_count %}
+            Selected: <span class="count">{{ selected_count }}</span> of {{ total_count }} decision items
+          {% endblocktrans %}
         </td>
       </tr>
     </tfoot>

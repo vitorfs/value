@@ -180,8 +180,9 @@ $(function () {
         'id': $(component).attr("data-id"),
         'csrfmiddlewaretoken': getCSRF()
       },
-      success: function () {
-        toastr.success("Changes successfully saved!");
+      dataType: 'json',
+      success: function (data) {
+        toastr.success(data.message);
         if (is_active) {
           $(icon).removeClass().addClass("glyphicon glyphicon-remove-sign text-danger")
           $(component).attr("data-is-active", "False");

@@ -9,6 +9,7 @@
 {% block javascript %}
   <script src="{% static 'js/meetings/dashboard.js' %}"></script>
   <script src="{% static 'js/meetings/meetings.js' %}"></script>
+  <script src="{% static 'js/meetings/scenarios.js' %}"></script>
   <script>
     $(function () {
       $(".factors").sortable({
@@ -69,7 +70,7 @@
               <div class="col-md-6">
                 <div class="panel panel-default">
                   <div class="panel-body">
-                    <p><strong>Order the decision items, using the value factors priority, using the following score:</strong></p>
+                    <p><strong>{% trans 'Order the decision items, using the value factors priority, using the following score:' %}</strong></p>
                     {% for measure_group in meeting.measure.get_grouped_measure_values %}
                       {% if measure_group|length > 1 %}
                         <div class="radio">
@@ -100,7 +101,7 @@
             </div>
             <div class="row">
               <div class="col-md-12">
-                <button type="submit" class="btn btn-primary">Generate priority list</button>
+                <button type="submit" class="btn btn-primary">{% trans 'Generate priority list' %}</button>
               </div>
             </div>
           </form>
@@ -108,4 +109,5 @@
       </div>
     </div>
   </div>
+  {% include 'meetings/dashboard/scenarios/scenario_actions.html' %}
 {% endblock %}

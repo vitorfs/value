@@ -25,8 +25,9 @@ $(function () {
       url: $(form).attr("action"),
       type: $(form).attr("method"),
       data: $(form).serialize(),
-      success: function () {
-        toastr.success("Changes successfully saved!");
+      dataType: 'json',
+      success: function (data) {
+        toastr.success(data.message);
       }
     });
   };
@@ -57,8 +58,9 @@ $(function () {
           url: $(form).attr("action"),
           type: $(form).attr("method"),
           data: $(form).serialize(),
-          success: function () {
-            toastr.success("Changes successfully saved!");
+          dataType: 'json',
+          success: function (data) {
+            toastr.success(data.message);
           }
         });
       }

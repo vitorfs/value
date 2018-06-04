@@ -10,6 +10,7 @@
   <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
   <script src="{% static 'js/meetings/dashboard.js' %}"></script>
   <script src="{% static 'js/meetings/meetings.js' %}"></script>
+  <script src="{% static 'js/meetings/scenarios.js' %}"></script>
   <script type="text/javascript">
     $(function () {
       $(".table-stakeholders-agreement tbody tr td.has-value").hover(
@@ -101,7 +102,7 @@
                   {% for meeting_stakeholder in stakeholders_agreement.meeting_stakeholders %}
                     <th>{{ meeting_stakeholder.stakeholder.profile.get_display_name }}</th>
                   {% endfor %}
-                  <th>Group Opinion</th>
+                  <th>{% trans 'Group Opinion' %}</th>
                 </tr>
               </thead>
               <tbody>
@@ -123,4 +124,5 @@
       </div>
     </div>
   </div>
+  {% include 'meetings/dashboard/scenarios/scenario_actions.html' %}
 {% endblock %}
