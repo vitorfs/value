@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-04 14:38+0300\n"
+"POT-Creation-Date: 2018-06-04 14:47+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -460,6 +460,12 @@ msgstr "Prosenttia arvoista"
 #: value/deliverables/meetings/charts.py:79
 msgid "Percentage:"
 msgstr "Prosenttia:"
+
+#: value/deliverables/meetings/charts.py:128
+#: value/deliverables/meetings/views/dashboard/dashboard.py:38
+#: value/deliverables/meetings/views/dashboard/dashboard.py:84
+msgid "Stakeholders Input"
+msgstr "Osallistujien arviot"
 
 #: value/deliverables/meetings/charts.py:129
 msgid "100% means the stakeholder evaluated all the meeting's decision items."
@@ -1676,13 +1682,10 @@ msgstr ""
 msgid "Select exactly two scenarios to compare."
 msgstr "Valitse kaksi skenaariota vertailuun"
 
+#: value/deliverables/meetings/views/dashboard/dashboard.py:30
 #: value/deliverables/meetings/views/dashboard/dashboard.py:63
 msgid "Factors Usage"
 msgstr "Arvojen käyttö"
-
-#: value/deliverables/meetings/views/dashboard/dashboard.py:84
-msgid "Stakeholders Input"
-msgstr "Osallistujien arviot"
 
 #: value/deliverables/meetings/views/dashboard/scenarios.py:64
 msgid "Factors Group Comparison"
