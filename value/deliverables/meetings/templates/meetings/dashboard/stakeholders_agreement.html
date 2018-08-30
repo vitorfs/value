@@ -119,68 +119,72 @@
 
           <div class="panel panel-default panel-chart">
             <div class="panel-heading">{% trans "Stakeholders' Agreement Based on Each Value Factor" %}</div>
-            <table class="table table-bordered table-stakeholders-agreement"
-                   {% if active_tab == 'raw' %}
-                   data-remote="{% url 'deliverables:meetings:stakeholders_agreement_details_factors' meeting.deliverable.pk meeting.pk %}">
-                   {% else %}
-                   data-remote="{% url 'deliverables:meetings:stakeholders_agreement_grouped_details_factors' meeting.deliverable.pk meeting.pk %}">
-                   {% endif %}
-              <thead>
-                <tr>
-                  <th>&nbsp;</th>
-                  {% for meeting_stakeholder in stakeholders_agreement.meeting_stakeholders %}
-                    <th>{{ meeting_stakeholder.stakeholder.profile.get_display_name }}</th>
-                  {% endfor %}
-                </tr>
-              </thead>
-              <tbody>
-                {% for row in stakeholders_agreement.matrix_by_factors %}
+            <div class="table-responsive">
+              <table class="table table-bordered table-stakeholders-agreement"
+                     {% if active_tab == 'raw' %}
+                     data-remote="{% url 'deliverables:meetings:stakeholders_agreement_details_factors' meeting.deliverable.pk meeting.pk %}">
+                     {% else %}
+                     data-remote="{% url 'deliverables:meetings:stakeholders_agreement_grouped_details_factors' meeting.deliverable.pk meeting.pk %}">
+                     {% endif %}
+                <thead>
                   <tr>
-                    <th>{{ row.0.stakeholder.profile.get_display_name }}</th>
-                    {% for col in row.1 %}
-                      {% if forloop.counter > forloop.parentloop.counter %}
-                        <td class="has-value compare-stakeholders"
-                            style="text-align: center; color: #fff; background-color: {{ col.1|matrix_cell_color }} "
-                            data-stakeholder-one="{{ row.0.stakeholder.pk }}"
-                            data-stakeholder-two="{{ col.0.stakeholder.pk }}">
-                          {{ col.1 }}%
-                        </td>
-                      {% else %}
-                        <td>&nbsp;</td>
-                      {% endif %}
+                    <th>&nbsp;</th>
+                    {% for meeting_stakeholder in stakeholders_agreement.meeting_stakeholders %}
+                      <th>{{ meeting_stakeholder.stakeholder.profile.get_display_name }}</th>
                     {% endfor %}
                   </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {% for row in stakeholders_agreement.matrix_by_factors %}
+                    <tr>
+                      <th>{{ row.0.stakeholder.profile.get_display_name }}</th>
+                      {% for col in row.1 %}
+                        {% if forloop.counter > forloop.parentloop.counter %}
+                          <td class="has-value compare-stakeholders"
+                              style="text-align: center; color: #fff; background-color: {{ col.1|matrix_cell_color }} "
+                              data-stakeholder-one="{{ row.0.stakeholder.pk }}"
+                              data-stakeholder-two="{{ col.0.stakeholder.pk }}">
+                            {{ col.1 }}%
+                          </td>
+                        {% else %}
+                          <td>&nbsp;</td>
+                        {% endif %}
+                      {% endfor %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div class="panel panel-default panel-chart">
             <div class="panel-heading">{% trans "Stakeholders' Agreement Based on the Overall Decision Item Evaluation" %}</div>
-            <table class="table table-bordered table-stakeholders-agreement">
-              <thead>
-                <tr>
-                  <th>&nbsp;</th>
-                  {% for meeting_stakeholder in stakeholders_agreement.meeting_stakeholders %}
-                    <th>{{ meeting_stakeholder.stakeholder.profile.get_display_name }}</th>
-                  {% endfor %}
-                </tr>
-              </thead>
-              <tbody>
-                {% for row in stakeholders_agreement.matrix_by_items %}
+            <div class="table-responsive">
+              <table class="table table-bordered table-stakeholders-agreement">
+                <thead>
                   <tr>
-                    <th>{{ row.0.stakeholder.profile.get_display_name }}</th>
-                    {% for col in row.1 %}
-                      {% if forloop.counter > forloop.parentloop.counter %}
-                        <td class="has-value" style="text-align: center; color: #fff; background-color: {{ col.1|matrix_cell_color }} ">{{ col.1 }}%</td>
-                      {% else %}
-                        <td>&nbsp;</td>
-                      {% endif %}
+                    <th>&nbsp;</th>
+                    {% for meeting_stakeholder in stakeholders_agreement.meeting_stakeholders %}
+                      <th>{{ meeting_stakeholder.stakeholder.profile.get_display_name }}</th>
                     {% endfor %}
                   </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {% for row in stakeholders_agreement.matrix_by_items %}
+                    <tr>
+                      <th>{{ row.0.stakeholder.profile.get_display_name }}</th>
+                      {% for col in row.1 %}
+                        {% if forloop.counter > forloop.parentloop.counter %}
+                          <td class="has-value" style="text-align: center; color: #fff; background-color: {{ col.1|matrix_cell_color }} ">{{ col.1 }}%</td>
+                        {% else %}
+                          <td>&nbsp;</td>
+                        {% endif %}
+                      {% endfor %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
           </div>
 
         </div>
