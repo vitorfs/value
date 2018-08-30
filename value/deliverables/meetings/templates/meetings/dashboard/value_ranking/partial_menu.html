@@ -1,0 +1,19 @@
+{% load i18n %}
+
+<ul class="nav nav-tabs" style="margin-bottom: 20px;">
+  <li role="presentation"{% if active_tab == 'all' %} class="active"{% endif %}>
+    <a href="{% url 'deliverables:meetings:value_ranking' meeting.deliverable.pk meeting.pk %}">
+      {% trans 'All' %}
+    </a>
+  </li>
+  <li role="presentation"{% if active_tab == 'groups' %} class="active"{% endif %}>
+    <a href="{% url 'deliverables:meetings:value_ranking_groups' meeting.deliverable.pk meeting.pk %}">
+      {% trans 'Stakeholders Groups' %}
+    </a>
+  </li>
+  <li role="presentation"{% if active_tab == 'individual' %} class="active"{% endif %}>
+    <a href="{% url 'deliverables:meetings:value_ranking_individual' meeting.deliverable.pk meeting.pk %}">
+      {% trans 'Individual' %}
+    </a>
+  </li>
+</ul>
