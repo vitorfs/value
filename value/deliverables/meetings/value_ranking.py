@@ -78,8 +78,12 @@ def _calc_value_ranking(meeting, meeting_items, measure_values_count, factors_co
         })
 
     value_rankings = sorted(value_rankings, key=lambda v: v['value_ranking'], reverse=True)
+    next_ranking = 1
     for index, entry in enumerate(value_rankings):
-        value_rankings[index]['ranking'] = index + 1
+        if index > 0 and value_rankings[index - 1]['value_ranking'] != value_rankings[index]['value_ranking']:
+            next_ranking += 1
+        value_rankings[index]['ranking'] = next_ranking
+
     return value_rankings
 
 
