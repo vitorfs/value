@@ -23,7 +23,7 @@ def vrank(total, *values):
 
 
 def _calc_value_ranking(meeting, meeting_items, measure_values_count, factors_count,
-                        stakeholders_ids, grouped_measure_values):
+                        stakeholders_ids, measure_values, grouped_measure_values):
     stakeholders_count = len(stakeholders_ids)
     max_evaluations = stakeholders_count * factors_count
 
@@ -33,12 +33,24 @@ def _calc_value_ranking(meeting, meeting_items, measure_values_count, factors_co
         item_evaluations = Evaluation.get_evaluations_by_meeting(meeting) \
             .filter(meeting_item=meeting_item, user__in=stakeholders_ids)
 
-        rankings = item_evaluations \
+        rankings = list()
+        for measure_value in measure_values:
+            rankings.append({
+                'measure_value__id': measure_value.pk,
+                'measure_value__order': measure_value.order,
+                'votes': 0
+            })
+
+        votes_by_measure_value = item_evaluations \
             .values('measure_value__id', 'measure_value__order') \
             .annotate(votes=Count('measure_value')) \
             .order_by('measure_value__order')
 
-        rankings = list(rankings)
+        for measure_value_votes in votes_by_measure_value:
+            for index, ranking in enumerate(rankings):
+                if ranking['measure_value__id'] == measure_value_votes['measure_value__id']:
+                    rankings[index]['votes'] = measure_value_votes['votes']
+                    break
 
         for index, ranking in enumerate(rankings):
             votes = int(ranking['votes'])
@@ -74,7 +86,8 @@ def _calc_value_ranking(meeting, meeting_items, measure_values_count, factors_co
 def calc_value_ranking_all(meeting):
     meeting_items = meeting.meetingitem_set.all()
     factors_count = meeting.factors.count()
-    measure_values_count = meeting.measure.measurevalue_set.count()
+    measure_values = meeting.measure.measurevalue_set.order_by('order')
+    measure_values_count = measure_values.count()
 
     grouped_measure_values = None
     if measure_values_count > 3:
@@ -82,7 +95,7 @@ def calc_value_ranking_all(meeting):
 
     stakeholders_ids = meeting.meetingstakeholder_set.values_list('stakeholder_id', flat=True)
     value_rankings = _calc_value_ranking(meeting, meeting_items, measure_values_count, factors_count,
-                                         stakeholders_ids, grouped_measure_values)
+                                         stakeholders_ids, measure_values, grouped_measure_values)
     return value_rankings
 
 
@@ -90,7 +103,8 @@ def calc_value_ranking_per_stakeholder_group(meeting):
     value_rankings_groups = list()
     meeting_items = meeting.meetingitem_set.all()
     factors_count = meeting.factors.count()
-    measure_values_count = meeting.measure.measurevalue_set.count()
+    measure_values = meeting.measure.measurevalue_set.order_by('order')
+    measure_values_count = measure_values.count()
 
     grouped_measure_values = None
     if measure_values_count > 3:
@@ -101,7 +115,7 @@ def calc_value_ranking_per_stakeholder_group(meeting):
     for group, stakeholders in groups.items():
         stakeholders_ids = [stakeholder.id for stakeholder in stakeholders]
         value_rankings = _calc_value_ranking(meeting, meeting_items, measure_values_count, factors_count,
-                                             stakeholders_ids, grouped_measure_values)
+                                             stakeholders_ids, measure_values, grouped_measure_values)
         value_rankings_groups.append({
             'group': group,
             'value_rankings': value_rankings
@@ -121,7 +135,8 @@ def calc_value_ranking_per_stakeholder_group(meeting):
 def calc_value_ranking_per_stakeholder(meeting):
     value_rankings_groups = list()
     meeting_items = meeting.meetingitem_set.all()
-    measure_values_count = meeting.measure.measurevalue_set.count()
+    measure_values = meeting.measure.measurevalue_set.order_by('order')
+    measure_values_count = measure_values.count()
     factors_count = meeting.factors.count()
     grouped_measure_values = None
 
@@ -133,7 +148,7 @@ def calc_value_ranking_per_stakeholder(meeting):
     for meeting_stakeholder in meeting_stakeholders:
         stakeholders_ids = [meeting_stakeholder.stakeholder.pk,]
         value_rankings = _calc_value_ranking(meeting, meeting_items, measure_values_count, factors_count,
-                                             stakeholders_ids, grouped_measure_values)
+                                             stakeholders_ids, measure_values, grouped_measure_values)
         value_rankings_groups.append({
             'group': meeting_stakeholder.stakeholder.profile.get_display_name(),
             'value_rankings': value_rankings

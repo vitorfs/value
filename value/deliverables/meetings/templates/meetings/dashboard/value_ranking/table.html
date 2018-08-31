@@ -40,7 +40,7 @@
             <tbody>
               {% for ranking in value_ranking_groups.0.value_rankings %}
                 <tr>
-                  <td style="white-space: nowrap!important;">
+                  <td>
                     <strong>{{ ranking.meeting_item.decision_item.name }}</strong>
                   </td>
                   <td>{{ ranking.meeting_item.value_ranking_as_html|safe }}</td>
