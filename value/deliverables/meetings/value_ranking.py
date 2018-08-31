@@ -146,13 +146,14 @@ def calc_value_ranking_per_stakeholder(meeting):
     meeting_stakeholders = meeting.meetingstakeholder_set.select_related('stakeholder__profile').all()
 
     for meeting_stakeholder in meeting_stakeholders:
-        stakeholders_ids = [meeting_stakeholder.stakeholder.pk,]
-        value_rankings = _calc_value_ranking(meeting, meeting_items, measure_values_count, factors_count,
-                                             stakeholders_ids, measure_values, grouped_measure_values)
-        value_rankings_groups.append({
-            'group': meeting_stakeholder.stakeholder.profile.get_display_name(),
-            'value_rankings': value_rankings
-        })
+        if Evaluation.get_evaluations_by_meeting(meeting).filter(user=meeting_stakeholder.stakeholder).exists():
+            stakeholders_ids = [meeting_stakeholder.stakeholder.pk,]
+            value_rankings = _calc_value_ranking(meeting, meeting_items, measure_values_count, factors_count,
+                                                 stakeholders_ids, measure_values, grouped_measure_values)
+            value_rankings_groups.append({
+                'group': meeting_stakeholder.stakeholder.profile.get_display_name(),
+                'value_rankings': value_rankings
+            })
 
     aggregated_ranking = calculate_aggregated_ranking(value_rankings_groups)
     value_rankings_groups = set_balanced_value_ranking(aggregated_ranking, value_rankings_groups)
