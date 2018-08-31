@@ -10,3 +10,8 @@ def startswith(text, starts):
     if isinstance(text, basestring):
         return text.startswith(starts)
     return False
+
+
+@register.filter('get')
+def get(obj, index):
+    return obj[index]

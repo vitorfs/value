@@ -34,6 +34,9 @@ urlpatterns = [
     url(r'^(?P<meeting_id>\d+)/dashboard/stakeholders-input/$', views.dashboard_stakeholders_input_chart,
         name='dashboard_stakeholders_input_chart'),
     url(r'^(?P<meeting_id>\d+)/dashboard/ranking/$', views.value_ranking, name='value_ranking'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/ranking/groups/$', views.value_ranking_groups, name='value_ranking_groups'),
+    url(r'^(?P<meeting_id>\d+)/dashboard/ranking/individual/$', views.value_ranking_individual, name='value_ranking_individual'),
+
     url(r'^(?P<meeting_id>\d+)/dashboard/items/$', views.decision_items_overview, name='decision_items_overview'),
     url(r'^(?P<meeting_id>\d+)/dashboard/measures/$', views.features_comparison, name='features_comparison'),
     url(r'^(?P<meeting_id>\d+)/dashboard/measures/(?P<measure_value_id>\d+)/$', views.features_comparison_chart,

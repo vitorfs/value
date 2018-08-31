@@ -94,29 +94,31 @@
           {% endif %}
           <div class="panel panel-default panel-chart">
             <div class="panel-heading">{% trans "Stakeholders' Opinion Based on Each Decision Item" %}</div>
-            <table class="table table-bordered table-condensed">
-              <thead>
-                <tr>
-                  <th style="width: 15%">&nbsp;</th>
-                  {% for meeting_stakeholder in stakeholders_agreement.meeting_stakeholders %}
-                    <th>{{ meeting_stakeholder.stakeholder.profile.get_display_name }}</th>
-                  {% endfor %}
-                  <th>Group Opinion</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for row in stakeholders_agreement.get_stakeholders_opinion %}
+            <div class="table-responsive">
+              <table class="table table-bordered table-condensed">
+                <thead>
                   <tr>
-                    <th>{{ row.0.decision_item.name }}</th>
-                    {% for col in row.1 %}
-                      <td style="color: #fff; background-color: {{ col.color }}; text-align: center">
-                        <small>{{ col.description }}<br>({{ col.percentage }}%)</small>
-                      </td>
+                    <th style="width: 15%">&nbsp;</th>
+                    {% for meeting_stakeholder in stakeholders_agreement.meeting_stakeholders %}
+                      <th>{{ meeting_stakeholder.stakeholder.profile.get_display_name }}</th>
                     {% endfor %}
+                    <th>Group Opinion</th>
                   </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {% for row in stakeholders_agreement.get_stakeholders_opinion %}
+                    <tr>
+                      <th>{{ row.0.decision_item.name }}</th>
+                      {% for col in row.1 %}
+                        <td style="color: #fff; background-color: {{ col.color }}; text-align: center">
+                          <small>{{ col.description }}<br>({{ col.percentage }}%)</small>
+                        </td>
+                      {% endfor %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
           </div>
 
         </div>

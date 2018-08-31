@@ -1,5 +1,7 @@
 {% extends 'meetings/dashboard/base_charts.html' %}
 
+{% load i18n %}
+
 {% block javascript %}
   {{ block.super }}
   <script type="text/javascript">
@@ -10,5 +12,29 @@
 {% endblock javascript %}
 
 {% block charts %}
-  {% include 'meetings/dashboard/value_ranking/chart.html' with opened=True %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {% trans 'Value Ranking' %}
+    </div>
+    <div class="panel-body">
+      {% include 'meetings/dashboard/value_ranking/partial_menu.html' with active_tab='all' %}
+      {% include 'meetings/dashboard/value_ranking/chart.html' with opened=True %}
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>{% trans 'Decision Item' %}</th>
+          <th>{% trans 'Value Ranking' %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ranking in value_rankings %}
+          <tr>
+            <td>{{ ranking.meeting_item }}</td>
+            <td>{{ ranking.value_ranking }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock charts %}
