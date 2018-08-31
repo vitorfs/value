@@ -28,10 +28,10 @@
         </tr>
       </thead>
       <tbody>
-        {% for ranking in value_rankings %}
+        {% for meeting_item in meeting_items %}
           <tr>
-            <td>{{ ranking.meeting_item }}</td>
-            <td>{{ ranking.value_ranking }}</td>
+            <td>{{ meeting_item.decision_item.name }}</td>
+            <td>{{ meeting_item.value_ranking_as_html|safe }}</td>
           </tr>
         {% endfor %}
       </tbody>

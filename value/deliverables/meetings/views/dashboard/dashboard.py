@@ -120,7 +120,7 @@ def value_ranking(request, deliverable_id, meeting_id):
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        value_rankings = calc_value_ranking_all(meeting)
+        meeting_items = meeting.meetingitem_set.order_by('-value_ranking')
         template_name = 'meetings/dashboard/value_ranking/list.html'
         if 'popup' in request.GET:
             template_name = 'meetings/dashboard/value_ranking/popup.html'
@@ -130,7 +130,7 @@ def value_ranking(request, deliverable_id, meeting_id):
             'chart_page_title': _('Value Ranking'),
             'chart': chart,
             'dump': dump,
-            'value_rankings': value_rankings
+            'meeting_items': meeting_items
         })
 
 
