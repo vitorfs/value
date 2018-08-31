@@ -1,25 +1,23 @@
 # coding: utf-8
 
 import json
-import itertools
-import operator
 
-from django.http import HttpResponse, HttpResponseBadRequest
-from django.core.urlresolvers import reverse
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext as _
 
-from value.deliverables.meetings.value_ranking import calc_value_ranking, calc_value_ranking_per_stakeholder_group, \
-    calc_value_ranking_per_stakeholder
-from value.measures.models import MeasureValue
 from value.deliverables.decorators import user_is_manager
-from value.deliverables.meetings.forms import CompareStakeholdersOpinion
 from value.deliverables.meetings.agreement_matrix import StakeholdersAgreement
 from value.deliverables.meetings.charts import Highcharts
 from value.deliverables.meetings.decorators import meeting_is_analysing_or_closed
+from value.deliverables.meetings.forms import CompareStakeholdersOpinion
 from value.deliverables.meetings.models import Meeting
 from value.deliverables.meetings.utils import *
+from value.deliverables.meetings.value_ranking import calc_value_ranking_per_stakeholder_group, \
+    calc_value_ranking_per_stakeholder, calc_value_ranking_all
+from value.measures.models import MeasureValue
 
 
 @login_required
@@ -122,7 +120,7 @@ def value_ranking(request, deliverable_id, meeting_id):
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
-        value_rankings = calc_value_ranking(meeting)
+        value_rankings = calc_value_ranking_all(meeting)
         template_name = 'meetings/dashboard/value_ranking/list.html'
         if 'popup' in request.GET:
             template_name = 'meetings/dashboard/value_ranking/popup.html'
@@ -141,20 +139,11 @@ def value_ranking(request, deliverable_id, meeting_id):
 def value_ranking_groups(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     value_ranking_groups = calc_value_ranking_per_stakeholder_group(meeting)
-    all_value_rankings = calc_value_ranking(meeting)
-    value_ranking_groups.insert(0, {
-        'group': _('Value Ranking'),
-        'value_rankings': all_value_rankings
-    })
-    for index, group in enumerate(value_ranking_groups):
-        value_ranking_groups[index]['value_rankings'] = sorted(
-            value_ranking_groups[index]['value_rankings'], key=lambda v: v['meeting_item'].decision_item.name
-        )
-
-    return render(request, 'meetings/dashboard/value_ranking/groups.html', {
+    return render(request, 'meetings/dashboard/value_ranking/table.html', {
         'meeting': meeting,
         'chart_menu_active': 'value_ranking',
         'chart_page_title': _('Value Ranking'),
+        'active_tab': 'groups',
         'value_ranking_groups': value_ranking_groups
     })
 
@@ -164,20 +153,11 @@ def value_ranking_groups(request, deliverable_id, meeting_id):
 def value_ranking_individual(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
     value_ranking_groups = calc_value_ranking_per_stakeholder(meeting)
-    all_value_rankings = calc_value_ranking(meeting)
-    value_ranking_groups.insert(0, {
-        'group': _('Value Ranking'),
-        'value_rankings': all_value_rankings
-    })
-    for index, group in enumerate(value_ranking_groups):
-        value_ranking_groups[index]['value_rankings'] = sorted(
-            value_ranking_groups[index]['value_rankings'], key=lambda v: v['meeting_item'].decision_item.name
-        )
-
-    return render(request, 'meetings/dashboard/value_ranking/individual.html', {
+    return render(request, 'meetings/dashboard/value_ranking/table.html', {
         'meeting': meeting,
         'chart_menu_active': 'value_ranking',
         'chart_page_title': _('Value Ranking'),
+        'active_tab': 'individual',
         'value_ranking_groups': value_ranking_groups
     })
 

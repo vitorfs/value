@@ -71,6 +71,9 @@ ROOT_URLCONF = 'value.urls'
 
 WSGI_APPLICATION = 'value.wsgi.application'
 
+INTERNAL_IPS = [
+    # '127.0.0.1'
+]
 
 DATABASES = {
     'default': dj_database_url.config(

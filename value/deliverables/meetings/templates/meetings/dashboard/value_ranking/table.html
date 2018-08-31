@@ -1,0 +1,62 @@
+{% extends 'meetings/dashboard/base_charts.html' %}
+
+{% load i18n templatehelpers %}
+
+{% block charts %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {% trans 'Value Ranking' %}
+    </div>
+    <div class="panel-body">
+      {% include 'meetings/dashboard/value_ranking/partial_menu.html' %}
+      <div class="alert alert-info">
+        <p>
+          <strong>Value Ranking:</strong> Vary from -100 to 100. Represents the % of positive impact, minus the % of negative impact.
+        </p>
+        <p>
+          <strong>Balanced Ranking:</strong> Vary from 0 to 100. It is calculated based on the value ranking of each stakeholder group.
+        </p>
+        <p>
+          <strong>Stakeholder Groups:</strong> The number in parenthesis is the value ranking (-100 to 100) calculated using the evaluations of only this group.
+          The number outside the parenthesis is the rank of the decision item, being "1" the best option.
+        </p>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          {% trans 'Balanced Value Ranking' %}
+        </div>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped" style="margin-bottom: 0;">
+            <thead>
+              <tr>
+                <th>{% trans 'Decision Item' %}</th>
+                <th>{% trans 'Value Ranking' %}</th>
+                <th>{% trans 'Balanced Ranking' %}</th>
+                {% for group in value_ranking_groups %}
+                  <th>{{ group.group }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for ranking in value_ranking_groups.0.value_rankings %}
+                <tr>
+                  <td style="white-space: nowrap!important;">
+                    <strong>{{ ranking.meeting_item.decision_item.name }}</strong>
+                  </td>
+                  <td>{{ ranking.meeting_item.value_ranking_as_html|safe }}</td>
+                  <td><strong class="text-primary">{{ ranking.balanced_value_ranking_display }}</strong></td>
+                  {% for group in value_ranking_groups %}
+                    <td style="white-space: nowrap!important;">
+                      {{ group.value_rankings|get:forloop.parentloop.counter0|get:'ranking' }}
+                      <small class="text-muted">({{ group.value_rankings|get:forloop.parentloop.counter0|get:'value_ranking' }})</small>
+                    </td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock charts %}
