@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.utils.translation import ugettext as _
 
 from value.factors.models import Factor, Group
@@ -74,7 +74,7 @@ def toggle_active(request):
         factor = Factor.objects.get(pk=factor_id)
         factor.is_active = not factor.is_active
         factor.save()
-        return HttpResponse()
+        return JsonResponse({'message': _('Changes successfully saved!')})
     except Factor.DoesNotExist:
         return HttpResponseBadRequest()
 

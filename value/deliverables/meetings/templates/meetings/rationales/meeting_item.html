@@ -1,3 +1,5 @@
+{% load i18n %}
+
 {% if meeting_item.has_rationales %}
   {% comment %}
   <div>
@@ -22,9 +24,9 @@
         {% else %}
           <div class="well blank-state">
             <span class="fa fa-comments"></span>
-            <h3>No notes recorded for this item.</h3>
+            <h3>{% trans 'No notes recorded for this item.' %}</h3>
             <button type="button" class="btn btn-primary js-add-meeting-item-note" data-item-id="{{ meeting_item.pk }}">
-              <span class="glyphicon glyphicon-plus"></span> Add a note
+              <span class="glyphicon glyphicon-plus"></span> {% trans 'Add a note' %}
             </button>
           </div>
         {% endif %}
@@ -47,10 +49,10 @@
 {% else %}
   <div class="well blank-state">
     <span class="fa fa-comments"></span>
-    <h3>No rationale recorded for this item.</h3>
+    <h3>{% trans 'No rationale recorded for this item.' %}</h3>
     {% comment %}
     <button type="button" class="btn btn-primary js-add-meeting-item-note" data-item-id="{{ meeting_item.pk }}">
-      <span class="glyphicon glyphicon-plus"></span> Add a note
+      <span class="glyphicon glyphicon-plus"></span> {% trans 'Add a note' %}
     </button>
     {% endcomment %}
   </div>

@@ -10,17 +10,20 @@ from value.measures.models import Measure
 
 class BaseFactorForm(forms.ModelForm):
     description = forms.CharField(
+        label=_('Description'),
         widget=forms.Textarea(attrs={'class': 'expanding', 'rows': '3'}),
         max_length=2000,
         required=False
     )
     measure = forms.ModelChoiceField(
+        label=_('Measure'),
         widget=forms.Select(),
         queryset=Measure.objects.filter(is_active=True),
         empty_label=_('Select…'),
         required=False
     )
     group = forms.ModelChoiceField(
+        label=_('Group'),
         widget=forms.Select(),
         queryset=Group.objects.order_by('name'),
         empty_label=_('Select…'),
@@ -49,7 +52,11 @@ class ChangeFactorForm(BaseFactorForm):
 
 
 class GroupForm(forms.ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length=255)
+    name = forms.CharField(
+        label=_('Name'),
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        max_length=255
+    )
 
     class Meta:
         model = Group

@@ -112,14 +112,14 @@
                       {% endif %}
                       <ul class="meeting-details">
                         <li><span class="fa fa-calendar"></span> {{ meeting.created_at }}</li>
-                        <li><span class="fa fa-users"></span> Stakeholders: {{ meeting.stakeholders_count }}</li>
-                        <li><span class="fa fa-list"></span> Decision Items: {{ meeting.items_count }}</li>
+                        <li><span class="fa fa-users"></span> {% trans 'Stakeholders:' %} {{ meeting.stakeholders_count }}</li>
+                        <li><span class="fa fa-list"></span> {% trans 'Decision Items:' %} {{ meeting.items_count }}</li>
                       </ul>
                       <button type="button"
                               class="btn btn-sm btn-default js-meeting-details"
                               data-name="{{ meeting.name }}"
                               data-url="{% url 'deliverables:historical_dashboard_meeting' meeting.deliverable.pk meeting.pk %}">
-                        <span class="glyphicon glyphicon-info-sign"></span> More details
+                        <span class="glyphicon glyphicon-info-sign"></span> {% trans 'More details' %}
                       </button>
                     </th>
                   {% endfor %}
@@ -174,7 +174,7 @@
                           </div>
                           <div style="margin-top: 10px">
                             <button type="button" class="btn btn-sm {% if meeting_item.has_rationales %}btn-primary{% else %}btn-default{% endif %}">
-                              <span class="fa fa-comments"></span> Notes
+                              <span class="fa fa-comments"></span> {% trans 'Notes' %}
                             </button>
                           </div>
                         </td>

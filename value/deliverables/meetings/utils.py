@@ -3,24 +3,25 @@
 from collections import OrderedDict
 
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext as _
 
 from value.deliverables.models import DecisionItemLookup
 
 
 def get_bar_chart_types_dict():
     chart_types = OrderedDict()
-    chart_types['stacked_bars'] = {'label': 'Stacked Bars', 'icon': 'glyphicon glyphicon-align-left'}
-    chart_types['basic_bars'] = {'label': 'Basic Bars', 'icon': 'glyphicon glyphicon-align-left'}
-    chart_types['stacked_columns'] = {'label': 'Stacked Columns', 'icon': 'glyphicon glyphicon-signal'}
-    chart_types['basic_columns'] = {'label': 'Basic Columns', 'icon': 'glyphicon glyphicon-signal'}
+    chart_types['stacked_bars'] = {'label': _('Stacked Bars'), 'icon': 'glyphicon glyphicon-align-left'}
+    chart_types['basic_bars'] = {'label': _('Basic Bars'), 'icon': 'glyphicon glyphicon-align-left'}
+    chart_types['stacked_columns'] = {'label': _('Stacked Columns'), 'icon': 'glyphicon glyphicon-signal'}
+    chart_types['basic_columns'] = {'label': _('Basic Columns'), 'icon': 'glyphicon glyphicon-signal'}
     return chart_types
 
 
 def get_treemap_chart_types_dict():
     chart_types = OrderedDict()
-    chart_types['simple'] = {'label': 'Simple Treemap', 'icon': 'fa fa-th-large'}
-    chart_types['detailed'] = {'label': 'Detailed Treemap', 'icon': 'fa fa-th'}
-    chart_types['pie'] = {'label': 'Detailed Pie Chart', 'icon': 'fa fa-pie-chart'}
+    chart_types['simple'] = {'label': _('Simple Treemap'), 'icon': 'fa fa-th-large'}
+    chart_types['detailed'] = {'label': _('Detailed Treemap'), 'icon': 'fa fa-th'}
+    chart_types['pie'] = {'label': _('Detailed Pie Chart'), 'icon': 'fa fa-pie-chart'}
     return chart_types
 
 
@@ -61,7 +62,7 @@ def _get_or_set_order_session(request, meeting, cookie_name, db_model_order):
 
 def get_charts_order_dict(measure):
     charts_order = OrderedDict()
-    charts_order['-value_ranking'] = 'Value Ranking'
+    charts_order['-value_ranking'] = _('Value Ranking')
     for measure_value in measure.measurevalue_set.all():
         charts_order[measure_value.pk] = u'{0} {1}'.format(measure_value.description, measure_value.measure.name)
     for field_key, field_value in DecisionItemLookup.get_visible_fields().iteritems():
@@ -71,10 +72,10 @@ def get_charts_order_dict(measure):
 
 def get_scenario_charts_order_dict(measure):
     charts_order = OrderedDict()
-    charts_order['-value_ranking'] = 'Value Ranking'
+    charts_order['-value_ranking'] = _('Value Ranking')
     for measure_value in measure.measurevalue_set.all():
         charts_order[measure_value.pk] = u'{0} {1}'.format(measure_value.description, measure_value.measure.name)
-    charts_order['name'] = 'Name'
+    charts_order['name'] = _('Name')
     return charts_order
 
 

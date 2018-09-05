@@ -46,8 +46,9 @@ $(function () {
   });
 
   $("#new-meeting").submit(function () {
-    $(".btn-start-meeting").prop("disabled", true);
-    $(".btn-start-meeting").text("Starting the meeting…");
+    var $btn = $(".btn-start-meeting");
+    $btn.prop("disabled", true);
+    $btn.text($btn.attr("data-loading"));
   });
 
   $("table.table-check-all.table-decision-items").each(function () {

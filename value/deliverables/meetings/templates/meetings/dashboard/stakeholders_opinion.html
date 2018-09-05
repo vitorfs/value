@@ -10,6 +10,7 @@
   <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
   <script src="{% static 'js/meetings/dashboard.js' %}"></script>
   <script src="{% static 'js/meetings/meetings.js' %}"></script>
+  <script src="{% static 'js/meetings/scenarios.js' %}"></script>
   <script type="text/javascript">
     $(function () {
       $(".table-stakeholders-agreement tbody tr td.has-value").hover(
@@ -125,4 +126,5 @@
       </div>
     </div>
   </div>
+  {% include 'meetings/dashboard/scenarios/scenario_actions.html' %}
 {% endblock %}
