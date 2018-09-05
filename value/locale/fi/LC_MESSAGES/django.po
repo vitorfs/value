@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-04 14:47+0300\n"
+"POT-Creation-Date: 2018-09-05 16:13+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1086,15 +1086,15 @@ msgstr "Aseta arvojen prioriteetti(vedä ja pudota):"
 msgid ""
 "Order the decision items, using the value factors priority, using the "
 "following score:"
-msgstr ""
+msgstr "Järjestä päätösasiat"
 
 #: value/deliverables/meetings/templates/meetings/dashboard/priority_list.html:104
 msgid "Generate priority list"
-msgstr ""
+msgstr "Luo prioriteettilista"
 
 #: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:72
 msgid "Change parameters"
-msgstr ""
+msgstr "Muuta asetuksia"
 
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/list.html:26
 msgid "Scenario Options"
@@ -1290,7 +1290,7 @@ msgstr "Osallistujien mielipiteet eri päätösentekoasioille"
 
 #: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:105
 msgid "Group Opinion"
-msgstr ""
+msgstr "Ryhmän mielipide"
 
 #: value/deliverables/meetings/templates/meetings/evaluate.html:22
 #: value/deliverables/meetings/templates/meetings/evaluate.html:59
@@ -1434,36 +1434,36 @@ msgstr "Ei tietoa"
 
 #: value/deliverables/meetings/templates/meetings/includes/partial_status.html:15
 msgid "Change meeting status to…"
-msgstr ""
+msgstr "Muuta kokouksen tila"
 
 #: value/deliverables/meetings/templates/meetings/includes/partial_status.html:29
 msgid "Close the meeting?"
-msgstr ""
+msgstr "Lopeta kokous?"
 
 #: value/deliverables/meetings/templates/meetings/includes/partial_status.html:32
 msgid ""
 "After closing the meeting the evaluation session will be finished. You won't "
 "be able to change the meeting details."
-msgstr ""
+msgstr "Kokouksen lisätietoja ei voida muuttaa kokouksen sulkemisen jälkeen."
 
 #: value/deliverables/meetings/templates/meetings/includes/partial_status.html:33
 #, python-format
 msgid ""
 "It is strongly advised to only close a decision making meeting after the "
 "progress reach 100%%."
-msgstr ""
+msgstr "Sulje kokous vasta kun kaikki ovat antaneet vastauksensa."
 
 #: value/deliverables/meetings/templates/meetings/includes/partial_status.html:34
 msgid "Current progress:"
-msgstr ""
+msgstr "Kokouksen edistyminen:"
 
 #: value/deliverables/meetings/templates/meetings/includes/partial_status.html:42
 msgid "You can re-open the meeting anytime."
-msgstr ""
+msgstr "Voit avata kokouksen tarvittaessa uudelleen."
 
 #: value/deliverables/meetings/templates/meetings/includes/partial_status.html:45
 msgid "Close the meeting"
-msgstr ""
+msgstr "Lopeta kokous"
 
 #: value/deliverables/meetings/templates/meetings/new.html:14
 msgid "New Meeting"
@@ -1517,7 +1517,7 @@ msgstr "4. Lisäasetukset"
 
 #: value/deliverables/meetings/templates/meetings/new.html:215
 msgid "Starting the meeting…"
-msgstr ""
+msgstr "Aloitetaan kokousta…"
 
 #: value/deliverables/meetings/templates/meetings/new.html:216
 msgid "Start the meeting"
@@ -1525,7 +1525,7 @@ msgstr "Aloita kokous"
 
 #: value/deliverables/meetings/templates/meetings/rationales/meeting_item.html:53
 msgid "No rationale recorded for this item."
-msgstr ""
+msgstr "Ei kommentteja"
 
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:45
 #: value/deliverables/templates/deliverables/settings/details.html:66
@@ -1535,31 +1535,31 @@ msgstr "Kehityksessä olevat ominaisuudet"
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:50
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:78
 msgid "Delete this meeting"
-msgstr ""
+msgstr "Poista kokous"
 
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:51
 msgid "Once you delete a meeting, there is no going back. Please be certain."
-msgstr ""
+msgstr "Poistettua kokousta ei voida palauttaa."
 
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:66
 #, python-format
 msgid ""
 "This action <strong>CANNOT</strong> be undone. This will permanently delete "
 "the meeting <strong>%(name)s</strong>."
-msgstr ""
+msgstr "Toimintoa <strong>EI VOIDA<strong> peruuttaa. Kokous <strong>%(name)s</strong> poistetaan pysyvästi."
 
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:73
 msgid "I understand the consequences."
-msgstr ""
+msgstr "Poista kokous"
 
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:87
 msgid "This meeting cannot be deleted."
-msgstr ""
+msgstr "Kokousta ei voida poistaa"
 
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:88
 msgid ""
 "There's already evaluation data associated with this decision making meeting."
-msgstr ""
+msgstr "Kokousta ei voida poistaa koska se on jo aloitettu."
 
 #: value/deliverables/meetings/templates/meetings/settings/details.html:40
 #: value/deliverables/meetings/templates/meetings/settings/includes/menu.html:6
@@ -1590,11 +1590,11 @@ msgstr "Poista valitut"
 
 #: value/deliverables/meetings/templates/meetings/settings/items.html:135
 msgid "There is no decision item available."
-msgstr ""
+msgstr "Kaikki päätösasiat on jo liitetty kokoukseen."
 
 #: value/deliverables/meetings/templates/meetings/settings/items.html:136
 msgid "Create new decision item"
-msgstr ""
+msgstr "Luo uusi päätösasia"
 
 #: value/deliverables/meetings/templates/meetings/settings/items.html:143
 #: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:95
@@ -1614,11 +1614,11 @@ msgstr "Kutsu"
 
 #: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:74
 msgid "Invite stakeholder"
-msgstr ""
+msgstr "Kutsu osallistujia"
 
 #: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:80
 msgid "Click to add a stakeholder to the meeting."
-msgstr ""
+msgstr "Napsauta lisätäksesi osallistujia."
 
 #: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:87
 #: value/deliverables/templates/deliverables/includes/add_stakeholders.html:15
@@ -1632,7 +1632,7 @@ msgstr "Luo uusi käyttäjä"
 
 #: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:113
 msgid "Remove the stakeholder"
-msgstr ""
+msgstr "Poista osallistuja"
 
 #: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:116
 msgid "Remove"
@@ -1652,31 +1652,31 @@ msgstr "Klikkaa nähdäksesi lisätiedot"
 
 #: value/deliverables/meetings/utils.py:13
 msgid "Stacked Bars"
-msgstr ""
+msgstr "Pinotut pylväät"
 
 #: value/deliverables/meetings/utils.py:14
 msgid "Basic Bars"
-msgstr ""
+msgstr "Pylväät"
 
 #: value/deliverables/meetings/utils.py:15
 msgid "Stacked Columns"
-msgstr ""
+msgstr "Pinotut sarakkeet"
 
 #: value/deliverables/meetings/utils.py:16
 msgid "Basic Columns"
-msgstr ""
+msgstr "Sarakkeet"
 
 #: value/deliverables/meetings/utils.py:22
 msgid "Simple Treemap"
-msgstr ""
+msgstr "Yksinkertainen puu"
 
 #: value/deliverables/meetings/utils.py:23
 msgid "Detailed Treemap"
-msgstr ""
+msgstr "Puukartta"
 
 #: value/deliverables/meetings/utils.py:24
 msgid "Detailed Pie Chart"
-msgstr ""
+msgstr "Piirakka"
 
 #: value/deliverables/meetings/validators.py:9
 msgid "Select exactly two scenarios to compare."
@@ -1954,7 +1954,7 @@ msgstr "Kokous"
 
 #: value/deliverables/templates/deliverables/historical_dashboard/decision_items_progress.html:103
 msgid "Was selected?"
-msgstr ""
+msgstr "Valittu?"
 
 #: value/deliverables/templates/deliverables/historical_dashboard/decision_items_progress.html:124
 msgid "There's no enough data to display the Decision Item Progress."
@@ -1988,7 +1988,7 @@ msgstr "Päätösasiat:"
 
 #: value/deliverables/templates/deliverables/historical_dashboard/summary.html:122
 msgid "More details"
-msgstr ""
+msgstr "Tarkenna"
 
 #: value/deliverables/templates/deliverables/historical_dashboard/summary.html:183
 msgid "Not evaluated"
