@@ -2830,7 +2830,7 @@ msgstr "Sukunimi"
 
 #: value/users/forms.py:22
 msgid "Email address"
-msgstr "Säköposti"
+msgstr "Sähköposti"
 
 #: value/users/models.py:14
 msgid "profile"
