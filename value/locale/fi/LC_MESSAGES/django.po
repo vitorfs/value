@@ -8,11 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-05 16:13+0300\n"
+"POT-Creation-Date: 2018-09-13 14:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: Markku Kemppainen <makemppa@iki.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: Finnish (Suomi)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -274,7 +274,7 @@ msgstr "Oikeudet"
 
 #: value/application_settings/templates/application_settings/index.html:35
 msgid "Select the users you want to grant/revoke administrator permissions"
-msgstr "Valitse käyttäjtä joille haluat antaa pääkäyttäjän oikeudet"
+msgstr "Valitse käyttäjiä joille haluat antaa pääkäyttäjän oikeudet"
 
 #: value/application_settings/templates/application_settings/index.html:42
 msgid "Administrators"
@@ -502,12 +502,18 @@ msgstr "Arvojen käyttöprosentti"
 #: value/deliverables/meetings/templates/meetings/dashboard/priority_list_result.html:56
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_scenario_form.html:30
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_details.html:9
+#: value/deliverables/meetings/templates/meetings/dashboard/value_ranking/list.html:17
+#: value/deliverables/meetings/templates/meetings/dashboard/value_ranking/list.html:27
+#: value/deliverables/meetings/templates/meetings/dashboard/value_ranking/table.html:8
+#: value/deliverables/meetings/templates/meetings/dashboard/value_ranking/table.html:33
 #: value/deliverables/meetings/templates/meetings/final_decision.html:135
 #: value/deliverables/meetings/templatetags/meeting_item.py:62
 #: value/deliverables/meetings/utils.py:65
 #: value/deliverables/meetings/utils.py:75
 #: value/deliverables/meetings/views/dashboard/dashboard.py:107
-#: value/deliverables/meetings/views/dashboard/dashboard.py:129
+#: value/deliverables/meetings/views/dashboard/dashboard.py:130
+#: value/deliverables/meetings/views/dashboard/dashboard.py:145
+#: value/deliverables/meetings/views/dashboard/dashboard.py:159
 #: value/deliverables/templates/deliverables/historical_dashboard/decision_items_progress.html:17
 #: value/deliverables/templates/deliverables/historical_dashboard/decision_items_progress.html:101
 #: value/deliverables/templates/deliverables/historical_dashboard/includes/partial_meeting.html:9
@@ -520,7 +526,7 @@ msgid "Ranking"
 msgstr "Sijoitus"
 
 #: value/deliverables/meetings/charts.py:259
-#: value/deliverables/meetings/views/dashboard/dashboard.py:221
+#: value/deliverables/meetings/views/dashboard/dashboard.py:252
 msgid "Features Comparison"
 msgstr "Ominaisuuksien vertailu"
 
@@ -542,8 +548,8 @@ msgstr "mielipide"
 
 #: value/deliverables/meetings/charts.py:368
 #: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:11
-#: value/deliverables/meetings/views/dashboard/dashboard.py:140
-#: value/deliverables/meetings/views/dashboard/dashboard.py:173
+#: value/deliverables/meetings/views/dashboard/dashboard.py:171
+#: value/deliverables/meetings/views/dashboard/dashboard.py:204
 msgid "Decision Items Overview"
 msgstr "Päätösasioiden yhteenveto"
 
@@ -606,7 +612,7 @@ msgstr "Sijainti"
 
 #: value/deliverables/meetings/forms.py:43
 msgid "Default evaluation"
-msgstr "arviointi"
+msgstr "Käytä oletusvalinta arvoa"
 
 #: value/deliverables/meetings/forms.py:51
 msgid "Use decisions from past meetings"
@@ -814,8 +820,8 @@ msgstr "Työpöytä"
 #: value/deliverables/meetings/templates/meetings/dashboard/dashboard_closed.html:38
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:54
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:83
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:196
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:203
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:200
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:207
 #: value/deliverables/meetings/templates/meetings/includes/partial_status.html:28
 #: value/deliverables/meetings/templates/meetings/new.html:113
 #: value/deliverables/meetings/templates/meetings/new.html:120
@@ -1014,7 +1020,7 @@ msgid "Summary"
 msgstr "Yhteenveto"
 
 #: value/deliverables/meetings/templates/meetings/dashboard/includes/menu.html:15
-#: value/deliverables/meetings/views/dashboard/dashboard.py:194
+#: value/deliverables/meetings/views/dashboard/dashboard.py:225
 msgid "Decision Items Comparison"
 msgstr "Päätöasioiden vertailu"
 
@@ -1166,6 +1172,8 @@ msgstr "Valitse päätösasiat"
 
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_scenario_form.html:28
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_details.html:7
+#: value/deliverables/meetings/templates/meetings/dashboard/value_ranking/list.html:26
+#: value/deliverables/meetings/templates/meetings/dashboard/value_ranking/table.html:32
 msgid "Decision Item"
 msgstr "Päätösentekoasia"
 
@@ -1268,11 +1276,11 @@ msgid ""
 msgstr "Osallistujaryhmien yksimielisyys:"
 
 #: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:122
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:197
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:201
 msgid "Stakeholders' Agreement Based on Each Value Factor"
 msgstr "Osallistujien yksimielisyys arvoilla eriteltynä"
 
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:160
+#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_agreement.html:162
 msgid "Stakeholders' Agreement Based on the Overall Decision Item Evaluation"
 msgstr "Osallistujien yksimielisyys päätösasioissa"
 
@@ -1288,9 +1296,33 @@ msgstr "Osallistujan mielipide"
 msgid "Stakeholders' Opinion Based on Each Decision Item"
 msgstr "Osallistujien mielipiteet eri päätösentekoasioille"
 
-#: value/deliverables/meetings/templates/meetings/dashboard/stakeholders_opinion.html:105
-msgid "Group Opinion"
-msgstr "Ryhmän mielipide"
+#: value/deliverables/meetings/templates/meetings/dashboard/value_ranking/partial_menu.html:6
+#: value/deliverables/meetings/templates/meetings/evaluate.html:151
+#: value/deliverables/templates/deliverables/new.html:64
+msgid "All"
+msgstr "Kaikki"
+
+#: value/deliverables/meetings/templates/meetings/dashboard/value_ranking/partial_menu.html:11
+#, fuzzy
+#| msgid "Stakeholders Roles"
+msgid "Stakeholders Groups"
+msgstr "Osallistujien roolit"
+
+#: value/deliverables/meetings/templates/meetings/dashboard/value_ranking/partial_menu.html:16
+msgid "Individual"
+msgstr ""
+
+#: value/deliverables/meetings/templates/meetings/dashboard/value_ranking/table.html:26
+#, fuzzy
+#| msgid "Value Ranking"
+msgid "Balanced Value Ranking"
+msgstr "Arvojärjestys"
+
+#: value/deliverables/meetings/templates/meetings/dashboard/value_ranking/table.html:34
+#, fuzzy
+#| msgid "Value Ranking"
+msgid "Balanced Ranking"
+msgstr "Arvojärjestys"
 
 #: value/deliverables/meetings/templates/meetings/evaluate.html:22
 #: value/deliverables/meetings/templates/meetings/evaluate.html:59
@@ -1319,11 +1351,6 @@ msgstr "Näytön asetukset"
 #: value/deliverables/meetings/templates/meetings/evaluate.html:145
 msgid "View"
 msgstr "Näytä"
-
-#: value/deliverables/meetings/templates/meetings/evaluate.html:151
-#: value/deliverables/templates/deliverables/new.html:64
-msgid "All"
-msgstr "Kaikki"
 
 #: value/deliverables/meetings/templates/meetings/evaluate.html:156
 msgid "To-do"
@@ -1546,7 +1573,9 @@ msgstr "Poistettua kokousta ei voida palauttaa."
 msgid ""
 "This action <strong>CANNOT</strong> be undone. This will permanently delete "
 "the meeting <strong>%(name)s</strong>."
-msgstr "Toimintoa <strong>EI VOIDA<strong> peruuttaa. Kokous <strong>%(name)s</strong> poistetaan pysyvästi."
+msgstr ""
+"Toimintoa <strong>EI VOIDA<strong> peruuttaa. Kokous <strong>%(name)s</"
+"strong> poistetaan pysyvästi."
 
 #: value/deliverables/meetings/templates/meetings/settings/delete.html:73
 msgid "I understand the consequences."
@@ -1910,6 +1939,8 @@ msgid ""
 "Selected: <span class=\"count\">%(selected_count)s</span> of %(total_count)s "
 "decision items"
 msgstr ""
+"Valittu <span class=\"count\">%(selected_count)s</span>/%(total_count)s "
+"päätösasiaa"
 
 #: value/deliverables/templates/deliverables/decision_items/includes/modal.html:10
 msgid "Decision item details"
