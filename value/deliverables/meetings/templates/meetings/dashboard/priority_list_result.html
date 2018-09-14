@@ -9,6 +9,7 @@
 {% block javascript %}
   <script src="{% static 'js/meetings/dashboard.js' %}"></script>
   <script src="{% static 'js/meetings/meetings.js' %}"></script>
+  <script src="{% static 'js/meetings/scenarios.js' %}"></script>
   <script>
     $(function () {
       $(".factors").sortable({
@@ -68,9 +69,10 @@
           </tbody>
         </table>
         <div class="panel-body">
-          <a href="{% url 'deliverables:meetings:priority_list' meeting.deliverable.pk meeting.pk %}" class="btn btn-default">Change parameters</a>
+          <a href="{% url 'deliverables:meetings:priority_list' meeting.deliverable.pk meeting.pk %}" class="btn btn-default">{% trans 'Change parameters' %}</a>
         </div>
       </div>
     </div>
   </div>
+  {% include 'meetings/dashboard/scenarios/scenario_actions.html' %}
 {% endblock %}

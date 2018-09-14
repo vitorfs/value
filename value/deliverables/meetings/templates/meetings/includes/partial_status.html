@@ -1,16 +1,18 @@
+{% load i18n l10n %}
+
 {% if user == meeting.deliverable.manager %}
 
   <div class="btn-group pull-right" style="margin-left: 10px;">
-    <button type="button" 
-            class="btn {% if meeting.status == meeting.ONGOING %}btn-success{% elif meeting.status == meeting.ANALYSING %}btn-warning{% elif meeting.status == meeting.CLOSED %}btn-danger{% else %}btn-default{% endif %} dropdown-toggle" 
-            data-toggle="dropdown" 
-            aria-haspopup="true" 
+    <button type="button"
+            class="btn {% if meeting.status == meeting.ONGOING %}btn-success{% elif meeting.status == meeting.ANALYSING %}btn-warning{% elif meeting.status == meeting.CLOSED %}btn-danger{% else %}btn-default{% endif %} dropdown-toggle"
+            data-toggle="dropdown"
+            aria-haspopup="true"
             aria-expanded="false">
       {{ meeting.get_status_icon_html|safe }}
       <span class="caret"></span>
     </button>
     <ul class="dropdown-menu">
-      <li class="dropdown-header" role="presentation">Change meeting status to…</li>
+      <li class="dropdown-header" role="presentation">{% trans 'Change meeting status to…' %}</li>
       {% for option in meeting.STATUS %}
         {% if option.0 != meeting.status %}
           <li><a href="javascript:void(0);" class="js-change-meeting-status" data-option="{{ option.0 }}">{{ option.1 }}</a></li>
@@ -23,24 +25,24 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="close-meeting-title">Close the meeting?</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="close-meeting-title">{% trans 'Close the meeting?' %}</h4>
         </div>
         <div class="modal-body">
-          <p>After closing the meeting the evaluation session will be finished. You won't be able to change the meeting details.</p>
-          <p>It is strongly advised to only close a decision making meeting after the progress reach 100%.</p>
-          <p>Current progress:</p>
+          <p>{% trans "After closing the meeting the evaluation session will be finished. You won't be able to change the meeting details." %}</p>
+          <p>{% trans 'It is strongly advised to only close a decision making meeting after the progress reach 100%.' %}</p>
+          <p>{% trans 'Current progress:' %}</p>
           {% with progress=meeting.progress %}
             <div class="progress">
-              <div class="progress-bar{% if progress == 100.0 %} progress-bar-success{% else %} progress-bar-warning{% endif %}" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%;">
+              <div class="progress-bar{% if progress == 100.0 %} progress-bar-success{% else %} progress-bar-warning{% endif %}" role="progressbar" aria-valuenow="{{ progress|unlocalize }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress|unlocalize }}%;">
                 {{ progress }}%
               </div>
             </div>
           {% endwith %}
-          <p>You can re-open the meeting anytime.</p>
+          <p>{% trans 'You can re-open the meeting anytime.' %}</p>
         </div>
         <div class="modal-footer">
-          <button id="confirm-close-meeting" type="button" class="btn btn-danger btn-block">Close the meeting</button>
+          <button id="confirm-close-meeting" type="button" class="btn btn-danger btn-block">{% trans 'Close the meeting' %}</button>
         </div>
       </div>
     </div>

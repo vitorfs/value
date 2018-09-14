@@ -14,18 +14,24 @@ from value.deliverables.meetings.validators import validate_scenarios_selection
 
 class AbstractMeetingForm(forms.ModelForm):
     deliverable = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Deliverable.objects.all(), required=True)
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length=255)
+    name = forms.CharField(
+        label=_('Name'),
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        max_length=255
+    )
     started_at = forms.DateTimeField(
         widget=forms.DateTimeInput(format='%d/%m/%Y %H:%M', attrs={'class': 'form-control'}),
         label=_('Starting at'),
         input_formats=['%d/%m/%Y %H:%M', ]
     )
     description = forms.CharField(
+        label=_('Description'),
         widget=forms.Textarea(attrs={'class': 'form-control expanding', 'rows': '1'}),
         max_length=2000,
         required=False
     )
     location = forms.CharField(
+        label=_('Location'),
         widget=forms.TextInput(attrs={'class': 'form-control'}),
         max_length=50,
         required=False
@@ -34,6 +40,7 @@ class AbstractMeetingForm(forms.ModelForm):
 
 class NewMeetingForm(AbstractMeetingForm):
     default_evaluation = forms.ModelChoiceField(
+        label=_('Default evaluation'),
         widget=forms.Select(attrs={'class': 'form-control'}),
         queryset=MeasureValue.objects.none(),
         required=False
@@ -68,10 +75,12 @@ class MeetingStatusForm(forms.ModelForm):
 
 class MeetingItemFinalDecisionForm(forms.ModelForm):
     meeting_decision = forms.BooleanField(
+        label=_('Meeting decision'),
         widget=forms.CheckboxInput(attrs={'class': 'final-decision'}),
         required=False
     )
     meeting_ranking = forms.FloatField(
+        label=_('Meeting ranking'),
         widget=forms.TextInput(attrs={'class': 'form-control input-sm'}),
         required=False
     )
@@ -84,6 +93,7 @@ class MeetingItemFinalDecisionForm(forms.ModelForm):
 class ScenarioForm(forms.ModelForm):
     meeting = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Meeting.objects.all(), required=True)
     meeting_items = forms.ModelMultipleChoiceField(
+        label=_('Meeting items'),
         widget=forms.CheckboxSelectMultiple(),
         queryset=None,
         required=True
@@ -106,7 +116,7 @@ class FactorMultipleModelChoiceField(forms.ModelMultipleChoiceField):
 
 
 class ScenarioBuilderForm(forms.Form):
-    name = forms.CharField(label='Name', max_length=255, required=True)
+    name = forms.CharField(label=_('Name'), max_length=255, required=True)
     meeting = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Meeting.objects.all(), required=True)
     meeting_items_count = forms.ChoiceField(
         label=_('Number of decision items to compose the scenario'),

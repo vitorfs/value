@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load static %}
+{% load static i18n %}
 
 {% block javascript %}
   <script src="{% static 'js/meetings/meetings.js' %}"></script>
@@ -15,11 +15,11 @@
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="{% url 'deliverables:index' %}">Deliverables</a></li>
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'deliverables:index' %}">{% trans 'Deliverables' %}</a></li>
     <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a></li>
     <li><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
-    <li class="active">Settings</li>
+    <li class="active">{% trans 'Settings' %}</li>
   </ol>
 {% endblock breadcrumb %}
 
@@ -37,14 +37,14 @@
         {% csrf_token %}
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Meeting details</h3>
+            <h3 class="panel-title">{% trans 'Meeting details' %}</h3>
           </div>
           <div class="panel-body">
             {% include 'includes/form_vertical.html' with form=form %}
             {% if meeting.is_survey %}<p>Share URL: <a href="{{ survey_url }}">{{ survey_url }}</a></p>{% endif %}
           </div>
           <div class="panel-footer">
-            <button type="submit" class="btn btn-primary">Save changes</button>
+            <button type="submit" class="btn btn-primary">{% trans 'Save changes' %}</button>
           </div>
         </div>
       </form>

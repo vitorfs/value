@@ -27,7 +27,7 @@ def dashboard(request, deliverable_id, meeting_id):
     charts = list()
     charts.append({
         'chart_id': 'factors_usage',
-        'chart_title': 'Factors Usage',
+        'chart_title': _('Factors Usage'),
         'chart_uri': reverse('deliverables:meetings:dashboard_factors_usage_chart', args=(
             deliverable_id,
             meeting_id,)
@@ -35,7 +35,7 @@ def dashboard(request, deliverable_id, meeting_id):
     })
     charts.append({
         'chart_id': 'stakeholders_input',
-        'chart_title': 'Stakeholders Input',
+        'chart_title': _('Stakeholders Input'),
         'chart_uri': reverse('deliverables:meetings:dashboard_stakeholders_input_chart', args=(
             deliverable_id,
             meeting_id,)

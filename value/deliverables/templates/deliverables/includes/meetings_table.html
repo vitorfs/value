@@ -1,4 +1,4 @@
-{% load avatar i18n %}
+{% load avatar i18n l10n %}
 
 <table class="table table-hover table-clickable-row">
   <thead>
@@ -38,10 +38,10 @@
             <div class="progress" style="margin-bottom: 0">
               <div class="progress-bar{% if progress == 100.0 %} progress-bar-success{% else %} progress-bar-warning{% endif %}"
                    role="progressbar"
-                   aria-valuenow="{{ progress }}"
+                   aria-valuenow="{{ progress|unlocalize }}"
                    aria-valuemin="0"
                    aria-valuemax="100"
-                   style="width: {{ progress }}%;">
+                   style="width: {{ progress|unlocalize }}%;">
                 {{ progress }}%
               </div>
             </div>

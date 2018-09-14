@@ -1,21 +1,23 @@
+{% load i18n %}
+
 {% comment %}
 <div>
   <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 20px;">
     <li role="presentation" class="active">
       <a href="#tab-meeting-notes" aria-controls="tab-meeting-notes" role="tab" data-toggle="tab">
-        Meeting Notes
+        {% trans 'Meeting Notes' %}
         <span class="badge">{{ meeting.rationales.count }}</span>
       </a>
     </li>
     <li role="presentation">
       <a href="#tab-meeting-items-notes" aria-controls="tab-meeting-items-notes" role="tab" data-toggle="tab">
-        Meeting Items Notes
+        {% trans 'Meeting Items Notes' %}
         <span class="badge">{{ meeting.get_meeting_items_rationales_count }}</span>
       </a>
     </li>
     <li role="presentation">
       <a href="#tab-scenarios-notes" aria-controls="tab-scenarios-notes" role="tab" data-toggle="tab">
-        Scenarios Notes
+        {% trans 'Scenarios Notes' %}
         <span class="badge">{{ meeting.get_scenarios_rationales_count }}</span>
       </a>
     </li>
@@ -27,9 +29,9 @@
       {% else %}
         <div class="well blank-state">
           <span class="fa fa-comments"></span>
-          <h3>No rationale recorded for this meeting.</h3>
+          <h3>{% trans 'No rationale recorded for this meeting.' %}</h3>
           <button type="button" class="btn btn-primary js-add-meeting-note" data-toggle="modal" data-target="#modal-new-note">
-            <span class="glyphicon glyphicon-plus"></span> Add a note
+            <span class="glyphicon glyphicon-plus"></span> {% trans 'Add a note' %}
           </button>
         </div>
       {% endif %}
@@ -77,9 +79,9 @@
                   {% else %}
                     <div class="well blank-state">
                       <span class="fa fa-comments"></span>
-                      <h3>No rationale recorded for this scenario.</h3>
+                      <h3>{% trans 'No rationale recorded for this scenario.' %}</h3>
                       <button type="button" class="btn btn-primary js-add-scenario-note" data-scenario-id="{{ scenario.pk }}">
-                        <span class="glyphicon glyphicon-plus"></span> Add a note
+                        <span class="glyphicon glyphicon-plus"></span> {% trans 'Add a note' %}
                       </button>
                     </div>
                   {% endif %}

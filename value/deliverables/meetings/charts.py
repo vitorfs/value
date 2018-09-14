@@ -125,7 +125,7 @@ class Highcharts(object):
 
         options = {
             'chart': {'type': 'bar'},
-            'title': {'text': 'Stakeholder\'s Input'},
+            'title': {'text': _('Stakeholders Input')},
             'subtitle': {'text': _('100% means the stakeholder evaluated all the meeting\'s decision items.')},
             'xAxis': {
                 'type': 'category',

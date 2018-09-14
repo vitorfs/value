@@ -1,1 +1,1 @@
-Version 1.7.0-alpha.2
+Version 1.7.2

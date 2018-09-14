@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.forms.models import inlineformset_factory
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.views.decorators.http import require_POST
 from django.utils.translation import ugettext as _
 
@@ -104,6 +104,6 @@ def toggle_active(request):
         measure = Measure.objects.get(pk=measure_id)
         measure.is_active = not measure.is_active
         measure.save()
-        return HttpResponse()
+        return JsonResponse({'message': _('Changes successfully saved!')})
     except Measure.DoesNotExist:
         return HttpResponseBadRequest()
