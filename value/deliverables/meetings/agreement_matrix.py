@@ -11,7 +11,7 @@ class StakeholdersAgreement(object):
     def __init__(self, meeting, group_measures=False):
         self.group_measures = group_measures
         self.meeting = meeting
-        self.meeting_stakeholders = meeting.meetingstakeholder_set \
+        self.meeting_stakeholders = meeting.meetingstakeholder_set.filter(meeting_input__gt=0) \
             .select_related('stakeholder', 'stakeholder__profile') \
             .order_by('stakeholder__first_name', 'stakeholder__last_name', 'stakeholder__username')
         self.meeting_items = meeting.meetingitem_set \

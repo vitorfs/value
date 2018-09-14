@@ -8,6 +8,7 @@ from django.utils.text import slugify
 
 class Profile(models.Model):
     user = models.OneToOneField(User)
+    is_external = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'auth_user_profile'
@@ -76,4 +77,9 @@ class Profile(models.Model):
             'z': '#AA3C39'
         }
 
-        return (initials.upper(), colors[initials[:1].lower()])
+        try:
+            color = colors[initials[:1].lower()]
+        except KeyError:
+            color = '#E1E1E1'
+
+        return (initials.upper(), color)

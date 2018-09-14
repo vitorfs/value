@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-13 14:17+0000\n"
+"POT-Creation-Date: 2018-09-14 14:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Markku Kemppainen <makemppa@iki.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -85,7 +85,7 @@ msgstr "Päätösasian URL"
 #: value/application_settings/models.py:42
 #: value/application_settings/templates/application_settings/items.html:66
 #: value/application_settings/templates/application_settings/items.html:79
-#: value/deliverables/meetings/models.py:538 value/deliverables/models.py:17
+#: value/deliverables/meetings/models.py:552 value/deliverables/models.py:17
 #: value/deliverables/models.py:64 value/factors/models.py:10
 #: value/factors/models.py:22 value/help/models.py:16
 #: value/measures/models.py:13
@@ -227,9 +227,10 @@ msgstr "Arvo ei voi olla 0. Käytä tyhjää arvoa"
 #: value/application_settings/templates/application_settings/items.html:54
 #: value/application_settings/templates/application_settings/items.html:127
 #: value/application_settings/templates/application_settings/jira.html:20
+#: value/core/templates/core/survey.html:119
 #: value/deliverables/meetings/templates/meetings/evaluate.html:169
 #: value/deliverables/meetings/templates/meetings/final_decision.html:89
-#: value/deliverables/meetings/templates/meetings/settings/details.html:46
+#: value/deliverables/meetings/templates/meetings/settings/details.html:47
 #: value/deliverables/templates/deliverables/settings/details.html:59
 #: value/deliverables/templates/deliverables/settings/factors.html:35
 #: value/deliverables/templates/deliverables/settings/measure.html:35
@@ -396,7 +397,7 @@ msgid "Ordering and column display saved successfully."
 msgstr "Järjestys ja sarakkeiden nayttäminen tallennettu."
 
 #: value/application_settings/views.py:78
-#: value/deliverables/meetings/views/evaluate.py:154
+#: value/deliverables/meetings/views/evaluate.py:159
 #: value/deliverables/meetings/views/final_decision.py:119
 msgid "An error ocurred while trying to save your data."
 msgstr "Virhe tietojen tallennuksessa."
@@ -416,6 +417,79 @@ msgstr "JIRA integraatio asetukset tallennettu."
 #: value/core/templates/core/home.html:13
 msgid "You are signed in as"
 msgstr "Olet kirjautuneena tunnuksella"
+
+#: value/core/templates/core/survey.html:33
+#: value/core/templates/core/survey.html:70
+#: value/deliverables/meetings/templates/meetings/evaluate.html:22
+#: value/deliverables/meetings/templates/meetings/evaluate.html:59
+#: value/deliverables/meetings/templates/meetings/final_decision.html:202
+msgid "Rationale"
+msgstr "Perusteet"
+
+#: value/core/templates/core/survey.html:94
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_compare_form.html:5
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_compare_form.html:15
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:10
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:17
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:31
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:38
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:91
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:103
+#: value/deliverables/meetings/templates/meetings/evaluate.html:83
+#: value/deliverables/meetings/templates/meetings/final_decision.html:24
+#: value/deliverables/meetings/templates/meetings/final_decision.html:42
+#: value/deliverables/meetings/templates/meetings/includes/menu.html:28
+#: value/deliverables/meetings/templates/meetings/new.html:225
+#: value/deliverables/meetings/templates/meetings/settings/items.html:142
+#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:94
+#: value/deliverables/templates/deliverables/decision_items/delete.html:52
+#: value/deliverables/templates/deliverables/decision_items/delete_list.html:38
+#: value/deliverables/templates/deliverables/decision_items/delete_list.html:79
+#: value/deliverables/templates/deliverables/decision_items/includes/decision_item_form.html:87
+#: value/deliverables/templates/deliverables/new.html:217
+#: value/deliverables/templates/deliverables/stakeholders.html:81
+#: value/factors/templates/factors/add.html:22
+#: value/factors/templates/factors/delete.html:22
+#: value/factors/templates/factors/edit.html:22
+#: value/factors/templates/factors/groups.html:110
+#: value/factors/templates/factors/groups.html:162
+#: value/measures/templates/measures/add.html:32
+#: value/measures/templates/measures/delete.html:27
+#: value/measures/templates/measures/edit.html:38
+#: value/users/templates/users/add.html:61
+#: value/users/templates/users/delete.html:26
+#: value/users/templates/users/edit.html:89
+#: value/users/templates/users/password.html:59
+#: value/users/templates/users/roles.html:121
+#: value/users/templates/users/roles.html:142
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: value/core/templates/core/survey.html:97
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:18
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:39
+#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:92
+#: value/deliverables/meetings/templates/meetings/evaluate.html:86
+#: value/deliverables/meetings/templates/meetings/final_decision.html:45
+#: value/deliverables/meetings/templates/meetings/includes/menu.html:29
+#: value/deliverables/templates/deliverables/decision_items/includes/decision_item_form.html:84
+#: value/deliverables/templates/deliverables/new.html:216
+#: value/factors/templates/factors/add.html:21
+#: value/factors/templates/factors/edit.html:21
+#: value/factors/templates/factors/groups.html:111
+#: value/factors/templates/factors/groups.html:163
+#: value/measures/templates/measures/add.html:31
+#: value/measures/templates/measures/edit.html:37
+#: value/users/templates/users/add.html:60
+#: value/users/templates/users/edit.html:88
+#: value/users/templates/users/roles.html:122
+#: value/users/templates/users/roles.html:143
+msgid "Save"
+msgstr "Tallenna"
+
+#: value/core/templates/core/survey_login.html:43
+msgid "Next"
+msgstr ""
 
 #: value/deliverables/decorators.py:15
 #: value/deliverables/meetings/decorators.py:15
@@ -448,7 +522,7 @@ msgid "JQL Query"
 msgstr "JQL kysely"
 
 #: value/deliverables/meetings/apps.py:9
-#: value/deliverables/meetings/models.py:98
+#: value/deliverables/meetings/models.py:102
 msgid "meetings"
 msgstr "Kokoukset"
 
@@ -646,108 +720,112 @@ msgstr "Perustuu"
 msgid "Select two scenarios to compare"
 msgstr "Valitse kaksi tapausta vertailuun"
 
-#: value/deliverables/meetings/models.py:24
+#: value/deliverables/meetings/models.py:26
 msgid "text"
 msgstr "teksti"
 
-#: value/deliverables/meetings/models.py:25 value/deliverables/models.py:23
+#: value/deliverables/meetings/models.py:27 value/deliverables/models.py:23
 #: value/help/models.py:21
 msgid "created at"
 msgstr "Luotu"
 
-#: value/deliverables/meetings/models.py:26
-#: value/deliverables/meetings/models.py:82 value/deliverables/models.py:25
+#: value/deliverables/meetings/models.py:28
+#: value/deliverables/meetings/models.py:84 value/deliverables/models.py:25
 #: value/help/models.py:23
 msgid "updated at"
 msgstr "Päivitetty"
 
-#: value/deliverables/meetings/models.py:29
+#: value/deliverables/meetings/models.py:31
 msgid "created by"
 msgstr "Luonut"
 
-#: value/deliverables/meetings/models.py:35
-#: value/deliverables/meetings/models.py:85
+#: value/deliverables/meetings/models.py:37
+#: value/deliverables/meetings/models.py:87
 msgid "updated by"
 msgstr "Päivittänyt"
 
-#: value/deliverables/meetings/models.py:43
+#: value/deliverables/meetings/models.py:45
 msgid "rationale"
 msgstr "Perustelu"
 
-#: value/deliverables/meetings/models.py:44
+#: value/deliverables/meetings/models.py:46
 msgid "rationales"
 msgstr "Perustelut"
 
-#: value/deliverables/meetings/models.py:61
+#: value/deliverables/meetings/models.py:63
 msgid "Ongoing"
 msgstr "Meneillään"
 
-#: value/deliverables/meetings/models.py:62
+#: value/deliverables/meetings/models.py:64
 msgid "Analysing"
 msgstr "Analyysi"
 
-#: value/deliverables/meetings/models.py:63
+#: value/deliverables/meetings/models.py:65
 msgid "Closed"
 msgstr "Päätetty"
 
-#: value/deliverables/meetings/models.py:91
+#: value/deliverables/meetings/models.py:93
 msgid "rationales count"
 msgstr "Perustelujen määrä"
 
-#: value/deliverables/meetings/models.py:92
+#: value/deliverables/meetings/models.py:94
 msgid "progress"
 msgstr "tilanne"
 
-#: value/deliverables/meetings/models.py:97
+#: value/deliverables/meetings/models.py:96
+msgid "accept external input?"
+msgstr ""
+
+#: value/deliverables/meetings/models.py:101
 msgid "meeting"
 msgstr "kokous"
 
-#: value/deliverables/meetings/models.py:361
+#: value/deliverables/meetings/models.py:365
 msgid "raw votes"
 msgstr "ääniä"
 
-#: value/deliverables/meetings/models.py:362
+#: value/deliverables/meetings/models.py:366
 msgid "percentage votes"
 msgstr "prosenttia äänistä"
 
-#: value/deliverables/meetings/models.py:379
+#: value/deliverables/meetings/models.py:383
 msgid "meeting decision"
 msgstr "kokouksen päätös"
 
-#: value/deliverables/meetings/models.py:382
+#: value/deliverables/meetings/models.py:386
 msgid "has rationales?"
 msgstr "perusteita?"
 
-#: value/deliverables/meetings/models.py:383
-#: value/deliverables/meetings/models.py:541
+#: value/deliverables/meetings/models.py:387
+#: value/deliverables/meetings/models.py:555
 msgid "value ranking"
 msgstr "arvojärjestys"
 
-#: value/deliverables/meetings/models.py:384
+#: value/deliverables/meetings/models.py:388
 msgid "meeting ranking"
 msgstr "kokoussijoitus"
 
-#: value/deliverables/meetings/models.py:390
+#: value/deliverables/meetings/models.py:394
 msgid "meeting item"
 msgstr "kokousasia"
 
-#: value/deliverables/meetings/models.py:391
+#: value/deliverables/meetings/models.py:395
 msgid "meeting items"
 msgstr "kokousasiat"
 
-#: value/deliverables/meetings/models.py:487
+#: value/deliverables/meetings/models.py:491
 msgid "meeting input"
 msgstr ""
 
-#: value/deliverables/meetings/models.py:504
+#: value/deliverables/meetings/models.py:518
 msgid "evaluated at"
 msgstr "arvioitu"
 
-#: value/deliverables/meetings/models.py:510
+#: value/deliverables/meetings/models.py:524
 msgid "evaluation"
 msgstr "arviointi"
 
-#: value/deliverables/meetings/models.py:511
+#: value/deliverables/meetings/models.py:525
 #: value/deliverables/templates/deliverables/decision_items/delete.html:38
 msgid "evaluations"
 msgstr "arvioinnit"
@@ -1116,44 +1194,6 @@ msgstr "%(name)s asiat"
 msgid "Common Items"
 msgstr "Yleiset asiat"
 
-#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_compare_form.html:5
-#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_compare_form.html:15
-#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:10
-#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:17
-#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:31
-#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:38
-#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:91
-#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:103
-#: value/deliverables/meetings/templates/meetings/evaluate.html:83
-#: value/deliverables/meetings/templates/meetings/final_decision.html:24
-#: value/deliverables/meetings/templates/meetings/final_decision.html:42
-#: value/deliverables/meetings/templates/meetings/includes/menu.html:28
-#: value/deliverables/meetings/templates/meetings/new.html:219
-#: value/deliverables/meetings/templates/meetings/settings/items.html:142
-#: value/deliverables/meetings/templates/meetings/settings/stakeholders.html:94
-#: value/deliverables/templates/deliverables/decision_items/delete.html:52
-#: value/deliverables/templates/deliverables/decision_items/delete_list.html:38
-#: value/deliverables/templates/deliverables/decision_items/delete_list.html:79
-#: value/deliverables/templates/deliverables/decision_items/includes/decision_item_form.html:87
-#: value/deliverables/templates/deliverables/new.html:217
-#: value/deliverables/templates/deliverables/stakeholders.html:81
-#: value/factors/templates/factors/add.html:22
-#: value/factors/templates/factors/delete.html:22
-#: value/factors/templates/factors/edit.html:22
-#: value/factors/templates/factors/groups.html:110
-#: value/factors/templates/factors/groups.html:162
-#: value/measures/templates/measures/add.html:32
-#: value/measures/templates/measures/delete.html:27
-#: value/measures/templates/measures/edit.html:38
-#: value/users/templates/users/add.html:61
-#: value/users/templates/users/delete.html:26
-#: value/users/templates/users/edit.html:89
-#: value/users/templates/users/password.html:59
-#: value/users/templates/users/roles.html:121
-#: value/users/templates/users/roles.html:142
-msgid "Cancel"
-msgstr "Peruuta"
-
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/partial_compare_form.html:16
 msgid "Compare"
 msgstr "Vertaile"
@@ -1205,27 +1245,6 @@ msgstr "Rakenna skenaario automaattisesti"
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:13
 msgid "New scenario"
 msgstr "Uusi skenaario"
-
-#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:18
-#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:39
-#: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:92
-#: value/deliverables/meetings/templates/meetings/evaluate.html:86
-#: value/deliverables/meetings/templates/meetings/final_decision.html:45
-#: value/deliverables/meetings/templates/meetings/includes/menu.html:29
-#: value/deliverables/templates/deliverables/decision_items/includes/decision_item_form.html:84
-#: value/deliverables/templates/deliverables/new.html:216
-#: value/factors/templates/factors/add.html:21
-#: value/factors/templates/factors/edit.html:21
-#: value/factors/templates/factors/groups.html:111
-#: value/factors/templates/factors/groups.html:163
-#: value/measures/templates/measures/add.html:31
-#: value/measures/templates/measures/edit.html:37
-#: value/users/templates/users/add.html:60
-#: value/users/templates/users/edit.html:88
-#: value/users/templates/users/roles.html:122
-#: value/users/templates/users/roles.html:143
-msgid "Save"
-msgstr "Tallenna"
 
 #: value/deliverables/meetings/templates/meetings/dashboard/scenarios/scenario_actions.html:34
 msgid "Edit scenario"
@@ -1323,12 +1342,6 @@ msgstr "Arvojärjestys"
 #| msgid "Value Ranking"
 msgid "Balanced Ranking"
 msgstr "Arvojärjestys"
-
-#: value/deliverables/meetings/templates/meetings/evaluate.html:22
-#: value/deliverables/meetings/templates/meetings/evaluate.html:59
-#: value/deliverables/meetings/templates/meetings/final_decision.html:202
-msgid "Rationale"
-msgstr "Perusteet"
 
 #: value/deliverables/meetings/templates/meetings/evaluate.html:104
 #: value/deliverables/meetings/templates/meetings/includes/menu.html:76
@@ -1542,11 +1555,11 @@ msgstr "Edelliset päätösasiat"
 msgid "4. Advanced settings"
 msgstr "4. Lisäasetukset"
 
-#: value/deliverables/meetings/templates/meetings/new.html:215
+#: value/deliverables/meetings/templates/meetings/new.html:221
 msgid "Starting the meeting…"
 msgstr "Aloitetaan kokousta…"
 
-#: value/deliverables/meetings/templates/meetings/new.html:216
+#: value/deliverables/meetings/templates/meetings/new.html:222
 msgid "Start the meeting"
 msgstr "Aloita kokous"
 
@@ -1736,7 +1749,7 @@ msgid "The meeting {0} was created successfully."
 msgstr "Kokous {0} luotu"
 
 #: value/deliverables/meetings/views/meetings.py:96
-#: value/deliverables/meetings/views/meetings.py:290
+#: value/deliverables/meetings/views/meetings.py:291
 #: value/deliverables/views.py:99 value/deliverables/views.py:307
 #: value/deliverables/views.py:340 value/factors/views.py:32
 #: value/factors/views.py:50 value/measures/views.py:46
@@ -1800,11 +1813,11 @@ msgstr "päätösasia lisätty."
 msgid "Select at least one decision item to add."
 msgstr "Valitse lisättävät päätösasiat."
 
-#: value/deliverables/meetings/views/meetings.py:288
+#: value/deliverables/meetings/views/meetings.py:289
 msgid "The meeting details was saved successfully!"
 msgstr "Kokouksen tiedot tallennettu."
 
-#: value/deliverables/meetings/views/meetings.py:334
+#: value/deliverables/meetings/views/meetings.py:337
 #, python-brace-format
 msgid "The meeeting {0} was completly deleted successfully."
 msgstr "Kokous {0} poistettiin."
@@ -2290,34 +2303,34 @@ msgstr "Päätösasia {0} tallennettu."
 msgid "The decision item {0} was deleted successfully."
 msgstr "Päätösasia {0} poistettu."
 
-#: value/deliverables/views.py:395 value/deliverables/views.py:426
+#: value/deliverables/views.py:398 value/deliverables/views.py:429
 msgid ""
 "It was not possible to connect to the JIRA server. Either the JIRA "
 "credentials are wrong or misconfigurated. Please contact the server "
 "administrator."
 msgstr "Ei JIRA yhteyttä. Ota yhteys pääkäyttäjään."
 
-#: value/deliverables/views.py:444
+#: value/deliverables/views.py:447
 #, python-brace-format
 msgid "{0} new item(s) imported from JIRA."
 msgstr "{0} arvoa tuotu JIRA:sta."
 
-#: value/deliverables/views.py:446
+#: value/deliverables/views.py:449
 msgid "No items imported from JIRA."
 msgstr "Ei tuotuja arvoja."
 
-#: value/deliverables/views.py:466 value/deliverables/views.py:486
-#: value/deliverables/views.py:505
+#: value/deliverables/views.py:469 value/deliverables/views.py:489
+#: value/deliverables/views.py:508
 #, python-brace-format
 msgid "The deliverable {0} was saved successfully."
 msgstr "Toimitus {0} tallennettu."
 
-#: value/deliverables/views.py:530
+#: value/deliverables/views.py:533
 #, python-brace-format
 msgid "The deliverable {0} was successfully transferred to {1}."
 msgstr "Toimitus {0} siirretty kohteeseen {1}."
 
-#: value/deliverables/views.py:536
+#: value/deliverables/views.py:539
 msgid "Something went wrong. Nothing changed."
 msgstr "Odottamaton virhe."
 
@@ -2832,11 +2845,11 @@ msgstr "Sukunimi"
 msgid "Email address"
 msgstr "Sähköposti"
 
-#: value/users/models.py:14
+#: value/users/models.py:15
 msgid "profile"
 msgstr "profiili"
 
-#: value/users/models.py:15
+#: value/users/models.py:16
 msgid "profiles"
 msgstr "profiilit"
 

@@ -8,7 +8,18 @@
 
 {% block javascript %}
   <script src="{% static 'js/meetings/meetings.js' %}"></script>
-  <script src="{% static 'js/meetings/evaluate.js' %}"></script>
+  <script src="{% static 'js/meetings/evaluate.js' %}?v=1"></script>
+  <script type="text/javascript">
+    $(function () {
+      $(".panel-group-evaluation .panel").each(function () {
+        var container = $(".panel-heading", this);
+        var target = $(container).attr("data-target");
+        if (!$(target).is(":visible")) {
+          $(target).slideDown();
+        }
+      });
+    });
+  </script>
 {% endblock javascript %}
 
 {% block mustache %}
@@ -92,85 +103,9 @@
   {% endif %}
 {% endblock mustache %}
 
-{% block breadcrumb %}
-  <ol class="breadcrumb">
-    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
-    <li><a href="{% url 'deliverables:index' %}">{% trans 'Deliverables' %}</a></li>
-    <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a></li>
-    <li><a href="{% url 'deliverables:meetings:index' meeting.deliverable.pk %}">{% trans 'Meetings' %}</a></li>
-    <li>
-      <a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a>
-    </li>
-    <li class="active">{% trans 'Evaluate' %}</li>
-  </ol>
-{% endblock breadcrumb %}
-
 {% block content %}
-  {% include 'meetings/includes/menu.html' with active='evaluate' meeting=meeting %}
-  <div class="row" style="margin-bottom: 20px">
-    <div class="col-md-3">
-      <form role="form">
-        <div class="input-group">
-          <input type="text"
-                 class="form-control"
-                 placeholder="{% trans 'Search' %}"
-                 name="search"
-                 value="{{ search_query|default_if_none:'' }}">
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="submit">
-              <span class="glyphicon glyphicon-search"></span>
-            </button>
-          </span>
-        </div>
-      </form>
-    </div>
-    <div class="col-md-3">
-      <span class="help-block">
-        {% if search_query %}
-          {{ meeting_items.count }} result{% if meeting_items.count > 1 %}s{% endif %}
-          (<a href="{% url 'deliverables:meetings:evaluate' meeting.deliverable.pk meeting.pk %}">{{ total_items }} {% trans 'total' %}</a>)
-        {% endif %}
-      </span>
-    </div>
-    <div class="col-md-6 text-right">
-      <div class="btn-group" role="group" aria-label="{% trans 'Panel display options' %}">
-        <button type="button" class="btn btn-default js-show-all">
-          <span class="glyphicon glyphicon-plus"></span>
-        </button>
-        <button type="button" class="btn btn-default js-hide-all">
-          <span class="glyphicon glyphicon-minus"></span>
-        </button>
-        <div class="btn-group js-grid-filters" role="group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            {% trans 'View' %}
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-right" role="menu">
-            <li>
-              <a href="javascript:void(0);" data-action="all">
-                <span class="glyphicon glyphicon-check"></span> {% trans 'All' %}
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0);" data-action="todo">
-                <span class="glyphicon glyphicon-unchecked"></span> {% trans 'To-do' %}
-              </a>
-            </li>
-            <li>
-              <a href="javascript:void(0);" data-action="finished">
-                <span class="glyphicon glyphicon-unchecked"></span> {% trans 'Finished' %}
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      {% if not meeting.is_closed %}
-        <button type="button" class="btn btn-primary pull-right js-placebo-save" style="margin-left: 10px">
-          <span class="glyphicon glyphicon-ok"></span> {% trans 'Save changes' %}
-        </button>
-      {% endif %}
-    </div>
-  </div>
+  <h3 style="margin-top: 0">{{ meeting.name }}</h3>
+  <p>{{ meeting.description|linebreaks }}</p>
   <div class="row">
     <div class="col-md-12">
       <div class="panel-group panel-group-evaluation" role="tablist" aria-multiselectable="true">
@@ -178,6 +113,13 @@
       </div>
     </div>
   </div>
+  {% if not meeting.is_closed %}
+    <p>
+      <a href="{% url 'thanks' %}" class="btn btn-primary">
+        <span class="glyphicon glyphicon-ok"></span> {% trans 'Save changes' %}
+      </a>
+    </p>
+  {% endif %}
   {% include 'deliverables/decision_items/includes/modal.html' %}
   <div id="factor-description-container"></div>
 {% endblock content %}

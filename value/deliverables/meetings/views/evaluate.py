@@ -2,6 +2,7 @@
 
 import json
 
+from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseBadRequest, Http404
@@ -13,12 +14,12 @@ from django.utils.translation import ugettext as _
 from value.factors.models import Factor
 from value.measures.models import Measure, MeasureValue
 from value.deliverables.meetings.forms import RationaleForm
-from value.deliverables.meetings.models import Meeting, MeetingItem, Evaluation
+from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder, Evaluation
 from value.deliverables.meetings.utils import get_meeting_progress
 
 
 @login_required
-def evaluate(request, deliverable_id, meeting_id):
+def evaluate(request, deliverable_id, meeting_id, template_name='meetings/evaluate.html'):
     try:
         meeting = Meeting.objects \
             .select_related('deliverable', 'measure') \
@@ -27,7 +28,7 @@ def evaluate(request, deliverable_id, meeting_id):
     except Meeting.DoesNotExist:
         raise Http404
 
-    factors = meeting.factors.all()
+    factors = meeting.factors.order_by('group__name', 'name')
     measure = meeting.measure
     measure_values = measure.measurevalue_set.all()
 
@@ -57,7 +58,7 @@ def evaluate(request, deliverable_id, meeting_id):
     search_query = request.GET.get('search')
     if search_query:
         meeting_items = meeting_items.filter(decision_item__name__icontains=search_query)
-    return render(request, 'meetings/evaluate.html', {
+    return render(request, template_name, {
         'meeting': meeting,
         'factors': factors,
         'measure': measure,
@@ -88,20 +89,24 @@ def save_evaluation(request, deliverable_id, meeting_id):
     else:
         measure_value = None
 
-    Evaluation.objects.update_or_create(
-        meeting=meeting,
-        meeting_item=meeting_item,
-        user=request.user,
-        factor=factor,
-        measure=measure,
-        defaults={'evaluated_at': timezone.now(), 'measure_value': measure_value}
-    )
+    with transaction.atomic():
+        Evaluation.objects.update_or_create(
+            meeting=meeting,
+            meeting_item=meeting_item,
+            user=request.user,
+            factor=factor,
+            measure=measure,
+            defaults={'evaluated_at': timezone.now(), 'measure_value': measure_value}
+        )
 
-    meeting_item.calculate_ranking()
-    for scenario in meeting_item.scenarios.all():
-        scenario.calculate_ranking()
-    meeting.deliverable.save()
-    meeting.calculate_progress()
+        meeting_item.calculate_ranking()
+        for scenario in meeting_item.scenarios.all():
+            scenario.calculate_ranking()
+        meeting.deliverable.save()
+        meeting.calculate_progress()
+        meeting_stakeholder, created = MeetingStakeholder.objects.get_or_create(meeting=meeting, stakeholder=request.user)
+        meeting_stakeholder.update_meeting_input()
+
     context = get_meeting_progress(meeting)
     return HttpResponse(json.dumps(context), content_type='application/json')
 
