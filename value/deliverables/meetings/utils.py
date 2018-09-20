@@ -14,6 +14,7 @@ def get_bar_chart_types_dict():
     chart_types['basic_bars'] = {'label': _('Basic Bars'), 'icon': 'glyphicon glyphicon-align-left'}
     chart_types['stacked_columns'] = {'label': _('Stacked Columns'), 'icon': 'glyphicon glyphicon-signal'}
     chart_types['basic_columns'] = {'label': _('Basic Columns'), 'icon': 'glyphicon glyphicon-signal'}
+    chart_types['balanced_columns'] = {'label': _('Balanced Columns'), 'icon': 'fa fa-align-justify fa-rotate-90'}
     return chart_types
 
 
@@ -37,7 +38,7 @@ def _get_or_set_chart_session(request, cookie_name, default_chart_type, chart_ty
     return chart_type
 
 
-def get_or_set_bar_chart_type_session(request, cookie_name, default_chart_type='stacked_bars'):
+def get_or_set_bar_chart_type_session(request, cookie_name, default_chart_type='balanced_columns'):
     return _get_or_set_chart_session(request, cookie_name, default_chart_type, get_bar_chart_types_dict().keys())
 
 

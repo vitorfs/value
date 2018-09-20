@@ -179,7 +179,7 @@ def get_decision_items_overview_chart_dict(meeting):
 def decision_items_overview(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
 
-    chart_type = get_or_set_bar_chart_type_session(request, 'decision_items_overview_chart_type', 'stacked_columns')
+    chart_type = get_or_set_bar_chart_type_session(request, 'decision_items_overview_chart_type', 'balanced_columns')
     chart_types_options = get_bar_chart_types_dict()
 
     if 'stakeholder' in request.GET:

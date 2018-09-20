@@ -34,7 +34,7 @@ class Highcharts(object):
         chart_type = 'bar'
         stacking = None
 
-        if chart in ['stacked_bars', 'stacked_columns']:
+        if chart in ['stacked_bars', 'stacked_columns', 'balanced_columns']:
             stacking = 'normal'
 
         if chart in ['stacked_columns', 'basic_columns']:
@@ -330,7 +330,6 @@ class Highcharts(object):
     def _decision_items_overview(self, meeting, chart_type, stakeholder_ids, evaluations, meeting_items):
         options = dict()
         if evaluations.exists():
-
             ID = 0
             NAME = 1
             VALUE_RANKING = 2
@@ -360,11 +359,90 @@ class Highcharts(object):
             options['subtitle'] = {'text': u'{0} {1}'.format(groups_text, _('opinion'))}
         return options
 
+    def _balanced_decision_items_overview(self, meeting, stakeholder_ids, evaluations, meeting_items):
+        options = dict()
+        if evaluations.exists():
+            ID = 0
+            NAME = 1
+            VALUE_RANKING = 2
+            OFFSET = len((ID, NAME, VALUE_RANKING, ))
+
+            measure = meeting.measure
+            evaluation_grid = self._build_evaluation_grid(meeting, evaluations, meeting_items)
+            evaluation_grid.sort(key=lambda x: (-x[2], -x[3]))
+            categories = map(lambda item: item[NAME], evaluation_grid)
+            series = list()
+
+            for index, measure_value in enumerate(measure.measurevalue_set.all()):
+                series.append({
+                    'type': 'column',
+                    'stacking': 'normal',
+                    'yAxis': 0,
+                    'tooltip': {'valueSuffix': '%'},
+                    'name': measure_value.description,
+                    'data': map(lambda item: get_votes_percentage(sum(item[3:]), item[index + OFFSET]), evaluation_grid),
+                    'color': measure_value.color
+                })
+
+            stakeholders_data = list()
+            for item in evaluation_grid:
+                stakeholders_count = evaluations.filter(meeting_item=item[ID]) \
+                    .values('user') \
+                    .order_by('user') \
+                    .distinct() \
+                    .count()
+                stakeholders_data.append(stakeholders_count)
+
+            series.append({
+                'name': _('Stakeholders'),
+                'type': 'spline',
+                'yAxis': 1,
+                'data': stakeholders_data,
+                'color': '#fe0074'
+            })
+
+            options = {
+                'chart': {
+                    'zoomType': 'xy'
+                },
+                'xAxis': [{
+                    'categories': categories,
+                    'crosshair': True
+                }],
+                'yAxis': [
+                    {
+                        'title': {'text': _('Percentage of evaluations')},
+                        'labels': {'format': '{value}%'},
+                        'min': 0,
+                        'max': 100
+                    },
+                    {
+                        'title': {'text': _('Number of Stakeholders')},
+                        'labels': {'format': '{value}',},
+                        'opposite': True,
+                        'color': '#fe0074'
+                    }
+                ],
+                'tooltip': {
+                    'shared': True
+                },
+                'series': series
+            }
+
+            groups_text = get_stakeholders_group_names(stakeholder_ids)
+            options['subtitle'] = {'text': u'{0} {1}'.format(groups_text, _('opinion'))}
+        return options
+
     def decision_items_overview(self, meeting, chart_type, stakeholder_ids):
         stakeholder_ids = list(set(stakeholder_ids))
         evaluations = Evaluation.get_evaluations_by_meeting(meeting).filter(user_id__in=stakeholder_ids)
         meeting_items = meeting.meetingitem_set.select_related('decision_item').all()
-        options = self._decision_items_overview(meeting, chart_type, stakeholder_ids, evaluations, meeting_items)
+
+        if chart_type == 'balanced_columns':
+            options = self._balanced_decision_items_overview(meeting, stakeholder_ids, evaluations, meeting_items)
+        else:
+            options = self._decision_items_overview(meeting, chart_type, stakeholder_ids, evaluations, meeting_items)
+
         options['title'] = {'text': _(u'Decision Items Overview')}
         return options
 
@@ -373,13 +451,13 @@ class Highcharts(object):
         evaluations = Evaluation.get_evaluations_by_meeting(scenario.meeting)\
             .filter(user_id__in=stakeholder_ids, meeting_item__in=scenario.meeting_items.all())
         meeting_items = scenario.meeting_items.all()
-        options = self._decision_items_overview(
-            scenario.meeting,
-            chart_type,
-            stakeholder_ids,
-            evaluations,
-            meeting_items
-        )
+
+        if chart_type == 'balanced_columns':
+            options = self._balanced_decision_items_overview(scenario.meeting, stakeholder_ids,
+                                                             evaluations, meeting_items)
+        else:
+            options = self._decision_items_overview(scenario.meeting, chart_type, stakeholder_ids,
+                                                    evaluations, meeting_items)
         options['title'] = {'text': _(u'Scenario Overview')}
         return options
 
@@ -436,13 +514,119 @@ class Highcharts(object):
 
         return options
 
+    def _balanced_factors_comparison_chart(self, evaluations):
+        options = dict()
+        if evaluations:
+            data = dict()
+            evaluations = evaluations.select_related('factor', 'factor__group', 'measure', 'measure_value')
+            measure = evaluations.first().measure
+            measure_values = measure.measurevalue_set.values_list('description', flat=True)
+
+            for evaluation in evaluations:
+                if evaluation.factor.group:
+                    label = u'<strong style="text-decoration: underline;">{0}:</strong> {1}'.format(
+                        evaluation.factor.group.name,
+                        evaluation.factor.name
+                    )
+                else:
+                    label = evaluation.factor.name
+                data[label] = dict()
+                for value in measure_values:
+                    data[label][value] = 0
+
+            for evaluation in evaluations:
+                if evaluation.factor.group:
+                    label = u'<strong style="text-decoration: underline;">{0}:</strong> {1}'.format(
+                        evaluation.factor.group.name,
+                        evaluation.factor.name
+                    )
+                else:
+                    label = evaluation.factor.name
+                data[label][evaluation.measure_value.description] += 1
+
+            sorted_data = sorted(data.items(), key=operator.itemgetter(0))
+
+            categories = list()
+            for factor in sorted_data:
+                categories.append(factor[0])
+
+            series = list()
+            for value in measure.measurevalue_set.all():
+                serie_data = list()
+                for factor in sorted_data:
+                    max_votes = 0
+                    for measurekey, count in factor[1].iteritems():
+                        max_votes += count
+                    percentage = get_votes_percentage(max_votes, factor[1][value.description])
+                    serie_data.append(percentage)
+                series.append({'name': value.description, 'data': serie_data, 'color': value.color})
+
+            stakeholders_data = list()
+            for factor in sorted_data:
+                stakeholders_count = 0
+                for measurekey, count in factor[1].iteritems():
+                    stakeholders_count += count
+                stakeholders_data.append(stakeholders_count)
+
+            for index, serie in enumerate(series):
+                series[index].update({
+                    'type': 'column',
+                    'stacking': 'normal',
+                    'yAxis': 0,
+                    'tooltip': {'valueSuffix': '%'}
+                })
+
+            series.append({
+                'name': 'Stakeholders',
+                'type': 'spline',
+                'yAxis': 1,
+                'data': stakeholders_data,
+                'color': '#fe0074'
+            })
+
+            options = {
+                'chart': {
+                    'zoomType': 'xy'
+                },
+                'xAxis': [{
+                    'categories': categories,
+                    'crosshair': True
+                }],
+                'yAxis': [
+                    {
+                        'title': {'text': _('Percentage of evaluations')},
+                        'labels': {'format': '{value}%'},
+                        'min': 0,
+                        'max': 100
+                    },
+                    {
+                    'title': {
+                        'text': _('Number of Stakeholders')
+                    },
+                    'labels': {
+                        'format': '{value}',
+                    },
+                    'opposite': True
+                }],
+                'tooltip': {
+                    'shared': True
+                },
+                'series': series
+            }
+        return options
+
     def factors_comparison(self, meeting_id, meeting_item_id, chart_type, stakeholder_ids):
         meeting = Meeting.objects.get(pk=meeting_id)
         meeting_item = MeetingItem.objects.get(pk=meeting_item_id)
         evaluations = Evaluation.get_evaluations_by_meeting(meeting) \
             .filter(meeting_item=meeting_item, user_id__in=stakeholder_ids)
-        max_votes = len(set(stakeholder_ids))
-        options = self._factors_comparison_chart(chart_type, evaluations, max_votes)
+
+        if chart_type == 'balanced_columns':
+            options = self._balanced_factors_comparison_chart(evaluations)
+        else:
+            max_votes = len(set(stakeholder_ids))
+            options = self._factors_comparison_chart(chart_type, evaluations, max_votes)
+
         groups_text = get_stakeholders_group_names(stakeholder_ids)
         options['title'] = {'text': u'{0} {1}'.format(
             meeting_item.decision_item.name, _('Value Factors Comparison')
@@ -454,8 +638,13 @@ class Highcharts(object):
         evaluations = Evaluation.get_evaluations_by_meeting(meeting) \
             .filter(meeting_item__in=scenario.meeting_items.all(), user_id__in=stakeholder_ids)
         items_count = scenario.meeting_items.count()
-        max_votes = len(stakeholder_ids) * items_count
-        options = self._factors_comparison_chart(chart_type, evaluations, max_votes)
+
+        if chart_type == 'balanced_columns':
+            options = self._balanced_factors_comparison_chart(evaluations)
+        else:
+            max_votes = len(stakeholder_ids) * items_count
+            options = self._factors_comparison_chart(chart_type, evaluations, max_votes)
+
         groups_text = get_stakeholders_group_names(stakeholder_ids)
         options['title'] = {'text': u'{0} {1}'.format(
             escape(scenario.name), _('Value Factors Comparison')
