@@ -413,8 +413,8 @@ class Highcharts(object):
                     {
                         'title': {'text': _('Percentage of evaluations')},
                         'labels': {'format': '{value}%'},
-                        'min': 0,
-                        'max': 100
+                        'floor': 0,
+                        'ceiling': 100
                     },
                     {
                         'title': {'text': _('Number of Stakeholders')},
