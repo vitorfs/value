@@ -11,8 +11,9 @@ from django.utils.translation import ugettext as _
 from value.deliverables.decorators import user_is_manager
 from value.deliverables.meetings.agreement_matrix import StakeholdersAgreement
 from value.deliverables.meetings.charts import Highcharts
+from value.deliverables.meetings.decision_items_matrix import DecisionItemsMatrix
 from value.deliverables.meetings.decorators import meeting_is_analysing_or_closed
-from value.deliverables.meetings.forms import CompareStakeholdersOpinion
+from value.deliverables.meetings.forms import CompareStakeholdersOpinion, DecisionAnalysisForm
 from value.deliverables.meetings.models import Meeting
 from value.deliverables.meetings.utils import *
 from value.deliverables.meetings.value_ranking import calc_value_ranking_per_stakeholder_group, \
@@ -192,6 +193,8 @@ def decision_items_overview(request, deliverable_id, meeting_id):
     dump = json.dumps(options)
     chart = get_decision_items_overview_chart_dict(meeting)
 
+    decision_items_matrix = DecisionItemsMatrix(meeting)
+
     if 'application/json' in request.META.get('HTTP_ACCEPT'):
         return HttpResponse(dump, content_type='application/json')
     else:
@@ -206,7 +209,9 @@ def decision_items_overview(request, deliverable_id, meeting_id):
             'stakeholder_ids': stakeholder_ids,
             'chart_type': chart_type,
             'chart_types_options': chart_types_options,
-            'chart': chart})
+            'chart': chart,
+            'decision_items_matrix': decision_items_matrix
+        })
 
 
 @login_required
@@ -326,6 +331,36 @@ def stakeholders_opinion_grouped(request, deliverable_id, meeting_id):
         'meeting': meeting,
         'stakeholders_agreement': StakeholdersAgreement(meeting, group_measures=True),
         'active_tab': 'grouped'
+    })
+
+
+''' Decision Analysis '''
+
+@login_required
+@meeting_is_analysing_or_closed
+def decision_analysis(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    dump = None
+    data = None
+    factor_x = None
+    factor_y = None
+    if request.method == 'POST':
+        form = DecisionAnalysisForm(meeting=meeting, data=request.POST)
+        if form.is_valid():
+            factor_x = form.cleaned_data.get('value_factor_x')
+            factor_y = form.cleaned_data.get('value_factor_y')
+            options = Highcharts().decision_analysis(meeting, factor_x, factor_y)
+            data = options['series'][0]['data']
+            dump = json.dumps(options)
+    else:
+        form = DecisionAnalysisForm(meeting=meeting)
+    return render(request, 'meetings/dashboard/decision_analysis.html', {
+        'meeting': meeting,
+        'form': form,
+        'dump': dump,
+        'data': data,
+        'factor_x': factor_x,
+        'factor_y': factor_y
     })
 
 

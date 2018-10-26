@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% load i18n static dashboard_helpers %}
+
+{% block stylesheet %}
+  <link href="{% static 'css/meetings/dashboard.css' %}" rel="stylesheet">
+{% endblock stylesheet %}
+
+{% block javascript %}
+  <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
+  <script src="{% static 'js/highcharts/highcharts-more.js' %}"></script>
+  <script src="{% static 'js/meetings/dashboard.js' %}"></script>
+  <script src="{% static 'js/meetings/meetings.js' %}"></script>
+  <script src="{% static 'js/meetings/scenarios.js' %}"></script>
+  <script>
+    $(function () {
+      {% if dump %}
+        $("#chart-decision-analysis .panel-body").highcharts({{ dump|safe }});
+        $("#table-decision-analysis").tablesorter();
+      {% endif %}
+    });
+  </script>
+{% endblock javascript %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+    <li><a href="{% url 'deliverables:index' %}">{% trans 'Deliverables' %}</a></li>
+    <li><a href="{% url 'deliverables:deliverable' meeting.deliverable.pk %}">{{ meeting.deliverable.name }}</a></li>
+    <li><a href="{% url 'deliverables:meetings:index' meeting.deliverable.pk %}">{% trans 'Meetings' %}</a></li>
+    <li><a href="{% url 'deliverables:meetings:meeting' meeting.deliverable.pk meeting.pk %}">{{ meeting.name }}</a></li>
+    <li><a href="{% url 'deliverables:meetings:dashboard' meeting.deliverable.pk meeting.pk %}">{% trans 'Dashboard' %}</a></li>
+    <li class="active">{% trans 'Decision Analysis' %}</li>
+  </ol>
+{% endblock breadcrumb %}
+
+{% block content %}
+  {% include 'meetings/includes/menu.html' with active='dashboard' meeting=meeting %}
+  <div class="row">
+    <div class="col-md-3 col-sm-4">
+      {% include 'meetings/dashboard/includes/menu.html' with active='decision_analysis' meeting=meeting %}
+    </div>
+    <div class="col-md-9 col-sm-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">{% trans 'Decision Analysis' %}</h3>
+        </div>
+        <div class="panel-body">
+          <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="row">
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">{% trans 'Plot chart' %}</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {% if dump %}
+        <div class="panel panel-default panel-chart" id="chart-decision-analysis">
+          <div class="panel-body"></div>
+        </div>
+
+        <div class="panel panel-default panel-chart">
+          <table class="table table-bordered" id="table-decision-analysis">
+            <thead>
+              <tr>
+                <th>Decision item</th>
+                <th>{{ factor_x.name }}</th>
+                <th>{{ factor_y.name }}</th>
+                <th>Size</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for row in data %}
+              <tr>
+                <td>{{ row.description }}</td>
+                <td>{{ row.x }}</td>
+                <td>{{ row.y }}</td>
+                <td>{{ row.z }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+  {% include 'meetings/dashboard/scenarios/scenario_actions.html' %}
+{% endblock %}

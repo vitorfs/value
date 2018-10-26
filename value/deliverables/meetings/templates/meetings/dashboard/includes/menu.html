@@ -30,6 +30,10 @@
        href="{% url 'deliverables:meetings:priority_list' meeting.deliverable.pk meeting.pk %}">
       {% trans 'Priority List' %}
     </a>
+    <a class="list-group-item{% if active == 'decision_analysis' %} active{% endif %}"
+       href="{% url 'deliverables:meetings:decision_analysis' meeting.deliverable.pk meeting.pk %}">
+      {% trans 'Decision Analysis' %}
+    </a>
   </div>
 </div>
 <div class="panel panel-default panel-menu">

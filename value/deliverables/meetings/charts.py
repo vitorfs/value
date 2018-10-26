@@ -393,13 +393,13 @@ class Highcharts(object):
                     .count()
                 stakeholders_data.append(stakeholders_count)
 
-            series.append({
-                'name': _('Stakeholders'),
-                'type': 'spline',
-                'yAxis': 1,
-                'data': stakeholders_data,
-                'color': '#fe0074'
-            })
+            # series.append({
+            #     'name': _('Stakeholders'),
+            #     'type': 'spline',
+            #     'yAxis': 1,
+            #     'data': stakeholders_data,
+            #     'color': '#fe0074'
+            # })
 
             options = {
                 'chart': {
@@ -576,13 +576,13 @@ class Highcharts(object):
                     'tooltip': {'valueSuffix': '%'}
                 })
 
-            series.append({
-                'name': 'Stakeholders',
-                'type': 'spline',
-                'yAxis': 1,
-                'data': stakeholders_data,
-                'color': '#fe0074'
-            })
+            # series.append({
+            #     'name': 'Stakeholders',
+            #     'type': 'spline',
+            #     'yAxis': 1,
+            #     'data': stakeholders_data,
+            #     'color': '#fe0074'
+            # })
 
             options = {
                 'chart': {
@@ -917,4 +917,133 @@ class Highcharts(object):
         )
         options['title'] = {'text': escape(scenario.name)}
         options['subtitle'] = {'text': subtitle}
+        return options
+
+
+    def get_decision_analysis_factor_ranking(self, meeting, factor, measure_values,
+                                             measure_values_count, grouped_measure_values):
+        value_rankings = dict()
+        for meeting_item in meeting.meetingitem_set.order_by('decision_item__name'):
+            item_evaluations = Evaluation.get_evaluations_by_meeting(meeting) \
+                .filter(meeting_item=meeting_item, factor=factor) \
+                .exclude(measure_value=None)
+
+            max_evaluations = item_evaluations.count()
+
+            rankings = list()
+            for measure_value in measure_values:
+                rankings.append({
+                    'measure_value__id': measure_value.pk,
+                    'measure_value__order': measure_value.order,
+                    'votes': 0
+                })
+
+            votes_by_measure_value = item_evaluations \
+                .values('measure_value__id', 'measure_value__order') \
+                .annotate(votes=Count('measure_value')) \
+                .order_by('measure_value__order')
+
+            for measure_value_votes in votes_by_measure_value:
+                for index, ranking in enumerate(rankings):
+                    if ranking['measure_value__id'] == measure_value_votes['measure_value__id']:
+                        rankings[index]['votes'] = measure_value_votes['votes']
+                        break
+
+            for index, ranking in enumerate(rankings):
+                votes = int(ranking['votes'])
+                percentage = get_votes_percentage(max_evaluations, votes, round_value=False)
+                rankings[index]['percentage'] = round(percentage, 2)
+
+            if measure_values_count <= 3:
+                highest = rankings[0]
+                lowest = rankings[-1]
+                value_ranking = highest['percentage'] - lowest['percentage']
+            else:
+                highest_group = grouped_measure_values[0]
+                highest_ids = map(lambda measure_value: measure_value.pk, highest_group)
+                highest_sum = sum([r['percentage'] for r in rankings if r['measure_value__id'] in highest_ids])
+
+                lowest_group = grouped_measure_values[-1]
+                lowest_ids = map(lambda measure_value: measure_value.pk, lowest_group)
+                lowest_sum = sum([r['percentage'] for r in rankings if r['measure_value__id'] in lowest_ids])
+
+                value_ranking = highest_sum - lowest_sum
+
+            value_rankings[meeting_item.pk] = round(value_ranking, 2)
+
+        return value_rankings
+
+    def decision_analysis(self, meeting, value_factor_x, value_factor_y):
+        measure_values = meeting.measure.measurevalue_set.order_by('order')
+        measure_values_count = measure_values.count()
+        grouped_measure_values = None
+        if measure_values_count > 3:
+            grouped_measure_values = meeting.measure.get_grouped_measure_values()
+
+        factor_x_ranking = self.get_decision_analysis_factor_ranking(meeting, value_factor_x, measure_values,
+                                                                     measure_values_count, grouped_measure_values)
+
+        factor_y_ranking = self.get_decision_analysis_factor_ranking(meeting, value_factor_y, measure_values,
+                                                                     measure_values_count, grouped_measure_values)
+
+        data = list()
+
+        for mi in meeting.meetingitem_set.order_by('decision_item__name'):
+            entry = {
+                'x': factor_x_ranking[mi.pk],
+                'y': factor_y_ranking[mi.pk],
+                'z': int(mi.decision_item.column_1),
+                'name': mi.decision_item.pk,
+                'description': mi.decision_item.name
+            }
+            data.append(entry)
+
+        options = {
+            'chart': {
+                'type': 'bubble',
+                'plotBorderWidth': 1,
+                'zoomType': 'xy'
+            },
+            'legend': {
+                'enabled': False
+            },
+            'title': {
+                'text': 'Decision items analysis'
+            },
+            'xAxis': {
+                'gridLineWidth': 1,
+                'title': {
+                    'text': value_factor_x.name
+                }
+            },
+            'yAxis': {
+                'startOnTick': False,
+                'endOnTick': False,
+                'title': {
+                    'text': value_factor_y.name
+                },
+                'maxPadding': 0.2
+            },
+            'tooltip': {
+                'useHTML': True,
+                'headerFormat': '<table>',
+                'pointFormat': '<tr><th colspan="2"><h3>{point.description}</h3></th></tr>' +
+                    ('<tr><th>%s</th> <td>{point.x}</td></tr>' % value_factor_x.name) +
+                    ('<tr><th>%s:</th> <td>{point.y}</td></tr>' % value_factor_y.name) +
+                    '<tr><th>Size: </th> <td>{point.z} htp</td></tr>',
+                'footerFormat': '</table>',
+                'followPointer': True
+            },
+            'plotOptions': {
+                'series': {
+                    'dataLabels': {
+                        'enabled': True,
+                        'format': '{point.name}'
+                    }
+                }
+            },
+            'series': [{
+                'data': data
+            }]
+        }
         return options
