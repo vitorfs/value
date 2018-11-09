@@ -1,5 +1,5 @@
 # coding: utf-8
-
+import math
 import operator
 
 from django.contrib.auth.models import User
@@ -393,13 +393,17 @@ class Highcharts(object):
                     .count()
                 stakeholders_data.append(stakeholders_count)
 
-            # series.append({
-            #     'name': _('Stakeholders'),
-            #     'type': 'spline',
-            #     'yAxis': 1,
-            #     'data': stakeholders_data,
-            #     'color': '#fe0074'
-            # })
+            series.append({
+                'name': _('Stakeholders'),
+                'type': 'line',
+                'yAxis': 1,
+                'data': stakeholders_data,
+                # 'color': '#fe0074'
+                'color': 'transparent',
+                'dataLabels': {
+                    'enabled': True
+                }
+            })
 
             options = {
                 'chart': {
@@ -557,9 +561,33 @@ class Highcharts(object):
                     max_votes = 0
                     for measurekey, count in factor[1].iteritems():
                         max_votes += count
-                    percentage = get_votes_percentage(max_votes, factor[1][value.description])
+                    percentage = int(round(get_votes_percentage(max_votes, factor[1][value.description])))
                     serie_data.append(percentage)
                 series.append({'name': value.description, 'data': serie_data, 'color': value.color})
+
+            # fix the percentage overflow (e.g. sum = 100.01)
+            for index, factor in enumerate(sorted_data):
+                _max_value = 0
+                _max_index = 0
+                _factor_total = 0
+                for serie_index, serie in enumerate(series):
+                    _value = serie['data'][index]
+                    _factor_total += _value
+                    if _value >= _max_value:
+                        _max_value = _value
+                        _max_index = serie_index
+                if _factor_total > 100:
+                    _rest = _factor_total - 100
+                    series[_max_index]['data'][index] = int(round(_max_value - _rest))
+
+
+            for index, factor in enumerate(sorted_data):
+                _factor_total = 0
+                for serie_index, serie in enumerate(series):
+                    _value = serie['data'][index]
+                    _factor_total += _value
+                print _factor_total
+                print type(_factor_total)
 
             stakeholders_data = list()
             for factor in sorted_data:
@@ -576,16 +604,20 @@ class Highcharts(object):
                     'tooltip': {'valueSuffix': '%'}
                 })
 
-            # series.append({
-            #     'name': 'Stakeholders',
-            #     'type': 'spline',
-            #     'yAxis': 1,
-            #     'data': stakeholders_data,
-            #     'color': '#fe0074'
-            # })
+            series.append({
+                'name': 'Stakeholders',
+                'type': 'line',
+                'yAxis': 1,
+                'data': stakeholders_data,
+                'color': 'transparent',
+                'dataLabels': {
+                    'enabled': True
+                }
+            })
 
             options = {
                 'chart': {
+                    'type': 'column',
                     'zoomType': 'xy'
                 },
                 'xAxis': [{
@@ -596,8 +628,8 @@ class Highcharts(object):
                     {
                         'title': {'text': _('Percentage of evaluations')},
                         'labels': {'format': '{value}%'},
-                        'min': 0,
-                        'max': 100
+                        'max': 100,
+                        'min': 0
                     },
                     {
                     'title': {
@@ -613,6 +645,7 @@ class Highcharts(object):
                 },
                 'series': series
             }
+
         return options
 
     def factors_comparison(self, meeting_id, meeting_item_id, chart_type, stakeholder_ids):
@@ -989,14 +1022,17 @@ class Highcharts(object):
         data = list()
 
         for mi in meeting.meetingitem_set.order_by('decision_item__name'):
-            entry = {
-                'x': factor_x_ranking[mi.pk],
-                'y': factor_y_ranking[mi.pk],
-                'z': int(mi.decision_item.column_1),
-                'name': mi.decision_item.pk,
-                'description': mi.decision_item.name
-            }
-            data.append(entry)
+            try:
+                entry = {
+                    'x': factor_x_ranking[mi.pk],
+                    'y': factor_y_ranking[mi.pk],
+                    'z': int(mi.decision_item.column_1),
+                    'name': mi.decision_item.pk,
+                    'description': mi.decision_item.name
+                }
+                data.append(entry)
+            except ValueError:
+                pass
 
         options = {
             'chart': {
