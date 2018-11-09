@@ -171,3 +171,16 @@ class CompareStakeholdersOpinion(forms.Form):
 
     class Meta:
         fields = ('stakeholder_1', 'stakeholder_2', )
+
+
+class DecisionAnalysisForm(forms.Form):
+    value_factor_x = forms.ModelChoiceField(queryset=Factor.objects.none())
+    value_factor_y = forms.ModelChoiceField(queryset=Factor.objects.none())
+
+    def __init__(self, meeting, *args, **kwargs):
+        super(DecisionAnalysisForm, self).__init__(*args, **kwargs)
+        self.fields['value_factor_x'].queryset = meeting.factors.all()
+        self.fields['value_factor_y'].queryset = meeting.factors.all()
+
+    class Meta:
+        fields = ('value_factor_x', 'value_factor_y')

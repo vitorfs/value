@@ -42,6 +42,8 @@ urlpatterns = [
     url(r'^(?P<meeting_id>\d+)/dashboard/measures/(?P<measure_value_id>\d+)/$', views.features_comparison_chart,
         name='features_comparison_chart'),
 
+    url(r'^(?P<meeting_id>\d+)/dashboard/analysis/$', views.decision_analysis, name='decision_analysis'),
+
     # Meta Charts
     url(r'^(?P<meeting_id>\d+)/dashboard/agreement/$', views.stakeholders_agreement, name='stakeholders_agreement'),
     url(r'^(?P<meeting_id>\d+)/dashboard/agreement/details/factors/$', views.stakeholders_agreement_details_factors,

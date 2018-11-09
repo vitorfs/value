@@ -1,0 +1,25 @@
+{% load i18n %}
+
+<div class="panel panel-default panel-chart">
+  <div class="panel-heading">{% trans 'Comparison Matrix' %}</div>
+  <div class="table-responsive">
+    <table class="table table-bordered" id="comparison-matrix" style="font-size: 12px;font-weight: bold;">
+      <thead>
+        <tr>
+          {% for header in matrix.get_header %}
+            <th>{{ header.value }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in matrix.get_matrix %}
+          <tr>
+            {% for col in row %}
+              <td style="{{ col.style }}" data-raw="{{ col.raw }}">{{ col.value }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
