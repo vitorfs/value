@@ -1031,7 +1031,7 @@ class Highcharts(object):
                     'description': mi.decision_item.name
                 }
                 data.append(entry)
-            except ValueError:
+            except (ValueError, TypeError):
                 pass
 
         options = {
