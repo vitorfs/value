@@ -8,13 +8,15 @@ register = template.Library()
 
 @register.filter('attr')
 def attr(obj, attr_name):
-    value = getattr(obj, attr_name)
-    if value is None:
-        value = ''
-    if value.startswith('http://') or value.startswith('https://'):
-        return mark_safe(u'<a href="{0}" target="_blank">{0}</a>'.format(escape(value)))
+    if attr_name == 'description':
+        value = obj.description_as_html()
     else:
-        return value
+        value = getattr(obj, attr_name)
+        if value is None:
+            value = ''
+        if value.startswith('http://') or value.startswith('https://'):
+            value = mark_safe(u'<a href="{0}" target="_blank">{0}</a>'.format(escape(value)))
+    return value
 
 
 @register.filter('dictkey')

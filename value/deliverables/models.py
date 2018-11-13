@@ -2,10 +2,13 @@
 
 from collections import OrderedDict
 
+import bleach
+import markdown
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from value.application_settings.models import ApplicationSetting
@@ -105,6 +108,11 @@ class DecisionItem(models.Model):
 
     def has_attachments(self):
         return self.attachments.exists()
+
+    def description_as_html(self):
+        cleaned_description = bleach.clean(self.description)
+        html = markdown.markdown(cleaned_description)
+        return mark_safe(html)
 
 
 def attachment_file_upload_to(instance, filename):

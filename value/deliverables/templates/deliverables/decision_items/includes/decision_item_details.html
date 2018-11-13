@@ -16,10 +16,11 @@
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="details">
       {% for name, field in fields.items %}
-        <div class="form-group">
-          <label class="control-label">{{ field.label }}</label>
-          <p>{{ item|attr:name }}</p>
+        <div>
+          <h4>{{ field.label }}</h4>
+          <div>{{ item|attr:name }}</div>
         </div>
+        {% if not forloop.last %}<hr>{% endif %}
       {% endfor %}
     </div>
     <div role="tabpanel" class="tab-pane" id="attachments">
