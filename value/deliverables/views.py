@@ -28,7 +28,8 @@ from value.deliverables.decorators import user_is_manager, user_is_stakeholder
 from value.deliverables.models import Deliverable, DecisionItem, DecisionItemAttachment, DecisionItemLookup
 from value.deliverables.meetings.models import Evaluation, Meeting
 from value.deliverables.forms import UploadFileForm, DeliverableForm, DeliverableBasicDataForm, \
-    DeliverableFactorsForm, DeliverableMeasureForm, DeliverableRemoveStakeholdersForm, JiraSearchIssuesForm
+    DeliverableFactorsForm, DeliverableMeasureForm, DeliverableRemoveStakeholdersForm, JiraSearchIssuesForm, \
+    DeliverableAdminsForm
 from value.deliverables.utils import excel_column_map
 
 
@@ -512,6 +513,26 @@ def measure_settings(request, deliverable_id):
         form = DeliverableMeasureForm(instance=deliverable)
 
     return render(request, 'deliverables/settings/measure.html', {
+        'deliverable': deliverable,
+        'form': form
+    })
+
+
+@login_required
+@user_is_manager
+def access_settings(request, deliverable_id):
+    deliverable = get_object_or_404(Deliverable, pk=deliverable_id)
+    if request.method == 'POST':
+        form = DeliverableAdminsForm(request.POST, instance=deliverable)
+        if form.is_valid():
+            deliverable = form.save()
+            messages.success(request, _(u'The deliverable {0} was saved successfully.').format(deliverable.name))
+            # redirect after post to avoid form re-submition
+            return redirect(reverse('deliverables:access_settings', args=(deliverable.pk,)))
+    else:
+        form = DeliverableAdminsForm(instance=deliverable)
+
+    return render(request, 'deliverables/settings/access.html', {
         'deliverable': deliverable,
         'form': form
     })

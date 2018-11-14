@@ -20,6 +20,7 @@ class Deliverable(models.Model):
     name = models.CharField(_('name'), max_length=255)
     description = models.TextField(_('description'), max_length=2000, null=True, blank=True)
     stakeholders = models.ManyToManyField(User)
+    admins = models.ManyToManyField(User, related_name='+')
     measure = models.ForeignKey(Measure, related_name='deliverables')
     factors = models.ManyToManyField(Factor, related_name='deliverables')
     manager = models.ForeignKey(User, related_name='deliverable_manager_user')

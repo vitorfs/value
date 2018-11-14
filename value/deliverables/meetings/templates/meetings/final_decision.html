@@ -74,7 +74,7 @@
           to <strong>Analysing</strong>.
         {% endblocktrans %}
       </p>
-      {% if user == meeting.deliverable.manager %}
+      {% if is_deliverable_admin %}
         <button type="button" class="btn btn-primary js-change-meeting-status" data-option="{{ meeting.ANALYSING }}">
           <span class="fa fa-bar-chart-o"></span> {% trans 'Change status to Analysing' %}
         </button>
@@ -154,7 +154,7 @@
                     <td style="vertical-align: middle; text-align: right;">
                       {{ form.instance.value_ranking_as_html|safe }}
                     </td>
-                    {% if meeting.deliverable.manager == request.user %}
+                    {% if is_deliverable_admin %}
                       <td style="vertical-align: middle; text-align: center;">
                         {% if not meeting.is_closed %}
                           {{ form.meeting_decision }}

@@ -50,7 +50,7 @@
               <button type="button" class="close" data-dismiss="alert" aria-label="{% trans 'Close' %}"><span aria-hidden="true">&times;</span></button>
               {% trans 'Click to remove a stakeholder from the meeting.' %}
             </div>
-            {% if user == meeting.deliverable.manager %}
+            {% if is_deliverable_admin %}
               {% include 'includes/users_panel_group.html' with stakeholders=stakeholders group_actions='removeable' %}
             {% else %}
               {% include 'includes/users_panel_group.html' with stakeholders=stakeholders %}

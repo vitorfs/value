@@ -1,6 +1,6 @@
 {% load i18n l10n %}
 
-{% if user == meeting.deliverable.manager %}
+{% if is_deliverable_admin %}
 
   <div class="btn-group pull-right" style="margin-left: 10px;">
     <button type="button"

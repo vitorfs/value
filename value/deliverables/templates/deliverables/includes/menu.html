@@ -26,7 +26,7 @@
       <span class="fa fa-line-chart"></span> {% trans 'Historical Dashboard' %}
     </a>
   </li>
-  {% if user == deliverable.manager %}
+  {% if is_deliverable_admin %}
     <li role="presentation"{% if active == 'settings' %} class="active"{% endif %}>
       <a href="{% url 'deliverables:settings' deliverable.pk %}">
         <span class="fa fa-wrench"></span> {% trans 'Settings' %}

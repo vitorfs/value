@@ -20,7 +20,7 @@ def user_is_manager(function):
     def wrap(request, *args, **kwargs):
         try:
             deliverable = Deliverable.objects.get(pk=kwargs['deliverable_id'])
-            if deliverable.manager == request.user:
+            if deliverable.manager == request.user or deliverable.admins.filter(pk=request.user.pk).exists():
                 return function(request, *args, **kwargs)
             else:
                 return permission_denied(request)

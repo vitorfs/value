@@ -21,7 +21,7 @@
   {% with has_meetings=deliverable.meeting_set.exists %}
 
     {% if has_meetings %}
-      {% if deliverable.manager == user %}
+      {% if is_deliverable_admin %}
         <div style="margin-bottom: 20px;" class="clearfix">
           <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary">
             <span class="glyphicon glyphicon-plus"></span> {% trans 'New meeting' %}
@@ -51,7 +51,7 @@
       <div class="well blank-state">
         <span class="fa fa-calendar"></span>
         <h3>{% trans 'This deliverable had no meeting yet.' %}</h3>
-        {% if deliverable.manager == user %}
+        {% if is_deliverable_admin %}
           <a href="{% url 'deliverables:meetings:new' deliverable.pk %}" class="btn btn-primary">
             <span class="glyphicon glyphicon-plus"></span> {% trans 'Start a meeting' %}
           </a>

@@ -129,6 +129,15 @@ class DeliverableMeasureForm(forms.ModelForm):
         fields = ['measure', ]
 
 
+class DeliverableAdminsForm(forms.ModelForm):
+    class Meta:
+        model = Deliverable
+        fields = ['admins', ]
+        widgets = {
+            'admins': forms.CheckboxSelectMultiple()
+        }
+
+
 class JiraSearchIssuesForm(forms.Form):
     query = forms.CharField(
         widget=forms.Textarea(attrs={'rows': '3'}),

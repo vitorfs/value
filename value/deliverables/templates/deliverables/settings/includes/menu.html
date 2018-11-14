@@ -14,5 +14,9 @@
        class="list-group-item{% if active == 'measure' %} active{% endif %}">
       {% trans 'Measure' %}
     </a>
+    <a href="{% url 'deliverables:access_settings' deliverable.pk %}"
+       class="list-group-item{% if active == 'access' %} active{% endif %}">
+      {% trans 'Access' %}
+    </a>
   </div>
 </div>

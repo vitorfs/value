@@ -19,7 +19,7 @@
   {% include 'deliverables/includes/menu.html' with active='stakeholders' deliverable=deliverable %}
 
   {% if deliverable.stakeholders.exists %}
-    {% if deliverable.manager == user %}
+    {% if is_deliverable_admin %}
       <div style="margin-bottom: 20px;" class="clearfix">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-stakeholder">
           <span class="glyphicon glyphicon-plus"></span> {% trans 'Add stakeholder' %}
@@ -50,7 +50,7 @@
     <div class="well blank-state">
       <span class="fa fa-users"></span>
       <h3>{% trans 'There is no stakeholder associated to the deliverable.' %}</h3>
-      {% if deliverable.manager == user %}
+      {% if is_deliverable_admin %}
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-stakeholder">
           <span class="glyphicon glyphicon-plus"></span> {% trans 'Add stakeholder' %}
         </button>

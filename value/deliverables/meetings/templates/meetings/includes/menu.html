@@ -98,7 +98,7 @@
     </a>
   </li>
 
-  {% if user == meeting.deliverable.manager %}
+  {% if is_deliverable_admin %}
     <li role="presentation"{% if active == 'settings' %} class="active"{% endif %}>
       <a href="{% url 'deliverables:meetings:settings' meeting.deliverable.pk meeting.pk %}">
         <span class="fa fa-wrench"></span> {% trans 'Settings' %}
