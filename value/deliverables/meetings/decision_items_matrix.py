@@ -90,8 +90,8 @@ class DecisionItemsMatrix(object):
     def get_header(self):
         header = ['']
         for factor in self.factors:
-            group = '[%s] ' % factor.group.name if factor.group is not None else ''
-            name = '%s%s' % (group, factor.name)
+            group = u'[%s] ' % factor.group.name if factor.group is not None else ''
+            name = u'%s%s' % (group, factor.name)
             entry = {
                 'style': 'font-weight:bold;',
                 'value': name
@@ -118,12 +118,12 @@ class DecisionItemsMatrix(object):
                         colors.append(measure_data['color'])
                         values.append(measure_data['description'])
                     background = 'background-image: linear-gradient(%s)' % ','.join(colors)
-                    names = ' / '.join(values)
-                    value = '{} ({}%)'.format(names, votes[0]['percentage'])
+                    names = u' / '.join(values)
+                    value = u'{} ({}%)'.format(names, votes[0]['percentage'])
                 else:
                     measure_data = self.measure_values_lookup[votes[0]['measure_value__id']]
                     background = 'background-color: %s' % measure_data['color']
-                    value = '{} ({}%)'.format(measure_data['description'], votes[0]['percentage'])
+                    value = u'{} ({}%)'.format(measure_data['description'], votes[0]['percentage'])
                 entry = {
                     'style': ';'.join([background, 'text-align:center', 'font-weight:bold']),
                     'value': value,
