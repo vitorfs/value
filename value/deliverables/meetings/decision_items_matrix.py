@@ -104,7 +104,7 @@ class DecisionItemsMatrix(object):
         for mi in self.meeting_items:
             row = list()
             row.append({
-                'style': 'font-weight:bold;white-space:nowrap',
+                'style': 'font-weight:bold;',
                 'value': mi.decision_item.name
             })
             for factor in self.factors:
