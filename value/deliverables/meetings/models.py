@@ -379,7 +379,7 @@ class Ranking(models.Model):
 
 class MeetingItem(models.Model):
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
-    decision_item = models.ForeignKey(DecisionItem, on_delete=models.PROTECT)
+    decision_item = models.ForeignKey(DecisionItem, on_delete=models.CASCADE)
     meeting_decision = models.BooleanField(_('meeting decision'), default=False)
     meeting_decision_rationale = models.ForeignKey(Rationale, null=True, related_name='final_decision_meeting_items')
     rationales = models.ManyToManyField(Rationale)
@@ -510,7 +510,7 @@ class MeetingStakeholder(models.Model):
 
 class Evaluation(models.Model):
     meeting = models.ForeignKey(Meeting, on_delete=models.PROTECT)
-    meeting_item = models.ForeignKey(MeetingItem, on_delete=models.PROTECT)
+    meeting_item = models.ForeignKey(MeetingItem, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     factor = models.ForeignKey(Factor, on_delete=models.PROTECT)
     measure = models.ForeignKey(Measure, on_delete=models.PROTECT)
