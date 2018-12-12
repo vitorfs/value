@@ -1,5 +1,6 @@
 from colour import Color
 from django.db.models import Count
+from django.utils.safestring import mark_safe
 
 from value.deliverables.meetings.models import Evaluation
 from value.deliverables.meetings.utils import get_votes_percentage
@@ -89,6 +90,10 @@ class DecisionItemsMatrix(object):
 
     def get_header(self):
         header = ['']
+        header.append({
+            'style': 'font-weight:bold;',
+            'value': 'Value Ranking'
+        })
         for factor in self.factors:
             group = u'[%s] ' % factor.group.name if factor.group is not None else ''
             name = u'%s%s' % (group, factor.name)
@@ -101,11 +106,15 @@ class DecisionItemsMatrix(object):
 
     def get_matrix(self):
         matrix = list()
-        for mi in self.meeting_items:
+        for mi in self.meeting_items.order_by('-value_ranking'):
             row = list()
             row.append({
                 'style': 'font-weight:bold;',
                 'value': mi.decision_item.name
+            })
+            row.append({
+                'style': 'font-weight:bold;',
+                'value': mark_safe(mi.value_ranking_as_html())
             })
             for factor in self.factors:
                 votes = self.get_most_votes(mi, factor)
