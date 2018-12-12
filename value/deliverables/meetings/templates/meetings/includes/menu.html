@@ -35,7 +35,7 @@
 {% if meeting.is_ongoing %}
   {% if jira_is_enabled %}
     <button type="button" class="btn btn-default pull-right" disabled style="margin-left: 10px">
-      <span class="fa fa-bitbucket"></span> {% trans 'Sync JIRA' %}</span>
+      <span class="fa fa-bitbucket"></span> {% trans 'Sync JIRA' %}
     </button>
   {% endif %}
   <button type="button" class="btn btn-default pull-right" disabled>
@@ -71,14 +71,16 @@
 
 <ul class="nav nav-tabs" style="margin-bottom: 20px">
 
-  <li role="presentation"{% if active == 'evaluate' %} class="active"{% endif %}>
-    <a href="{% url 'deliverables:meetings:evaluate' meeting.deliverable.pk meeting.pk %}">
-      <span class="fa fa-balance-scale"></span> {% trans 'Evaluate' %}
-      {% if meeting.is_closed %}
-        <span class="fa fa-lock text-muted" style="margin-left: 5px;"></span>
-      {% endif %}
-    </a>
-  </li>
+  {% if is_meeting_stakeholder %}
+    <li role="presentation"{% if active == 'evaluate' %} class="active"{% endif %}>
+      <a href="{% url 'deliverables:meetings:evaluate' meeting.deliverable.pk meeting.pk %}">
+        <span class="fa fa-balance-scale"></span> {% trans 'Evaluate' %}
+        {% if meeting.is_closed %}
+          <span class="fa fa-lock text-muted" style="margin-left: 5px;"></span>
+        {% endif %}
+      </a>
+    </li>
+  {% endif %}
 
   <li role="presentation"{% if active == 'dashboard' %} class="active"{% endif %}>
     <a href="{% url 'deliverables:meetings:dashboard' meeting.deliverable.pk meeting.pk %}">
@@ -112,7 +114,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title text-danger"><span class="fa fa-warning"></span> {% trans 'An Error Occurred' %}</h4>
       </div>
       <div class="modal-body">
@@ -120,11 +122,11 @@
           {% trans 'It was not possible to sync with JIRA. Possibly because some configuration is missing.' %}<br>
           {% trans 'Please contact the system administrator.' %}
         </p>
-        <p>See below details of the error:</p>
+        <p>{% trans 'See below details of the error:' %}</p>
         <pre><code id="jira-error-body"></code></pre>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Close' %}</button>
       </div>
     </div>
   </div>

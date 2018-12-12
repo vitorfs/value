@@ -1,5 +1,5 @@
 # coding: utf-8
-
+import csv
 import json
 
 from django.http import HttpResponse, HttpResponseBadRequest, Http404
@@ -313,10 +313,7 @@ def decision_items(request, deliverable_id, meeting_id):
 @user_is_manager
 def stakeholders(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
-    stakeholders = [
-        meeting_stakeholder.stakeholder for meeting_stakeholder in meeting.meetingstakeholder_set.select_related(
-            'stakeholder')
-    ]
+    stakeholders = meeting.meetingstakeholder_set.select_related('stakeholder', 'stakeholder__profile')
     available_stakeholders = User.objects \
         .exclude(id__in=meeting.meetingstakeholder_set.values('stakeholder__id')) \
         .filter(is_active=True) \
@@ -325,6 +322,21 @@ def stakeholders(request, deliverable_id, meeting_id):
         'meeting': meeting,
         'stakeholders': stakeholders,
         'available_stakeholders': available_stakeholders})
+
+
+@login_required
+@require_POST
+def remove_idle_stakeholders(request, deliverable_id, meeting_id):
+    meeting = Meeting.objects.get(pk=meeting_id, deliverable__id=deliverable_id)
+    queryset = meeting.meetingstakeholder_set.filter(meeting_input=0.0)
+    if queryset.exists():
+        queryset.delete()
+        meeting.calculate_progress()
+        meeting.calculate_all_rankings()
+        messages.success(request, _('Stakeholders without input removed with success.'))
+    else:
+        messages.warning(request, _('There was no stakeholder without input.'))
+    return redirect(reverse('deliverables:meetings:stakeholders', args=(deliverable_id, meeting_id)))
 
 
 @login_required
@@ -337,3 +349,31 @@ def delete(request, deliverable_id, meeting_id):
         messages.success(request, _(u'The meeeting {0} was completly deleted successfully.').format(meeting.name))
         return redirect(reverse('deliverables:deliverable', args=(meeting.deliverable.pk,)))
     return render(request, 'meetings/settings/delete.html', {'meeting': meeting, 'can_delete': can_delete})
+
+
+@login_required
+def export_excel(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+
+    evaluations = meeting.get_evaluations() \
+        .select_related('meeting_item', 'user', 'factor', 'measure_value', 'rationale') \
+        .values_list('user__username', 'user__email', 'meeting_item__decision_item__name',
+                     'factor__name', 'measure_value__description', 'rationale__text') \
+        .order_by('user', 'meeting_item', 'factor')
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="data.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['Username', 'Email', 'Item', 'Factor', 'Evaluation', 'Comments'])
+    for e in evaluations:
+        try:
+            row = list()
+            for s in e:
+                if s is not None:
+                    row.append(s.encode('utf-8'))
+                else:
+                    row.append('')
+            writer.writerow(row)
+        except Exception, err:
+            writer.writerow(['error!'])
+    return response

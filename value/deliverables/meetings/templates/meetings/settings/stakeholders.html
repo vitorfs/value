@@ -6,12 +6,16 @@
   <script src="{% static 'js/meetings/meetings.js' %}"></script>
   <script type="text/javascript">
     $(function () {
-      $(".panel-group-stakeholders.removeable .panel").click(function () {
-        var stakeholder_id = $(this).attr("data-stakeholder-id");
-        var stakeholder_name = $(this).attr("data-stakeholder-name");
+      $(".js-remove-stakeholder").click(function () {
+        var stakeholder_id = $(this).data("stakeholder-id");
+        var stakeholder_name = $(this).data("stakeholder-name");
         $("#remove-stakeholder-id").val(stakeholder_id);
         $("#remove-stakeholder .remove-stakeholder-name").text(stakeholder_name);
         $("#remove-stakeholder").modal("show");
+      });
+
+      $("#formRemoveIdleStakeholders").submit(function (){
+        return confirm($(this).data('confirm-message'));
       });
     });
   </script>
@@ -43,22 +47,57 @@
           <h3 class="panel-title">{% trans 'Stakeholders' %}</h3>
         </div>
         <div class="panel-body">
-          {% if meeting.is_closed %}
-            {% include 'includes/users_panel_group.html' with stakeholders=stakeholders %}
-          {% else %}
-            <div class="alert alert-info alert-dismissible fade in" role="alert">
-              <button type="button" class="close" data-dismiss="alert" aria-label="{% trans 'Close' %}"><span aria-hidden="true">&times;</span></button>
-              {% trans 'Click to remove a stakeholder from the meeting.' %}
-            </div>
-            {% if is_deliverable_admin %}
-              {% include 'includes/users_panel_group.html' with stakeholders=stakeholders group_actions='removeable' %}
-            {% else %}
-              {% include 'includes/users_panel_group.html' with stakeholders=stakeholders %}
-            {% endif %}
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteStakeholder" style="margin-top: 20px">
-              <span class="glyphicon glyphicon-envelope"></span> {% trans 'Invite' %}
-            </button>
+          {% if not meeting.is_closed %}
+            <nav style="margin-bottom: 20px">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inviteStakeholder">
+                <span class="glyphicon glyphicon-envelope"></span> {% trans 'Invite' %}
+              </button>
+              <form action="{% url 'deliverables:meetings:remove_idle_stakeholders' meeting.deliverable.pk meeting.pk %}"
+                    method="post"
+                    id="formRemoveIdleStakeholders"
+                    style="display:inline-block"
+                    data-confirm-message="{% trans 'Are you sure you want to remove the stakeholders with no input?' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-default">{% trans 'Remove stakeholders with no input' %}</button>
+              </form>
+
+            </nav>
           {% endif %}
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>{% trans 'Stakeholder' %}</th>
+                <th>{% trans 'Meeting input' %}</th>
+                {% if not meeting.is_closed %}
+                  <th></th>
+                {% endif %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for stakeholder in stakeholders %}
+                <tr>
+                  <td>
+                    {{ stakeholder.stakeholder.profile.get_display_name }}
+                    {% if stakeholder.is_external %}
+                      <span class="label label-primary">{% trans 'external' %}</span>
+                    {% endif %}
+                    {% if stakeholder.is_manager %}
+                      <span class="label label-warning">{% trans 'manager' %}</span>
+                    {% endif %}
+                  </td>
+                  <td>{{ stakeholder.meeting_input }}%</td>
+                  {% if not meeting.is_closed %}
+                    <td>
+                      <button type="button"
+                              class="btn btn-danger btn-sm js-remove-stakeholder"
+                              data-stakeholder-id="{{ stakeholder.stakeholder_id }}"
+                              data-stakeholder-name="{{ stakeholder.stakeholder.profile.get_display_name }}">{% trans 'Remove' %}</button>
+                    </td>
+                  {% endif %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

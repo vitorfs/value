@@ -1080,7 +1080,7 @@ class Highcharts(object):
                 'pointFormat': '<tr><th colspan="2"><h3>{point.description}</h3></th></tr>' +
                     ('<tr><th>%s</th> <td>{point.x}</td></tr>' % value_factor_x.name) +
                     ('<tr><th>%s:</th> <td>{point.y}</td></tr>' % value_factor_y.name) +
-                    '<tr><th>Size: </th> <td>{point.z} htp</td></tr>',
+                    '<tr><th>Size: </th> <td>{point.z}</td></tr>',
                 'footerFormat': '</table>',
                 'followPointer': True
             },

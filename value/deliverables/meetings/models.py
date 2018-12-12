@@ -507,6 +507,12 @@ class MeetingStakeholder(models.Model):
         self.save()
         return self.meeting_input
 
+    def is_manager(self):
+        if self.meeting.deliverable.manager == self.stakeholder or \
+            self.meeting.deliverable.admins.filter(pk=self.stakeholder_id).exists():
+            return True
+        return False
+
 
 class Evaluation(models.Model):
     meeting = models.ForeignKey(Meeting, on_delete=models.PROTECT)

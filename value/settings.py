@@ -132,6 +132,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
 
                 'value.deliverables.context_processors.deliverable_admin',
+                'value.deliverables.meetings.context_processors.meeting_stakeholder',
                 'value.application_settings.context_processors.application_settings',
             ],
             'debug': DEBUG

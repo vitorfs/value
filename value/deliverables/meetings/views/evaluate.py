@@ -5,9 +5,9 @@ import json
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseBadRequest, Http404
+from django.http import HttpResponse, HttpResponseBadRequest, Http404, HttpResponseForbidden
 from django.views.decorators.http import require_POST
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
@@ -27,6 +27,9 @@ def evaluate(request, deliverable_id, meeting_id, template_name='meetings/evalua
             .get(pk=meeting_id, deliverable__id=deliverable_id)
     except Meeting.DoesNotExist:
         raise Http404
+
+    if not meeting.meetingstakeholder_set.filter(stakeholder=request.user).exists():
+        return redirect('deliverables:meetings:dashboard', deliverable_id=deliverable_id, meeting_id=meeting_id)
 
     factors = meeting.factors.order_by('group__name', 'name')
     measure = meeting.measure
@@ -75,6 +78,9 @@ def evaluate(request, deliverable_id, meeting_id, template_name='meetings/evalua
 def save_evaluation(request, deliverable_id, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
 
+    if not meeting.meetingstakeholder_set.filter(stakeholder=request.user).exists():
+        return HttpResponseForbidden()
+
     meeting_item_id = request.POST.get('meeting_item_id')
     factor_id = request.POST.get('factor_id')
     measure_id = request.POST.get('measure_id')
@@ -116,6 +122,9 @@ def save_evaluation(request, deliverable_id, meeting_id):
 def save_rationale(request, deliverable_id, meeting_id):
     try:
         meeting = Meeting.objects.get(pk=meeting_id, deliverable__id=deliverable_id)
+
+        if not meeting.meetingstakeholder_set.filter(stakeholder=request.user).exists():
+            return HttpResponseForbidden()
 
         meeting_item_id = request.POST.get('meeting_item_id')
         factor_id = request.POST.get('factor_id')

@@ -41,13 +41,18 @@
           </div>
           <div class="panel-body">
             {% include 'includes/form_vertical.html' with form=form %}
-            {% if meeting.is_survey %}<p>Share URL: <a href="{{ survey_url }}">{{ survey_url }}</a></p>{% endif %}
+            {% if meeting.is_survey %}<p>{% trans 'Share URL:' %} <a href="{{ survey_url }}">{{ survey_url }}</a></p>{% endif %}
           </div>
           <div class="panel-footer">
             <button type="submit" class="btn btn-primary">{% trans 'Save changes' %}</button>
           </div>
         </div>
       </form>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <a href="{% url 'deliverables:meetings:export_excel' meeting.deliverable.pk meeting.pk %}">{% trans 'Download meeting evaluation data' %}</a>
+        </div>
+      </div>
     </div>
   </div>
 {% endblock content %}

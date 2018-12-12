@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^(?P<meeting_id>\d+)/progress/$', views.update_meeting_progress, name='update_meeting_progress'),
     url(r'^(?P<meeting_id>\d+)/rationales/$', views.rationales, name='rationales'),
     url(r'^(?P<meeting_id>\d+)/sync-jira/$', views.sync_jira, name='sync_jira'),
+    url(r'^(?P<meeting_id>\d+)/export/$', views.export_excel, name='export_excel'),
 
     # Evaluate URLs
     url(r'^(?P<meeting_id>\d+)/evaluate/$', views.evaluate, name='evaluate'),
@@ -121,5 +122,6 @@ urlpatterns = [
     url(r'^(?P<meeting_id>\d+)/settings/items/remove/$', views.remove_decision_items, name='remove_decision_items'),
     url(r'^(?P<meeting_id>\d+)/settings/stakeholders/$', views.stakeholders, name='stakeholders'),
     url(r'^(?P<meeting_id>\d+)/settings/stakeholders/add/$', views.add_stakeholders, name='add_stakeholders'),
-    url(r'^(?P<meeting_id>\d+)/settings/stakeholders/remove/$', views.remove_stakeholder, name='remove_stakeholder')
+    url(r'^(?P<meeting_id>\d+)/settings/stakeholders/remove/$', views.remove_stakeholder, name='remove_stakeholder'),
+    url(r'^(?P<meeting_id>\d+)/settings/stakeholders/remove-idle/$', views.remove_idle_stakeholders, name='remove_idle_stakeholders')
 ]
