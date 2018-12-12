@@ -349,7 +349,8 @@ def decision_analysis(request, deliverable_id, meeting_id):
         if form.is_valid():
             factor_x = form.cleaned_data.get('value_factor_x')
             factor_y = form.cleaned_data.get('value_factor_y')
-            options = Highcharts().decision_analysis(meeting, factor_x, factor_y)
+            scenario = form.cleaned_data.get('scenario')
+            options = Highcharts().decision_analysis(meeting, factor_x, factor_y, scenario)
             data = options['series'][0]['data']
             dump = json.dumps(options)
     else:

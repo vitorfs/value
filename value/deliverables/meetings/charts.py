@@ -953,10 +953,16 @@ class Highcharts(object):
         return options
 
 
-    def get_decision_analysis_factor_ranking(self, meeting, factor, measure_values,
-                                             measure_values_count, grouped_measure_values):
+    def get_decision_analysis_factor_ranking(self, meeting, factor, measure_values, measure_values_count,
+                                             grouped_measure_values, scenario):
         value_rankings = dict()
-        for meeting_item in meeting.meetingitem_set.order_by('decision_item__name'):
+
+        if scenario is not None:
+            meeting_items = scenario.meeting_items.order_by('decision_item__name')
+        else:
+            meeting_items = meeting.meetingitem_set.order_by('decision_item__name')
+
+        for meeting_item in meeting_items:
             item_evaluations = Evaluation.get_evaluations_by_meeting(meeting) \
                 .filter(meeting_item=meeting_item, factor=factor) \
                 .exclude(measure_value=None)
@@ -1006,7 +1012,7 @@ class Highcharts(object):
 
         return value_rankings
 
-    def decision_analysis(self, meeting, value_factor_x, value_factor_y):
+    def decision_analysis(self, meeting, value_factor_x, value_factor_y, scenario):
         measure_values = meeting.measure.measurevalue_set.order_by('order')
         measure_values_count = measure_values.count()
         grouped_measure_values = None
@@ -1014,20 +1020,28 @@ class Highcharts(object):
             grouped_measure_values = meeting.measure.get_grouped_measure_values()
 
         factor_x_ranking = self.get_decision_analysis_factor_ranking(meeting, value_factor_x, measure_values,
-                                                                     measure_values_count, grouped_measure_values)
+                                                                     measure_values_count, grouped_measure_values,
+                                                                     scenario)
 
         factor_y_ranking = self.get_decision_analysis_factor_ranking(meeting, value_factor_y, measure_values,
-                                                                     measure_values_count, grouped_measure_values)
+                                                                     measure_values_count, grouped_measure_values,
+                                                                     scenario)
 
         data = list()
 
-        for mi in meeting.meetingitem_set.order_by('decision_item__name'):
+        if scenario is not None:
+            meeting_items = scenario.meeting_items.order_by('decision_item__name')
+        else:
+            meeting_items = meeting.meetingitem_set.order_by('decision_item__name')
+
+        for mi in meeting_items:
             try:
+                item_name = mi.decision_item.name.split(' ')[0]
                 entry = {
                     'x': factor_x_ranking[mi.pk],
                     'y': factor_y_ranking[mi.pk],
                     'z': int(mi.decision_item.column_1),
-                    'name': mi.decision_item.pk,
+                    'name': item_name,
                     'description': mi.decision_item.name
                 }
                 data.append(entry)
