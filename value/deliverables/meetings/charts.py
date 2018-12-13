@@ -7,6 +7,7 @@ from django.db.models import Count
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
 
+from value.deliverables.meetings.templatetags.meeting_item import display_rationales_button, display_info_button
 from value.factors.models import Group as FactorGroup
 from value.deliverables.meetings.models import Meeting, MeetingItem, Evaluation
 from value.deliverables.meetings.utils import get_votes_percentage
@@ -1053,6 +1054,7 @@ class Highcharts(object):
                                                                      scenario)
 
         data = list()
+        items_excluded = list()
 
         if scenario is not None:
             meeting_items = scenario.meeting_items.order_by('decision_item__name')
@@ -1062,16 +1064,32 @@ class Highcharts(object):
         for mi in meeting_items:
             try:
                 item_name = mi.decision_item.name.split(' ')[0]
+                rationales = list()
+                if mi.has_rationales:
+                    for rationale in mi.get_all_rationales():
+                        rationales.append(u'<p><strong>%s:</strong> %s</p>' % (
+                        escape(rationale.created_by.profile.get_display_name()), escape(rationale.text)))
+                else:
+                    rationales.append(u'<em class="text-muted">%s</em>' % _("There was no comments for this item."))
+
+                buttons = u'{}{}'.format(
+                    display_info_button(mi.decision_item),
+                    display_rationales_button(mi)
+                )
+
                 entry = {
                     'x': factor_x_ranking[mi.pk],
                     'y': factor_y_ranking[mi.pk],
                     'z': int(mi.decision_item.column_1),
                     'name': item_name,
-                    'description': mi.decision_item.name
+                    'description': mi.decision_item.name,
+                    'rationales': u''.join(rationales),
+                    'value_ranking': mi.value_ranking_as_html(),
+                    'buttons': buttons
                 }
                 data.append(entry)
             except (ValueError, TypeError):
-                pass
+                items_excluded.append(mi)
 
         options = {
             'chart': {
@@ -1101,12 +1119,15 @@ class Highcharts(object):
             },
             'tooltip': {
                 'useHTML': True,
-                'headerFormat': '<table>',
-                'pointFormat': '<tr><th colspan="2"><h3>{point.description}</h3></th></tr>' +
-                    ('<tr><th>%s</th> <td>{point.x}</td></tr>' % value_factor_x.name) +
-                    ('<tr><th>%s:</th> <td>{point.y}</td></tr>' % value_factor_y.name) +
-                    '<tr><th>Size: </th> <td>{point.z}</td></tr>',
-                'footerFormat': '</table>',
+                'headerFormat': '<div style="white-space:normal!important;width:500px;">',
+                'pointFormat': '<h4>{point.description}</h4>' +
+                    ('<div><strong>%s:</strong> {point.x}</div>' % value_factor_x.name) +
+                    ('<div><strong>%s:</strong> {point.y}</div>' % value_factor_y.name) +
+                    '<div><strong>Size:</strong> {point.z}</div>' +
+                    ('<div><strong>%s:</strong> {point.value_ranking}</div>' % _('Value Ranking')) +
+                    '<hr>' +
+                    ('<h5>%s:</h5> <div>{point.rationales}</div>' % _('Comments')),
+                'footerFormat': '</div>',
                 'followPointer': True
             },
             'plotOptions': {
@@ -1121,4 +1142,4 @@ class Highcharts(object):
                 'data': data
             }]
         }
-        return options
+        return options, items_excluded

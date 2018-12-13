@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load i18n static dashboard_helpers %}
+{% load i18n static dashboard_helpers meeting_item %}
 
 {% block stylesheet %}
   <link href="{% static 'css/meetings/dashboard.css' %}" rel="stylesheet">
@@ -17,6 +17,7 @@
       {% if dump %}
         $("#chart-decision-analysis .panel-body").highcharts({{ dump|safe }});
         $("#table-decision-analysis").tablesorter();
+        $("#table-excluded-items").tablesorter();
       {% endif %}
     });
   </script>
@@ -57,6 +58,15 @@
         </div>
       </div>
 
+      {% if items_excluded %}
+        <div class="alert alert-warning alert-dismissable" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="{% trans 'Close' %}">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <a href="#excluded-items">{{ items_excluded|length }} decision items</a> were excluded from the analysis because they do not have a size associated with.
+        </div>
+      {% endif %}
+
       {% if dump %}
         <div class="panel panel-default panel-chart" id="chart-decision-analysis">
           <div class="panel-body"></div>
@@ -66,7 +76,8 @@
           <table class="table table-bordered" id="table-decision-analysis">
             <thead>
               <tr>
-                <th>Decision item</th>
+                <th>{% trans 'Decision Item' %}</th>
+                <th>{% trans 'Value Ranking' %}</th>
                 <th>{{ factor_x.name }}</th>
                 <th>{{ factor_y.name }}</th>
                 <th>Size</th>
@@ -75,7 +86,11 @@
             <tbody>
             {% for row in data %}
               <tr>
-                <td>{{ row.description }}</td>
+                <td>
+                  {{ row.description }}
+                  {{ row.buttons|safe }}
+                </td>
+                <td>{{ row.value_ranking|safe }}</td>
                 <td>{{ row.x }}</td>
                 <td>{{ row.y }}</td>
                 <td>{{ row.z }}</td>
@@ -84,9 +99,38 @@
             </tbody>
           </table>
         </div>
+        {% if items_excluded %}
+          <div class="panel panel-danger" id="excluded-items">
+            <div class="panel-heading">
+              <h5 class="panel-title">{% trans 'The decision items below were excluded from the analysis' %}</h5>
+            </div>
+            <table class="table table-bordered" id="table-excluded-items">
+              <thead>
+                <tr>
+                  <th>{% trans 'Decision Item' %}</th>
+                  <th>{% trans 'Value Ranking' %}</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for meeting_item in items_excluded %}
+                <tr>
+                  <td>
+                    {{ meeting_item.decision_item.name }}
+                    {% display_info_button meeting_item.decision_item %}
+                    {% display_rationales_button meeting_item %}
+                  </td>
+                  <td>{{ meeting_item.value_ranking_as_html|safe }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% endif %}
       {% endif %}
 
     </div>
   </div>
   {% include 'meetings/dashboard/scenarios/scenario_actions.html' %}
+  {% include 'meetings/rationales/modal.html' %}
+  {% include 'deliverables/decision_items/includes/modal.html' %}
 {% endblock %}

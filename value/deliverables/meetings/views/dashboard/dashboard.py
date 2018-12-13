@@ -344,13 +344,14 @@ def decision_analysis(request, deliverable_id, meeting_id):
     data = None
     factor_x = None
     factor_y = None
+    items_excluded = list()
     if request.method == 'POST':
         form = DecisionAnalysisForm(meeting=meeting, data=request.POST)
         if form.is_valid():
             factor_x = form.cleaned_data.get('value_factor_x')
             factor_y = form.cleaned_data.get('value_factor_y')
             scenario = form.cleaned_data.get('scenario')
-            options = Highcharts().decision_analysis(meeting, factor_x, factor_y, scenario)
+            options, items_excluded = Highcharts().decision_analysis(meeting, factor_x, factor_y, scenario)
             data = options['series'][0]['data']
             dump = json.dumps(options)
     else:
@@ -361,7 +362,8 @@ def decision_analysis(request, deliverable_id, meeting_id):
         'dump': dump,
         'data': data,
         'factor_x': factor_x,
-        'factor_y': factor_y
+        'factor_y': factor_y,
+        'items_excluded': items_excluded
     })
 
 
