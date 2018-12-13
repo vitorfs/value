@@ -7,11 +7,13 @@
         <h3 class="panel-title">{% blocktrans with name=scenarios.0.name %}{{ name }} Items{% endblocktrans %}</h3>
       </div>
       <ul class="list-group">
-        {% for meeting_item in scenarios.0.scenario.meeting_items.all %}
-          {% if meeting_item not in scenarios.1.scenario.meeting_items.all %}
+        {% for meeting_item in scenarios.0.scenario_items %}
+          {% if meeting_item not in scenarios.1.scenario_items %}
             <li class="list-group-item">
-              {{ meeting_item.decision_item.name }}
-              <span class="badge">{{ meeting_item.get_value_ranking_display }}</span>
+              <div class="row">
+                <div class="col-sm-8 col-md-9 col-lg-10">{{ meeting_item.decision_item.name }}</div>
+                <div class="col-sm-4 col-md-3 col-lg-2" style="text-align: right"><span class="badge">{{ meeting_item.get_value_ranking_display }}</span></div>
+              </div>
             </li>
           {% endif %}
         {% endfor %}
@@ -24,11 +26,13 @@
         <h3 class="panel-title">{% trans 'Common Items' %}</h3>
       </div>
       <ul class="list-group">
-        {% for meeting_item in scenarios.0.scenario.meeting_items.all %}
-          {% if meeting_item in scenarios.1.scenario.meeting_items.all %}
+        {% for meeting_item in scenarios.0.scenario_items %}
+          {% if meeting_item in scenarios.1.scenario_items %}
             <li class="list-group-item">
-              {{ meeting_item.decision_item.name }}
-              <span class="badge">{{ meeting_item.get_value_ranking_display }}</span>
+              <div class="row">
+                <div class="col-sm-8 col-md-9 col-lg-10">{{ meeting_item.decision_item.name }}</div>
+                <div class="col-sm-4 col-md-3 col-lg-2" style="text-align: right"><span class="badge">{{ meeting_item.get_value_ranking_display }}</span></div>
+              </div>
             </li>
           {% endif %}
         {% endfor %}
@@ -41,11 +45,13 @@
         <h3 class="panel-title">{% blocktrans with name=scenarios.1.name %}{{ name }} Items{% endblocktrans %}</h3>
       </div>
       <ul class="list-group">
-        {% for meeting_item in scenarios.1.scenario.meeting_items.all %}
-          {% if meeting_item not in scenarios.0.scenario.meeting_items.all %}
+        {% for meeting_item in scenarios.1.scenario_items %}
+          {% if meeting_item not in scenarios.0.scenario_items %}
             <li class="list-group-item">
-              {{ meeting_item.decision_item.name }}
-              <span class="badge">{{ meeting_item.get_value_ranking_display }}</span>
+              <div class="row">
+                <div class="col-sm-8 col-md-9 col-lg-10">{{ meeting_item.decision_item.name }}</div>
+                <div class="col-sm-4 col-md-3 col-lg-2" style="text-align: right"><span class="badge">{{ meeting_item.get_value_ranking_display }}</span></div>
+              </div>
             </li>
           {% endif %}
         {% endfor %}

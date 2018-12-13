@@ -7,16 +7,6 @@
   <script type="text/javascript">
     $(function () {
       $("#chart-form-meeting-overview .panel-body").highcharts({{ dump|safe }});
-      $("#comparison-matrix").tablesorter({
-        textExtraction: function (node) {
-          return $(node).data("raw");
-        },
-        headers: {
-          0: {
-            sorter: false
-          }
-        }
-      });
     });
   </script>
 {% endblock javascript %}

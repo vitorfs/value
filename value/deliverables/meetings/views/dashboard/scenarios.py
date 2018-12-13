@@ -146,7 +146,6 @@ def scenario(request, deliverable_id, meeting_id, scenario_id):
         'meeting': meeting,
         'scenario': scenario,
         'chart_menu_active': scenario.pk,
-        'scenario': scenario,
         'delete_scenario_next': reverse('deliverables:meetings:dashboard', args=(meeting.deliverable.pk, meeting.pk)),
         'stakeholder_ids': stakeholder_ids,
         'bar_chart_types_options': bar_chart_types_options,
@@ -270,6 +269,7 @@ def compare_scenario(request, deliverable_id, meeting_id):
                 charts_data = get_scenario_charts(scenario)
                 charts_data['name'] = scenario.name
                 charts_data['scenario'] = scenario
+                charts_data['scenario_items'] = scenario.meeting_items.order_by('-value_ranking')
                 scenarios.append(charts_data)
             context = RequestContext(request, {
                 'meeting': meeting,
@@ -277,7 +277,8 @@ def compare_scenario(request, deliverable_id, meeting_id):
                 'bar_chart_types_options': bar_chart_types_options,
                 'treemap_chart_types_options': treemap_chart_types_options,
                 'display_chart_factors_groups': display_chart_factors_groups,
-                'scenarios': scenarios})
+                'scenarios': scenarios
+            })
             json_context['html'] = render_to_string('meetings/dashboard/scenarios/partial_compare.html', context)
     else:
         form = CompareScenarioForm(initial={'meeting': meeting})
