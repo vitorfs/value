@@ -42,6 +42,19 @@ $(function () {
     });
   });
 
+  $(document).on("click", ".js-meeting-item-rationale", function () {
+      var url = $(this).data("remote-url");
+      $.ajax({
+          url: url,
+          beforeSend: function () {
+              $("#modal-rationale .modal-body").html("");
+          },
+          success: function (data) {
+              $("#modal-rationale .modal-body").html(data);
+          }
+      });
+  });
+
   $(".js-sync-jira").click(function () {
     var btn = $(this);
     var url = btn.attr("data-remote");

@@ -17,7 +17,8 @@ def meeting_item_rationale(request, deliverable_id, meeting_id, meeting_item_id)
     meeting_item = get_object_or_404(MeetingItem, pk=meeting_item_id)
     return render(request, 'meetings/rationales/meeting_item.html', {
         'meeting': meeting,
-        'meeting_item': meeting_item})
+        'meeting_item': meeting_item
+    })
 
 
 @login_required
@@ -28,4 +29,5 @@ def scenario_rationale(request, deliverable_id, meeting_id, scenario_id):
     return render(request, 'meetings/rationales/meeting_item.html', {
         'meeting': meeting,
         'scenario': scenario,
-        'rationales': rationales})
+        'rationales': rationales
+    })

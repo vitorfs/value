@@ -52,15 +52,22 @@
           <thead>
             <tr>
               <th>{% trans 'Name' %}</th>
+              <th style="width: 70px;"></th>
               <th>{% trans 'Summary' %}</th>
               <th>{% trans 'Value Ranking' %}</th>
-              <th>{{ priority_factor.name }} Frequency</th>
+              <th>{{ priority_factor.name }} {% trans 'Frequency' %}</th>
             </tr>
           </thead>
           <tbody>
             {% for meeting_item, count in final_ordering %}
               <tr>
-                <td>{{ meeting_item.decision_item.name }}</td>
+                <td>
+                  {{ meeting_item.decision_item.name }}
+                </td>
+                <td>
+                  {% display_info_button meeting_item.decision_item %}
+                  {% display_rationales_button meeting_item %}
+                </td>
                 <td>{% display_evaluation_summary meeting_item %}</td>
                 <td>{{ meeting_item.value_ranking_as_html|safe }}</td>
                 <td>{{ count }}</td>
@@ -75,4 +82,6 @@
     </div>
   </div>
   {% include 'meetings/dashboard/scenarios/scenario_actions.html' %}
+  {% include 'deliverables/decision_items/includes/modal.html' %}
+  {% include 'meetings/rationales/modal.html' %}s
 {% endblock %}

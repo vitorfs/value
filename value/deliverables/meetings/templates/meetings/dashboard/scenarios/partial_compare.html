@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n meeting_item %}
 
 <div class="row">
   <div class="col-md-4">
@@ -11,7 +11,11 @@
           {% if meeting_item not in scenarios.1.scenario_items %}
             <li class="list-group-item">
               <div class="row">
-                <div class="col-sm-8 col-md-9 col-lg-10">{{ meeting_item.decision_item.name }}</div>
+                <div class="col-sm-8 col-md-9 col-lg-10">
+                  {{ meeting_item.decision_item.name }}
+                  {% display_info_button meeting_item.decision_item %}
+                  {% display_rationales_button meeting_item %}
+                </div>
                 <div class="col-sm-4 col-md-3 col-lg-2" style="text-align: right"><span class="badge">{{ meeting_item.get_value_ranking_display }}</span></div>
               </div>
             </li>
@@ -30,7 +34,11 @@
           {% if meeting_item in scenarios.1.scenario_items %}
             <li class="list-group-item">
               <div class="row">
-                <div class="col-sm-8 col-md-9 col-lg-10">{{ meeting_item.decision_item.name }}</div>
+                <div class="col-sm-8 col-md-9 col-lg-10">
+                  {{ meeting_item.decision_item.name }}
+                  {% display_info_button meeting_item.decision_item %}
+                  {% display_rationales_button meeting_item %}
+                </div>
                 <div class="col-sm-4 col-md-3 col-lg-2" style="text-align: right"><span class="badge">{{ meeting_item.get_value_ranking_display }}</span></div>
               </div>
             </li>
@@ -49,7 +57,11 @@
           {% if meeting_item not in scenarios.0.scenario_items %}
             <li class="list-group-item">
               <div class="row">
-                <div class="col-sm-8 col-md-9 col-lg-10">{{ meeting_item.decision_item.name }}</div>
+                <div class="col-sm-8 col-md-9 col-lg-10">
+                  {{ meeting_item.decision_item.name }}
+                  {% display_info_button meeting_item.decision_item %}
+                  {% display_rationales_button meeting_item %}
+                </div>
                 <div class="col-sm-4 col-md-3 col-lg-2" style="text-align: right"><span class="badge">{{ meeting_item.get_value_ranking_display }}</span></div>
               </div>
             </li>

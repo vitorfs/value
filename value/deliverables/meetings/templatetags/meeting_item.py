@@ -84,3 +84,29 @@ def display_info_button(decision_item):
           </a>
     </span>'''.format(_('Click to view details'), remote)
     return mark_safe(html)
+
+
+@register.simple_tag
+def display_rationales_button(meeting_item):
+    remote = reverse(
+        'deliverables:meetings:meeting_item_rationale',
+        args=(meeting_item.decision_item.deliverable.pk, meeting_item.meeting.pk, meeting_item.pk)
+    )
+    color = '#333333'
+    if meeting_item.has_rationales:
+        color = '#337ab7'
+
+    html = u'''
+        <span data-toggle="tooltip"
+              title="{0}"
+              data-container="body" style="margin-left: 5px;">
+          <a href="javascript:void(0);"
+             class="btn-details js-meeting-item-rationale"
+             data-toggle="modal"
+             data-target="#modal-rationale"
+             data-remote-url="{1}"
+             style="color: {2}!important;">
+            <span class="fa fa-comments"></span>
+          </a>
+    </span>'''.format(_('Click to view comments'), remote, color)
+    return mark_safe(html)
