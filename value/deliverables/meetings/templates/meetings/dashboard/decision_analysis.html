@@ -12,15 +12,80 @@
   <script src="{% static 'js/meetings/dashboard.js' %}"></script>
   <script src="{% static 'js/meetings/meetings.js' %}"></script>
   <script src="{% static 'js/meetings/scenarios.js' %}"></script>
-  <script>
-    $(function () {
-      {% if dump %}
-        $("#chart-decision-analysis .panel-body").highcharts({{ dump|safe }});
-        $("#table-decision-analysis").tablesorter();
+  {% if dump %}
+    <script>
+      $(function () {
+        var SELECT_MODE = false;
+        var options = {{ dump|safe }};
+        options['plotOptions']['series']['point']['events']['click'] = function (event) {
+          if (SELECT_MODE) {
+            var meetingItemId = event.point.id;
+
+            if (this.scenarioSelected) {
+              $("input[name='meeting_item_id'][value='" + meetingItemId + "']").prop("checked", false);
+              this.update({color: '#337ab7', scenarioSelected: false});
+            }
+            else {
+              $("input[name='meeting_item_id'][value='" + meetingItemId + "']").prop("checked", true);
+              this.update({color: '#3c763d', scenarioSelected: true});
+            }
+          }
+        };
+        var chart = Highcharts.chart($("#chart-decision-analysis .panel-body")[0], options);
+
+        $("#table-decision-analysis").tablesorter({ headers: { 0: { sorter: false }}});
         $("#table-excluded-items").tablesorter();
-      {% endif %}
-    });
-  </script>
+
+        $(".js-select-mode-off").click(function () {
+          SELECT_MODE = true;
+          chart.update({
+            plotOptions: {
+              series: {
+                cursor: 'pointer'
+              }
+            }
+          });
+
+          $(".js-select-mode-off").closest(".panel").hide();
+          $(".js-select-mode-on").closest(".panel").show();
+          $("#table-decision-analysis input[type='checkbox']").prop("disabled", false);
+          $("#table-decision-analysis tr td:first-child").show();
+          $("#table-decision-analysis tr th:first-child").show();
+          $(".panel-select-mode").show();
+        });
+
+        $(".js-select-mode-on").click(function () {
+          var confirmToggleOff = confirm("Are you sure you want to turn select mode off? All selection will be lost.");
+
+          if (confirmToggleOff) {
+            SELECT_MODE = false;
+            $(".js-select-mode-on").closest(".panel").hide();
+            $(".js-select-mode-off").closest(".panel").show();
+
+            // Reset the chart
+            chart = Highcharts.chart($("#chart-decision-analysis .panel-body")[0], options);
+            chart.update({
+              plotOptions: {
+                series: {
+                  cursor: 'normal'
+                }
+              }
+            });
+            var $checkboxes = $("#table-decision-analysis input[type='checkbox']");
+            $checkboxes.prop("checked", false);
+            $checkboxes.prop("disabled", true);
+            $("#table-decision-analysis tr td:first-child").hide();
+            $("#table-decision-analysis tr th:first-child").hide();
+            $(".panel-select-mode").hide();
+          }
+        });
+
+        $("input[type='checkbox'][name='meeting_item_id']").click(function () {
+          alert($(this).val());
+        });
+      });
+    </script>
+  {% endif %}
 {% endblock javascript %}
 
 {% block breadcrumb %}
@@ -68,14 +133,38 @@
       {% endif %}
 
       {% if dump %}
+        <div class="panel panel-default">
+          <div class="panel-heading js-select-mode-off" style="cursor: pointer;">
+            <span class="text-muted">
+              <span class="fa fa-toggle-off"></span>
+              <span>Select Mode</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="panel panel-success" style="display: none">
+          <div class="panel-heading js-select-mode-on" style="cursor: pointer;">
+            <span class="text-success">
+              <span class="fa fa-toggle-on"></span>
+              <strong>Select Mode</strong>
+            </span>
+          </div>
+          <div class="panel-body">
+
+          </div>
+        </div>
+
         <div class="panel panel-default panel-chart" id="chart-decision-analysis">
           <div class="panel-body"></div>
         </div>
 
         <div class="panel panel-default panel-chart">
-          <table class="table table-bordered" id="table-decision-analysis">
+          <table class="table table-bordered table-check-all" id="table-decision-analysis">
             <thead>
               <tr>
+                <th style="display: none;">
+                  <input type="checkbox" autocomplete="off">
+                </th>
                 <th>{% trans 'Decision Item' %}</th>
                 <th>{% trans 'Value Ranking' %}</th>
                 <th>{{ factor_x.name }}</th>
@@ -85,7 +174,10 @@
             </thead>
             <tbody>
             {% for row in data %}
-              <tr>
+              <tr data-meeting-item-id="{{ row.id }}">
+                <td style="display: none;">
+                  <input type="checkbox" name="meeting_item_id" value="{{ row.id }}" autocomplete="off">
+                </td>
                 <td>
                   {{ row.description }}
                   {{ row.buttons|safe }}

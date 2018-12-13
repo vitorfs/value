@@ -1085,7 +1085,10 @@ class Highcharts(object):
                     'description': mi.decision_item.name,
                     'rationales': u''.join(rationales),
                     'value_ranking': mi.value_ranking_as_html(),
-                    'buttons': buttons
+                    'buttons': buttons,
+                    'id': mi.pk,
+                    'color': '#337ab7',
+                    'scenarioSelected': False
                 }
                 data.append(entry)
             except (ValueError, TypeError):
@@ -1135,6 +1138,12 @@ class Highcharts(object):
                     'dataLabels': {
                         'enabled': True,
                         'format': '{point.name}'
+                    },
+                    'cursor': 'normal',
+                    'point': {
+                        'events': {
+                            'click': None  # Click handler defined in the template
+                        }
                     }
                 }
             },
