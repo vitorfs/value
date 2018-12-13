@@ -11,7 +11,7 @@
   <script src="{% static 'js/highcharts/highcharts-more.js' %}"></script>
   <script src="{% static 'js/meetings/dashboard.js' %}"></script>
   <script src="{% static 'js/meetings/meetings.js' %}"></script>
-  <script src="{% static 'js/meetings/scenarios.js' %}"></script>
+  <script src="{% static 'js/meetings/scenarios.js' %}?v=1"></script>
   {% if dump %}
     <script>
       $(function () {
@@ -20,18 +20,44 @@
         options['plotOptions']['series']['point']['events']['click'] = function (event) {
           if (SELECT_MODE) {
             var meetingItemId = event.point.id;
-
-            if (this.scenarioSelected) {
-              $("input[name='meeting_item_id'][value='" + meetingItemId + "']").prop("checked", false);
-              this.update({color: '#337ab7', scenarioSelected: false});
-            }
-            else {
-              $("input[name='meeting_item_id'][value='" + meetingItemId + "']").prop("checked", true);
-              this.update({color: '#3c763d', scenarioSelected: true});
-            }
+            $("input[name='meeting_item_id'][value='" + meetingItemId + "']").click();
           }
         };
-        var chart = Highcharts.chart($("#chart-decision-analysis .panel-body")[0], options);
+        var chart = new Highcharts.chart($("#chart-decision-analysis .panel-body")[0], options);
+
+        var resetChart = function (_chart) {
+          _chart.series[0].data.forEach(function (point) {
+            point.update({color: '#337ab7', scenarioSelected: false});
+          });
+          updateSelection(_chart);
+        };
+
+        var updateSelection = function (_chart) {
+          var totalSelected = 0;
+          var x = 0;
+          var y = 0;
+          var z = 0;
+
+          _chart.series[0].data.forEach(function (point) {
+            if (point.scenarioSelected) {
+              totalSelected += 1;
+              x += point.x;
+              y += point.y;
+              z += point.z;
+            }
+          });
+
+          if (totalSelected > 0) {
+            x = Math.round((x / totalSelected) * 100) / 100;
+            y = Math.round((y / totalSelected) * 100) / 100;
+          }
+
+          $(".js-items-selected").text(totalSelected);
+          $(".js-mean-x").text(x);
+          $(".js-mean-y").text(y);
+          $(".js-total-size").text(z);
+
+        };
 
         $("#table-decision-analysis").tablesorter({ headers: { 0: { sorter: false }}});
         $("#table-excluded-items").tablesorter();
@@ -63,7 +89,7 @@
             $(".js-select-mode-off").closest(".panel").show();
 
             // Reset the chart
-            chart = Highcharts.chart($("#chart-decision-analysis .panel-body")[0], options);
+            resetChart(chart);
             chart.update({
               plotOptions: {
                 series: {
@@ -80,9 +106,58 @@
           }
         });
 
-        $("input[type='checkbox'][name='meeting_item_id']").click(function () {
-          alert($(this).val());
+        $("table.table-check-all thead tr th input[type='checkbox']").click(function () {
+          var is_checked = $(this).is(":checked");
+          if (is_checked) {
+            chart.series[0].data.forEach(function (point) {
+              point.update({color: '#3c763d', scenarioSelected: true});
+            });
+          }
+          else {
+            chart.series[0].data.forEach(function (point) {
+              point.update({color: '#337ab7', scenarioSelected: false});
+            });
+          }
+          updateSelection(chart);
         });
+
+        $("input[type='checkbox'][name='meeting_item_id']").click(function () {
+          var meetingItemId = parseInt($(this).val());
+          var point = chart.get(meetingItemId);
+
+          if (point.scenarioSelected) {
+            point.update({color: '#337ab7', scenarioSelected: false});
+          }
+          else {
+            point.update({color: '#3c763d', scenarioSelected: true});
+          }
+
+          updateSelection(chart);
+        });
+
+        $(".js-reset-selection").click(function () {
+          var confirmResetSelection = confirm("Are you sure you want to reset selection?");
+          if (confirmResetSelection) {
+            resetChart(chart);
+
+            var $checkboxes = $("#table-decision-analysis input[type='checkbox']");
+            $checkboxes.prop("checked", false);
+          }
+        });
+
+        $(".js-create-scenario-from-selection").click(function () {
+          var selected = '';
+          chart.series[0].data.forEach(function (point) {
+            if (point.scenarioSelected) {
+              selected += point.id + ' '
+            }
+          });
+          selected = selected.trim();
+          $("#form-add-scenario").data("initial-selection", selected);
+        });
+
+        // main
+        $("#add-next").val("scenario_charts");
       });
     </script>
   {% endif %}
@@ -111,7 +186,7 @@
           <h3 class="panel-title">{% trans 'Decision Analysis' %}</h3>
         </div>
         <div class="panel-body">
-          <form method="post">
+          <form method="post" action="{% url 'deliverables:meetings:decision_analysis' meeting.deliverable.pk meeting.pk %}">
             {% csrf_token %}
             {{ form.as_p }}
             <div class="row">
@@ -137,7 +212,7 @@
           <div class="panel-heading js-select-mode-off" style="cursor: pointer;">
             <span class="text-muted">
               <span class="fa fa-toggle-off"></span>
-              <span>Select Mode</span>
+              <span>{% trans 'Select Mode' %}</span>
             </span>
           </div>
         </div>
@@ -146,16 +221,67 @@
           <div class="panel-heading js-select-mode-on" style="cursor: pointer;">
             <span class="text-success">
               <span class="fa fa-toggle-on"></span>
-              <strong>Select Mode</strong>
+              <strong>{% trans 'Select Mode' %}</strong>
             </span>
           </div>
           <div class="panel-body">
+            <div style="margin-bottom: 15px;">
+              <button type="button"
+                      class="btn btn-primary btn-sm js-create-scenario-from-selection"
+                      style="margin-right: 5px;"
+                      data-toggle="modal"
+                      data-target="#modal-add-scenario">{% trans 'Create Scenario From Selection' %}</button>
+              <button type="button" class="btn btn-default btn-sm js-reset-selection">{% trans 'Reset Selection' %}</button>
+            </div>
+            <div class="row">
+              <div class="col-lg-3">
+                <div class="panel panel-default" style="margin-bottom: 0">
+                  <div class="panel-body text-center">
+                    <h6 style="min-height: 26px">{% trans 'Items Selected' %}</h6>
+                    <h2 class="js-items-selected">0</h2>
+                  </div>
+                </div>
+              </div>
 
+              <div class="col-lg-3">
+                <div class="panel panel-default" style="margin-bottom: 0">
+                  <div class="panel-body text-center">
+                    <h6 style="min-height: 26px">{{ factor_x.name }}</h6>
+                    <h2 class="js-mean-x">0</h2>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-3">
+                <div class="panel panel-default" style="margin-bottom: 0">
+                  <div class="panel-body text-center">
+                    <h6 style="min-height: 26px">{{ factor_y.name }}</h6>
+                    <h2 class="js-mean-y">0</h2>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-3">
+                <div class="panel panel-default" style="margin-bottom: 0">
+                  <div class="panel-body text-center">
+                    <h6 style="min-height: 26px">{% trans 'Total Size' %}</h6>
+                    <h2 class="js-total-size">0</h2>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="panel panel-default panel-chart" id="chart-decision-analysis">
           <div class="panel-body"></div>
+          <div class="panel-footer">
+            {% for entry in data_summary %}
+              <span style="margin-right: 15px">
+                <strong>{{ entry.name }}:</strong> {{ entry.value }}
+              </span>
+            {% endfor %}
+          </div>
         </div>
 
         <div class="panel panel-default panel-chart">

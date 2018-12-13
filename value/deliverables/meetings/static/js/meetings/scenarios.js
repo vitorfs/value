@@ -38,6 +38,15 @@ $(function () {
                     sortList: [[VALUE_RANKING_COLUMN, DESCENDING]]
                 });
                 initializeCheckAll();
+                var initial_selection = $("#form-add-scenario").data("initial-selection");
+                if (initial_selection !== undefined) {
+                    var ids = initial_selection.split(' ');
+                    ids.forEach(function (meeting_item_id) {
+                        var $input = $("#add-table-decision-items input[name='add-meeting_items'][value='" + meeting_item_id + "']")
+                        $input.prop("checked", true);
+                        $("#add-table-decision-items tbody").prepend($input.closest("tr"));
+                    });
+                }
             },
             complete: function () {
                 $("#modal-add-scenario .modal-body").loading();
@@ -46,6 +55,7 @@ $(function () {
     });
     $("#modal-add-scenario").on("hidden.bs.modal", function () {
         $("#modal-add-scenario .modal-body").html("");
+        $("#form-add-scenario").data("initial-selection", "");
     });
 
     $("#form-add-scenario").submit(function () {

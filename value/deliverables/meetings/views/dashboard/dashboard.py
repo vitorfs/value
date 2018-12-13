@@ -345,6 +345,7 @@ def decision_analysis(request, deliverable_id, meeting_id):
     factor_x = None
     factor_y = None
     items_excluded = list()
+    data_summary = list()
     if request.method == 'POST':
         form = DecisionAnalysisForm(meeting=meeting, data=request.POST)
         if form.is_valid():
@@ -353,6 +354,27 @@ def decision_analysis(request, deliverable_id, meeting_id):
             scenario = form.cleaned_data.get('scenario')
             options, items_excluded = Highcharts().decision_analysis(meeting, factor_x, factor_y, scenario)
             data = options['series'][0]['data']
+
+            total = 0
+            mean_x = 0
+            mean_y = 0
+            total_z = 0
+            for entry in data:
+                total += 1
+                mean_x += entry['x']
+                mean_y += entry['y']
+                total_z += entry['z']
+            if total > 0:
+                mean_x = round(mean_x / total, 2)
+                mean_y = round(mean_y / total, 2)
+
+            data_summary = [
+                {'name': _('Total items'), 'value': total},
+                {'name': factor_x.name, 'value': mean_x},
+                {'name': factor_y.name, 'value': mean_y},
+                {'name': 'Total size', 'value': total_z}
+            ]
+
             dump = json.dumps(options)
     else:
         form = DecisionAnalysisForm(meeting=meeting)
@@ -363,7 +385,8 @@ def decision_analysis(request, deliverable_id, meeting_id):
         'data': data,
         'factor_x': factor_x,
         'factor_y': factor_y,
-        'items_excluded': items_excluded
+        'items_excluded': items_excluded,
+        'data_summary': data_summary
     })
 
 
