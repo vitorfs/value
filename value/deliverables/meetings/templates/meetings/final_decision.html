@@ -5,6 +5,7 @@
 {% block javascript %}
   <script src="{% static 'js/meetings/meetings.js' %}"></script>
   <script src="{% static 'js/meetings/decision.js' %}"></script>
+  <script src="{% static 'js/meetings/scenarios.js' %}"></script>
 {% endblock javascript %}
 
 {% block mustache %}
@@ -88,9 +89,12 @@
           <button type="button" class="btn btn-primary pull-right js-placebo-save">
             <span class="glyphicon glyphicon-ok"></span> {% trans 'Save changes' %}
           </button>
+          <button type="button" class="btn btn-default pull-right" style="margin-right:10px" data-toggle="modal" data-target="#modal-scenario-final-decision">
+            <span class="fa fa-files-o"></span> {% trans 'Select Scenario' %}
+          </button>
         {% endif %}
 
-        <p class="lead">Meeting decision</p>
+        <p class="lead">{% trans 'Meeting decision' %}</p>
 
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -211,5 +215,64 @@
       </div>
     </div>
   {% endif %}
+  <div class="modal fade" id="modal-scenario-final-decision" data-modal-index="3">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">{% trans 'Scenarios' %}</h4>
+        </div>
+        <div class="modal-body">
+          <p>{% trans 'Select a scenario to set as a final decision.' %}</p>
+          <table class="table" style="margin-bottom: 0;">
+            <thead>
+              <tr>
+                <th>{% trans 'Scenario' %}</th>
+                <th>{% trans 'Decision Items' %}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for scenario in meeting.scenarios.all %}
+                <tr>
+                  <td>{{ scenario.name }}</td>
+                  <td>{{ scenario.meeting_items.count }}</td>
+                  <td style="text-align: right">
+                    <button type="button"
+                            class="btn btn-default btn-sm js-scenario-details"
+                            data-remote-url="{% url 'deliverables:meetings:scenario_details' meeting.deliverable.pk meeting.pk scenario.pk %}"
+                            data-toggle="modal"
+                            data-target="#modal-scenario-details">{% trans 'View Details' %}</button>
+                    <form action="{% url 'deliverables:meetings:set_scenario_final_decision' meeting.deliverable.pk meeting.pk %}" method="post" style="display:inline-block;">
+                      {% csrf_token %}
+                      <input type="hidden" name="scenario" value="{{ scenario.pk }}">
+                      <button type="submit" class="btn btn-primary btn-sm">{% trans 'Select Scenario' %}</button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="modal-scenario-details" data-modal-index="4">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">{% trans 'Scenario' %}</h4>
+        </div>
+        <div class="modal-body">
+
+        </div>
+      </div>
+    </div>
+  </div>
   {% include 'deliverables/decision_items/includes/modal.html' %}
 {% endblock content %}

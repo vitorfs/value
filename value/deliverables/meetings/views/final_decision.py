@@ -2,16 +2,17 @@
 
 import json
 
+from django.contrib import messages
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_POST
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.forms.models import modelformset_factory
 from django.utils.translation import ugettext as _
 
 from value.deliverables.meetings.models import Meeting, MeetingItem, Rationale
-from value.deliverables.meetings.forms import MeetingItemFinalDecisionForm
+from value.deliverables.meetings.forms import MeetingItemFinalDecisionForm, ScenarioFinalDecision
 from value.deliverables.decorators import user_is_manager
 from value.deliverables.meetings.decorators import user_is_meeting_stakeholder
 from value.deliverables.meetings.utils import get_meeting_progress
@@ -46,6 +47,21 @@ def save_final_decision(request, deliverable_id, meeting_id):
         dump = json.dumps(errors)
         return HttpResponseBadRequest(dump, content_type='application/json')
     return HttpResponse()
+
+
+@login_required
+@user_is_manager
+@require_POST
+@transaction.atomic
+def set_scenario_final_decision(request, deliverable_id, meeting_id):
+    meeting = get_object_or_404(Meeting, pk=meeting_id, deliverable__id=deliverable_id)
+    form = ScenarioFinalDecision(meeting=meeting, data=request.POST)
+    if form.is_valid():
+        form.set_final_decision()
+        messages.success(request, _('The scenario "%s" was saved as the final decision.') % form.cleaned_data.get('scenario').name)
+    else:
+        messages.error(request, _('An error occurred. Please try again later.'))
+    return redirect('deliverables:meetings:final_decision', deliverable_id=deliverable_id, meeting_id=meeting_id)
 
 
 @login_required

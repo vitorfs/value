@@ -184,5 +184,16 @@ class DecisionAnalysisForm(forms.Form):
         self.fields['value_factor_y'].queryset = meeting.factors.all()
         self.fields['scenario'].queryset = meeting.scenarios.all()
 
-    class Meta:
-        fields = ('value_factor_x', 'value_factor_y')
+
+class ScenarioFinalDecision(forms.Form):
+    scenario = forms.ModelChoiceField(queryset=Scenario.objects.none(), required=False)
+
+    def __init__(self, meeting, *args, **kwargs):
+        super(ScenarioFinalDecision, self).__init__(*args, **kwargs)
+        self.meeting = meeting
+        self.fields['scenario'].queryset = meeting.scenarios.all()
+
+    def set_final_decision(self):
+        scenario = self.cleaned_data.get('scenario')
+        self.meeting.meetingitem_set.update(meeting_decision=False)
+        scenario.meeting_items.update(meeting_decision=True)

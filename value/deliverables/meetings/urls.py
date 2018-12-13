@@ -109,6 +109,7 @@ urlpatterns = [
     # Final Decision URLs
     url(r'^(?P<meeting_id>\d+)/decision/$', views.final_decision, name='final_decision'),
     url(r'^(?P<meeting_id>\d+)/decision/save/$', views.save_final_decision, name='save_final_decision'),
+    url(r'^(?P<meeting_id>\d+)/decision/set-scenario/$', views.set_scenario_final_decision, name='set_scenario_final_decision'),
     url(r'^(?P<meeting_id>\d+)/decision/rationale/save/$', views.save_final_decision_rationale,
         name='save_final_decision_rationale'),
     url(r'^(?P<meeting_id>\d+)/decision/rationale/item/(?P<meeting_item_id>\d+)/save/$',
