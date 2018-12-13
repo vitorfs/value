@@ -205,7 +205,21 @@ class Highcharts(object):
     def _value_ranking(self, meeting_items):
         categories = meeting_items.values_list('decision_item__name', flat=True).order_by('-value_ranking')
         data = meeting_items.values_list('value_ranking', flat=True).order_by('-value_ranking')
-        data = [round(value, 2) for value in data]
+        data = [{'y': round(value, 2)} for value in data]
+
+        data = list()
+        for meeting_item in meeting_items.order_by('-value_ranking'):
+            rationales = list()
+            if meeting_item.has_rationales:
+                for rationale in meeting_item.get_all_rationales():
+                    rationales.append('<p><strong>%s:</strong> %s</p>' % (escape(rationale.created_by.profile.get_display_name()), escape(rationale.text)))
+            else:
+                rationales.append('<em class="text-muted">%s</em>' % _("There was no comments for this item."))
+            data.append({
+                'description': meeting_item.decision_item.name,
+                'y': round(meeting_item.value_ranking, 2),
+                'rationales': ''.join(rationales)
+            })
 
         options = {
             'chart': {'type': 'column'},
@@ -213,6 +227,17 @@ class Highcharts(object):
             'exporting': {'enabled': False},
             'xAxis': {
                 'categories': list(categories)
+            },
+            'tooltip': {
+                'useHTML': True,
+                'headerFormat': '<div style="white-space:normal!important;width:500px;">',
+                'pointFormat': (
+                    '<h4>{point.description}</h4>' +
+                    '<div><strong>%s:</strong> {point.y}</div><hr>' % _('Value Ranking') +
+                    '<h5>%s:</h5> <div>{point.rationales}</div>' % _('Comments')
+                ),
+                'footerFormat': '</div>',
+                'followPointer': True
             },
             'series': [{
                 'name': _('Ranking'),
