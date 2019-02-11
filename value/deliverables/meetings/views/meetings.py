@@ -19,7 +19,7 @@ from value.application_settings.models import ApplicationSetting
 from value.deliverables.models import Deliverable, DecisionItemLookup, DecisionItem
 from value.deliverables.decorators import user_is_manager, user_is_stakeholder
 from value.deliverables.meetings.models import Meeting, MeetingItem, MeetingStakeholder
-from value.deliverables.meetings.forms import NewMeetingForm, MeetingForm, MeetingStatusForm
+from value.deliverables.meetings.forms import NewMeetingForm, MeetingForm, MeetingStatusForm, AddStakeholdersForm
 from value.deliverables.meetings.utils import get_meeting_progress
 
 
@@ -202,14 +202,9 @@ def remove_stakeholder(request, deliverable_id, meeting_id):
 @transaction.atomic
 def add_stakeholders(request, deliverable_id, meeting_id):
     meeting = Meeting.objects.get(pk=meeting_id, deliverable__id=deliverable_id)
-    stakeholder_ids = request.POST.getlist('stakeholders')
-    if any(stakeholder_ids):
-        for stakeholder_id in stakeholder_ids:
-            user = User.objects.get(pk=stakeholder_id)
-            meeting_stakeholder = MeetingStakeholder(stakeholder=user, meeting=meeting)
-            meeting_stakeholder.save()
-        meeting.calculate_progress()
-        meeting.calculate_all_rankings()
+    form = AddStakeholdersForm(data=request.POST, meeting=meeting)
+    if form.is_valid():
+        form.add_stakeholders()
         messages.success(request, _(u'Stakeholders sucessfully added to the meeting!'))
     else:
         messages.warning(request, _(u'Select at least one stakeholder to add.'))

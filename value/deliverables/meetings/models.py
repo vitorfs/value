@@ -494,6 +494,7 @@ class MeetingStakeholder(models.Model):
     class Meta:
         db_table = 'meeting_stakeholders'
         ordering = ('stakeholder__first_name', 'stakeholder__last_name', 'stakeholder__username')
+        unique_together = (('meeting', 'stakeholder',),)
 
     def __unicode__(self):
         return '{0} - {1}'.format(self.meeting.name, self.stakeholder.username)

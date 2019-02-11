@@ -2,13 +2,14 @@
 
 from django import forms
 from django.contrib.auth.models import User
+from django.db import transaction
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
 from value.factors.models import Factor
 from value.measures.models import MeasureValue
 from value.deliverables.models import Deliverable
-from value.deliverables.meetings.models import Meeting, MeetingItem, Scenario, Rationale
+from value.deliverables.meetings.models import Meeting, MeetingItem, Scenario, Rationale, MeetingStakeholder
 from value.deliverables.meetings.validators import validate_scenarios_selection
 
 
@@ -197,3 +198,28 @@ class ScenarioFinalDecision(forms.Form):
         scenario = self.cleaned_data.get('scenario')
         self.meeting.meetingitem_set.update(meeting_decision=False)
         scenario.meeting_items.update(meeting_decision=True)
+
+
+class AddStakeholdersForm(forms.Form):
+    stakeholders = forms.ModelMultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple(),
+        queryset=User.objects.none(),
+        required=True
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.meeting = kwargs.pop('meeting')
+        super(AddStakeholdersForm, self).__init__(*args, **kwargs)
+        self.fields['stakeholders'].queryset = User.objects \
+            .exclude(id__in=self.meeting.meetingstakeholder_set.values('stakeholder__id'))
+
+    @transaction.atomic
+    def add_stakeholders(self):
+        stakeholders = self.cleaned_data.get('stakeholders')
+        for stakeholder in stakeholders:
+            MeetingStakeholder.objects.get_or_create(stakeholder=stakeholder, meeting=self.meeting)
+        self.meeting.calculate_progress()
+        self.meeting.calculate_all_rankings()
+
+    class Meta:
+        fields = ('stakeholders',)
