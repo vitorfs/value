@@ -162,7 +162,7 @@ class DecisionItemLookup(models.Model):
         verbose_name_plural = _('decision items lookups')
 
     def __unicode__(self):
-        return self.column_name
+        return self.column_label
 
     @staticmethod
     def get_base_fields():

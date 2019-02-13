@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from value.factors.models import Factor
 from value.measures.models import MeasureValue
-from value.deliverables.models import Deliverable
+from value.deliverables.models import Deliverable, DecisionItemLookup
 from value.deliverables.meetings.models import Meeting, MeetingItem, Scenario, Rationale, MeetingStakeholder
 from value.deliverables.meetings.validators import validate_scenarios_selection
 
@@ -177,6 +177,10 @@ class CompareStakeholdersOpinion(forms.Form):
 class DecisionAnalysisForm(forms.Form):
     value_factor_x = forms.ModelChoiceField(queryset=Factor.objects.none())
     value_factor_y = forms.ModelChoiceField(queryset=Factor.objects.none())
+    size_z = forms.ModelChoiceField(
+        queryset=DecisionItemLookup.objects.filter(column_type__in=(DecisionItemLookup.INTEGER,
+                                                                    DecisionItemLookup.FLOAT))
+    )
     scenario = forms.ModelChoiceField(queryset=Scenario.objects.none(), required=False)
 
     def __init__(self, meeting, *args, **kwargs):

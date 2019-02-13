@@ -8,6 +8,7 @@ from django.utils.html import escape
 from django.utils.translation import ugettext as _
 
 from value.deliverables.meetings.templatetags.meeting_item import display_rationales_button, display_info_button
+from value.deliverables.models import DecisionItemLookup
 from value.factors.models import Group as FactorGroup
 from value.deliverables.meetings.models import Meeting, MeetingItem, Evaluation
 from value.deliverables.meetings.utils import get_votes_percentage
@@ -1038,7 +1039,7 @@ class Highcharts(object):
 
         return value_rankings
 
-    def decision_analysis(self, meeting, value_factor_x, value_factor_y, scenario):
+    def decision_analysis(self, meeting, value_factor_x, value_factor_y, size_z, scenario):
         measure_values = meeting.measure.measurevalue_set.order_by('order')
         measure_values_count = measure_values.count()
         grouped_measure_values = None
@@ -1077,10 +1078,16 @@ class Highcharts(object):
                     display_rationales_button(mi)
                 )
 
+                z = getattr(mi.decision_item, size_z.column_name)
+                if size_z.column_type == DecisionItemLookup.INTEGER:
+                    z = int(z)
+                elif size_z.column_type == DecisionItemLookup.FLOAT:
+                    z = float(z)
+
                 entry = {
                     'x': factor_x_ranking[mi.pk],
                     'y': factor_y_ranking[mi.pk],
-                    'z': int(mi.decision_item.column_1),
+                    'z': z,
                     'name': item_name,
                     'description': mi.decision_item.name,
                     'rationales': u''.join(rationales),
