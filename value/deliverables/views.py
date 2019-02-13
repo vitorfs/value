@@ -393,7 +393,8 @@ def jira_search_issues(request, deliverable_id):
     try:
         jira = JIRA(
             server=django_settings.JIRA_URL,
-            basic_auth=(django_settings.JIRA_USERNAME, django_settings.JIRA_PASSWORD)
+            basic_auth=(django_settings.JIRA_USERNAME, django_settings.JIRA_PASSWORD),
+            options={'verify': False}
         )
     except:
         messages.error(request, _('It was not possible to connect to the JIRA server. Either the JIRA credentials are wrong or misconfigurated. Please contact the server administrator.'))
@@ -424,7 +425,8 @@ def jira_import_issues(request, deliverable_id):
     try:
         jira = JIRA(
             server=django_settings.JIRA_URL,
-            basic_auth=(django_settings.JIRA_USERNAME, django_settings.JIRA_PASSWORD)
+            basic_auth=(django_settings.JIRA_USERNAME, django_settings.JIRA_PASSWORD),
+            options={'verify': False}
         )
     except:
         messages.error(request, _('It was not possible to connect to the JIRA server. Either the JIRA credentials are wrong or misconfigurated. Please contact the server administrator.'))

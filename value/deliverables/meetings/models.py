@@ -2,6 +2,7 @@
 
 import uuid
 
+import requests
 from django.contrib.auth.models import User, Group
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
@@ -305,7 +306,8 @@ class Meeting(models.Model):
         app_settings = ApplicationSetting.get()
         jira = JIRA(
             server=settings.JIRA_URL,
-            basic_auth=(settings.JIRA_USERNAME, settings.JIRA_PASSWORD)
+            basic_auth=(settings.JIRA_USERNAME, settings.JIRA_PASSWORD),
+            options={'verify': False}
         )
         items = self.meetingitem_set \
             .select_related('decision_item') \
