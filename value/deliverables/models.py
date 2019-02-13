@@ -28,6 +28,7 @@ class Deliverable(models.Model):
     created_by = models.ForeignKey(User, related_name='deliverable_creation_user')
     updated_at = models.DateTimeField(_('updated at'), auto_now=True)
     updated_by = models.ForeignKey(User, null=True, related_name='deliverable_update_user')
+    is_archived = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'deliverables'

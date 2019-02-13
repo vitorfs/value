@@ -76,6 +76,17 @@
             <p><strong>{% trans 'Transfer ownership' %}</strong></p>
             <p style="margin-bottom: 0;">{% trans 'Transfer this deliverable to another user.' %}</p>
           </li>
+          <li class="list-group-item">
+            <form method="post" action="{% url 'deliverables:archive_settings' deliverable.pk %}">
+              {% csrf_token %}
+              <button type="submit"
+                      class="btn btn-danger pull-right">
+                {% trans 'Archive' %}
+              </button>
+            </form>
+            <p><strong>{% trans 'Archive' %}</strong></p>
+            <p style="margin-bottom: 0;">{% trans 'Archive this deliverable.' %}</p>
+          </li>
         </ul>
       </div>
     </div>

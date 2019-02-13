@@ -36,7 +36,7 @@ from value.deliverables.utils import excel_column_map
 @login_required
 def index(request):
     manager_deliverables = Deliverable.objects \
-        .filter(manager=request.user) \
+        .filter(manager=request.user, is_archived=False) \
         .select_related('manager', 'manager__profile') \
         .prefetch_related('meeting_set', 'stakeholders__profile') \
         .order_by('-updated_at')
@@ -699,3 +699,13 @@ def historical_dashboard_meeting(request, deliverable_id, meeting_id):
         'meeting': meeting,
         'items': items
     })
+
+@login_required
+@require_POST
+@user_is_manager
+def archive_settings(request, deliverable_id):
+    deliverable = Deliverable.objects.get(id=deliverable_id)
+    deliverable.is_archived = True
+    deliverable.save()
+    messages.success(request, 'Deliverable archived with success!')
+    return redirect('deliverables:index')

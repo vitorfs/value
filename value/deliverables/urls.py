@@ -42,6 +42,7 @@ urlpatterns = [
     url(r'^(?P<deliverable_id>\d+)/settings/factors/$', views.factors_settings, name='factors_settings'),
     url(r'^(?P<deliverable_id>\d+)/settings/measure/$', views.measure_settings, name='measure_settings'),
     url(r'^(?P<deliverable_id>\d+)/settings/access/$', views.access_settings, name='access_settings'),
+    url(r'^(?P<deliverable_id>\d+)/settings/archive/$', views.archive_settings, name='archive_settings'),
 
     url(r'(?P<deliverable_id>\d+)/meetings/', include('value.deliverables.meetings.urls', namespace='meetings')),
 ]
