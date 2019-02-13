@@ -42,7 +42,7 @@ def index(request):
         .order_by('-updated_at')
 
     stakeholder_deliverables = Deliverable.objects \
-        .filter(stakeholders__in=[request.user]) \
+        .filter(stakeholders__in=[request.user], is_archived=False) \
         .exclude(manager=request.user) \
         .select_related('manager', 'manager__profile') \
         .prefetch_related('meeting_set') \
